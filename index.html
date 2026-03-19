@@ -20,6 +20,15 @@
   .b2 .synopsis { color: #2a4a2a; }
   .b3 .synopsis { color: #2a2a5a; }
 
+  table.chtable { table-layout: fixed; }
+  table.chtable td:nth-child(2),
+  table.chtable td:nth-child(3),
+  table.chtable td:nth-child(4) {
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+    overflow: hidden;
+  }
   @media (max-width: 600px) {
     body { padding: 0 !important; }
     div[style*="max-width: 740px"] { border-left: none !important; border-right: none !important; }
@@ -42,15 +51,14 @@
     table[style*="width:100%"] tr { display: block; }
     td[style*="width:33%"] { display: block !important; width: 100% !important; border-right: none !important; border-bottom: 1px solid #c8b87a; padding: 8px 0 !important; }
     td[style*="width:33%"]:last-child { border-bottom: none; }
-    /* Chapter tables — column widths on mobile */
-    table.chtable td:first-child { width: 46% !important; }
+    /* Chapter tables — icon columns always centred, no padding squash */
     table.chtable td:nth-child(2),
     table.chtable td:nth-child(3),
     table.chtable td:nth-child(4) {
-      width: 18% !important;
       text-align: center !important;
-      padding-left: 2px !important;
-      padding-right: 2px !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      overflow: hidden;
     }
     table.chtable td:nth-child(2) a,
     table.chtable td:nth-child(3) a,
@@ -216,12 +224,13 @@
   </div>
 
   <div style="padding:16px 24px 20px; background:#faf8f3;">
-    <table class="chtable" style="width:100%; border-collapse:collapse; font-size:12px;">
+    <table class="chtable" style="width:100%; border-collapse:collapse; font-size:12px; table-layout:fixed;">
+      <colgroup><col style="width:55%;"><col style="width:15%;"><col style="width:15%;"><col style="width:15%;"></colgroup>
       <thead><tr>
-        <td style="font-size:10px; letter-spacing:3px; color:#8b6914; text-transform:uppercase; padding:0 0 10px 0; width:42%;">Chapter</td>
-        <td style="font-size:10px; letter-spacing:3px; color:#8b6914; text-transform:uppercase; padding:0 0 10px 4px; text-align:center; width:19%;">📖 Read</td>
-        <td style="font-size:10px; letter-spacing:3px; color:#8b6914; text-transform:uppercase; padding:0 0 10px 4px; text-align:center; width:19%;">🎧 Listen</td>
-        <td style="font-size:10px; letter-spacing:3px; color:#8b6914; text-transform:uppercase; padding:0 0 10px 4px; text-align:center; width:20%;">📝 Notes</td>
+        <td style="font-size:10px; letter-spacing:3px; color:#8b6914; text-transform:uppercase; padding:0 0 10px 0;">Chapter</td>
+        <td style="font-size:10px; letter-spacing:3px; color:#8b6914; text-transform:uppercase; padding:0 0 10px 4px; text-align:center;">📖 Read</td>
+        <td style="font-size:10px; letter-spacing:3px; color:#8b6914; text-transform:uppercase; padding:0 0 10px 4px; text-align:center;">🎧 Listen</td>
+        <td style="font-size:10px; letter-spacing:3px; color:#8b6914; text-transform:uppercase; padding:0 0 10px 4px; text-align:center;">📝 Notes</td>
       </tr></thead>
       <tbody>
 
@@ -315,12 +324,13 @@
   </div>
 
   <div class="b2" style="padding:16px 24px 20px; background:#f5faf5;">
-    <table class="chtable" style="width:100%; border-collapse:collapse; font-size:12px;">
+    <table class="chtable" style="width:100%; border-collapse:collapse; font-size:12px; table-layout:fixed;">
+      <colgroup><col style="width:55%;"><col style="width:15%;"><col style="width:15%;"><col style="width:15%;"></colgroup>
       <thead><tr>
-        <td style="font-size:10px; letter-spacing:3px; color:#4a7a4a; text-transform:uppercase; padding:0 0 10px 0; width:42%;">Chapter</td>
-        <td style="font-size:10px; letter-spacing:3px; color:#4a7a4a; text-transform:uppercase; padding:0 0 10px 4px; text-align:center; width:19%;">📖 Read</td>
-        <td style="font-size:10px; letter-spacing:3px; color:#4a7a4a; text-transform:uppercase; padding:0 0 10px 4px; text-align:center; width:19%;">🎧 Listen</td>
-        <td style="font-size:10px; letter-spacing:3px; color:#4a7a4a; text-transform:uppercase; padding:0 0 10px 4px; text-align:center; width:20%;">📝 Notes</td>
+        <td style="font-size:10px; letter-spacing:3px; color:#4a7a4a; text-transform:uppercase; padding:0 0 10px 0;">Chapter</td>
+        <td style="font-size:10px; letter-spacing:3px; color:#4a7a4a; text-transform:uppercase; padding:0 0 10px 4px; text-align:center;">📖 Read</td>
+        <td style="font-size:10px; letter-spacing:3px; color:#4a7a4a; text-transform:uppercase; padding:0 0 10px 4px; text-align:center;">🎧 Listen</td>
+        <td style="font-size:10px; letter-spacing:3px; color:#4a7a4a; text-transform:uppercase; padding:0 0 10px 4px; text-align:center;">📝 Notes</td>
       </tr></thead>
       <tbody>
 
@@ -447,12 +457,13 @@
   </div>
 
   <div class="b3" style="padding:16px 24px 20px; background:#f5f5fa;">
-    <table class="chtable" style="width:100%; border-collapse:collapse; font-size:12px;">
+    <table class="chtable" style="width:100%; border-collapse:collapse; font-size:12px; table-layout:fixed;">
+      <colgroup><col style="width:55%;"><col style="width:15%;"><col style="width:15%;"><col style="width:15%;"></colgroup>
       <thead><tr>
-        <td style="font-size:10px; letter-spacing:3px; color:#5a5aaa; text-transform:uppercase; padding:0 0 10px 0; width:42%;">Chapter</td>
-        <td style="font-size:10px; letter-spacing:3px; color:#5a5aaa; text-transform:uppercase; padding:0 0 10px 4px; text-align:center; width:19%;">📖 Read</td>
-        <td style="font-size:10px; letter-spacing:3px; color:#5a5aaa; text-transform:uppercase; padding:0 0 10px 4px; text-align:center; width:19%;">🎧 Listen</td>
-        <td style="font-size:10px; letter-spacing:3px; color:#5a5aaa; text-transform:uppercase; padding:0 0 10px 4px; text-align:center; width:20%;">📝 Notes</td>
+        <td style="font-size:10px; letter-spacing:3px; color:#5a5aaa; text-transform:uppercase; padding:0 0 10px 0;">Chapter</td>
+        <td style="font-size:10px; letter-spacing:3px; color:#5a5aaa; text-transform:uppercase; padding:0 0 10px 4px; text-align:center;">📖 Read</td>
+        <td style="font-size:10px; letter-spacing:3px; color:#5a5aaa; text-transform:uppercase; padding:0 0 10px 4px; text-align:center;">🎧 Listen</td>
+        <td style="font-size:10px; letter-spacing:3px; color:#5a5aaa; text-transform:uppercase; padding:0 0 10px 4px; text-align:center;">📝 Notes</td>
       </tr></thead>
       <tbody>
 
