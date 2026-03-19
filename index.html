@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🏔 Marduk's Map — The Ghosts of Men Trilogy</title>
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -18,6 +19,45 @@
   .synopsis { font-size: 11px; font-style: italic; color: #6a4020; padding: 3px 0 3px 16px; line-height: 1.5; }
   .b2 .synopsis { color: #2a4a2a; }
   .b3 .synopsis { color: #2a2a5a; }
+
+  @media (max-width: 600px) {
+    body { padding: 0 !important; }
+    div[style*="max-width: 740px"] { border-left: none !important; border-right: none !important; }
+    /* Masthead */
+    div[style*="font-size: 32px"] { font-size: 22px !important; }
+    /* Section padding */
+    div[style*="padding: 28px 32px"] { padding: 16px 14px !important; }
+    div[style*="padding:28px 32px"] { padding: 16px 14px !important; }
+    div[style*="padding: 16px 24px 20px"] { padding: 10px 10px 14px !important; }
+    div[style*="padding:16px 24px 20px"] { padding: 10px 10px 14px !important; }
+    div[style*="padding: 18px 24px"] { padding: 10px 10px !important; }
+    div[style*="padding:18px 24px"] { padding: 10px 10px !important; }
+    div[style*="padding: 14px 24px"] { padding: 10px 10px !important; }
+    div[style*="padding:14px 24px"] { padding: 10px 10px !important; }
+    div[style*="padding: 10px 24px"] { padding: 8px 10px !important; }
+    div[style*="padding:10px 24px"] { padding: 8px 10px !important; }
+    div[style*="padding: 24px 32px"] { padding: 14px 12px !important; }
+    div[style*="padding:24px 32px"] { padding: 14px 12px !important; }
+    /* Library catalogue table — stack columns vertically */
+    table[style*="width:100%"] tr { display: block; }
+    td[style*="width:33%"] { display: block !important; width: 100% !important; border-right: none !important; border-bottom: 1px solid #c8b87a; padding: 8px 0 !important; }
+    td[style*="width:33%"]:last-child { border-bottom: none; }
+    /* Chapter table columns — compress */
+    td[style*="width:42%"] { width: 55% !important; }
+    td[style*="width:19%"] { width: 15% !important; }
+    td[style*="width:20%"] { width: 15% !important; }
+    /* Book header flex — wrap */
+    div[style*="display:flex"] { flex-wrap: wrap; gap: 4px; }
+    /* Video embed — full width already via % but ensure container */
+    div[style*="max-width: 560px"] { max-width: 100% !important; }
+    /* Review quotes */
+    div[style*="border-left:3px solid #8b6914"] { margin-left: 0 !important; }
+    /* CTA button */
+    a[style*="padding:13px 32px"] { padding: 12px 16px !important; font-size: 11px !important; letter-spacing: 2px !important; }
+    /* Body text sizes */
+    div[style*="font-size: 15px"] { font-size: 13px !important; }
+    div[style*="font-size:15px"] { font-size: 13px !important; }
+  }
 </style>
 </head>
 <body>
