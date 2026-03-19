@@ -30,34 +30,35 @@
     overflow: hidden;
   }
   @media (max-width: 600px) {
-    /* Chapter table wrappers — remove side padding so table fills full width */
-    div[style*="padding:16px 24px 20px"] { padding-left: 0 !important; padding-right: 0 !important; }
-    div[style*="padding:10px 24px"] { padding-left: 0 !important; padding-right: 0 !important; }
-    /* Also kill side padding on purchase bar */
-    div[style*="padding:10px 24px; border-bottom"] { padding-left: 8px !important; padding-right: 8px !important; }
-
     body { padding: 0 !important; }
     div[style*="max-width: 740px"] { border-left: none !important; border-right: none !important; }
-    /* Masthead */
+
+    /* Masthead font */
     div[style*="font-size: 32px"] { font-size: 22px !important; }
-    /* Section padding */
+
+    /* General section padding reductions */
     div[style*="padding: 28px 32px"] { padding: 16px 14px !important; }
-    div[style*="padding:28px 32px"] { padding: 16px 14px !important; }
-    div[style*="padding: 16px 24px 20px"] { padding: 10px 10px 14px !important; }
-    div[style*="padding:16px 24px 20px"] { padding: 10px 10px 14px !important; }
-    div[style*="padding: 18px 24px"] { padding: 10px 10px !important; }
-    div[style*="padding:18px 24px"] { padding: 10px 10px !important; }
-    div[style*="padding: 14px 24px"] { padding: 10px 10px !important; }
-    div[style*="padding:14px 24px"] { padding: 10px 10px !important; }
-    div[style*="padding: 10px 24px"] { padding: 8px 10px !important; }
-    div[style*="padding:10px 24px"] { padding: 8px 10px !important; }
+    div[style*="padding:28px 32px"]  { padding: 16px 14px !important; }
     div[style*="padding: 24px 32px"] { padding: 14px 12px !important; }
-    div[style*="padding:24px 32px"] { padding: 14px 12px !important; }
-    /* Library catalogue table — stack columns vertically */
-    table[style*="width:100%"] tr { display: block; }
+    div[style*="padding:24px 32px"]  { padding: 14px 12px !important; }
+    div[style*="padding: 18px 24px"] { padding: 10px 10px !important; }
+    div[style*="padding:18px 24px"]  { padding: 10px 10px !important; }
+    div[style*="padding: 14px 24px"] { padding: 10px 10px !important; }
+    div[style*="padding:14px 24px"]  { padding: 10px 10px !important; }
+    div[style*="padding: 10px 24px"] { padding: 8px 10px !important; }
+    div[style*="padding:10px 24px"]  { padding: 8px 10px !important; }
+
+    /* Chapter table wrappers — zero side padding so table fills full width */
+    table.chtable { width: 100% !important; }
+    div[style*="padding:16px 24px 20px"] { padding-left: 0 !important; padding-right: 0 !important; }
+    div[style*="padding: 16px 24px 20px"] { padding-left: 0 !important; padding-right: 0 !important; }
+
+    /* Library catalogue table only — stack columns vertically */
+    table[style*="width:100%"]:not(.chtable) tr { display: block; }
     td[style*="width:33%"] { display: block !important; width: 100% !important; border-right: none !important; border-bottom: 1px solid #c8b87a; padding: 8px 0 !important; }
     td[style*="width:33%"]:last-child { border-bottom: none; }
-    /* Chapter tables — icon columns always centred, no padding squash */
+
+    /* Chapter tables — icon columns centred, no side padding */
     table.chtable td:nth-child(2),
     table.chtable td:nth-child(3),
     table.chtable td:nth-child(4) {
@@ -72,17 +73,18 @@
       display: block;
       text-align: center;
     }
+
     /* Book header flex — wrap */
     div[style*="display:flex"] { flex-wrap: wrap; gap: 4px; }
-    /* Video embed — full width already via % but ensure container */
+    /* Video embed */
     div[style*="max-width: 560px"] { max-width: 100% !important; }
     /* Review quotes */
     div[style*="border-left:3px solid #8b6914"] { margin-left: 0 !important; }
     /* CTA button */
     a[style*="padding:13px 32px"] { padding: 12px 16px !important; font-size: 11px !important; letter-spacing: 2px !important; }
-    /* Body text sizes */
+    /* Body text */
     div[style*="font-size: 15px"] { font-size: 13px !important; }
-    div[style*="font-size:15px"] { font-size: 13px !important; }
+    div[style*="font-size:15px"]  { font-size: 13px !important; }
   }
 </style>
 </head>
@@ -610,7 +612,7 @@
   <!-- FOOTER -->
   <div style="background:#2c1810; color:#8b6914; text-align:center; padding:16px 20px; border-top:4px double #8b6914; font-size:11px; letter-spacing:2px;">
     <div>✦ &nbsp; THE GHOSTS OF MEN TRILOGY &nbsp; · &nbsp; JAMES ALEXANDER HIGGINS &nbsp; ✦</div>
-    <div style="margin-top:6px; color:#5a3a10; font-size:10px; letter-spacing:1px;">Links activate as chapters are published &nbsp;·&nbsp; ⌛ = Coming soon &nbsp;·&nbsp; v2.5.5</div>
+    <div style="margin-top:6px; color:#5a3a10; font-size:10px; letter-spacing:1px;">Links activate as chapters are published &nbsp;·&nbsp; ⌛ = Coming soon &nbsp;·&nbsp; v2.5.6</div>
   </div>
 
 </div>
