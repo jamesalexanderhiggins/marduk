@@ -30,6 +30,12 @@
     overflow: hidden;
   }
   @media (max-width: 600px) {
+    /* Chapter table wrappers — remove side padding so table fills full width */
+    div[style*="padding:16px 24px 20px"] { padding-left: 0 !important; padding-right: 0 !important; }
+    div[style*="padding:10px 24px"] { padding-left: 0 !important; padding-right: 0 !important; }
+    /* Also kill side padding on purchase bar */
+    div[style*="padding:10px 24px; border-bottom"] { padding-left: 8px !important; padding-right: 8px !important; }
+
     body { padding: 0 !important; }
     div[style*="max-width: 740px"] { border-left: none !important; border-right: none !important; }
     /* Masthead */
@@ -604,7 +610,7 @@
   <!-- FOOTER -->
   <div style="background:#2c1810; color:#8b6914; text-align:center; padding:16px 20px; border-top:4px double #8b6914; font-size:11px; letter-spacing:2px;">
     <div>✦ &nbsp; THE GHOSTS OF MEN TRILOGY &nbsp; · &nbsp; JAMES ALEXANDER HIGGINS &nbsp; ✦</div>
-    <div style="margin-top:6px; color:#5a3a10; font-size:10px; letter-spacing:1px;">Links activate as chapters are published &nbsp;·&nbsp; ⌛ = Coming soon &nbsp;·&nbsp; v2.5.4</div>
+    <div style="margin-top:6px; color:#5a3a10; font-size:10px; letter-spacing:1px;">Links activate as chapters are published &nbsp;·&nbsp; ⌛ = Coming soon &nbsp;·&nbsp; v2.5.5</div>
   </div>
 
 </div>
