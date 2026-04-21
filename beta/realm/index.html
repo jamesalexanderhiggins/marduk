@@ -167,31 +167,112 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 @keyframes eveBlink{0%,92%,100%{opacity:1;}93%,97%{opacity:0.4;}}
 @keyframes glitchT{0%,100%{transform:translateX(0);}50%{transform:translateX(2px);}}
 
-/* ── House Scene (RPG layer renderer) ────────────── */
-.hs-root{position:absolute;inset:0;overflow:hidden;background:#D6C8B4;}
-.hs-layer{position:absolute;top:-10%;left:-10%;width:120%;height:120%;will-change:transform;}
-.hs-layer img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;pointer-events:none;user-select:none;}
-.hs-dark{position:absolute;inset:0;background:radial-gradient(ellipse 90% 75% at 50% 85%,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.55) 55%,rgba(0,0,0,0.88) 100%);pointer-events:none;}
-.hs-vign{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.55) 0%,transparent 25%,transparent 72%,rgba(0,0,0,0.45) 100%);pointer-events:none;}
+/* ── House Scene (RPG parallax renderer) ─────────── */
+/* Images now have real PNG transparency (white removed via PIL).
+   Background is dark — no blend mode tricks needed.             */
+.hs-root{position:absolute;inset:0;overflow:hidden;
+  background:linear-gradient(180deg,#040210 0%,#07050F 50%,#0A0814 100%);}
+/* Oversized layer for parallax headroom — 15% bleed each side */
+.hs-layer{position:absolute;top:-15%;left:-15%;width:130%;height:130%;
+  will-change:transform;transition:opacity 0.7s ease;}
+.hs-layer img{display:block;width:100%;height:100%;
+  object-fit:contain;object-position:center bottom;
+  pointer-events:none;user-select:none;-webkit-user-drag:none;}
+/* Atmosphere on top of images */
+.hs-dark{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 80% 60% at 50% 90%,
+    transparent 0%,rgba(0,0,0,0.45) 55%,rgba(0,0,0,0.82) 100%);}
+.hs-vign{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to bottom,
+    rgba(0,0,0,0.72) 0%,rgba(0,0,0,0.15) 22%,
+    rgba(0,0,0,0.0) 60%,rgba(0,0,0,0.55) 100%);}
+.hs-sides{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to right,
+    rgba(0,0,0,0.60) 0%,transparent 20%,transparent 80%,rgba(0,0,0,0.60) 100%);}
+/* Atmospheric glows */
 .hs-atm{position:absolute;pointer-events:none;}
-.hs-candle{background:radial-gradient(ellipse at 45% 55%,rgba(210,128,28,0.28) 0%,transparent 65%);animation:hsCandle 2.9s ease-in-out infinite;}
-.hs-moon{background:linear-gradient(148deg,rgba(110,168,210,0.18) 0%,transparent 52%);animation:hsMoon 8s ease-in-out infinite;}
+.hs-candle{animation:hsCandle 3.1s ease-in-out infinite;
+  background:radial-gradient(ellipse at 42% 58%,rgba(205,118,22,0.32) 0%,transparent 62%);}
+.hs-moon{animation:hsMoon 9s ease-in-out infinite;
+  background:linear-gradient(145deg,rgba(100,160,210,0.22) 0%,transparent 48%);}
+/* Dust particles */
 .hs-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
-.hs-hotspots{position:absolute;inset:0;}
-.hs-hs{position:absolute;cursor:pointer;}
-.hs-bloom{position:absolute;inset:0;border:1px solid rgba(201,168,76,0);transition:border-color 0.35s,box-shadow 0.35s;}
-.hs-hs:hover .hs-bloom{border-color:rgba(201,168,76,0.28);box-shadow:inset 0 0 48px rgba(201,168,76,0.12);}
-.hs-tip{position:absolute;bottom:calc(100% + 14px);left:50%;transform:translateX(-50%) translateY(6px);opacity:0;transition:opacity 0.3s,transform 0.3s;background:rgba(7,9,16,0.96);border:1px solid rgba(201,168,76,0.3);padding:13px 20px;font-family:'EB Garamond',serif;font-size:16px;font-style:italic;color:var(--text);min-width:180px;max-width:300px;text-align:center;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,0.7);white-space:normal;}
-.hs-hs:hover .hs-tip{opacity:1;transform:translateX(-50%) translateY(0);}
-.hs-exit-cue{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(201,168,76,0.75);opacity:0;transition:opacity 0.35s;white-space:nowrap;}
-.hs-hs.exit:hover .hs-exit-cue{opacity:1;}
-.hs-hud{position:absolute;bottom:26px;left:28px;pointer-events:none;z-index:20;}
-.hs-hud-era{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.32em;color:rgba(201,168,76,0.72);text-transform:uppercase;margin-bottom:4px;}
-.hs-hud-name{font-family:'Cinzel Decorative',serif;font-size:clamp(13px,1.8vw,20px);color:var(--text);text-shadow:0 2px 10px rgba(0,0,0,0.9);}
-@keyframes hsCandle{0%,100%{opacity:0.72;}18%{opacity:0.90;}40%{opacity:0.60;}68%{opacity:0.85;}85%{opacity:0.68;}}
-@keyframes hsMoon{0%,100%{opacity:0.55;}50%{opacity:0.82;}}
-@keyframes hsDust{0%{transform:translateY(0) translateX(0);opacity:0;}8%{opacity:var(--dp,0.7);}88%{opacity:0.2;}100%{transform:translateY(var(--dy,-130px)) translateX(var(--dx,12px));opacity:0;}}
-@keyframes hsFadeIn{from{opacity:0;}to{opacity:1;}}
+/* Scene text overlay */
+.hs-scene-text{position:absolute;left:50%;transform:translateX(-50%);
+  text-align:center;pointer-events:none;z-index:14;
+  animation:hsFadeIn 1.2s 0.9s both ease;}
+.hs-scene-title{font-family:'Cinzel Decorative',serif;
+  font-size:clamp(18px,2.4vw,30px);color:rgba(228,220,203,0.92);
+  text-shadow:0 2px 18px rgba(0,0,0,0.9),0 0 40px rgba(0,0,0,0.6);
+  letter-spacing:0.06em;margin-bottom:10px;}
+.hs-scene-quote{font-family:'EB Garamond',serif;
+  font-size:clamp(14px,1.6vw,19px);font-style:italic;
+  color:rgba(201,168,76,0.78);
+  text-shadow:0 1px 12px rgba(0,0,0,0.9);
+  max-width:520px;line-height:1.6;}
+/* Directional whispers — hover hints near each exit */
+.hs-whisper{position:absolute;pointer-events:none;z-index:13;
+  font-family:'EB Garamond',serif;font-style:italic;
+  color:rgba(201,168,76,0);text-align:center;
+  transition:color 0.4s,opacity 0.4s;
+  text-shadow:0 1px 8px rgba(0,0,0,0.8);
+  font-size:clamp(12px,1.3vw,15px);line-height:1.5;}
+/* Hotspot zones — invisible but interactive */
+.hs-hs{position:absolute;cursor:pointer;z-index:15;}
+.hs-hs:hover ~ .hs-whisper,
+.hs-hs:focus ~ .hs-whisper{color:rgba(201,168,76,0.72);}
+/* Glow border on hover */
+.hs-bloom{position:absolute;inset:0;
+  border:1px solid rgba(201,168,76,0);
+  transition:border-color 0.4s,box-shadow 0.4s,background 0.4s;}
+.hs-hs:hover .hs-bloom,.hs-hs:active .hs-bloom{
+  border-color:rgba(201,168,76,0.22);
+  box-shadow:inset 0 0 60px rgba(201,168,76,0.08);}
+/* Tooltip panel */
+.hs-tip{position:absolute;left:50%;
+  transform:translateX(-50%) translateY(8px);
+  opacity:0;transition:opacity 0.35s,transform 0.35s;
+  background:rgba(4,2,12,0.96);
+  border:1px solid rgba(201,168,76,0.35);
+  padding:14px 22px;
+  font-family:'EB Garamond',serif;font-size:clamp(14px,1.5vw,17px);
+  font-style:italic;color:var(--text);
+  min-width:200px;max-width:310px;text-align:center;
+  pointer-events:none;
+  box-shadow:0 10px 40px rgba(0,0,0,0.85),0 0 20px rgba(201,168,76,0.06);
+  white-space:normal;line-height:1.55;}
+.hs-tip.above{bottom:calc(100% + 14px);}
+.hs-tip.below{top:calc(100% + 14px);}
+.hs-hs:hover .hs-tip,.hs-hs:active .hs-tip{
+  opacity:1;transform:translateX(-50%) translateY(0);}
+/* Exit label */
+.hs-exit-cue{position:absolute;bottom:8px;left:50%;
+  transform:translateX(-50%);
+  font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:0.32em;text-transform:uppercase;
+  color:rgba(201,168,76,0.0);transition:color 0.4s;
+  white-space:nowrap;}
+.hs-hs.exit:hover .hs-exit-cue{color:rgba(201,168,76,0.7);}
+/* HUD — era + title bottom left */
+.hs-hud{position:absolute;bottom:24px;left:26px;
+  pointer-events:none;z-index:16;
+  animation:hsFadeIn 1s 0.4s both ease;}
+.hs-hud-era{font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:0.35em;color:rgba(201,168,76,0.6);
+  text-transform:uppercase;margin-bottom:5px;}
+.hs-hud-name{font-family:'Cinzel Decorative',serif;
+  font-size:clamp(12px,1.6vw,18px);color:rgba(228,220,203,0.88);
+  text-shadow:0 2px 12px rgba(0,0,0,1);}
+/* Keyframes */
+@keyframes hsCandle{0%,100%{opacity:0.75;}20%{opacity:0.95;}
+  42%{opacity:0.58;}65%{opacity:0.88;}84%{opacity:0.65;}}
+@keyframes hsMoon{0%,100%{opacity:0.52;}50%{opacity:0.84;}}
+@keyframes hsDust{
+  0%{transform:translateY(0) translateX(0);opacity:0;}
+  8%{opacity:var(--dp,0.65);}90%{opacity:0.15;}
+  100%{transform:translateY(var(--dy,-140px)) translateX(var(--dx,10px));opacity:0;}}
+@keyframes hsFadeIn{from{opacity:0;transform:translateX(-50%) translateY(10px);}
+  to{opacity:1;transform:translateX(-50%) translateY(0);}}
 </style>
 </head>
 <body>
@@ -585,8 +666,10 @@ function render(x, y) {
   }
   else { renderEmpty(s, x, y, tile); }
 
-  // Navigation arrows
-  renderNavArrows(x, y);
+  // Navigation arrows — suppressed inside house scenes (exits are in-scene)
+  if (!HOUSE_SCENES[`${x},${y}`]) {
+    renderNavArrows(x, y);
+  }
 
   // Environmental overlays
   if (tile.house_id) {
@@ -1593,197 +1676,228 @@ document.addEventListener('keydown', (ev) => {
 /* ── House Scene data ──────────────────────────── */
 const HOUSE_SCENES = {
   '-10,-13': {
-    slug:    'threshold',
-    path:    'house-emily/threshold',
-    layers:  [
-      {parallax: 0.04},   // bg  — floats the least (farthest)
-      {parallax: 0.16},   // mid — mid-depth
-      {parallax: 0.32},   // obj — floats most (nearest)
+    slug: 'threshold',
+    path: 'house-emily/threshold',
+    layers: [
+      {parallax: 0.03},
+      {parallax: 0.13},
+      {parallax: 0.27},
     ],
-    /* Hotspot zones in % coords — measured against viewport, NOT image.
-     * The images are offset/scaled inside the hs-root so these need
-     * to map to where the painted features appear at 1200px reference width.
-     * door  : left wooden door  (obj layer, left cluster)
-     * window: gothic window     (obj layer, right cluster)
-     * fire  : fireplace         (mid layer, centre)         */
+    title: 'The Threshold of Emily',
+    quote: 'She stood in the long green dress — golden hair caught mid-turn — and did not turn all the way.',
+    whispers: [
+      { text: 'Follow the light.\nIt knows where\nshe walked.',
+        left:'6%', top:'52%', width:'19%' },
+      { text: 'The night outside\nis not the night\nyou came from.',
+        left:'73%', top:'36%', width:'21%' },
+      { text: 'Cold.\nShe used to\nlight it herself.',
+        left:'39%', top:'60%', width:'16%' },
+    ],
     hotspots: [
-      { id:'door',   type:'exit', label:'Open the door',
-        x:'4%',  y:'10%', w:'32%', h:'80%',
+      { id:'door', type:'exit', label:'Enter',
+        x:'3%', y:'10%', w:'28%', h:'82%',
         tip:'The door is ajar. Something warm breathes on the other side.',
-        target: [-10, -14] },
+        tipPos:'below',
+        target:[-10,-14] },
       { id:'window', type:'lore',
-        x:'60%', y:'8%',  w:'35%', h:'70%',
-        tip:'The night outside is not the night you came from.' },
-      { id:'fire',   type:'lore',
-        x:'34%', y:'28%', w:'24%', h:'44%',
-        tip:'Cold. It has been cold for a long time. She used to light it herself.' },
+        x:'60%', y:'6%', w:'36%', h:'70%',
+        tip:'Somewhere beyond that glass, the world she agreed to leave still turns without her.',
+        tipPos:'below' },
+      { id:'fire', type:'lore',
+        x:'33%', y:'30%', w:'24%', h:'42%',
+        tip:'Cold. It has been cold for a long time. She used to light it herself.',
+        tipPos:'above' },
     ],
-    candle:   { left:'2%',   top:'12%', width:'40%', height:'68%' },
-    moonbeam: { left:'56%',  top:'0%',  width:'44%', height:'78%' },
+    candle:   {left:'0%',  top:'10%', width:'38%', height:'70%'},
+    moonbeam: {left:'55%', top:'0%',  width:'45%', height:'80%'},
   },
 };
 
 /* ── House Scene renderer ─────────────────────── */
-let hsParallaxRaf = null;   // so we can cancel on navigation
+let hsParallaxRaf = null;
 
 function renderHouseScene(s, x, y, tile, scene) {
-  // Cancel any prior parallax loop
   if (hsParallaxRaf) { cancelAnimationFrame(hsParallaxRaf); hsParallaxRaf = null; }
 
-  // Body background — near-black, the dark overlay on top does the rest
-  document.body.style.background = '#06050C';
+  document.body.style.background = '#040210';
+  // Pause starfield while in house scene
+  if (typeof starRaf !== 'undefined' && starRaf) {
+    cancelAnimationFrame(starRaf); starRaf = null;
+    const bgC = document.getElementById('bg');
+    bgC.getContext('2d').clearRect(0, 0, bgC.width, bgC.height);
+  }
 
-  // Stage is full-bleed
   s.className = '';
-  s.style.cssText = 'position:relative;z-index:10;width:100%;height:100vh;padding:0;overflow:hidden;';
+  s.style.cssText = 'position:absolute;inset:0;padding:0;overflow:hidden;z-index:10;';
 
   const base = scene.path;
 
   s.innerHTML = `
     <div class="hs-root" id="hsRoot">
-      <!-- Parallax image layers: bg, mid, obj -->
       <div class="hs-layer" id="hsL0" style="z-index:2;opacity:0;">
-        <img src="${base}/bg.png" alt="" draggable="false">
+        <img src="${base}/bg.png" alt="">
       </div>
       <div class="hs-layer" id="hsL1" style="z-index:3;opacity:0;">
-        <img src="${base}/mid.png" alt="" draggable="false">
+        <img src="${base}/mid.png" alt="">
       </div>
       <div class="hs-layer" id="hsL2" style="z-index:4;opacity:0;">
-        <img src="${base}/obj.png" alt="" draggable="false">
+        <img src="${base}/obj.png" alt="">
       </div>
-
-      <!-- Darkness + vignette on top of images -->
-      <div class="hs-dark" style="z-index:5;"></div>
-      <div class="hs-vign" style="z-index:6;"></div>
-
-      <!-- Atmospheric glow layers -->
-      <div class="hs-atm hs-candle" style="z-index:7;
+      <div class="hs-dark"  style="z-index:5;"></div>
+      <div class="hs-vign"  style="z-index:6;"></div>
+      <div class="hs-sides" style="z-index:7;"></div>
+      <div class="hs-atm hs-candle" style="z-index:8;
         left:${scene.candle.left};top:${scene.candle.top};
         width:${scene.candle.width};height:${scene.candle.height};"></div>
-      <div class="hs-atm hs-moon" style="z-index:7;
+      <div class="hs-atm hs-moon" style="z-index:8;
         left:${scene.moonbeam.left};top:${scene.moonbeam.top};
         width:${scene.moonbeam.width};height:${scene.moonbeam.height};"></div>
-
-      <!-- Dust particles -->
-      <div class="hs-particles" id="hsParticles" style="z-index:8;"></div>
-
-      <!-- Hotspot click zones -->
-      <div class="hs-hotspots" style="z-index:9;">
-        ${scene.hotspots.map(h => `
-          <div class="hs-hs ${h.type}" id="hsHs_${h.id}"
-               data-type="${h.type}"
-               ${h.target ? `data-tx="${h.target[0]}" data-ty="${h.target[1]}"` : ''}
-               style="left:${h.x};top:${h.y};width:${h.w};height:${h.h};">
-            <div class="hs-bloom"></div>
-            <div class="hs-tip">${h.tip}</div>
-            ${h.type === 'exit' ? `<div class="hs-exit-cue">↵ ${h.label}</div>` : ''}
-          </div>`).join('')}
+      <div class="hs-particles" id="hsParticles" style="z-index:9;"></div>
+      <div class="hs-scene-text" style="top:5%;z-index:13;width:58%;margin-left:-29%;">
+        <div class="hs-scene-title">${scene.title || tile.name}</div>
+        ${scene.quote ? `<div class="hs-scene-quote">${scene.quote}</div>` : ''}
       </div>
-
-      <!-- HUD — era + title, bottom-left -->
-      <div class="hs-hud" style="z-index:10;">
+      ${(scene.whispers || []).map((w, i) => `
+        <div class="hs-whisper" id="hsW${i}" style="
+          left:${w.left};top:${w.top};width:${w.width};
+          font-size:clamp(11px,1.15vw,14px);">
+          ${w.text.replace(/\n/g,'<br>')}
+        </div>`).join('')}
+      ${scene.hotspots.map(h => `
+        <div class="hs-hs ${h.type}" id="hsHs_${h.id}"
+             data-type="${h.type}"
+             ${h.target ? `data-tx="${h.target[0]}" data-ty="${h.target[1]}"` : ''}
+             style="left:${h.x};top:${h.y};width:${h.w};height:${h.h};">
+          <div class="hs-bloom"></div>
+          <div class="hs-tip ${h.tipPos || 'above'}">${h.tip}</div>
+          ${h.type==='exit' ? `<div class="hs-exit-cue">&#8629; ${h.label}</div>` : ''}
+        </div>`).join('')}
+      <div class="hs-hud" style="z-index:16;">
         <div class="hs-hud-era">${tile.era || ''}</div>
         <div class="hs-hud-name">${tile.name || ''}</div>
       </div>
     </div>`;
 
-  // ── Hotspot interactions ──────────────────────────
+  // Hotspot click / touch
   s.querySelectorAll('.hs-hs').forEach(el => {
     el.addEventListener('click', () => {
-      if (el.dataset.type === 'exit') {
-        goTo(parseInt(el.dataset.tx), parseInt(el.dataset.ty));
-      }
+      if (el.dataset.type === 'exit') goTo(parseInt(el.dataset.tx), parseInt(el.dataset.ty));
     });
-    // iPad: show tooltip on first tap, navigate on second
-    let tapped = false;
-    el.addEventListener('touchend', (ev) => {
+    let tc = 0;
+    el.addEventListener('touchend', ev => {
       if (el.dataset.type !== 'exit') return;
       ev.preventDefault();
-      if (!tapped) { tapped = true; setTimeout(() => tapped = false, 1800); return; }
-      goTo(parseInt(el.dataset.tx), parseInt(el.dataset.ty));
-    }, {passive: false});
+      tc++;
+      if (tc >= 2) { tc = 0; goTo(parseInt(el.dataset.tx), parseInt(el.dataset.ty)); }
+      else setTimeout(() => { tc = 0; }, 2000);
+    }, {passive:false});
   });
 
-  // ── Dust particles (amber left, moonblue right) ───
-  const particleEl = document.getElementById('hsParticles');
-  for (let i = 0; i < 26; i++) {
-    const p   = document.createElement('div');
-    const isA = i < 14;                                    // amber vs blue split
-    const sz  = 1.5 + Math.random() * 2.5;
-    const lft = isA ? 3  + Math.random() * 40 : 58 + Math.random() * 36;
-    const dur = 4.5 + Math.random() * 6;
-    const del = Math.random() * 8;
-    const dx  = (Math.random() - 0.5) * 32;
-    const dy  = -(80 + Math.random() * 100);
-    const op  = 0.5 + Math.random() * 0.45;
-    const col = isA ? `rgba(218,138,34,${op})` : `rgba(114,176,220,${op})`;
-    p.style.cssText = `
-      position:absolute;
-      bottom:${5 + Math.random() * 55}%;
-      left:${lft}%;
-      width:${sz}px;height:${sz}px;
-      border-radius:50%;
-      background:${col};
-      pointer-events:none;
-      --dp:${op};--dx:${dx}px;--dy:${dy}px;
-      animation:hsDust ${dur}s ${del}s linear infinite;`;
-    particleEl.appendChild(p);
+  // Dust particles
+  const pEl = document.getElementById('hsParticles');
+  for (let i = 0; i < 28; i++) {
+    const p = document.createElement('div');
+    const amber = i < 16;
+    const sz  = 1.4 + Math.random() * 2.4;
+    const lft = amber ? (2 + Math.random() * 38) : (56 + Math.random() * 38);
+    const bot = 5 + Math.random() * 55;
+    const dur = 5 + Math.random() * 7;
+    const del = Math.random() * 9;
+    const dx  = (Math.random() - 0.5) * 36;
+    const dy  = -(90 + Math.random() * 110);
+    const op  = 0.45 + Math.random() * 0.5;
+    p.style.cssText = `position:absolute;bottom:${bot}%;left:${lft}%;`
+      + `width:${sz}px;height:${sz}px;border-radius:50%;`
+      + `background:${amber?`rgba(215,135,30,${op})`:`rgba(108,172,218,${op})`};`
+      + `pointer-events:none;--dp:${op};--dx:${dx}px;--dy:${dy}px;`
+      + `animation:hsDust ${dur}s ${del}s linear infinite;`;
+    pEl.appendChild(p);
   }
 
-  // ── Parallax: mouse on desktop, tilt on iPad ──────
+  // Parallax
+  let tX=0, tY=0, cX=0, cY=0;
+  const EASE=0.06, PX=70, PY=45;
   const layerEls = [
-    { el: document.getElementById('hsL0'), f: scene.layers[0].parallax },
-    { el: document.getElementById('hsL1'), f: scene.layers[1].parallax },
-    { el: document.getElementById('hsL2'), f: scene.layers[2].parallax },
+    {el:document.getElementById('hsL0'), f:scene.layers[0].parallax},
+    {el:document.getElementById('hsL1'), f:scene.layers[1].parallax},
+    {el:document.getElementById('hsL2'), f:scene.layers[2].parallax},
   ];
-  let tX = 0, tY = 0, cX = 0, cY = 0;
-  const EASE = 0.07;
-  const MAX_PX = 55, MAX_PY = 38;
-
   function parallaxLoop() {
     hsParallaxRaf = requestAnimationFrame(parallaxLoop);
-    cX += (tX - cX) * EASE;
-    cY += (tY - cY) * EASE;
-    layerEls.forEach(({ el, f }) => {
-      // Base offset is -10% (the oversize bleed). Parallax shifts on top.
-      el.style.transform = `translate(calc(-10% + ${cX * f * MAX_PX}px), calc(-10% + ${cY * f * MAX_PY}px))`;
+    cX += (tX-cX)*EASE; cY += (tY-cY)*EASE;
+    layerEls.forEach(({el,f}) => {
+      el.style.transform = `translate(calc(-15% + ${cX*f*PX}px), calc(-15% + ${cY*f*PY}px))`;
     });
   }
   parallaxLoop();
 
-  // Mouse input (desktop)
-  const mouseHandler = (ev) => {
-    tX = (ev.clientX / window.innerWidth  - 0.5) * 2;
-    tY = (ev.clientY / window.innerHeight - 0.5) * 2;
+  const onMouse = ev => {
+    tX = (ev.clientX/window.innerWidth  - 0.5)*2;
+    tY = (ev.clientY/window.innerHeight - 0.5)*2;
   };
-  document.addEventListener('mousemove', mouseHandler);
+  document.addEventListener('mousemove', onMouse);
 
-  // Gyro input (iPad/iPhone)
-  let gyroHandler = null;
-  if (typeof DeviceOrientationEvent !== 'undefined') {
-    gyroHandler = (ev) => {
-      tX = Math.max(-1, Math.min(1,  (ev.gamma || 0) / 25));
-      tY = Math.max(-1, Math.min(1, -(ev.beta  || 0) / 40));
+  let onGyro = null;
+  function attachGyro() {
+    onGyro = ev => {
+      tX = Math.max(-1, Math.min(1,  (ev.gamma||0)/22));
+      tY = Math.max(-1, Math.min(1, -(ev.beta ||0)/35));
     };
-    window.addEventListener('deviceorientation', gyroHandler);
+    window.addEventListener('deviceorientation', onGyro);
+  }
+  if (typeof DeviceOrientationEvent !== 'undefined') {
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      const reqBtn = document.createElement('button');
+      reqBtn.style.cssText = 'position:fixed;bottom:80px;right:22px;z-index:200;'
+        +'font-family:Cinzel,serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;'
+        +'color:rgba(201,168,76,0.7);background:rgba(0,0,0,0.65);'
+        +'border:1px solid rgba(201,168,76,0.25);padding:8px 14px;cursor:pointer;';
+      reqBtn.textContent = 'Enable Motion';
+      document.body.appendChild(reqBtn);
+      reqBtn.addEventListener('click', () => {
+        DeviceOrientationEvent.requestPermission().then(st => {
+          if (st==='granted') attachGyro();
+        });
+        reqBtn.remove();
+      });
+    } else {
+      attachGyro();
+    }
   }
 
-  // ── Staggered fade-in of layers ──────────────────
-  ['hsL0','hsL1','hsL2'].forEach((id, i) => {
-    const el = document.getElementById(id);
-    el.style.transition = `opacity 0.7s ${0.2 + i * 0.3}s ease`;
-    // Force reflow then animate
-    requestAnimationFrame(() => requestAnimationFrame(() => { el.style.opacity = '1'; }));
+  // Whisper proximity brightening on desktop
+  const whisperEls = (scene.whispers||[]).map((_,i) => document.getElementById(`hsW${i}`));
+  const onMouseW = ev => {
+    const nx = ev.clientX/window.innerWidth;
+    const ny = ev.clientY/window.innerHeight;
+    whisperEls.forEach(w => {
+      if (!w) return;
+      const r   = w.getBoundingClientRect();
+      const wCx = (r.left+r.right) /2/window.innerWidth;
+      const wCy = (r.top +r.bottom)/2/window.innerHeight;
+      const d   = Math.hypot(nx-wCx, ny-wCy);
+      const a   = Math.max(0, Math.min(0.65, 0.65 - d*2.0));
+      w.style.color = `rgba(201,168,76,${a})`;
+    });
+  };
+  document.addEventListener('mousemove', onMouseW);
+
+  // Staggered fade-in
+  layerEls.forEach(({el},i) => {
+    el.style.transition = `opacity 0.8s ${0.1 + i*0.28}s ease`;
+    requestAnimationFrame(() => requestAnimationFrame(() => { el.style.opacity='1'; }));
   });
 
-  // ── Cleanup on navigation ─────────────────────────
-  // Store handlers so render() teardown can remove them
   s._hsCleanup = () => {
-    if (hsParallaxRaf) { cancelAnimationFrame(hsParallaxRaf); hsParallaxRaf = null; }
-    document.removeEventListener('mousemove', mouseHandler);
-    if (gyroHandler) window.removeEventListener('deviceorientation', gyroHandler);
+    if (hsParallaxRaf) { cancelAnimationFrame(hsParallaxRaf); hsParallaxRaf=null; }
+    document.removeEventListener('mousemove', onMouse);
+    document.removeEventListener('mousemove', onMouseW);
+    if (onGyro) window.removeEventListener('deviceorientation', onGyro);
+    document.querySelectorAll('button[style*="Enable Motion"]').forEach(b=>b.remove());
+    initStars({count:200, color:'220,215,200', speed:0.015});
   };
 }
+
 
 /* ── Boot ──────────────────────────────────────── */
 async function boot() {
