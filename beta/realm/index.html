@@ -96,11 +96,44 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 #mv-header{padding:18px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);background:rgba(7,9,16,0.8);}
 .mv-title{font-family:'Cinzel Decorative',serif;font-size:22px;color:var(--gold);text-shadow:var(--glow);letter-spacing:0.1em;}
 .mv-sub{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--spirit);text-transform:uppercase;margin-left:12px;}
-.mv-close{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);background:none;border:1px solid var(--border);padding:8px 16px;cursor:pointer;transition:all 0.3s;}
+.mv-close{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);background:none;border:1px solid var(--border);padding:10px 18px;cursor:pointer;transition:all 0.3s;min-height:40px;}
 .mv-close:hover{color:var(--gold);border-color:var(--gold);}
-#mv-canvas-wrap{flex:1;overflow:hidden;position:relative;cursor:grab;}
+.mv-controls{display:flex;gap:8px;align-items:center;}
+.mv-ctl{width:40px;height:40px;background:rgba(7,9,16,0.8);border:1px solid var(--border);color:var(--gold);font-size:20px;font-family:'Cinzel',serif;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.mv-ctl:hover,.mv-ctl:active{border-color:var(--gold);background:rgba(201,168,76,0.12);box-shadow:var(--glow);}
+.mv-ctl:active{transform:scale(0.95);}
+#mv-canvas-wrap{flex:1;overflow:hidden;position:relative;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;overscroll-behavior:contain;}
 #mv-canvas-wrap.dragging{cursor:grabbing;}
-#mv-canvas{display:block;}
+#mv-canvas{display:block;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;}
+
+/* Info panel — slides up from bottom when a cell is tapped */
+.mv-info{position:absolute;left:12px;right:12px;bottom:12px;max-width:640px;margin:0 auto;background:linear-gradient(180deg,rgba(13,17,25,0.96),rgba(7,9,16,0.98));border:1px solid var(--border);padding:18px 22px;transform:translateY(calc(100% + 24px));opacity:0;transition:transform 0.3s ease,opacity 0.3s ease;pointer-events:none;box-shadow:0 -8px 40px rgba(0,0,0,0.6),0 0 30px rgba(201,168,76,0.08);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}
+.mv-info.show{transform:translateY(0);opacity:1;pointer-events:auto;}
+.info-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;}
+.info-title{font-family:'Cinzel Decorative',serif;font-size:20px;color:var(--gold);line-height:1.25;flex:1;}
+.info-coord{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--dim);white-space:nowrap;padding-top:6px;}
+.info-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.info-tag{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--spirit);border:1px solid rgba(126,184,212,0.3);padding:3px 10px;}
+.info-era{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.info-lore{font-size:14px;line-height:1.65;color:var(--text);font-style:italic;margin-bottom:14px;max-height:120px;overflow-y:auto;}
+.info-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.info-travel{flex:1;min-height:44px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--bg);background:var(--gold);border:none;padding:12px 20px;cursor:pointer;transition:all 0.25s;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.info-travel:hover,.info-travel:active{background:var(--gold2);box-shadow:var(--glow);}
+.info-travel:disabled{background:var(--dim);cursor:not-allowed;opacity:0.5;}
+.info-dismiss{min-height:44px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);background:transparent;border:1px solid var(--border);padding:12px 20px;cursor:pointer;transition:all 0.25s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.info-dismiss:hover,.info-dismiss:active{color:var(--gold);border-color:var(--gold);}
+
+@media(max-width:600px){
+  #mv-header{padding:12px 14px;flex-wrap:wrap;gap:8px;}
+  .mv-title{font-size:16px;}
+  .mv-sub{display:none;}
+  .mv-ctl{width:38px;height:38px;}
+  .mv-close{padding:8px 12px;font-size:9px;}
+  .info-title{font-size:16px;}
+  .info-lore{font-size:13px;max-height:90px;}
+  .mv-hover{display:none;}
+  .mv-legend{gap:10px;font-size:8px;}
+}
 #mv-footer{padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);background:rgba(7,9,16,0.8);font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:var(--dim);}
 .mv-hover{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.15em;color:var(--gold);}
 .mv-legend{display:flex;gap:18px;}
@@ -155,18 +188,25 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
       <span class="mv-title">The Marduk View</span>
       <span class="mv-sub" id="mvSub">· All Rooms</span>
     </div>
-    <button class="mv-close" id="mvClose">Close the View</button>
+    <div class="mv-controls">
+      <button class="mv-ctl" id="mvZoomOut" title="Zoom out">−</button>
+      <button class="mv-ctl" id="mvZoomIn"  title="Zoom in">+</button>
+      <button class="mv-ctl" id="mvRecenter" title="Recenter">⌖</button>
+      <button class="mv-close" id="mvClose">Close</button>
+    </div>
   </div>
   <div id="mv-canvas-wrap">
     <canvas id="mv-canvas"></canvas>
+    <!-- Info panel: slides up when a tile is tapped -->
+    <div id="mvInfo" class="mv-info"></div>
   </div>
   <div id="mv-footer">
-    <span class="mv-hover" id="mvHover">Hover a cell to name it · scroll to zoom · drag to pan</span>
+    <span class="mv-hover" id="mvHover">Tap a cell to preview  ·  tap again to travel  ·  pinch to zoom  ·  drag to pan</span>
     <div class="mv-legend">
       <div class="item"><span class="dot" style="background:var(--gold);"></span>Home</div>
       <div class="item"><span class="dot" style="background:var(--spirit);"></span>Visited</div>
       <div class="item"><span class="dot" style="background:var(--gold2);"></span>Correct</div>
-      <div class="item"><span class="dot" style="background:var(--ember);"></span>House</div>
+      <div class="item"><span class="dot" style="background:var(--ember);"></span>House door</div>
     </div>
   </div>
 </div>
@@ -746,11 +786,46 @@ function renderNavArrows(x, y) {
   });
 }
 
-/* ── Marduk View (honeycomb) ──────────────────── */
-const MV_R = 14;    // hex radius base
-let mvZoom = 1.0;
-let mvOffset = {x: 0, y: 0};
-let mvDrag = null;
+/* ═══════════════════════════════════════════════
+ *  MARDUK VIEW — game-like map (v4.2)
+ * ═══════════════════════════════════════════════
+ * - Touch-native: dedicated touchstart/move/end handlers
+ *   (avoids Pointer Events, which are unreliable in iOS Safari)
+ * - Kinetic panning with velocity + decay after flick
+ * - Smooth eased zoom (tweens mvZoom -> mvTargetZoom per frame)
+ * - Pinch-to-zoom anchored on pinch midpoint (no drift)
+ * - Double-tap to zoom in centred on tap point
+ * - Tap-to-preview (single tap), tap-again-to-travel
+ * - Visual feedback: tap ripple, selected-cell halo pulse
+ * - Big default cells (radius 36px) — feels like a strategy map
+ * - Continuous rAF loop so zoom / velocity / ripple all ease
+ * ═══════════════════════════════════════════════ */
+
+const MV_R = 24;                   // base hex radius at zoom 1
+const MV_ZOOM_MIN  = 0.5;
+const MV_ZOOM_MAX  = 5.5;
+const MV_ZOOM_HOME = 1.8;          // default zoom on open / recenter
+const MV_ZOOM_EASE = 0.18;         // 0..1 per frame — higher = snappier
+const MV_PAN_DECAY = 0.90;         // velocity decay per frame
+const MV_PAN_STOP  = 0.35;         // below this px/frame, stop
+const MV_TAP_MOVE_PX = 14;         // move threshold for tap vs drag
+const MV_TAP_TIME_MS = 320;
+const MV_DBL_TIME_MS = 320;
+const MV_DBL_DIST_PX = 36;
+
+let mvZoom       = MV_ZOOM_HOME;
+let mvTargetZoom = MV_ZOOM_HOME;
+let mvZoomAnchor = null;           // screen point to keep fixed during zoom tween
+let mvOffset     = {x: 0, y: 0};
+let mvVel        = {x: 0, y: 0};
+let mvSelected   = null;
+let mvRipples    = [];             // [{x, y, t0}]
+let mvRaf        = null;
+let mvCanvasCtx  = null;
+let mvWrapEl     = null;
+let mvCanvasEl   = null;
+let mvDrawFn     = null;
+let mvResizeFn   = null;
 
 function renderMardukView() {
   updateProgressDisplay();
@@ -758,129 +833,95 @@ function renderMardukView() {
   document.getElementById('navArrows').innerHTML = '';
   const mv = document.getElementById('mv-stage');
   mv.classList.add('show');
-  document.getElementById('mvSub').textContent = isKudraUnlocked() ? '· All Rooms · KUDRAMARDUK overlay' : '· All Rooms';
+  document.getElementById('mvSub').textContent = isKudraUnlocked()
+    ? '· All Rooms · KUDRAMARDUK overlay'
+    : '· All Rooms';
   setupMVCanvas();
-  // Hidden body canvas until closed
   document.body.style.background = 'var(--bg)';
-  initStars({count: 280, color: '230,220,190', speed: 0.008});
-  startParticles({colors: ['#c9a84c33', '#7eb8d433'], min: 1, max: 2, speed: 8});
+  initStars({count: 320, color: '230,220,190', speed: 0.005});
+  startParticles({colors: ['#c9a84c22', '#7eb8d422'], min: 1, max: 2, speed: 12});
 }
 
 function setupMVCanvas() {
-  const wrap = document.getElementById('mv-canvas-wrap');
-  const canvas = document.getElementById('mv-canvas');
-  canvas.width  = wrap.clientWidth;
-  canvas.height = wrap.clientHeight;
-  const ctx = canvas.getContext('2d');
+  mvWrapEl   = document.getElementById('mv-canvas-wrap');
+  mvCanvasEl = document.getElementById('mv-canvas');
+  mvCanvasCtx = mvCanvasEl.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
 
-  function draw() {
-    const W = canvas.width, H = canvas.height;
-    ctx.clearRect(0, 0, W, H);
+  // Set initial state
+  mvZoom = mvTargetZoom = MV_ZOOM_HOME;
+  mvOffset = {x: 0, y: 0};
+  mvVel = {x: 0, y: 0};
+  mvSelected = null;
+  mvRipples = [];
+  hideInfoPanel();
 
+  function sizeCanvas() {
+    const w = mvWrapEl.clientWidth;
+    const h = mvWrapEl.clientHeight;
+    mvCanvasEl.style.width  = w + 'px';
+    mvCanvasEl.style.height = h + 'px';
+    mvCanvasEl.width  = Math.floor(w * dpr);
+    mvCanvasEl.height = Math.floor(h * dpr);
+  }
+  sizeCanvas();
+
+  /* ── hex geometry ─────────────────────────────── */
+  function metrics() {
     const r = MV_R * mvZoom;
-    const hexW = Math.sqrt(3) * r;
-    const hexH = 2 * r * 0.75;
-
-    // Draw KUDRAMARDUK path overlay first (under the tiles)
-    if (isKudraUnlocked()) {
-      Object.keys(REALM.paths).forEach(pathId => {
-        const pts = REALM.paths[pathId];
-        ctx.beginPath();
-        pts.forEach((pt, i) => {
-          const [px, py] = gridToScreen(pt[0], pt[1], W, H, hexW, hexH);
-          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-        });
-        const g = ctx.createLinearGradient(0, 0, W, H);
-        g.addColorStop(0, 'rgba(201,168,76,0.9)');
-        g.addColorStop(1, 'rgba(232,201,110,0.6)');
-        ctx.strokeStyle = g;
-        ctx.lineWidth = 3;
-        ctx.shadowColor = 'rgba(201,168,76,0.8)';
-        ctx.shadowBlur = 8;
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-      });
-    }
-
-    const p = getP();
-    const visited = new Set(p.visited || []);
-
-    // Hexagons
+    return {r, hexW: Math.sqrt(3) * r, hexH: 2 * r * 0.75};
+  }
+  function gridToScreen(x, y, m) {
+    m = m || metrics();
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const stagger = (y % 2 === 0 ? 0 : m.hexW / 2);
+    const px = W / 2 + mvOffset.x + x * m.hexW + stagger;
+    const py = H / 2 + mvOffset.y - y * m.hexH;
+    return [px, py];
+  }
+  function screenToGrid(sx, sy) {
+    // Inverse of gridToScreen, approximate — used for zoom anchoring.
+    // Ignores row stagger; good enough for pinch/tween centring.
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const m = metrics();
+    return {
+      gx: (sx - W / 2 - mvOffset.x) / m.hexW,
+      gy: (H / 2 + mvOffset.y - sy) / m.hexH,
+    };
+  }
+  function tileAtPixel(sx, sy) {
+    const m = metrics();
+    let best = null, bestD = Infinity;
     for (let x = -GRID_EXTENT; x <= GRID_EXTENT; x++) {
       for (let y = -GRID_EXTENT; y <= GRID_EXTENT; y++) {
-        const [px, py] = gridToScreen(x, y, W, H, hexW, hexH);
-        if (px < -r || px > W + r || py < -r || py > H + r) continue;
-        const tile = getTile(x, y);
-        const isVisited = visited.has(`${x},${y}`);
-        const isHome = (x === 0 && y === 0);
-        const isMV   = (tile.type === 'marduk_view');
-        const isQuiz = (tile.type === 'quiz');
-        const isHouse = !!tile.house_id;
-        const isCorrectQ = isQuiz && isCorrect(tile.question_id);
-        const hasContent = tile.type && tile.type !== 'empty';
-
-        drawHex(ctx, px, py, r * 0.92);
-
-        let fill = 'rgba(7,9,16,0.55)';
-        let stroke = 'rgba(201,168,76,0.08)';
-        let lineW = 1;
-
-        if (isHome) {
-          fill = 'rgba(201,168,76,0.55)';
-          stroke = 'var(--gold2)';
-          lineW = 2;
-        } else if (isMV) {
-          fill = 'rgba(232,201,110,0.35)';
-          stroke = 'var(--gold)';
-          lineW = 2;
-        } else if (isHouse) {
-          fill = 'rgba(46,74,58,0.4)';
-          stroke = 'rgba(201,163,74,0.5)';
-          lineW = 1.5;
-          if (tile.type === 'house_front_door') {
-            stroke = 'rgba(255,107,43,0.8)';
-            lineW = 2.5;
-          }
-        } else if (isCorrectQ) {
-          fill = 'rgba(232,201,110,0.25)';
-          stroke = 'var(--gold2)';
-          lineW = 1.5;
-        } else if (isQuiz) {
-          fill = 'rgba(126,184,212,0.12)';
-          stroke = 'rgba(126,184,212,0.4)';
-        } else if (isVisited) {
-          fill = 'rgba(201,168,76,0.1)';
-          stroke = 'rgba(126,184,212,0.3)';
-        } else if (hasContent) {
-          fill = 'rgba(13,17,25,0.7)';
-          stroke = 'rgba(201,168,76,0.2)';
-        }
-        ctx.fillStyle = fill;
-        ctx.fill();
-        ctx.strokeStyle = stroke;
-        ctx.lineWidth = lineW;
-        ctx.stroke();
-
-        // Emoji for named tiles
-        if (tile.emoji && r > 10) {
-          ctx.font = `${Math.min(r * 0.9, 20)}px serif`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(tile.emoji, px, py);
+        const [px, py] = gridToScreen(x, y, m);
+        const d = Math.hypot(px - sx, py - sy);
+        if (d < m.r && d < bestD) {
+          bestD = d;
+          best = {x, y, info: getTile(x, y)};
         }
       }
     }
+    return best;
   }
 
-  function gridToScreen(x, y, W, H, hexW, hexH) {
-    const cx = W / 2 + mvOffset.x;
-    const cy = H / 2 + mvOffset.y;
-    // Offset rows for honeycomb
-    const px = cx + x * hexW + (y % 2 === 0 ? 0 : hexW / 2);
-    const py = cy - y * hexH;
-    return [px, py];
+  /* ── zoom anchor: change zoom while keeping a screen point fixed */
+  function setZoomAround(newZoom, anchorSx, anchorSy) {
+    newZoom = Math.max(MV_ZOOM_MIN, Math.min(MV_ZOOM_MAX, newZoom));
+    // Find the grid point currently under the anchor
+    const g = screenToGrid(anchorSx, anchorSy);
+    // Apply new zoom
+    mvZoom = newZoom;
+    // Recompute where that grid point would be in screen space, shift offset to re-anchor
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const m = metrics();
+    const newSx = W / 2 + mvOffset.x + g.gx * m.hexW;
+    const newSy = H / 2 + mvOffset.y - g.gy * m.hexH;
+    mvOffset.x += (anchorSx - newSx);
+    mvOffset.y += (anchorSy - newSy);
   }
 
+  /* ── drawing ──────────────────────────────────── */
   function drawHex(ctx, x, y, r) {
     ctx.beginPath();
     for (let i = 0; i < 6; i++) {
@@ -892,88 +933,582 @@ function setupMVCanvas() {
     ctx.closePath();
   }
 
-  // Hover / click
-  const hoverEl = document.getElementById('mvHover');
-  wrap.onmousemove = (ev) => {
-    const rect = wrap.getBoundingClientRect();
-    const mx = ev.clientX - rect.left;
-    const my = ev.clientY - rect.top;
-    if (mvDrag) {
-      mvOffset.x = mvDrag.off.x + (mx - mvDrag.start.x);
-      mvOffset.y = mvDrag.off.y + (my - mvDrag.start.y);
-      draw();
-      return;
+  function draw() {
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const ctx = mvCanvasCtx;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    const m = metrics();
+    const {r, hexW, hexH} = m;
+    const zoomStage = mvZoom < 0.75 ? 'far' : (mvZoom < 1.6 ? 'mid' : 'near');
+    const now = performance.now();
+
+    // Parallax background wash — subtle coloured radial that shifts with offset
+    const bgGrad = ctx.createRadialGradient(W / 2 + mvOffset.x * 0.3, H / 2 + mvOffset.y * 0.3, 40,
+                                            W / 2, H / 2, Math.max(W, H) * 0.8);
+    bgGrad.addColorStop(0, 'rgba(40,30,15,0.22)');
+    bgGrad.addColorStop(1, 'rgba(5,7,12,0)');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    // KUDRAMARDUK path overlay
+    if (isKudraUnlocked()) {
+      Object.keys(REALM.paths).forEach(pathId => {
+        const pts = REALM.paths[pathId];
+        ctx.beginPath();
+        pts.forEach((pt, i) => {
+          const [px, py] = gridToScreen(pt[0], pt[1], m);
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        });
+        ctx.strokeStyle = 'rgba(232,201,110,0.75)';
+        ctx.lineWidth = Math.max(2, r * 0.14);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.shadowColor = 'rgba(232,201,110,0.8)';
+        ctx.shadowBlur = 12;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      });
     }
-    const tile = tileAtPixel(mx, my);
-    if (tile && tile.info.name) {
-      hoverEl.textContent = `${tile.info.emoji || '·'}  ${tile.info.name}  (${tile.x >= 0 ? '+' : ''}${tile.x}, ${tile.y >= 0 ? '+' : ''}${tile.y})`;
-    } else if (tile) {
-      hoverEl.textContent = `· empty ·  (${tile.x >= 0 ? '+' : ''}${tile.x}, ${tile.y >= 0 ? '+' : ''}${tile.y})`;
-    } else {
-      hoverEl.textContent = 'Hover a cell to name it · scroll to zoom · drag to pan';
-    }
-  };
-  wrap.onmousedown = (ev) => {
-    wrap.classList.add('dragging');
-    const rect = wrap.getBoundingClientRect();
-    mvDrag = {start: {x: ev.clientX - rect.left, y: ev.clientY - rect.top}, off: {...mvOffset}, moved: false, downPos: {x: ev.clientX, y: ev.clientY}};
-  };
-  wrap.onmouseup = (ev) => {
-    wrap.classList.remove('dragging');
-    if (mvDrag) {
-      const moved = Math.hypot(ev.clientX - mvDrag.downPos.x, ev.clientY - mvDrag.downPos.y);
-      if (moved < 4) {
-        // treated as click
-        const rect = wrap.getBoundingClientRect();
-        const mx = ev.clientX - rect.left;
-        const my = ev.clientY - rect.top;
-        const tile = tileAtPixel(mx, my);
-        if (tile) {
-          document.getElementById('mv-stage').classList.remove('show');
-          goTo(tile.x, tile.y);
+
+    const p = getP();
+    const visited = new Set(p.visited || []);
+    const selKey = mvSelected ? `${mvSelected.x},${mvSelected.y}` : null;
+
+    // Cells
+    const padR = r * 2;
+    for (let x = -GRID_EXTENT; x <= GRID_EXTENT; x++) {
+      for (let y = -GRID_EXTENT; y <= GRID_EXTENT; y++) {
+        const [px, py] = gridToScreen(x, y, m);
+        if (px < -padR || px > W + padR || py < -padR || py > H + padR) continue;
+
+        const tile      = getTile(x, y);
+        const isVisited = visited.has(`${x},${y}`);
+        const isHome    = (x === 0 && y === 0);
+        const isMV      = (tile.type === 'marduk_view');
+        const isQuiz    = (tile.type === 'quiz');
+        const isHouse   = !!tile.house_id;
+        const isFrontDoor = (tile.type === 'house_front_door');
+        const isCorrectQ  = isQuiz && isCorrect(tile.question_id);
+        const hasContent  = tile.type && tile.type !== 'empty';
+        const isSelected  = selKey === `${x},${y}`;
+
+        // Base styling
+        let fill = 'rgba(10,14,22,0.55)';
+        let stroke = 'rgba(201,168,76,0.08)';
+        let lineW = 1;
+        let rimColor = null;
+
+        if (isHome)         { fill = 'rgba(232,201,110,0.55)'; stroke = '#e8c96e'; lineW = 2.8; rimColor = 'rgba(232,201,110,0.8)'; }
+        else if (isMV)      { fill = 'rgba(232,201,110,0.32)'; stroke = '#c9a84c'; lineW = 2.2; rimColor = 'rgba(232,201,110,0.55)'; }
+        else if (isFrontDoor){ fill = 'rgba(255,107,43,0.25)'; stroke = '#ff6b2b'; lineW = 2.6; rimColor = 'rgba(255,107,43,0.5)'; }
+        else if (isHouse)   { fill = 'rgba(46,74,58,0.45)';   stroke = 'rgba(201,163,74,0.5)'; lineW = 1.5; }
+        else if (isCorrectQ){ fill = 'rgba(232,201,110,0.24)'; stroke = '#e8c96e'; lineW = 1.8; rimColor = 'rgba(232,201,110,0.4)'; }
+        else if (isQuiz)    { fill = 'rgba(126,184,212,0.14)'; stroke = 'rgba(126,184,212,0.42)'; lineW = 1.4; }
+        else if (isVisited) { fill = 'rgba(201,168,76,0.11)'; stroke = 'rgba(126,184,212,0.3)'; lineW = 1.1; }
+        else if (hasContent){ fill = 'rgba(13,17,25,0.75)';   stroke = 'rgba(201,168,76,0.22)'; lineW = 1; }
+
+        // Radial inner gradient fill for a "shine"
+        drawHex(ctx, px, py, r * 0.94);
+        if (hasContent || isHome || isMV) {
+          const g = ctx.createRadialGradient(px - r * 0.25, py - r * 0.3, 1, px, py, r * 0.95);
+          const fillBase = fill;
+          g.addColorStop(0, fillBase.replace(/[\d.]+\)$/, (a) => Math.min(parseFloat(a) + 0.18, 1) + ')'));
+          g.addColorStop(1, fillBase);
+          ctx.fillStyle = g;
+        } else {
+          ctx.fillStyle = fill;
+        }
+        ctx.fill();
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = lineW;
+        ctx.stroke();
+
+        // Rim glow on important tiles (breathing)
+        if (rimColor) {
+          const breath = 0.55 + 0.45 * Math.sin(now * 0.0022 + (x + y) * 0.3);
+          ctx.save();
+          ctx.shadowColor = rimColor;
+          ctx.shadowBlur = 14 * breath;
+          ctx.strokeStyle = rimColor;
+          ctx.lineWidth = 0.6;
+          drawHex(ctx, px, py, r * 0.94);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Selected halo — dual ring pulse
+        if (isSelected) {
+          const pulse = 0.72 + 0.28 * Math.sin(now * 0.006);
+          ctx.save();
+          ctx.shadowColor = 'rgba(232,201,110,0.9)';
+          ctx.shadowBlur = 22;
+          drawHex(ctx, px, py, r * 1.08);
+          ctx.strokeStyle = `rgba(232,201,110,${pulse})`;
+          ctx.lineWidth = 2.6;
+          ctx.stroke();
+          ctx.restore();
+          drawHex(ctx, px, py, r * 1.35);
+          ctx.strokeStyle = `rgba(232,201,110,${pulse * 0.28})`;
+          ctx.lineWidth = 1.4;
+          ctx.stroke();
+        }
+
+        // Emoji — mid and near
+        if (tile.emoji && zoomStage !== 'far' && r > 12) {
+          ctx.font = `${Math.min(r * 1.0, 34)}px serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          const ey = (zoomStage === 'near' && tile.name) ? py - r * 0.12 : py;
+          ctx.fillText(tile.emoji, px, ey);
+        }
+
+        // Name — near only
+        if (zoomStage === 'near' && tile.name && r > 28) {
+          ctx.font = `600 ${Math.min(r * 0.24, 12)}px Cinzel,serif`;
+          ctx.fillStyle = 'rgba(228,220,203,0.9)';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          const nm = tile.name.length > 17 ? tile.name.slice(0, 15) + '…' : tile.name;
+          ctx.fillText(nm, px, py + r * 0.38);
         }
       }
     }
-    mvDrag = null;
-  };
-  wrap.onmouseleave = () => { wrap.classList.remove('dragging'); mvDrag = null; };
-  wrap.onwheel = (ev) => {
-    ev.preventDefault();
-    const delta = -ev.deltaY * 0.001;
-    mvZoom = Math.max(0.4, Math.min(3.5, mvZoom * (1 + delta)));
-    draw();
-  };
 
-  function tileAtPixel(mx, my) {
-    const W = canvas.width, H = canvas.height;
-    const r = MV_R * mvZoom;
-    const hexW = Math.sqrt(3) * r;
-    const hexH = 2 * r * 0.75;
-    let best = null, bestD = Infinity;
-    for (let x = -GRID_EXTENT; x <= GRID_EXTENT; x++) {
-      for (let y = -GRID_EXTENT; y <= GRID_EXTENT; y++) {
-        const [px, py] = gridToScreen(x, y, W, H, hexW, hexH);
-        const d = Math.hypot(px - mx, py - my);
-        if (d < r && d < bestD) { bestD = d; best = {x, y, info: getTile(x, y)}; }
-      }
-    }
-    return best;
+    // Tap ripples (gold ring expanding out from tap point)
+    mvRipples = mvRipples.filter(rp => now - rp.t0 < 650);
+    mvRipples.forEach(rp => {
+      const t = (now - rp.t0) / 650; // 0..1
+      const rad = 8 + t * 85;
+      const alpha = (1 - t) * 0.55;
+      ctx.beginPath();
+      ctx.arc(rp.x, rp.y, rad, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(232,201,110,${alpha})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
   }
 
-  draw();
-  // Resize handler scoped to MV
-  window.addEventListener('resize', () => {
-    canvas.width = wrap.clientWidth;
-    canvas.height = wrap.clientHeight;
+  /* ── animation loop: drives zoom easing, velocity decay, redraw ── */
+  let panning = false;           // suspends velocity decay while actively dragging
+  function loop() {
+    mvRaf = requestAnimationFrame(loop);
+
+    // Ease zoom toward target
+    if (Math.abs(mvZoom - mvTargetZoom) > 0.002) {
+      if (mvZoomAnchor) {
+        const newZ = mvZoom + (mvTargetZoom - mvZoom) * MV_ZOOM_EASE;
+        setZoomAround(newZ, mvZoomAnchor.x, mvZoomAnchor.y);
+      } else {
+        mvZoom = mvZoom + (mvTargetZoom - mvZoom) * MV_ZOOM_EASE;
+      }
+    } else if (mvZoomAnchor) {
+      mvZoomAnchor = null;
+    }
+
+    // Apply momentum
+    if (!panning && (Math.abs(mvVel.x) > MV_PAN_STOP || Math.abs(mvVel.y) > MV_PAN_STOP)) {
+      mvOffset.x += mvVel.x;
+      mvOffset.y += mvVel.y;
+      mvVel.x *= MV_PAN_DECAY;
+      mvVel.y *= MV_PAN_DECAY;
+    } else if (!panning) {
+      mvVel.x = 0; mvVel.y = 0;
+    }
+
     draw();
+  }
+  function stopLoop() {
+    if (mvRaf) { cancelAnimationFrame(mvRaf); mvRaf = null; }
+  }
+  // Kick off the loop. Stop when MV stage is hidden (see mvClose handler).
+  if (mvRaf) cancelAnimationFrame(mvRaf);
+  loop();
+
+  mvDrawFn = draw;
+  mvResizeFn = () => { sizeCanvas(); };
+
+  /* ═══════════════════════════════════════════════
+   *  INPUT — touch first, mouse second
+   * ═══════════════════════════════════════════════ */
+
+  // Active gestures
+  let activeTouches = new Map();   // identifier -> {x, y, t}
+  let panAnchor = null;            // {sx, sy, offX, offY, lastX, lastY, lastT, vx, vy}
+  let pinchAnchor = null;          // {dist, zoom, midSx, midSy, midGrid}
+  let tapStart = null;             // {sx, sy, t}
+  let lastTap = null;              // {sx, sy, t} — for double-tap detection
+
+  function wrapPos(clientX, clientY) {
+    const r = mvWrapEl.getBoundingClientRect();
+    return {x: clientX - r.left, y: clientY - r.top};
+  }
+
+  function startGesture(touchList) {
+    activeTouches.clear();
+    for (const t of touchList) {
+      const p = wrapPos(t.clientX, t.clientY);
+      activeTouches.set(t.identifier, {x: p.x, y: p.y, t: performance.now()});
+    }
+    beginByCount();
+  }
+
+  function beginByCount() {
+    if (activeTouches.size === 1) {
+      const first = Array.from(activeTouches.values())[0];
+      tapStart = {sx: first.x, sy: first.y, t: performance.now()};
+      panAnchor = {
+        sx: first.x, sy: first.y,
+        offX: mvOffset.x, offY: mvOffset.y,
+        lastX: first.x, lastY: first.y, lastT: performance.now(),
+        vx: 0, vy: 0,
+      };
+      pinchAnchor = null;
+      panning = true;
+      mvVel.x = 0; mvVel.y = 0;
+    } else if (activeTouches.size === 2) {
+      tapStart = null;
+      panAnchor = null;
+      const arr = Array.from(activeTouches.values());
+      const midSx = (arr[0].x + arr[1].x) / 2;
+      const midSy = (arr[0].y + arr[1].y) / 2;
+      pinchAnchor = {
+        dist: Math.hypot(arr[0].x - arr[1].x, arr[0].y - arr[1].y),
+        zoom: mvZoom,
+        midSx, midSy,
+        midGrid: screenToGrid(midSx, midSy),
+      };
+      panning = true;
+    }
+  }
+
+  function updateGesture(touchList) {
+    // Refresh positions
+    for (const t of touchList) {
+      const p = wrapPos(t.clientX, t.clientY);
+      activeTouches.set(t.identifier, {x: p.x, y: p.y, t: performance.now()});
+    }
+
+    if (pinchAnchor && activeTouches.size >= 2) {
+      const arr = Array.from(activeTouches.values()).slice(0, 2);
+      const dist = Math.hypot(arr[0].x - arr[1].x, arr[0].y - arr[1].y);
+      const midSx = (arr[0].x + arr[1].x) / 2;
+      const midSy = (arr[0].y + arr[1].y) / 2;
+      const factor = dist / pinchAnchor.dist;
+      const newZoom = Math.max(MV_ZOOM_MIN, Math.min(MV_ZOOM_MAX, pinchAnchor.zoom * factor));
+      mvZoom = newZoom;
+      mvTargetZoom = newZoom;
+      // Put pinchAnchor.midGrid back at the current midpoint
+      const m = metrics();
+      const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+      mvOffset.x = midSx - W / 2 - pinchAnchor.midGrid.gx * m.hexW;
+      mvOffset.y = midSy - H / 2 + pinchAnchor.midGrid.gy * m.hexH;
+    } else if (panAnchor && activeTouches.size === 1) {
+      const p = Array.from(activeTouches.values())[0];
+      mvOffset.x = panAnchor.offX + (p.x - panAnchor.sx);
+      mvOffset.y = panAnchor.offY + (p.y - panAnchor.sy);
+      // Track velocity (px per frame at 60fps)
+      const now = performance.now();
+      const dt = Math.max(1, now - panAnchor.lastT);
+      panAnchor.vx = (p.x - panAnchor.lastX) / dt * 16;
+      panAnchor.vy = (p.y - panAnchor.lastY) / dt * 16;
+      panAnchor.lastX = p.x;
+      panAnchor.lastY = p.y;
+      panAnchor.lastT = now;
+
+      if (tapStart && Math.hypot(p.x - tapStart.sx, p.y - tapStart.sy) > MV_TAP_MOVE_PX) {
+        tapStart = null;
+        mvWrapEl.classList.add('dragging');
+      }
+    }
+  }
+
+  function endGesture(endedIdentifiers) {
+    const now = performance.now();
+
+    // Capture final velocity BEFORE removing the anchor
+    if (panAnchor && activeTouches.size === 1 && endedIdentifiers.length === 1) {
+      mvVel.x = clamp(panAnchor.vx, -50, 50);
+      mvVel.y = clamp(panAnchor.vy, -50, 50);
+    }
+
+    // Remove ended touches
+    for (const id of endedIdentifiers) activeTouches.delete(id);
+
+    // Tap handling
+    if (tapStart && activeTouches.size === 0) {
+      const dt = now - tapStart.t;
+      if (dt < MV_TAP_TIME_MS) {
+        handleTap(tapStart.sx, tapStart.sy, now);
+      }
+      tapStart = null;
+    }
+
+    if (activeTouches.size === 0) {
+      panAnchor = null;
+      pinchAnchor = null;
+      panning = false;
+      mvWrapEl.classList.remove('dragging');
+    } else {
+      // Rebase gesture for remaining touches
+      beginByCount();
+    }
+  }
+
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  function handleTap(sx, sy, now) {
+    // Double-tap detection
+    if (lastTap && (now - lastTap.t) < MV_DBL_TIME_MS &&
+        Math.hypot(sx - lastTap.sx, sy - lastTap.sy) < MV_DBL_DIST_PX) {
+      // Zoom in centred on tap point
+      mvTargetZoom = Math.min(MV_ZOOM_MAX, mvZoom * 1.8);
+      mvZoomAnchor = {x: sx, y: sy};
+      mvRipples.push({x: sx, y: sy, t0: now});
+      lastTap = null;
+      return;
+    }
+    lastTap = {sx, sy, t: now};
+
+    // Single tap on cell
+    const tile = tileAtPixel(sx, sy);
+    if (!tile) {
+      mvSelected = null;
+      hideInfoPanel();
+      return;
+    }
+    mvRipples.push({x: sx, y: sy, t0: now});
+
+    if (mvSelected && mvSelected.x === tile.x && mvSelected.y === tile.y) {
+      travelFromMV(tile.x, tile.y);
+      return;
+    }
+    mvSelected = {x: tile.x, y: tile.y};
+    showInfoPanel(tile);
+  }
+
+  /* ── wire touch events ────────────────────────── */
+  mvWrapEl.addEventListener('touchstart', (ev) => {
+    ev.preventDefault();
+    startGesture(ev.touches);
+  }, {passive: false});
+
+  mvWrapEl.addEventListener('touchmove', (ev) => {
+    ev.preventDefault();
+    updateGesture(ev.touches);
+  }, {passive: false});
+
+  mvWrapEl.addEventListener('touchend', (ev) => {
+    ev.preventDefault();
+    const ended = [];
+    for (const t of ev.changedTouches) ended.push(t.identifier);
+    endGesture(ended);
+  }, {passive: false});
+
+  mvWrapEl.addEventListener('touchcancel', (ev) => {
+    const ended = [];
+    for (const t of ev.changedTouches) ended.push(t.identifier);
+    endGesture(ended);
   });
+
+  /* ── mouse events (desktop) ───────────────────── */
+  let mouseDown = false;
+  mvWrapEl.addEventListener('mousedown', (ev) => {
+    mouseDown = true;
+    const p = wrapPos(ev.clientX, ev.clientY);
+    tapStart = {sx: p.x, sy: p.y, t: performance.now()};
+    panAnchor = {
+      sx: p.x, sy: p.y,
+      offX: mvOffset.x, offY: mvOffset.y,
+      lastX: p.x, lastY: p.y, lastT: performance.now(),
+      vx: 0, vy: 0,
+    };
+    panning = true;
+    mvVel.x = 0; mvVel.y = 0;
+  });
+  mvWrapEl.addEventListener('mousemove', (ev) => {
+    if (!mouseDown) return;
+    const p = wrapPos(ev.clientX, ev.clientY);
+    mvOffset.x = panAnchor.offX + (p.x - panAnchor.sx);
+    mvOffset.y = panAnchor.offY + (p.y - panAnchor.sy);
+    const now = performance.now();
+    const dt = Math.max(1, now - panAnchor.lastT);
+    panAnchor.vx = (p.x - panAnchor.lastX) / dt * 16;
+    panAnchor.vy = (p.y - panAnchor.lastY) / dt * 16;
+    panAnchor.lastX = p.x;
+    panAnchor.lastY = p.y;
+    panAnchor.lastT = now;
+    if (tapStart && Math.hypot(p.x - tapStart.sx, p.y - tapStart.sy) > MV_TAP_MOVE_PX) {
+      tapStart = null;
+      mvWrapEl.classList.add('dragging');
+    }
+  });
+  mvWrapEl.addEventListener('mouseup', (ev) => {
+    if (!mouseDown) return;
+    mouseDown = false;
+    const now = performance.now();
+    if (panAnchor) {
+      mvVel.x = clamp(panAnchor.vx, -50, 50);
+      mvVel.y = clamp(panAnchor.vy, -50, 50);
+    }
+    if (tapStart && (now - tapStart.t) < MV_TAP_TIME_MS) {
+      const p = wrapPos(ev.clientX, ev.clientY);
+      handleTap(p.x, p.y, now);
+    }
+    tapStart = null;
+    panAnchor = null;
+    panning = false;
+    mvWrapEl.classList.remove('dragging');
+  });
+  mvWrapEl.addEventListener('mouseleave', () => {
+    mouseDown = false;
+    panning = false;
+    panAnchor = null;
+    tapStart = null;
+    mvWrapEl.classList.remove('dragging');
+  });
+
+  // Desktop wheel-zoom centred on cursor
+  mvWrapEl.addEventListener('wheel', (ev) => {
+    ev.preventDefault();
+    const p = wrapPos(ev.clientX, ev.clientY);
+    const factor = Math.exp(-ev.deltaY * 0.0018);
+    mvTargetZoom = Math.max(MV_ZOOM_MIN, Math.min(MV_ZOOM_MAX, mvZoom * factor));
+    mvZoomAnchor = {x: p.x, y: p.y};
+  }, {passive: false});
+
+  /* ── zoom control buttons ─────────────────────── */
+  document.getElementById('mvZoomIn').onclick = () => {
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    mvZoomAnchor = {x: W / 2, y: H / 2};
+    mvTargetZoom = Math.min(MV_ZOOM_MAX, mvZoom * 1.4);
+  };
+  document.getElementById('mvZoomOut').onclick = () => {
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    mvZoomAnchor = {x: W / 2, y: H / 2};
+    mvTargetZoom = Math.max(MV_ZOOM_MIN, mvZoom / 1.4);
+  };
+  document.getElementById('mvRecenter').onclick = () => {
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    mvZoomAnchor = {x: W / 2, y: H / 2};
+    mvTargetZoom = MV_ZOOM_HOME;
+    // Also pan back to centre (0,0) over a couple of frames by injecting
+    // velocity — but simpler: snap offset to 0,0.
+    mvOffset.x = 0;
+    mvOffset.y = 0;
+    mvVel.x = 0;
+    mvVel.y = 0;
+    mvSelected = null;
+    hideInfoPanel();
+  };
+
+  /* ── resize ───────────────────────────────────── */
+  const ro = new ResizeObserver(() => sizeCanvas());
+  ro.observe(mvWrapEl);
 }
+
+/* ── Info panel (unchanged external helpers) ───── */
+function stripTags(html) { return (html || '').replace(/<[^>]*>/g, ''); }
+
+function showInfoPanel(tileRef) {
+  const {x, y, info} = tileRef;
+  const panel = document.getElementById('mvInfo');
+  const p = getP();
+  const visitedSet = new Set(p.visited || []);
+  const titleText = info.name
+    ? `${info.emoji ? info.emoji + '  ' : ''}${info.name}`
+    : 'An empty tile';
+
+  const tags = [];
+  if (visitedSet.has(`${x},${y}`)) tags.push('Visited');
+  if (info.type === 'quiz' && isCorrect(info.question_id)) tags.push('Answered');
+  if (info.type === 'home') tags.push('Home');
+  if (info.type === 'threshold') tags.push('Threshold');
+  if (info.type === 'marduk_view') tags.push('Reward');
+  if (info.type === 'spine') tags.push('Spine');
+  if (info.house_id) {
+    const h = info.house_id.charAt(0).toUpperCase() + info.house_id.slice(1);
+    tags.push(`House of ${h}`);
+  }
+  if (info.type === 'house_front_door') tags.push('Front Door');
+  if (info.on_path && info.on_path.length) tags.push('On a Path');
+
+  let lore = '';
+  if (info.lore) {
+    const plain = stripTags(info.lore);
+    lore = plain.length > 260 ? plain.slice(0, 260) + '…' : plain;
+  } else if (info.type === 'quiz') {
+    const q = REALM.questions[info.question_id];
+    lore = q ? stripTags(q.lore).slice(0, 220) + '…' : '';
+  } else if (!info.name) {
+    lore = 'An empty tile. Still navigable — keep walking, the realm continues beyond.';
+  }
+
+  let actionDisabled = '';
+  let actionLabel = 'Travel here →';
+  if (info.type === 'marduk_view' && !isMVUnlocked()) {
+    actionDisabled = 'disabled';
+    actionLabel = 'Locked — solve the quiz';
+  }
+  if (info.type === 'quiz') {
+    const qid = info.question_id;
+    const n = parseInt(qid.slice(1));
+    if (n > 1 && !isCorrect('Q' + (n - 1)) && !isCorrect(qid)) {
+      actionDisabled = 'disabled';
+      actionLabel = `Answer Q${n - 1} first`;
+    }
+  }
+
+  panel.innerHTML = `
+    <div class="info-head">
+      <div class="info-title">${titleText}</div>
+      <div class="info-coord">(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})</div>
+    </div>
+    ${info.era ? `<div class="info-era">${info.era}</div>` : ''}
+    ${tags.length ? `<div class="info-tags">${tags.map(t => `<span class="info-tag">${t}</span>`).join('')}</div>` : ''}
+    ${lore ? `<div class="info-lore">${lore}</div>` : ''}
+    <div class="info-actions">
+      <button class="info-travel" ${actionDisabled} onclick="mvTravel(${x},${y})">${actionLabel}</button>
+      <button class="info-dismiss" onclick="mvDismiss()">Dismiss</button>
+    </div>`;
+  panel.classList.add('show');
+}
+
+function hideInfoPanel() {
+  const panel = document.getElementById('mvInfo');
+  if (panel) panel.classList.remove('show');
+}
+
+function travelFromMV(x, y) {
+  const info = getTile(x, y);
+  if (info.type === 'marduk_view' && !isMVUnlocked()) return;
+  if (info.type === 'quiz') {
+    const n = parseInt(info.question_id.slice(1));
+    if (n > 1 && !isCorrect('Q' + (n - 1)) && !isCorrect(info.question_id)) return;
+  }
+  document.getElementById('mv-stage').classList.remove('show');
+  hideInfoPanel();
+  mvSelected = null;
+  if (mvRaf) { cancelAnimationFrame(mvRaf); mvRaf = null; }
+  goTo(x, y);
+}
+
+window.mvTravel  = (x, y) => travelFromMV(x, y);
+window.mvDismiss = () => {
+  mvSelected = null;
+  hideInfoPanel();
+};
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('mv-stage').classList.contains('show') && mvResizeFn) mvResizeFn();
+});
 
 document.getElementById('mvClose').addEventListener('click', () => {
   document.getElementById('mv-stage').classList.remove('show');
+  if (mvRaf) { cancelAnimationFrame(mvRaf); mvRaf = null; }
   goTo(0, 0);
 });
-
 /* ── Keyboard nav ─────────────────────────────── */
 document.addEventListener('keydown', (ev) => {
   if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA') return;
