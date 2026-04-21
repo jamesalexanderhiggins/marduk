@@ -600,7 +600,9 @@
       },
       "path_colors": {
         "A": "#C9A84C"
-      }
+      },
+      "key_id": "A",
+      "key_note": "Default placement — reassign via Room Card"
     },
     "-12,-13": {
       "type": "house_interior",
@@ -1450,7 +1452,9 @@
       },
       "path_colors": {
         "B": "#4A7C59"
-      }
+      },
+      "key_id": "B",
+      "key_note": "Default placement — reassign via Room Card"
     },
     "-13,1": {
       "type": "house_interior",
@@ -1624,7 +1628,9 @@
       },
       "path_colors": {
         "C": "#7B5EA7"
-      }
+      },
+      "key_id": "C",
+      "key_note": "Default placement — reassign via Room Card"
     },
     "-13,13": {
       "type": "house_interior",
@@ -1897,7 +1903,9 @@
       },
       "path_colors": {
         "D": "#5B9AB8"
-      }
+      },
+      "key_id": "D",
+      "key_note": "Default placement — reassign via Room Card"
     },
     "1,14": {
       "type": "house_interior",
@@ -2082,7 +2090,9 @@
       },
       "path_colors": {
         "E": "#A83232"
-      }
+      },
+      "key_id": "E",
+      "key_note": "Default placement — reassign via Room Card"
     },
     "12,12": {
       "type": "house_interior",
@@ -2366,7 +2376,9 @@
       },
       "path_colors": {
         "F": "#A86A32"
-      }
+      },
+      "key_id": "F",
+      "key_note": "Default placement — reassign via Room Card"
     },
     "13,2": {
       "type": "house_interior",
@@ -2672,7 +2684,9 @@
       },
       "path_colors": {
         "G": "#2D8888"
-      }
+      },
+      "key_id": "G",
+      "key_note": "Default placement — reassign via Room Card"
     },
     "12,-16": {
       "type": "house_interior",
@@ -2945,7 +2959,9 @@
       },
       "path_colors": {
         "H": "#5C2D82"
-      }
+      },
+      "key_id": "H",
+      "key_note": "Default placement — reassign via Room Card"
     },
     "1,-16": {
       "type": "house_interior",
@@ -3766,6 +3782,697 @@
       "path_colors": {
         "H": "#5C2D82"
       }
+    },
+    "-8,6": {
+      "name": "Marduk's Cave",
+      "emoji": "🕳️",
+      "key_id": "I",
+      "type": "special",
+      "lore": null,
+      "era": "The Wilderness · A Sealed Chamber",
+      "dead_end": true
+    },
+    "7,-4": {
+      "name": "The FBI Holding Cell at JFK",
+      "emoji": "🔒",
+      "key_id": "J",
+      "type": "special",
+      "lore": null,
+      "era": "Pre-Collapse · JFK Terminal B",
+      "dead_end": true
+    },
+    "6,11": {
+      "name": "The Med Pod Room",
+      "emoji": "🛏️",
+      "key_id": null,
+      "type": "special",
+      "lore": null,
+      "era": "The Wilderness · A Glass Cylinder",
+      "dead_end": true,
+      "ghost_haunted": true
+    },
+    "4,7": {
+      "type": "locked_zone_threshold",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null,
+      "keys_required": [
+        "E",
+        "D"
+      ]
+    },
+    "4,8": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "4,9": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "4,10": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "5,7": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "5,8": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "5,9": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "5,10": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "6,7": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "6,8": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "6,9": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "6,10": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "7,7": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "7,8": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "7,9": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "7,10": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone1",
+      "zone_name": "The Crossing",
+      "zone_color": "#7755BB",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-4,6": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-4,7": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-4,8": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-4,9": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-4,10": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-3,6": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-3,7": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-3,8": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-3,9": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-3,10": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-2,6": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-2,7": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-2,8": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-2,9": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-2,10": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-1,6": {
+      "type": "locked_zone_threshold",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null,
+      "keys_required": [
+        "B",
+        "C"
+      ]
+    },
+    "-1,7": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-1,8": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-1,9": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-1,10": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone2",
+      "zone_name": "The Observatory",
+      "zone_color": "#336655",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-12,-8": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-12,-7": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-12,-6": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-12,-5": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-12,-4": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-11,-8": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-11,-7": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-11,-6": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-11,-5": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-11,-4": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-10,-8": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-10,-7": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-10,-6": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-10,-5": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-10,-4": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-9,-8": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-9,-7": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-9,-6": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-9,-5": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-9,-4": {
+      "type": "locked_zone_threshold",
+      "zone_id": "zone3",
+      "zone_name": "The Vault",
+      "zone_color": "#886633",
+      "name": null,
+      "lore": null,
+      "emoji": null,
+      "keys_required": [
+        "A",
+        "G"
+      ]
+    },
+    "-2,-6": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-2,-5": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-2,-4": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-1,-6": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-1,-5": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "-1,-4": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "0,-6": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "0,-5": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "0,-4": {
+      "type": "locked_zone_threshold",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null,
+      "keys_required": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J"
+      ]
+    },
+    "1,-6": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "1,-5": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "1,-4": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "2,-6": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "2,-5": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
+    },
+    "2,-4": {
+      "type": "locked_zone_interior",
+      "zone_id": "zone4",
+      "zone_name": "The Sanctum",
+      "zone_color": "#3333AA",
+      "name": null,
+      "lore": null,
+      "emoji": null
     }
   },
   "questions": {
@@ -4789,6 +5496,156 @@
         ]
       },
       "hidden": true
+    }
+  },
+  "key_defs": {
+    "A": {
+      "sym": "♦",
+      "color": "#C9A84C",
+      "name": "The Gold Key"
+    },
+    "B": {
+      "sym": "◆",
+      "color": "#4A7C59",
+      "name": "The Moss Key"
+    },
+    "C": {
+      "sym": "✦",
+      "color": "#7B5EA7",
+      "name": "The Violet Key"
+    },
+    "D": {
+      "sym": "❆",
+      "color": "#5B9AB8",
+      "name": "The Ice Key"
+    },
+    "E": {
+      "sym": "✸",
+      "color": "#A83232",
+      "name": "The Crimson Key"
+    },
+    "F": {
+      "sym": "⬡",
+      "color": "#A86A32",
+      "name": "The Copper Key"
+    },
+    "G": {
+      "sym": "◈",
+      "color": "#2D8888",
+      "name": "The Teal Key"
+    },
+    "H": {
+      "sym": "★",
+      "color": "#5C2D82",
+      "name": "The Purple Key"
+    },
+    "I": {
+      "sym": "◇",
+      "color": "#AAAAAA",
+      "name": "The Silver Key"
+    },
+    "J": {
+      "sym": "⊕",
+      "color": "#CC5500",
+      "name": "The Ember Key"
+    }
+  },
+  "zones_config": {
+    "zone1": {
+      "name": "The Crossing",
+      "color": "#7755BB",
+      "threshold": [
+        4,
+        7
+      ],
+      "keys_required": [
+        "E",
+        "D"
+      ],
+      "block": {
+        "x": [
+          4,
+          7
+        ],
+        "y": [
+          7,
+          10
+        ]
+      }
+    },
+    "zone2": {
+      "name": "The Observatory",
+      "color": "#336655",
+      "threshold": [
+        -1,
+        6
+      ],
+      "keys_required": [
+        "B",
+        "C"
+      ],
+      "block": {
+        "x": [
+          -4,
+          -1
+        ],
+        "y": [
+          6,
+          10
+        ]
+      }
+    },
+    "zone3": {
+      "name": "The Vault",
+      "color": "#886633",
+      "threshold": [
+        -9,
+        -4
+      ],
+      "keys_required": [
+        "A",
+        "G"
+      ],
+      "block": {
+        "x": [
+          -12,
+          -9
+        ],
+        "y": [
+          -8,
+          -4
+        ]
+      }
+    },
+    "zone4": {
+      "name": "The Sanctum",
+      "color": "#3333AA",
+      "threshold": [
+        0,
+        -4
+      ],
+      "keys_required": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J"
+      ],
+      "block": {
+        "x": [
+          -2,
+          2
+        ],
+        "y": [
+          -6,
+          -4
+        ]
+      }
     }
   }
 }
