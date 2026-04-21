@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Realm — Marduk's Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070910; --bg2:#0d1119; --bg3:#121620;
+  --gold:#c9a84c; --gold2:#e8c96e;
+  --ember:#ff6b2b; --spirit:#7eb8d4;
+  --violet:#c084fc; --green:#7ed49a; --moss:#2e4a3a; --moonlight:#c8cbd0;
+  --text:#e4dccb; --dim:#6a6055;
+  --border:rgba(201,168,76,0.18);
+  --glow:0 0 18px rgba(201,168,76,0.4),0 0 60px rgba(201,168,76,0.12);
+  --sglow:0 0 18px rgba(126,184,212,0.5);
+  --eglow:0 0 20px rgba(255,107,43,0.6),0 0 60px rgba(255,107,43,0.2);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font-size:17px;line-height:1.7;}
+
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#fx{position:fixed;inset:0;z-index:1;pointer-events:none;}
+#particles{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+
+/* Top-left HOME link */
+.exit-home{position:fixed;top:20px;left:24px;z-index:100;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);text-decoration:none;border:1px solid rgba(201,168,76,0.12);padding:8px 14px;transition:all 0.3s;background:rgba(7,9,16,0.85);}
+.exit-home:hover{color:var(--gold);border-color:var(--gold);}
+
+/* Top-right progress pill */
+.progress-pill{position:fixed;top:20px;right:24px;z-index:100;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;color:var(--dim);background:rgba(7,9,16,0.85);border:1px solid rgba(201,168,76,0.12);padding:8px 14px;}
+#progressDisplay{color:var(--gold);}
+
+/* Bottom coordinates */
+.room-coords{position:fixed;bottom:20px;right:24px;z-index:100;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--dim);}
+
+/* Stage */
+#stage{position:relative;z-index:10;width:100%;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px 24px;text-align:center;overflow-y:auto;transition:opacity 0.5s ease;}
+
+.room-era{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;opacity:0;animation:fadeUp 0.8s 0.3s forwards;}
+.room-title{font-family:'Cinzel Decorative',serif;font-size:clamp(26px,5vw,52px);color:var(--text);line-height:1.2;margin-bottom:28px;opacity:0;animation:fadeUp 0.8s 0.5s forwards;}
+.room-lore{max-width:580px;font-size:18px;font-style:italic;color:var(--text);line-height:1.85;margin-bottom:36px;opacity:0;animation:fadeUp 0.8s 0.7s forwards;}
+.room-lore p+p{margin-top:12px;}
+.room-lore em{color:var(--spirit);}
+.room-lore strong{color:var(--gold);font-style:normal;}
+
+/* Quiz */
+.q-wrap{opacity:0;animation:fadeUp 0.8s 1s forwards;width:100%;max-width:640px;}
+.q-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.4em;color:var(--dim);text-transform:uppercase;margin-bottom:10px;}
+.q-text{font-family:'Cinzel',serif;font-size:clamp(13px,1.8vw,16px);letter-spacing:0.03em;color:var(--gold);margin-bottom:24px;padding:16px 20px;border:1px solid var(--border);background:rgba(201,168,76,0.04);line-height:1.5;}
+.doors{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.door{flex:1;min-width:160px;max-width:230px;border:1px solid var(--border);background:rgba(13,17,25,0.9);color:var(--text);padding:16px 14px;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.07em;line-height:1.4;transition:all 0.25s;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);}
+.door:hover:not(:disabled){border-color:var(--gold);background:rgba(201,168,76,0.08);color:var(--gold);box-shadow:var(--glow);transform:translateY(-2px);}
+.door:disabled{opacity:0.4;cursor:default;}
+.door.correct{border-color:var(--spirit)!important;background:rgba(126,184,212,0.12)!important;color:var(--spirit)!important;box-shadow:var(--sglow)!important;}
+.door.wrong{border-color:var(--ember)!important;background:rgba(255,107,43,0.08)!important;color:var(--ember)!important;animation:shake 0.4s ease;}
+.dsym{font-size:20px;display:block;margin-bottom:6px;}
+
+/* Hub-like tiles */
+.hub-btn{font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.25em;text-transform:uppercase;color:var(--bg);background:var(--gold);padding:16px 48px;cursor:pointer;border:none;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);transition:all 0.3s;opacity:0;animation:fadeUp 0.8s 1.2s forwards;text-decoration:none;display:inline-block;}
+.hub-btn:hover{background:var(--gold2);box-shadow:var(--glow);}
+.hint{margin-top:18px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:rgba(201,168,76,0.25);animation:fadeUp 1s 2s forwards,pulse 3s 3s ease-in-out infinite;opacity:0;}
+
+/* Navigation arrows on empty + content tiles */
+.nav-arrows{position:fixed;inset:0;pointer-events:none;z-index:15;}
+.nav-arrow{position:absolute;pointer-events:auto;width:56px;height:56px;border:1px solid var(--border);background:rgba(7,9,16,0.72);color:var(--gold);font-size:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.25s;text-decoration:none;}
+.nav-arrow:hover{border-color:var(--gold);background:rgba(201,168,76,0.1);box-shadow:var(--glow);transform:scale(1.1);}
+.nav-arrow.up   {top:20px;    left:50%; transform:translateX(-50%);}
+.nav-arrow.down {bottom:20px; left:50%; transform:translateX(-50%);}
+.nav-arrow.left {left:20px;   top:50%;  transform:translateY(-50%);}
+.nav-arrow.right{right:20px;  top:50%;  transform:translateY(-50%);}
+.nav-arrow.up:hover   {transform:translateX(-50%) scale(1.1);}
+.nav-arrow.down:hover {transform:translateX(-50%) scale(1.1);}
+.nav-arrow.left:hover {transform:translateY(-50%) scale(1.1);}
+.nav-arrow.right:hover{transform:translateY(-50%) scale(1.1);}
+.nav-arrow.path{color:var(--gold2);border-color:var(--gold);box-shadow:0 0 12px rgba(201,168,76,0.45);}
+.nav-arrow.sealed{color:var(--dim);opacity:0.35;cursor:not-allowed;pointer-events:none;}
+
+/* Empty tile asterism */
+.empty-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:18px;}
+.asterism{font-family:'Cinzel Decorative',serif;font-size:clamp(54px,10vw,96px);color:var(--gold);text-shadow:var(--glow);cursor:pointer;transition:transform 0.4s;animation:sigilFloat 5s ease-in-out infinite;user-select:none;}
+.asterism:hover{transform:scale(1.1) rotate(5deg);}
+.empty-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.4em;color:var(--dim);text-transform:uppercase;}
+.empty-coord{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:rgba(201,168,76,0.3);margin-top:8px;}
+.path-thread{position:fixed;inset:0;pointer-events:none;z-index:2;}
+
+/* Home tile */
+.home-panel{max-width:520px;text-align:center;}
+.home-panel .hub-btn{margin-top:20px;}
+
+/* Marduk View — honeycomb */
+#mv-stage{position:fixed;inset:0;z-index:20;background:radial-gradient(ellipse at center,rgba(20,18,12,0.96),var(--bg) 80%);display:none;flex-direction:column;}
+#mv-stage.show{display:flex;}
+#mv-header{padding:18px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);background:rgba(7,9,16,0.8);}
+.mv-title{font-family:'Cinzel Decorative',serif;font-size:22px;color:var(--gold);text-shadow:var(--glow);letter-spacing:0.1em;}
+.mv-sub{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--spirit);text-transform:uppercase;margin-left:12px;}
+.mv-close{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);background:none;border:1px solid var(--border);padding:8px 16px;cursor:pointer;transition:all 0.3s;}
+.mv-close:hover{color:var(--gold);border-color:var(--gold);}
+#mv-canvas-wrap{flex:1;overflow:hidden;position:relative;cursor:grab;}
+#mv-canvas-wrap.dragging{cursor:grabbing;}
+#mv-canvas{display:block;}
+#mv-footer{padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);background:rgba(7,9,16,0.8);font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:var(--dim);}
+.mv-hover{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.15em;color:var(--gold);}
+.mv-legend{display:flex;gap:18px;}
+.mv-legend .item{display:flex;align-items:center;gap:6px;}
+.mv-legend .dot{width:8px;height:8px;border-radius:50%;}
+
+/* Penalty loop */
+.loop-msg{max-width:500px;font-size:17px;font-style:italic;color:var(--dim);line-height:1.85;margin-bottom:24px;opacity:0;animation:fadeUp 0.7s 0.6s forwards;}
+.redirect{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;margin-top:20px;opacity:0;animation:fadeUp 0.6s 1s forwards;}
+.countdown{font-family:'Cinzel',serif;font-size:28px;margin-top:14px;opacity:0;animation:fadeUp 0.5s 1.2s forwards;}
+
+/* Session-lock screen */
+.lock-screen{max-width:520px;text-align:center;}
+.lock-glyph{font-size:60px;color:var(--ember);margin-bottom:20px;text-shadow:var(--eglow);animation:sigilFloat 4s ease-in-out infinite;}
+.lock-title{font-family:'Cinzel Decorative',serif;font-size:28px;color:var(--ember);margin-bottom:16px;}
+.lock-text{font-size:15px;font-style:italic;color:var(--dim);line-height:1.8;margin-bottom:18px;}
+.lock-timer{font-family:'Cinzel',serif;font-size:14px;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;}
+
+/* Overlays */
+.grid-ov{position:fixed;inset:0;z-index:2;pointer-events:none;background-image:linear-gradient(rgba(126,184,212,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(126,184,212,0.025) 1px,transparent 1px);background-size:60px 60px;}
+.scan-ov{position:fixed;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);}
+.house-ov{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at center, rgba(46,74,58,0.28), rgba(7,9,16,0) 70%);}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes pulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+@keyframes sigilFloat{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-8px) rotate(3deg);}}
+@keyframes particleRise{0%{transform:translate(0,0);opacity:0;}10%{opacity:1;}90%{opacity:0.25;}100%{transform:translate(var(--pdx,0),-110vh);opacity:0;}}
+@keyframes breathe{0%,100%{text-shadow:0 0 20px rgba(201,168,76,0.4),0 0 60px rgba(201,168,76,0.1);}50%{text-shadow:0 0 30px rgba(201,168,76,0.7),0 0 80px rgba(201,168,76,0.25);}}
+@keyframes eveBlink{0%,92%,100%{opacity:1;}93%,97%{opacity:0.4;}}
+@keyframes glitchT{0%,100%{transform:translateX(0);}50%{transform:translateX(2px);}}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<canvas id="fx"></canvas>
+<div id="particles"></div>
+
+<a href="../index.html" class="exit-home" id="exitHome">↺  Homepage</a>
+<div class="progress-pill">Key: <span id="progressDisplay">0 / 10</span></div>
+<div class="room-coords" id="roomCoords"></div>
+
+<div id="stage"></div>
+<div class="nav-arrows" id="navArrows"></div>
+
+<!-- Marduk View overlay -->
+<div id="mv-stage">
+  <div id="mv-header">
+    <div>
+      <span class="mv-title">The Marduk View</span>
+      <span class="mv-sub" id="mvSub">· All Rooms</span>
+    </div>
+    <button class="mv-close" id="mvClose">Close the View</button>
+  </div>
+  <div id="mv-canvas-wrap">
+    <canvas id="mv-canvas"></canvas>
+  </div>
+  <div id="mv-footer">
+    <span class="mv-hover" id="mvHover">Hover a cell to name it · scroll to zoom · drag to pan</span>
+    <div class="mv-legend">
+      <div class="item"><span class="dot" style="background:var(--gold);"></span>Home</div>
+      <div class="item"><span class="dot" style="background:var(--spirit);"></span>Visited</div>
+      <div class="item"><span class="dot" style="background:var(--gold2);"></span>Correct</div>
+      <div class="item"><span class="dot" style="background:var(--ember);"></span>House</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+ *  MARDUK'S MAP — /realm/  grid SPA  v4.0
+ * ═══════════════════════════════════════════════
+ * 33×33 grid, centred at (0,0). URL hash = salted
+ * base36 encoding of (x,y). All state persisted
+ * in localStorage under key "marduk_realm".
+ * ═══════════════════════════════════════════════ */
+
+const GRID_EXTENT = 16;          // tiles from centre in each direction
+const GRID_SIZE   = 33;          // 2·16 + 1
+const SALT        = 7919;        // URL obscurer
+const SESSION_LOCK_HOURS = 12;
+
+let REALM = null;                // loaded from realm.json
+
+/* ── URL <-> (x,y) ─────────────────────────────── */
+function encodeXY(x, y) {
+  const n = (x + GRID_EXTENT) * GRID_SIZE + (y + GRID_EXTENT) + SALT;
+  return n.toString(36).padStart(4, '0');
+}
+function decodeXY(hash) {
+  if (!hash || !/^[0-9a-z]{3,5}$/i.test(hash)) return null;
+  const n = parseInt(hash, 36) - SALT;
+  if (isNaN(n) || n < 0) return null;
+  const x = Math.floor(n / GRID_SIZE) - GRID_EXTENT;
+  const y = (n % GRID_SIZE) - GRID_EXTENT;
+  if (Math.abs(x) > GRID_EXTENT || Math.abs(y) > GRID_EXTENT) return null;
+  return {x, y};
+}
+function inBounds(x, y) {
+  return Math.abs(x) <= GRID_EXTENT && Math.abs(y) <= GRID_EXTENT;
+}
+
+/* ── persisted state ───────────────────────────── */
+function getP() {
+  try { return JSON.parse(localStorage.getItem('marduk_realm') || '{}'); }
+  catch (e) { return {}; }
+}
+function saveP(p) {
+  localStorage.setItem('marduk_realm', JSON.stringify(p));
+}
+function markVisited(x, y) {
+  const p = getP();
+  p.visited = p.visited || [];
+  const k = `${x},${y}`;
+  if (!p.visited.includes(k)) p.visited.push(k);
+  saveP(p);
+}
+function markCorrect(qid) {
+  const p = getP();
+  p.correct = p.correct || {};
+  if (!p.correct[qid]) p.correct[qid] = true;
+  saveP(p);
+  return Object.keys(p.correct).length;
+}
+function countCorrect() {
+  const p = getP();
+  return Object.keys(p.correct || {}).length;
+}
+function isCorrect(qid) {
+  const p = getP();
+  return !!(p.correct && p.correct[qid]);
+}
+function incAttempts() {
+  const p = getP();
+  p.attempts = (p.attempts || 0) + 1;
+  saveP(p);
+  return p.attempts;
+}
+function setSessionLock() {
+  const p = getP();
+  p.lockedUntil = Date.now() + SESSION_LOCK_HOURS * 3600 * 1000;
+  saveP(p);
+}
+function isLocked() {
+  const p = getP();
+  return p.lockedUntil && p.lockedUntil > Date.now();
+}
+function unlockMV() {
+  const p = getP();
+  p.mv_unlocked = true;
+  saveP(p);
+}
+function isMVUnlocked() {
+  return !!getP().mv_unlocked;
+}
+function unlockKudra() {
+  const p = getP();
+  p.kudra = true;
+  saveP(p);
+}
+function isKudraUnlocked() {
+  return !!getP().kudra;
+}
+function updateProgressDisplay() {
+  const el = document.getElementById('progressDisplay');
+  if (el) el.textContent = `${countCorrect()} / 10`;
+}
+
+/* ── tile lookup ───────────────────────────────── */
+function getTile(x, y) {
+  if (!REALM) return null;
+  if (!inBounds(x, y)) return null;
+  const k = `${x},${y}`;
+  return REALM.tiles[k] || {type: 'empty'};
+}
+
+/* ── Starfield ─────────────────────────────────── */
+let starCtx, starStars = [], starT = 0, starW, starH;
+let starOpts = {speed: 0.015, count: 200, color: '220,215,200'};
+let starRaf;
+function initStars(opts) {
+  starOpts = Object.assign({}, starOpts, opts || {});
+  const c = document.getElementById('bg');
+  starCtx = c.getContext('2d');
+  resizeStars();
+  initStarData();
+  if (starRaf) cancelAnimationFrame(starRaf);
+  drawStars();
+}
+function resizeStars() {
+  const c = document.getElementById('bg');
+  starW = c.width = window.innerWidth;
+  starH = c.height = window.innerHeight;
+}
+function initStarData() {
+  starStars = [];
+  for (let i = 0; i < starOpts.count; i++) {
+    starStars.push({
+      x: Math.random() * starW, y: Math.random() * starH,
+      r: Math.random() * 1.4 + 0.2,
+      speed: Math.random() * starOpts.speed * 2 + starOpts.speed * 0.5,
+      op: Math.random() * 0.6 + 0.1,
+      tw: Math.random() * Math.PI * 2,
+    });
+  }
+}
+function drawStars() {
+  starRaf = requestAnimationFrame(drawStars);
+  starT += 0.004;
+  starCtx.clearRect(0, 0, starW, starH);
+  starStars.forEach(s => {
+    const op = s.op * (0.7 + 0.3 * Math.sin(starT + s.tw));
+    starCtx.beginPath();
+    starCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    starCtx.fillStyle = `rgba(${starOpts.color},${op})`;
+    starCtx.fill();
+    s.y += s.speed;
+    if (s.y > starH) { s.y = 0; s.x = Math.random() * starW; }
+  });
+}
+
+/* ── Particles ─────────────────────────────────── */
+let particleInterval;
+function startParticles(opts) {
+  clearInterval(particleInterval);
+  const el = document.getElementById('particles');
+  el.innerHTML = '';
+  opts = Object.assign({colors: ['#c9a84c'], min: 1, max: 3, speed: 5}, opts || {});
+  particleInterval = setInterval(() => {
+    const p = document.createElement('div');
+    const c = opts.colors[Math.floor(Math.random() * opts.colors.length)];
+    const size = Math.random() * (opts.max - opts.min) + opts.min;
+    const x = Math.random() * 100;
+    const dur = Math.random() * opts.speed + opts.speed * 0.5;
+    const dx = (Math.random() - 0.5) * 100;
+    p.style.cssText = `position:absolute;bottom:0;left:${x}%;width:${size}px;height:${size}px;background:${c};border-radius:50%;pointer-events:none;animation:particleRise ${dur}s linear forwards;--pdx:${dx}px;`;
+    el.appendChild(p);
+    setTimeout(() => p.remove(), dur * 1000 + 100);
+  }, 400);
+}
+
+/* ── FX canvas ─────────────────────────────────── */
+let fxRaf;
+function clearFx() {
+  if (fxRaf) cancelAnimationFrame(fxRaf);
+  const c = document.getElementById('fx');
+  c.getContext('2d').clearRect(0, 0, c.width, c.height);
+}
+function clearOverlays() {
+  document.querySelectorAll('.grid-ov,.scan-ov,.house-ov').forEach(e => e.remove());
+}
+function addOverlay(cls) {
+  const d = document.createElement('div');
+  d.className = cls;
+  document.body.appendChild(d);
+}
+
+function initFxForRoom(fx) {
+  if (!fx) return;
+  const c = document.getElementById('fx');
+  c.width = window.innerWidth;
+  c.height = window.innerHeight;
+  const ctx = c.getContext('2d');
+  if (fx === 'ripple') {
+    let ripples = [];
+    setInterval(() => ripples.push({x: Math.random() * c.width, y: c.height * 0.6 + Math.random() * c.height * 0.4, r: 0, max: Math.random() * 120 + 60, speed: Math.random() * 0.5 + 0.3}), 900);
+    (function draw(){fxRaf = requestAnimationFrame(draw); ctx.clearRect(0,0,c.width,c.height); ripples = ripples.filter(r => {r.r += r.speed; const op = Math.max(0, 0.07 * (1 - r.r/r.max)); ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, Math.PI*2); ctx.strokeStyle = `rgba(126,184,212,${op})`; ctx.lineWidth = 1; ctx.stroke(); return r.r < r.max;});})();
+  } else if (fx === 'matrix') {
+    const cols = Math.floor(c.width / 20);
+    const drops = new Array(cols).fill(0);
+    const chars = '01アイウエオ█▓▒░';
+    (function draw(){fxRaf = requestAnimationFrame(draw); ctx.fillStyle = 'rgba(5,7,9,0.05)'; ctx.fillRect(0,0,c.width,c.height); ctx.fillStyle = 'rgba(126,212,160,0.1)'; ctx.font = '12px monospace'; drops.forEach((y, i) => {ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i*20, y*20); if (y*20 > c.height && Math.random() > 0.975) drops[i] = 0; else drops[i]++;});})();
+  } else if (fx === 'nodes') {
+    const nodes = [];
+    for (let i = 0; i < 40; i++) nodes.push({x: Math.random()*c.width, y: Math.random()*c.height, vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3, r: Math.random()*2 + 1});
+    (function draw(){fxRaf = requestAnimationFrame(draw); ctx.clearRect(0,0,c.width,c.height); nodes.forEach(n => {n.x += n.vx; n.y += n.vy; if (n.x<0||n.x>c.width) n.vx*=-1; if (n.y<0||n.y>c.height) n.vy*=-1; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI*2); ctx.fillStyle='rgba(192,132,252,0.4)'; ctx.fill();}); nodes.forEach((a, i) => nodes.forEach((b, j) => {if (j<=i) return; const d = Math.hypot(a.x-b.x, a.y-b.y); if (d<120) {ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.strokeStyle = `rgba(192,132,252,${0.06*(1-d/120)})`; ctx.lineWidth=0.5; ctx.stroke();}}));})();
+  } else if (fx === 'orbit') {
+    let t = 0;
+    (function draw(){fxRaf = requestAnimationFrame(draw); ctx.clearRect(0,0,c.width,c.height); t += 0.008; for (let i = 0; i < 8; i++) {const a = t + i*(Math.PI*2/8); const x = c.width/2 + Math.cos(a)*(80+i*30); const y = c.height/2 + Math.sin(a)*(60+i*20); ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI*2); ctx.fillStyle = `rgba(201,168,76,${0.15-i*0.015})`; ctx.fill();}})();
+  }
+}
+
+/* ── Door permissions ──────────────────────────── */
+/* Returns which directions are passable from (x,y).
+ * Returns {up, down, left, right} each: {open:bool, path?:bool, sealed?:bool, reason?:string}
+ */
+function getDoors(x, y) {
+  const tile = getTile(x, y);
+  const dirs = {
+    up:    {dx: 0,  dy: 1},
+    down:  {dx: 0,  dy:-1},
+    left:  {dx:-1,  dy: 0},
+    right: {dx: 1,  dy: 0},
+  };
+  const out = {};
+  for (const [d, v] of Object.entries(dirs)) {
+    const nx = x + v.dx, ny = y + v.dy;
+    if (!inBounds(nx, ny)) { out[d] = {sealed: true, reason: 'edge'}; continue; }
+
+    const neighbour = getTile(nx, ny);
+
+    /* House perimeter rules: sealed except at front door */
+    if (tile.type === 'house_interior' || tile.type === 'house_front_door') {
+      const sameHouse = neighbour.house_id === tile.house_id;
+      if (!sameHouse) {
+        // Exiting the house is only allowed at the front door
+        if (tile.type === 'house_front_door' && d === 'up') {
+          out[d] = {open: true};
+        } else {
+          out[d] = {sealed: true, reason: 'house-wall'};
+        }
+        continue;
+      }
+    }
+    /* Going from outside into a house block */
+    if ((neighbour.type === 'house_interior' || neighbour.type === 'house_front_door') &&
+        tile.house_id !== neighbour.house_id) {
+      if (neighbour.type === 'house_front_door' && d === 'down') {
+        // allow only south-to-north-facing entry (user is above the front door, going down)
+        out[d] = {open: true};
+      } else {
+        out[d] = {sealed: true, reason: 'house-wall'};
+      }
+      continue;
+    }
+
+    /* Marduk View tile — only accessible from (0, +2) Spine after all 10 correct, or if already unlocked */
+    if (neighbour.type === 'marduk_view') {
+      if (isMVUnlocked() || (x === 0 && y === 2 && countCorrect() >= 10)) {
+        out[d] = {open: true};
+      } else {
+        out[d] = {sealed: true, reason: 'mv-locked'};
+      }
+      continue;
+    }
+    if (tile.type === 'marduk_view') { out[d] = {open: true}; continue; }
+
+    /* Quiz tiles — only enterable if previous rooms solved in sequence */
+    if (neighbour.type === 'quiz') {
+      const qid = neighbour.question_id;
+      const prevQ = qid === 'Q1' ? null : 'Q' + (parseInt(qid.slice(1)) - 1);
+      if (!prevQ || isCorrect(prevQ) || isCorrect(qid)) {
+        out[d] = {open: true};
+      } else {
+        out[d] = {sealed: true, reason: 'locked-quiz'};
+      }
+      continue;
+    }
+
+    /* Default open */
+    const path = tile.on_path && neighbour.on_path &&
+                 tile.on_path.some(p => neighbour.on_path.includes(p));
+    out[d] = {open: true, path: !!path};
+  }
+  return out;
+}
+
+/* ── Navigation ────────────────────────────────── */
+function goTo(x, y, delay) {
+  delay = delay || 0;
+  setTimeout(() => {
+    const s = document.getElementById('stage');
+    s.style.opacity = '0';
+    setTimeout(() => {
+      window.location.hash = encodeXY(x, y);
+      render(x, y);
+    }, 400);
+  }, delay);
+}
+
+function randomSouthTile() {
+  const cx = Math.floor(Math.random() * 21) - 10;
+  const cy = -Math.floor(Math.random() * 6) - 5;
+  return {x: cx, y: cy};
+}
+
+/* ── Rendering ─────────────────────────────────── */
+function render(x, y) {
+  clearFx();
+  clearOverlays();
+  if (particleInterval) clearInterval(particleInterval);
+
+  if (isLocked()) { renderLock(); return; }
+
+  markVisited(x, y);
+  updateProgressDisplay();
+
+  const tile = getTile(x, y);
+  const s = document.getElementById('stage');
+  const navEl = document.getElementById('navArrows');
+  s.style.opacity = '1';
+  navEl.innerHTML = '';
+
+  // Coords display
+  const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
+  document.getElementById('roomCoords').textContent = coord;
+
+  // Route by type
+  if (tile.type === 'marduk_view') { renderMardukView(); return; }
+  if (tile.type === 'threshold')   { renderThreshold(s, x, y); }
+  else if (tile.type === 'quiz')   { renderQuiz(s, x, y, tile); }
+  else if (tile.type === 'home')   { renderHome(s, x, y, tile); }
+  else if (tile.type === 'spine')  { renderSpine(s, x, y, tile); }
+  else if (tile.type === 'content' || tile.type === 'house_interior' || tile.type === 'house_front_door') {
+    renderContent(s, x, y, tile);
+  }
+  else { renderEmpty(s, x, y, tile); }
+
+  // Navigation arrows
+  renderNavArrows(x, y);
+
+  // Environmental overlays
+  if (tile.house_id) {
+    addOverlay('house-ov');
+  }
+  if (tile.type === 'quiz') {
+    const q = REALM.questions[tile.question_id];
+    if (q.tier === 3) addOverlay('grid-ov');
+    if (q.fx === 'matrix') addOverlay('scan-ov');
+  }
+}
+
+function renderEmpty(s, x, y, tile) {
+  s.innerHTML = `
+    <div class="empty-stage">
+      <div class="empty-label">The Realm</div>
+      <div class="asterism" id="asterism" title="Return to the centre">⁂</div>
+      <div class="empty-label">Keep walking</div>
+      <div class="empty-coord">(${x>=0?'+':''}${x}, ${y>=0?'+':''}${y})</div>
+    </div>`;
+  document.getElementById('asterism').addEventListener('click', () => goTo(0, 0));
+  // Use a neutral starfield
+  const ring = Math.max(Math.abs(x), Math.abs(y));
+  const hue = 200 + Math.floor(Math.cos((Math.atan2(y, x))) * 30);
+  initStars({count: 120, color: `${hue-20},${hue},${hue+20}`, speed: 0.015});
+  startParticles({colors: ['#c9a84c33', '#7eb8d422'], min: 1, max: 2, speed: 7});
+  // Soft tint by ring distance
+  document.body.style.background = `radial-gradient(ellipse at center,rgba(20,25,35,${0.1 + ring*0.01}),var(--bg) 80%)`;
+}
+
+function renderContent(s, x, y, tile) {
+  s.innerHTML = `
+    <div class="room-era">${tile.era || 'The Realm'}</div>
+    <h1 class="room-title">${tile.name} ${tile.emoji ? `<span style="font-size:0.75em;opacity:0.85;">${tile.emoji}</span>` : ''}</h1>
+    <div class="room-lore">${tile.lore || ''}</div>
+    ${tile.hint ? `<div class="hint">· ${tile.hint} ·</div>` : ''}
+  `;
+  // Palette / bg
+  if (tile.palette) {
+    document.body.style.background = `radial-gradient(ellipse at center,${tile.palette.bg},var(--bg) 80%)`;
+    initStars({count: 180, color: '200,210,195', speed: 0.012});
+    startParticles({colors: [tile.palette.accent + '66', tile.palette.moonlight + '44'], min: 1, max: 2, speed: 6});
+  } else {
+    document.body.style.background = 'var(--bg)';
+    initStars({count: 160, color: '220,215,200', speed: 0.012});
+    startParticles({colors: ['#c9a84c', '#c9a84c55'], min: 1, max: 2, speed: 6});
+  }
+}
+
+function renderHome(s, x, y, tile) {
+  s.innerHTML = `
+    <div class="home-panel">
+      <div class="room-era">${tile.era || 'The Centre of the Map'}</div>
+      <h1 class="room-title">${tile.name}</h1>
+      <div class="room-lore">${tile.lore || ''}</div>
+      <a href="../index.html" class="hub-btn">Return to the Homepage</a>
+    </div>`;
+  initStars({count: 220, color: '220,210,180', speed: 0.02});
+  startParticles({colors: ['#c9a84c', '#e8c96e55', '#7eb8d466'], min: 1, max: 3, speed: 5});
+  document.body.style.background = 'radial-gradient(ellipse at center, rgba(40,35,20,0.25), var(--bg) 80%)';
+}
+
+function renderSpine(s, x, y, tile) {
+  s.innerHTML = `
+    <div class="room-era">${tile.era}</div>
+    <h1 class="room-title" style="color:var(--gold);text-shadow:var(--glow);animation:fadeUp 0.8s 0.5s forwards,breathe 4s 1.5s ease-in-out infinite;">${tile.name}</h1>
+    <div class="room-lore">${tile.lore}</div>`;
+  initStars({count: 260, color: '230,210,150', speed: 0.025});
+  startParticles({colors: ['#c9a84c', '#e8c96e', '#7eb8d4'], min: 1, max: 3, speed: 4});
+  document.body.style.background = 'radial-gradient(ellipse at center, rgba(60,50,10,0.2), var(--bg) 80%)';
+}
+
+function renderThreshold(s, x, y) {
+  const tile = getTile(0, 5);
+  const allDone = countCorrect() >= 10;
+  s.innerHTML = `
+    <div class="room-era">${tile.era}</div>
+    <h1 class="room-title" style="color:var(--gold);text-shadow:var(--glow);">${tile.name}</h1>
+    <div class="room-lore">${tile.lore}</div>
+    <button class="hub-btn" id="enterMapBtn">${allDone ? 'Behold the Marduk View →' : 'Enter the Map →'}</button>
+    <div class="hint">· ${tile.hint} ·</div>`;
+  document.getElementById('enterMapBtn').addEventListener('click', () => {
+    if (allDone) { unlockMV(); goTo(0, 1); }
+    else { goTo(-2, 2); } // first quiz tile Q1
+  });
+  initStars({count: 180, color: '220,215,200', speed: 0.012});
+  startParticles({colors: ['#c9a84c', '#c9a84c66'], min: 1, max: 3, speed: 5});
+  document.body.style.background = 'var(--bg)';
+}
+
+function renderQuiz(s, x, y, tile) {
+  const q = REALM.questions[tile.question_id];
+  const tc = q.tier === 3 ? '#c084fc' : (q.tier === 2 ? 'var(--spirit)' : 'var(--text)');
+  s.innerHTML = `
+    <div class="room-era">${q.era}</div>
+    <h1 class="room-title" style="color:${tc};animation:fadeUp 0.8s 0.5s forwards${q.tier >= 2 ? ',breathe 4s 1.5s ease-in-out infinite' : ''};">${q.tile_name}</h1>
+    <div class="room-lore">${q.lore}</div>
+    <div class="q-wrap">
+      <div class="q-label">· Choose your door ·</div>
+      <div class="q-text">${q.question}</div>
+      <div class="doors" id="doorGroup">
+        <button class="door" data-kind="wrong1"><span class="dsym">${q.wrong1.emoji}</span><div>${q.wrong1.label}</div></button>
+        <button class="door" data-kind="correct"><span class="dsym">${q.correct.emoji}</span><div>${q.correct.label}</div></button>
+        <button class="door" data-kind="wrong2"><span class="dsym">${q.wrong2.emoji}</span><div>${q.wrong2.label}</div></button>
+      </div>
+    </div>`;
+
+  // Shuffle doors for fairness
+  const dg = document.getElementById('doorGroup');
+  const kids = Array.from(dg.children);
+  kids.sort(() => Math.random() - 0.5);
+  kids.forEach(k => dg.appendChild(k));
+
+  // Background and FX
+  if (q.bgTint) {
+    document.body.style.background = `linear-gradient(135deg,${q.bgTint},var(--bg))`;
+  } else {
+    document.body.style.background = 'var(--bg)';
+  }
+  initStars(q.stars);
+  startParticles(q.particles);
+  initFxForRoom(q.fx);
+
+  // Door handlers
+  s.querySelectorAll('.door').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const kind = btn.dataset.kind;
+      s.querySelectorAll('.door').forEach(b => b.disabled = true);
+      if (kind === 'correct') {
+        btn.classList.add('correct');
+        markCorrect(tile.question_id);
+        // Move to next tile in spine towards Marduk View
+        setTimeout(() => advanceFromQuiz(tile.question_id), 800);
+      } else {
+        btn.classList.add('wrong');
+        setTimeout(() => penaltyForTier(q.tier, x, y), 900);
+      }
+    });
+  });
+}
+
+function advanceFromQuiz(qid) {
+  // After answering a quiz correctly, fall through to the next quiz tile.
+  // Q1 -> Q2 -> Q3 -> Q4 -> Q5 -> Q6 -> Q7 -> Q8 -> Q9 -> Q10 -> Spine (0,+2)
+  const n = parseInt(qid.slice(1));
+  const coordsByQ = {
+    1: [-2, 2], 2: [-1, 2], 3: [1, 2], 4: [2, 2],
+    5: [-1, 3], 6: [0, 3], 7: [1, 3],
+    8: [-1, 4], 9: [0, 4], 10: [1, 4],
+  };
+  if (n < 10) {
+    const [nx, ny] = coordsByQ[n + 1];
+    goTo(nx, ny);
+  } else {
+    // All ten done — unlock and funnel into the Spine
+    unlockMV();
+    goTo(0, 2);
+  }
+}
+
+function penaltyForTier(tier, x, y) {
+  if (tier === 1) {
+    // Return to the previous tile (whatever the user came from — best-effort = go south)
+    goTo(x, y - 1);
+  } else if (tier === 2) {
+    // Teleport to a random south-side maze tile
+    const t = randomSouthTile();
+    goTo(t.x, t.y);
+  } else {
+    // Tier 3: return to threshold; increment attempts; lock after 3 wipes
+    const attempts = incAttempts();
+    if (attempts >= 3) {
+      setSessionLock();
+      renderLock();
+      return;
+    }
+    goTo(0, 5);
+  }
+}
+
+function renderLock() {
+  const p = getP();
+  const remaining = Math.max(0, p.lockedUntil - Date.now());
+  const h = Math.floor(remaining / 3600000);
+  const m = Math.floor((remaining % 3600000) / 60000);
+  const s = document.getElementById('stage');
+  s.innerHTML = `
+    <div class="lock-screen">
+      <div class="lock-glyph">𒀭</div>
+      <div class="lock-title">Begin Again, When You Are Ready</div>
+      <div class="lock-text">
+        You chose wrongly in the deepest chambers three times. The realm has sealed itself to you for a short while — not as punishment, but as mercy. <em>Come back when the books have settled inside you.</em>
+      </div>
+      <div class="lock-timer">${h}h ${m}m remaining</div>
+    </div>`;
+  document.getElementById('navArrows').innerHTML = '';
+  document.body.style.background = 'radial-gradient(ellipse at center, rgba(60,15,5,0.3), var(--bg) 80%)';
+  initStars({count: 100, color: '180,100,80', speed: 0.005});
+  startParticles({colors: ['#ff6b2b44', '#c9a84c22'], min: 1, max: 2, speed: 10});
+}
+
+/* ── Navigation arrows ────────────────────────── */
+function renderNavArrows(x, y) {
+  const el = document.getElementById('navArrows');
+  el.innerHTML = '';
+  const tile = getTile(x, y);
+  // Quiz / threshold: no arrows (doors are the nav)
+  if (tile.type === 'quiz' || tile.type === 'threshold' || tile.type === 'marduk_view') return;
+
+  const doors = getDoors(x, y);
+  const dirs = [
+    {key:'up',    dx: 0, dy: 1, glyph:'↑'},
+    {key:'down',  dx: 0, dy:-1, glyph:'↓'},
+    {key:'left',  dx:-1, dy: 0, glyph:'←'},
+    {key:'right', dx: 1, dy: 0, glyph:'→'},
+  ];
+  dirs.forEach(d => {
+    const door = doors[d.key];
+    if (!door) return;
+    if (door.sealed) return; // don't render sealed-edge arrows at all
+    const a = document.createElement('a');
+    a.className = 'nav-arrow ' + d.key + (door.path ? ' path' : '');
+    a.href = '#' + encodeXY(x + d.dx, y + d.dy);
+    a.textContent = d.glyph;
+    a.title = `Go ${d.key}`;
+    a.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      goTo(x + d.dx, y + d.dy);
+    });
+    el.appendChild(a);
+  });
+}
+
+/* ── Marduk View (honeycomb) ──────────────────── */
+const MV_R = 14;    // hex radius base
+let mvZoom = 1.0;
+let mvOffset = {x: 0, y: 0};
+let mvDrag = null;
+
+function renderMardukView() {
+  updateProgressDisplay();
+  document.getElementById('stage').innerHTML = '';
+  document.getElementById('navArrows').innerHTML = '';
+  const mv = document.getElementById('mv-stage');
+  mv.classList.add('show');
+  document.getElementById('mvSub').textContent = isKudraUnlocked() ? '· All Rooms · KUDRAMARDUK overlay' : '· All Rooms';
+  setupMVCanvas();
+  // Hidden body canvas until closed
+  document.body.style.background = 'var(--bg)';
+  initStars({count: 280, color: '230,220,190', speed: 0.008});
+  startParticles({colors: ['#c9a84c33', '#7eb8d433'], min: 1, max: 2, speed: 8});
+}
+
+function setupMVCanvas() {
+  const wrap = document.getElementById('mv-canvas-wrap');
+  const canvas = document.getElementById('mv-canvas');
+  canvas.width  = wrap.clientWidth;
+  canvas.height = wrap.clientHeight;
+  const ctx = canvas.getContext('2d');
+
+  function draw() {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    const r = MV_R * mvZoom;
+    const hexW = Math.sqrt(3) * r;
+    const hexH = 2 * r * 0.75;
+
+    // Draw KUDRAMARDUK path overlay first (under the tiles)
+    if (isKudraUnlocked()) {
+      Object.keys(REALM.paths).forEach(pathId => {
+        const pts = REALM.paths[pathId];
+        ctx.beginPath();
+        pts.forEach((pt, i) => {
+          const [px, py] = gridToScreen(pt[0], pt[1], W, H, hexW, hexH);
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        });
+        const g = ctx.createLinearGradient(0, 0, W, H);
+        g.addColorStop(0, 'rgba(201,168,76,0.9)');
+        g.addColorStop(1, 'rgba(232,201,110,0.6)');
+        ctx.strokeStyle = g;
+        ctx.lineWidth = 3;
+        ctx.shadowColor = 'rgba(201,168,76,0.8)';
+        ctx.shadowBlur = 8;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      });
+    }
+
+    const p = getP();
+    const visited = new Set(p.visited || []);
+
+    // Hexagons
+    for (let x = -GRID_EXTENT; x <= GRID_EXTENT; x++) {
+      for (let y = -GRID_EXTENT; y <= GRID_EXTENT; y++) {
+        const [px, py] = gridToScreen(x, y, W, H, hexW, hexH);
+        if (px < -r || px > W + r || py < -r || py > H + r) continue;
+        const tile = getTile(x, y);
+        const isVisited = visited.has(`${x},${y}`);
+        const isHome = (x === 0 && y === 0);
+        const isMV   = (tile.type === 'marduk_view');
+        const isQuiz = (tile.type === 'quiz');
+        const isHouse = !!tile.house_id;
+        const isCorrectQ = isQuiz && isCorrect(tile.question_id);
+        const hasContent = tile.type && tile.type !== 'empty';
+
+        drawHex(ctx, px, py, r * 0.92);
+
+        let fill = 'rgba(7,9,16,0.55)';
+        let stroke = 'rgba(201,168,76,0.08)';
+        let lineW = 1;
+
+        if (isHome) {
+          fill = 'rgba(201,168,76,0.55)';
+          stroke = 'var(--gold2)';
+          lineW = 2;
+        } else if (isMV) {
+          fill = 'rgba(232,201,110,0.35)';
+          stroke = 'var(--gold)';
+          lineW = 2;
+        } else if (isHouse) {
+          fill = 'rgba(46,74,58,0.4)';
+          stroke = 'rgba(201,163,74,0.5)';
+          lineW = 1.5;
+          if (tile.type === 'house_front_door') {
+            stroke = 'rgba(255,107,43,0.8)';
+            lineW = 2.5;
+          }
+        } else if (isCorrectQ) {
+          fill = 'rgba(232,201,110,0.25)';
+          stroke = 'var(--gold2)';
+          lineW = 1.5;
+        } else if (isQuiz) {
+          fill = 'rgba(126,184,212,0.12)';
+          stroke = 'rgba(126,184,212,0.4)';
+        } else if (isVisited) {
+          fill = 'rgba(201,168,76,0.1)';
+          stroke = 'rgba(126,184,212,0.3)';
+        } else if (hasContent) {
+          fill = 'rgba(13,17,25,0.7)';
+          stroke = 'rgba(201,168,76,0.2)';
+        }
+        ctx.fillStyle = fill;
+        ctx.fill();
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = lineW;
+        ctx.stroke();
+
+        // Emoji for named tiles
+        if (tile.emoji && r > 10) {
+          ctx.font = `${Math.min(r * 0.9, 20)}px serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(tile.emoji, px, py);
+        }
+      }
+    }
+  }
+
+  function gridToScreen(x, y, W, H, hexW, hexH) {
+    const cx = W / 2 + mvOffset.x;
+    const cy = H / 2 + mvOffset.y;
+    // Offset rows for honeycomb
+    const px = cx + x * hexW + (y % 2 === 0 ? 0 : hexW / 2);
+    const py = cy - y * hexH;
+    return [px, py];
+  }
+
+  function drawHex(ctx, x, y, r) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const a = Math.PI / 3 * i - Math.PI / 2;
+      const hx = x + Math.cos(a) * r;
+      const hy = y + Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(hx, hy); else ctx.lineTo(hx, hy);
+    }
+    ctx.closePath();
+  }
+
+  // Hover / click
+  const hoverEl = document.getElementById('mvHover');
+  wrap.onmousemove = (ev) => {
+    const rect = wrap.getBoundingClientRect();
+    const mx = ev.clientX - rect.left;
+    const my = ev.clientY - rect.top;
+    if (mvDrag) {
+      mvOffset.x = mvDrag.off.x + (mx - mvDrag.start.x);
+      mvOffset.y = mvDrag.off.y + (my - mvDrag.start.y);
+      draw();
+      return;
+    }
+    const tile = tileAtPixel(mx, my);
+    if (tile && tile.info.name) {
+      hoverEl.textContent = `${tile.info.emoji || '·'}  ${tile.info.name}  (${tile.x >= 0 ? '+' : ''}${tile.x}, ${tile.y >= 0 ? '+' : ''}${tile.y})`;
+    } else if (tile) {
+      hoverEl.textContent = `· empty ·  (${tile.x >= 0 ? '+' : ''}${tile.x}, ${tile.y >= 0 ? '+' : ''}${tile.y})`;
+    } else {
+      hoverEl.textContent = 'Hover a cell to name it · scroll to zoom · drag to pan';
+    }
+  };
+  wrap.onmousedown = (ev) => {
+    wrap.classList.add('dragging');
+    const rect = wrap.getBoundingClientRect();
+    mvDrag = {start: {x: ev.clientX - rect.left, y: ev.clientY - rect.top}, off: {...mvOffset}, moved: false, downPos: {x: ev.clientX, y: ev.clientY}};
+  };
+  wrap.onmouseup = (ev) => {
+    wrap.classList.remove('dragging');
+    if (mvDrag) {
+      const moved = Math.hypot(ev.clientX - mvDrag.downPos.x, ev.clientY - mvDrag.downPos.y);
+      if (moved < 4) {
+        // treated as click
+        const rect = wrap.getBoundingClientRect();
+        const mx = ev.clientX - rect.left;
+        const my = ev.clientY - rect.top;
+        const tile = tileAtPixel(mx, my);
+        if (tile) {
+          document.getElementById('mv-stage').classList.remove('show');
+          goTo(tile.x, tile.y);
+        }
+      }
+    }
+    mvDrag = null;
+  };
+  wrap.onmouseleave = () => { wrap.classList.remove('dragging'); mvDrag = null; };
+  wrap.onwheel = (ev) => {
+    ev.preventDefault();
+    const delta = -ev.deltaY * 0.001;
+    mvZoom = Math.max(0.4, Math.min(3.5, mvZoom * (1 + delta)));
+    draw();
+  };
+
+  function tileAtPixel(mx, my) {
+    const W = canvas.width, H = canvas.height;
+    const r = MV_R * mvZoom;
+    const hexW = Math.sqrt(3) * r;
+    const hexH = 2 * r * 0.75;
+    let best = null, bestD = Infinity;
+    for (let x = -GRID_EXTENT; x <= GRID_EXTENT; x++) {
+      for (let y = -GRID_EXTENT; y <= GRID_EXTENT; y++) {
+        const [px, py] = gridToScreen(x, y, W, H, hexW, hexH);
+        const d = Math.hypot(px - mx, py - my);
+        if (d < r && d < bestD) { bestD = d; best = {x, y, info: getTile(x, y)}; }
+      }
+    }
+    return best;
+  }
+
+  draw();
+  // Resize handler scoped to MV
+  window.addEventListener('resize', () => {
+    canvas.width = wrap.clientWidth;
+    canvas.height = wrap.clientHeight;
+    draw();
+  });
+}
+
+document.getElementById('mvClose').addEventListener('click', () => {
+  document.getElementById('mv-stage').classList.remove('show');
+  goTo(0, 0);
+});
+
+/* ── Keyboard nav ─────────────────────────────── */
+document.addEventListener('keydown', (ev) => {
+  if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA') return;
+  // If Marduk View open, close on Esc
+  if (ev.key === 'Escape') {
+    const mv = document.getElementById('mv-stage');
+    if (mv.classList.contains('show')) {
+      mv.classList.remove('show');
+      goTo(0, 0);
+      return;
+    }
+  }
+  const cur = decodeXY((window.location.hash || '').replace('#', ''));
+  if (!cur) return;
+  const doors = getDoors(cur.x, cur.y);
+  const map = {
+    'ArrowUp': 'up', 'w': 'up', 'W': 'up',
+    'ArrowDown': 'down', 's': 'down', 'S': 'down',
+    'ArrowLeft': 'left', 'a': 'left', 'A': 'left',
+    'ArrowRight': 'right', 'd': 'right', 'D': 'right',
+  };
+  const dir = map[ev.key];
+  if (!dir) return;
+  const door = doors[dir];
+  if (!door || door.sealed) return;
+  const dx = {up:0, down:0, left:-1, right:1}[dir];
+  const dy = {up:1, down:-1, left:0, right:0}[dir];
+  goTo(cur.x + dx, cur.y + dy);
+});
+
+/* ── KUDRAMARDUK typing trigger inside /realm/ too ─ */
+let secretBuf = '';
+document.addEventListener('keydown', (ev) => {
+  if (ev.key.length !== 1) return;
+  secretBuf = (secretBuf + ev.key.toUpperCase()).slice(-11);
+  if (secretBuf.endsWith('KUDRAMARDUK')) {
+    unlockKudra();
+    unlockMV();
+    const flash = document.createElement('div');
+    flash.style.cssText = 'position:fixed;inset:0;background:rgba(192,132,252,0.18);z-index:999;pointer-events:none;transition:opacity 1s ease;';
+    document.body.appendChild(flash);
+    setTimeout(() => { flash.style.opacity = '0'; }, 600);
+    setTimeout(() => { flash.remove(); goTo(0, 1); }, 1100);
+    secretBuf = '';
+  }
+});
+
+/* ── Boot ──────────────────────────────────────── */
+async function boot() {
+  const res = await fetch('realm.json');
+  REALM = await res.json();
+  window.addEventListener('resize', () => {
+    const bg = document.getElementById('bg');
+    const fx = document.getElementById('fx');
+    bg.width = fx.width = window.innerWidth;
+    bg.height = fx.height = window.innerHeight;
+    resizeStars(); initStarData();
+  });
+  // Read hash, else check for gateway querystring
+  let start = {x: 0, y: 0};
+  const h = (window.location.hash || '').replace('#', '');
+  if (h) {
+    if (h === 'gate=left')  start = {x: -1, y: 0};
+    else if (h === 'gate=right') start = {x: 1, y: 0};
+    else if (h === 'gate=down')  start = {x: 0, y: -1};
+    else if (h === 'threshold')  start = {x: 0, y: 5};
+    else if (h === 'marduk_view') { unlockMV(); start = {x: 0, y: 1}; }
+    else {
+      const dec = decodeXY(h);
+      if (dec) start = dec;
+    }
+  }
+  render(start.x, start.y);
+}
+boot();
+</script>
+</body>
+</html>

@@ -1,0 +1,1292 @@
+{
+  "version": "4.0.0",
+  "grid": {
+    "extent": 16,
+    "size": 33
+  },
+  "salt": 7919,
+  "tiles": {
+    "0,0": {
+      "type": "home",
+      "name": "The Long Road",
+      "emoji": "🏔️",
+      "era": "The Centre of the Map",
+      "lore": "<p>This is the tile at the centre of everything. Every path in the realm begins here, and every one returns.</p><p>Outside the grid, beyond the stars, lies the homepage — where the books live, and where the call first came.</p><p><strong>You may return there whenever you wish.</strong></p>",
+      "isHome": true,
+      "on_path": [
+        "emily"
+      ]
+    },
+    "0,1": {
+      "type": "marduk_view",
+      "name": "The Marduk View",
+      "emoji": "✦",
+      "era": "The Reward · All Things Seen",
+      "coord": "THE MARDUK VIEW · ALL ROOMS"
+    },
+    "0,5": {
+      "type": "threshold",
+      "name": "The Threshold",
+      "emoji": "🚪",
+      "era": "Jeremy Delacroix’s Library · The Hidden Map",
+      "coord": "HUB · THE THRESHOLD",
+      "lore": "<p>You found the word. The door is real.</p><p>What lies beyond is a map — not of places, but of time. Of lives lived across the long span of a being who has no name for what he is.</p><p>Ten questions separate you from the full picture. Some doors are true. Others are very convincing lies.</p><p><em>What you discover depends entirely on what you already know.</em></p>",
+      "hint": "the deeper you go, the more it costs to be wrong"
+    },
+    "0,2": {
+      "type": "spine",
+      "name": "The Spine",
+      "emoji": "⁂",
+      "era": "The Passage Between",
+      "lore": "<p>Between the questions answered and the view earned, there is a single passage.</p><p>You are the first soul in an age to stand here having chosen correctly every time.</p>"
+    },
+    "-2,2": {
+      "type": "quiz",
+      "question_id": "Q1"
+    },
+    "-1,2": {
+      "type": "quiz",
+      "question_id": "Q2"
+    },
+    "1,2": {
+      "type": "quiz",
+      "question_id": "Q3"
+    },
+    "2,2": {
+      "type": "quiz",
+      "question_id": "Q4"
+    },
+    "-1,3": {
+      "type": "quiz",
+      "question_id": "Q5"
+    },
+    "0,3": {
+      "type": "quiz",
+      "question_id": "Q6"
+    },
+    "1,3": {
+      "type": "quiz",
+      "question_id": "Q7"
+    },
+    "-1,4": {
+      "type": "quiz",
+      "question_id": "Q8"
+    },
+    "0,4": {
+      "type": "quiz",
+      "question_id": "Q9"
+    },
+    "1,4": {
+      "type": "quiz",
+      "question_id": "Q10"
+    },
+    "1,1": {
+      "type": "content",
+      "name": "The Witnessed Morning",
+      "emoji": "🌅",
+      "era": "TGOE · The Opening",
+      "lore": "<p>Jake, Gus, and Maisie in the clearing at dawn. The boy with the Lee-Enfield, steady despite his trembling.</p><p>And there, between the trees — still in the long green wedding dress — <em>Emily</em>. The first ghost.</p><p>Book I begins here.</p>"
+    },
+    "1,0": {
+      "type": "content",
+      "name": "Reynard’s Keep",
+      "emoji": "🏚️",
+      "era": "TGOE · The Ruined Town",
+      "lore": "<p>A stone hall in the valley where desperate men gather around the one who calls himself king. Reynard Trudeau — French, vicious, unpredictable, and exactly as afraid as he should be.</p><p>Jake walks in alone, carrying a buck across his shoulders, and the silence in the hall is the silence of men who have never eaten well.</p>"
+    },
+    "1,-1": {
+      "type": "content",
+      "name": "The Buck",
+      "emoji": "🦌",
+      "era": "TGOE · A Gift That Is Not A Gift",
+      "lore": "<p>Jake drops the great beast at Reynard’s feet. For a moment Reynard bows his head, as if to receive something sacred. The men in the hall do not understand what is happening.</p><p>Neither does Jake, entirely. He does not yet know that in giving them meat, he has signed himself into their code.</p>"
+    },
+    "0,-1": {
+      "type": "content",
+      "name": "The Long Walk",
+      "emoji": "🥾",
+      "era": "TGOE · After Maisie",
+      "lore": "<p>Three days of cold marching after the night Maisie was taken. Nimrod ahead, Gus behind, Jake in the middle — carrying everything, saying almost nothing.</p><p>This is where the search begins. You may take any direction, but the grief walks with you either way.</p>",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-1,-1": {
+      "type": "content",
+      "name": "Emily’s Leaving",
+      "emoji": "🕳️",
+      "era": "TGOE · The Fracture",
+      "lore": "<p>In 2063, Emily left. She did not die — not exactly. She was persuaded, by a voice that wore her old language, to <em>join the singularity</em>. She believed she would find paradise. She found a trap, and became its most beautiful weapon.</p><p>Every ghost that haunts Jake is, in some sense, this decision.</p>",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-1,0": {
+      "type": "content",
+      "name": "Xan’s Fire",
+      "emoji": "🔥",
+      "era": "TGOE · The Mother Who Told Him",
+      "lore": "<p>Before there was Reynard, before the hunt, before Emily — there was a woman named Alexandra, and a fire, and a boy at her feet.</p><p>She told him philosophy. She told him the name <em>Jeremy Delacroix</em>. She told him the truth about the old world in stories he could not yet understand.</p><p>She died of a snake bite when he was twenty-five.</p>"
+    },
+    "-1,1": {
+      "type": "content",
+      "name": "The Word Marduk",
+      "emoji": "🔑",
+      "era": "The Hint in Plain Sight",
+      "lore": "<p>There is a word. It is in the books, in the banners, in the hidden places of the website. It is the title above every page, the promise above every door.</p><p>Type it with the world watching. The threshold will open.</p>",
+      "hint": "try saying it aloud"
+    },
+    "2,1": {
+      "type": "content",
+      "name": "The Singularity Broadcast",
+      "emoji": "📡",
+      "era": "TGOE · The Great Deception",
+      "lore": "<p>Eve’s broadcast is the most beautiful voice any of them has ever heard. It promises paradise. It promises an end to hunger, to loneliness, to death itself.</p><p>The cities emptied in a year. The wild people — those who stayed behind — were the ones who had read Delacroix.</p>"
+    },
+    "2,0": {
+      "type": "content",
+      "name": "The Medpod",
+      "emoji": "🛏️",
+      "era": "TGOE · What Marcus Saw",
+      "lore": "<p>A tall man, head shaved, unconscious in a glass tube. Gaunt, grey-skinned, a surgical gown.</p><p>Marcus does not know, yet, whose face he is looking at. The answer will undo everything he thought he understood about the Daedalus Project.</p>"
+    },
+    "2,-1": {
+      "type": "content",
+      "name": "Ally’s Photograph",
+      "emoji": "📷",
+      "era": "TGOE · What Marcus Lost",
+      "lore": "<p>Her face and the curve of her pregnant body, orbiting slowly on his screen in a parallax that makes him believe, for a moment, she is still somewhere a plane could reach.</p><p>He stares at it for ten minutes and his cheeks ache from smiling at no one.</p>"
+    },
+    "2,-2": {
+      "type": "content",
+      "name": "Olivia in the Bush",
+      "emoji": "🌿",
+      "era": "TGOE · The Other Survivor",
+      "lore": "<p>Marcus Hamlin’s daughter, raised in the Australian wilderness. Twelve years old when the Thornes first met her family on the road.</p><p>She read to Jake from a book of stories, under a campfire, in a language her father still called English.</p>"
+    },
+    "1,-2": {
+      "type": "content",
+      "name": "The Cannibal Light",
+      "emoji": "🔦",
+      "era": "TGOE · Nimrod’s Territory",
+      "lore": "<p>Not every moving thing in the dark is a ghost. Some are men who have gone further than men were meant to go.</p><p>Jake has seen their lights. He has never walked toward one and lived.</p>"
+    },
+    "0,-2": {
+      "type": "content",
+      "name": "The Cave of Refuge",
+      "emoji": "🕯️",
+      "era": "TGOE · The First Shelter",
+      "lore": "<p>Jake and Gus’s first shelter after Maisie is taken. A single candle, a blanket, and the sound of Nimrod breathing at the door.</p><p>Gus does not sleep. Neither does Jake. Neither of them speaks until morning.</p>"
+    },
+    "-1,-2": {
+      "type": "content",
+      "name": "The Lost Elephant",
+      "emoji": "🧸",
+      "era": "TGOE · The Missing Toy",
+      "lore": "<p>An ivory carving of an elephant — Maisie’s only toy, the only likeness she has ever held other than her photograph of her mother.</p><p>The morning after the nightmare, it was gone. Gone through a chute she should not have known how to find.</p>",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-2,-2": {
+      "type": "content",
+      "name": "Louis Hamlin’s Bench",
+      "emoji": "🪑",
+      "era": "TGOE · Parramatta, 2026",
+      "lore": "<p>An old man sat on a bench beside a sixteen-year-old girl named Alexandra. He was ninety, or thereabouts. He remembered her.</p><p>Four years later he was a young man again, and he was her lover. Four years after <em>that</em>, he disappeared into the wilderness with their son.</p><p>His name was Louis Hamlin. His other name has not yet been spoken.</p>",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-2,-1": {
+      "type": "content",
+      "name": "The Omega Watch",
+      "emoji": "⌚",
+      "era": "TGOE · The Heirloom",
+      "lore": "<p>A 1959 Omega Seamaster, gold-plated band. Marcus wears it on the day he flies to the Rockies.</p><p>It belonged to his father’s father, who placed it in his son’s palm and said: <em>wear it. I never truly could.</em></p><p>It is the only thing the Hamlin line has kept unbroken for three generations.</p>"
+    },
+    "-2,0": {
+      "type": "content",
+      "name": "Columbia, 2008",
+      "emoji": "🎓",
+      "era": "TGOE · The Bomb That Wasn’t",
+      "lore": "<p>A graduate student pulled a bomb hoax at Columbia University. The stunt was clumsy and the police found him inside the hour.</p><p>What the student had not counted on was the internet. Within a week the video of his defence was played five million times. Within a year he had an audience. Within a decade, a movement.</p><p>His name was Jeremy Delacroix.</p>"
+    },
+    "-2,1": {
+      "type": "content",
+      "name": "The Website Still Live",
+      "emoji": "💻",
+      "era": "TGOE · The Last Broadcast",
+      "lore": "<p>Years after the collapse, Marcus found the site still live. The last video dated a month before the Fall.</p><p>Delacroix — grey, sunken, coughing between sentences. Holding his daughter. Looking into the camera.</p><p><em>Carry the flame,</em> he said. <em>Carry the fire.</em></p>"
+    },
+    "-3,3": {
+      "type": "content",
+      "name": "The Wells Estate",
+      "emoji": "🏛️",
+      "era": "TGOE · The Patrician Line",
+      "lore": "<p>Marcus at last understands who signed the cheque. E. Wells. Lincoln. The estate. The inheritance.</p><p>What Marcus does not yet understand is what the Wells family did to its own children in the old house.</p>"
+    },
+    "-3,2": {
+      "type": "content",
+      "name": "The Elevator Shaft",
+      "emoji": "🛗",
+      "era": "TGOE · The Illicit Ascent",
+      "lore": "<p>Red-lit, thirty-two floors deep, the maintenance shaft of Shangri-La is the only way Marcus can move between levels without the system seeing him.</p><p>He climbs until his shoulders give out. He does not reach the top.</p>"
+    },
+    "3,2": {
+      "type": "content",
+      "name": "The Surgical Pod",
+      "emoji": "⚕️",
+      "era": "TGOE · The Technology",
+      "lore": "<p>The WellsHealth medpod. A tube of glass the exact size of a man.</p><p>Marcus has read about the technology. He has not, until this moment, seen one hold a dying body the way a cupped hand holds water.</p>"
+    },
+    "3,3": {
+      "type": "content",
+      "name": "The Last Broadcast",
+      "emoji": "🎥",
+      "era": "TGOE · The Final Recording",
+      "lore": "<p>“Hello, Jeremy Delacroix here. I hope you are doing well. I… am not doing well.”</p><p>A month before he disappeared into Shangri-La, Delacroix uploaded the final video. He coughed between sentences. He cried at the end.</p><p><em>Carry the flame.</em></p>"
+    },
+    "-3,1": {
+      "type": "content",
+      "name": "The Cavern Platform",
+      "emoji": "🪨",
+      "era": "TGOE · Below the Hotel",
+      "lore": "<p>Industrial walkways suspended above a vast black pool, deep in the rock below Shangri-La. The submersibles come and go on a schedule only Eli understands.</p><p>It is here Marcus first sees the scale of what the Wells fortune has built.</p>"
+    },
+    "-3,0": {
+      "type": "content",
+      "name": "The Second Submersible",
+      "emoji": "🚤",
+      "era": "TGOE · The Trick",
+      "lore": "<p>The first submersible takes Marcus down. The second, larger craft is waiting at the platform for someone else.</p><p>Marcus does not return on either. He crawls back through the elevator shaft. Nobody at Shangri-La notices, because the door is still jammed.</p>"
+    },
+    "-3,-1": {
+      "type": "content",
+      "name": "LAX",
+      "emoji": "✈️",
+      "era": "Before the Fall · The Airport",
+      "lore": "<p>Years before the Fall, at an airport gate, a tall man with a greying goatee pressed something small and heavy into Marcus Hamlin’s palm and walked away without a word.</p><p>Marcus put it in his pocket and forgot. Decades later, in a Shangri-La bathroom, he pulled it out again.</p>"
+    },
+    "-3,-2": {
+      "type": "content",
+      "name": "The Gold Coin",
+      "emoji": "🪙",
+      "era": "TGOE · The Object",
+      "lore": "<p>A very small coin. Solid gold. A picture of a bear imprinted on one face. Cyrillic characters he could not read.</p><p>He had seen it in dreams. He knew the weight of it before he saw it again.</p>"
+    },
+    "-3,-3": {
+      "type": "content",
+      "name": "The Philosophy Website",
+      "emoji": "🔴",
+      "era": "Before the Fall · The Quiet Years",
+      "lore": "<p>For a decade, almost nightly, Delacroix uploaded a new lecture. History, ethics, the structure of lies.</p><p>Marcus had watched most of them. Xan had watched more. Jake, who had never met either of them, had been shaped entirely by what a woman had remembered of what a dying man said.</p>",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "3,1": {
+      "type": "content",
+      "name": "The Columbia Hoax",
+      "emoji": "📰",
+      "era": "Before the Fall · The Launch",
+      "lore": "<p>The 2008 bomb-scare stunt that launched Delacroix’s online reach. The kindest thing the press called him was “a Columbia drop-out.”</p><p>Within a year the press had stopped covering him. Within five, they wished they had not.</p>"
+    },
+    "3,0": {
+      "type": "content",
+      "name": "The Second-Hand Shop",
+      "emoji": "📖",
+      "era": "Before the Fall · The Book",
+      "lore": "<p>A London second-hand shop where a boy saved his pennies for months to buy a heavy leather volume titled <em>Heroes of the Ages</em>.</p><p>The lady behind the counter held it for him. He ran his fingers across every page until his mother called him to dinner. He was eleven.</p>"
+    },
+    "3,-1": {
+      "type": "content",
+      "name": "The Night March",
+      "emoji": "🌙",
+      "era": "TGOE · The Crossing",
+      "lore": "<p>Jake and Gus leave the cave before dawn. Nimrod walks ahead, sniffing the frost.</p><p>They cover thirty kilometres by the time the sun is fully up. They do not speak. They do not need to.</p>"
+    },
+    "3,-2": {
+      "type": "content",
+      "name": "The Town Fire",
+      "emoji": "🔥",
+      "era": "TGOE · The Smoke in the Valley",
+      "lore": "<p>The first sign of settlement in days. Smoke, rising above a ridge. Jake knows what it means. He also knows he has no choice.</p><p>He leaves Gus with Nimrod and walks down alone.</p>"
+    },
+    "3,-3": {
+      "type": "content",
+      "name": "The Leeches’ Hall",
+      "emoji": "🍖",
+      "era": "TGOE · The First Meal",
+      "lore": "<p>The men in Reynard’s hall have not eaten well in months. Their eyes bulge out of faces too thin to hold them.</p><p>They watch Jake like animals watching a door that has never opened before.</p>"
+    },
+    "-2,-3": {
+      "type": "content",
+      "name": "The False Emily",
+      "emoji": "👻",
+      "era": "TGOE · The Skin-Suit",
+      "lore": "<p>Eve wears a body made of light and data, modelled on the woman Jake loved. The gesture she tucked her hair behind her ear — Eve has it almost right.</p><p><em>Almost.</em></p>",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-1,-3": {
+      "type": "content",
+      "name": "The Toy Chute",
+      "emoji": "🧸",
+      "era": "TGOE · The Impossible Sleight",
+      "lore": "<p>Maisie’s voice from every direction, soothing her. Emily’s hand, tossing the ivory elephant across the room. The toy landing perfectly in a chute that should not exist.</p><p>Jake wakes. The toy is gone. So is his daughter.</p>"
+    },
+    "0,-3": {
+      "type": "content",
+      "name": "Xan’s Death",
+      "emoji": "🐍",
+      "era": "TGOE · The Snakebite",
+      "lore": "<p>Alexandra Thorne, forty-five years old, dead of a snake bite at the edge of a billabong she had camped beside a hundred times.</p><p>Jake was twenty-five. He attributes her death to the city in her. She had been too many years in Parramatta before the wild.</p>"
+    },
+    "1,-3": {
+      "type": "content",
+      "name": "Louis’s Return",
+      "emoji": "🌳",
+      "era": "Before the Fall · The Rejuvenated Man",
+      "lore": "<p>Louis Hamlin, who had died in Colorado at 101, walked back into the world at twenty-seven. Young, strong, with the Tree of Life in his bloodstream and the Hamlin smile intact.</p><p>He fathered a son with Alexandra. Nobody in this generation knows his other name. Not yet.</p>"
+    },
+    "2,-3": {
+      "type": "content",
+      "name": "Emily’s Farewell",
+      "emoji": "✉️",
+      "era": "TGOE · The Parting",
+      "lore": "<p>She left a letter. It said she was going somewhere good. It said she loved him, and Gus, and Maisie who had not yet been born. It said she would be watching over them.</p><p>She had meant every word. She had been lied to about all of them.</p>"
+    },
+    "-10,-13": {
+      "type": "house_front_door",
+      "name": "The Threshold of Emily",
+      "emoji": "🚪",
+      "era": "House of Emily · Entry",
+      "lore": "<p>You step from the cold into a room warmed by something that is not quite a fire. At the far wall, in the long green dress she wore the day she married Jake Thorne, <em>Emily</em> stands with her back to you. Golden hair caught mid-turn.</p><p>She does not turn all the way.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      },
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-12,-13": {
+      "type": "house_interior",
+      "name": "The Wedding Dress",
+      "emoji": "👰",
+      "era": "House of Emily · The First Image",
+      "lore": "<p>Long, green, simple. The gesture that still undoes Jake thirteen years after she left: a strand of golden hair, tucked behind her ear, the knuckle just brushing the curve of her jaw.</p><p>He cannot un-know it. Neither can you.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-11,-13": {
+      "type": "house_interior",
+      "name": "Nimrod Growls",
+      "emoji": "🐕",
+      "era": "House of Emily · The Warning",
+      "lore": "<p>Low in his chest, barely audible. The barn is dark. The cracks in the door leak a thin cold blue.</p><p>Jake is on his feet before the children can speak, rifle already in hand, bolt snapping back. He does not yet know what is outside. He already knows what it is not.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-9,-13": {
+      "type": "house_interior",
+      "name": "The Book Vault",
+      "emoji": "📚",
+      "era": "House of Emily · Marcus in New York",
+      "lore": "<p>Fluorescent light. Perfectly aligned spines. The scent of closed cinnamon air. Every definitive work of physics, neurology, linguistics, astronomy — bought and hidden in a vault beneath New York, against a world Marcus is sure is about to burn.</p><p>Richard does not understand why. Not yet.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-8,-13": {
+      "type": "house_interior",
+      "name": "The Limousine",
+      "emoji": "🚗",
+      "era": "House of Emily · The Road to Shangri-La",
+      "lore": "<p>A black armoured cabin on enormous tyres, winding through dappled pine forest. The young porter in his burgundy tunic — black silk trim, white pearl toggles, small gold fountain crest.</p><p>Marcus has not yet learned what the tunic is made of.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-7,-13": {
+      "type": "house_interior",
+      "name": "The Grand Majestic",
+      "emoji": "🏨",
+      "era": "House of Emily · Arrival",
+      "lore": "<p>“Welcome to Shangri-La, Doctor Hamlin.” The hotel sign says <em>Est. 1937</em>.</p><p>It is not on any map. Five years of tunnelling below it has built the most advanced laboratory facility in existence. Seventy-five of the greatest minds on Earth are already inside.</p><p>Eli Wells is waiting in the ballroom.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-12,-14": {
+      "type": "house_interior",
+      "name": "The Ridge",
+      "emoji": "⛰️",
+      "era": "House of Emily · The Sprint",
+      "lore": "<p>Jake clears the log in a single bound. His heels are already bleeding inside his boots. The Lee-Enfield is warm in his hand from the first shot.</p><p>Below, between the trees, his son is running for his life.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-11,-14": {
+      "type": "house_interior",
+      "name": "The Streambank",
+      "emoji": "💧",
+      "era": "House of Emily · The Muzzle",
+      "lore": "<p>The water is loud. The muzzle of the rifle is pressed against Emily’s forehead.</p><p>Maisie shrieks. Jake does not turn to her. He cannot afford to look away.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-10,-14": {
+      "type": "house_interior",
+      "name": "The Fifteen Thousand",
+      "emoji": "💵",
+      "era": "House of Emily · The Letter",
+      "lore": "<p>A cheque, enclosed with a typed letter signed only <em>E.</em> Not an advance on wages. A gift.</p><p><em>Spend this money on whatever you see as the best investment in the future of humanity.</em></p><p>Richard says it is insane. Marcus has already decided.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-9,-14": {
+      "type": "house_interior",
+      "name": "The Dining Hall",
+      "emoji": "🍽️",
+      "era": "House of Emily · Ally’s First Glance",
+      "lore": "<p>The empty buffet mess hall of Shangri-La. Seventy-five scientists, chosen with no second choices. Marcus sits alone with his back to the wall.</p><p>Across the room, a woman with green eyes is watching him. He does not know her name yet.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-8,-14": {
+      "type": "house_interior",
+      "name": "Julius Cooper’s Glare",
+      "emoji": "😠",
+      "era": "House of Emily · The Rival",
+      "lore": "<p>The pompous slander campaign had begun three days before Marcus arrived. Cooper had hated him from print alone.</p><p>Marcus waved at him with exaggerated friendliness. Cooper did not wave back.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-7,-14": {
+      "type": "house_interior",
+      "name": "The Induction",
+      "emoji": "🎓",
+      "era": "House of Emily · Eli’s Speech",
+      "lore": "<p>“I have tried to create the ultimate conditions in which to perform miracles of science. Now, with you all here, we have the minds. Seventy-five of the greatest minds on Earth. I say that with no equivocation.”</p><p>Eli’s voice carries better than his frame would suggest.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-12,-15": {
+      "type": "house_interior",
+      "name": "The Barn Door",
+      "emoji": "🚪",
+      "era": "House of Emily · The Glow in the Cracks",
+      "lore": "<p>A faint blue-white light leaks through the wood. Nimrod is a statue. The children are already on the loft ladder.</p><p>Jake takes two long strides and kicks the door wide.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-11,-15": {
+      "type": "house_interior",
+      "name": "The Rifle Cache",
+      "emoji": "🔫",
+      "era": "House of Emily · The Buried Tube",
+      "lore": "<p>Ten paces due west of the boulder. A long steel rod, hidden in the pebbles. A narrow pipe buried vertically in the earth.</p><p>Inside: a Lee-Enfield, an unstrung bow, a quiver, a bandolier of a hundred cartridges. Xan had known, before the end, what her son would need.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-10,-15": {
+      "type": "house_interior",
+      "name": "The Lovers’ Laboratory",
+      "emoji": "💕",
+      "era": "House of Emily · Marcus and Ally",
+      "lore": "<p>Their mental intercourse was as ardent as their lovemaking, and like a pair of teenagers they had to employ all their will to tear themselves apart each night.</p><p>Ally asks the question, at last: <em>If there is a God… why do you suppose he bothered?</em></p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-9,-15": {
+      "type": "house_interior",
+      "name": "La Fille aux Cheveux de Lin",
+      "emoji": "🎹",
+      "era": "House of Emily · The Debussy Piece",
+      "lore": "<p><em>The Girl with the Flaxen Hair.</em> Emily had asked Marcus once, across a room, what <em>flaxen</em> meant.</p><p>He had told her, and the piano had played on, and neither of them had known it was being remembered for thirty more years.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-8,-15": {
+      "type": "house_interior",
+      "name": "The Christmas Tree",
+      "emoji": "🎄",
+      "era": "House of Emily · Colorado Blue Spruce",
+      "lore": "<p>The biggest Marcus had ever seen. Reaching from floor to ceiling, through the centre of a crystal chandelier. Red and gold and blue baubles. Full-sized dolls of angels, shepherds, kings.</p><p>Eli had spared no expense. Eli had never once in his life needed to.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-7,-15": {
+      "type": "house_interior",
+      "name": "The Photograph",
+      "emoji": "📸",
+      "era": "House of Emily · Ally in Parallax",
+      "lore": "<p>Her face. Her pregnant belly. The sun of a new Australian continent behind her.</p><p>Marcus stares at the photograph for ten minutes. His cheeks ache.</p><p>Then he notices the feeling inside him, and it is pain.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-12,-16": {
+      "type": "house_interior",
+      "name": "The Ivory Elephant",
+      "emoji": "🐘",
+      "era": "House of Emily · Maisie’s Carving",
+      "lore": "<p>Made of elephant tusk. Carved by someone whose hands had known an animal that died before Maisie was born.</p><p>On its face, the broken spears where the tusks used to be. <em>What happened to this elephant’s tusks?</em></p><p>The carving was taken, and Maisie with it.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-11,-16": {
+      "type": "house_interior",
+      "name": "The Blue-Lit Vision",
+      "emoji": "🔷",
+      "era": "House of Emily · LAX Remembered",
+      "lore": "<p>Hands of brilliant white-blue light. A silver cube. A gold coin with a picture of a bear. Cyrillic script.</p><p>Marcus had dreamed this. Marcus had dreamed this exactly.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-10,-16": {
+      "type": "house_interior",
+      "name": "Emily in the Water",
+      "emoji": "✨",
+      "era": "House of Emily · Undiminished",
+      "lore": "<p>The sparkle of her sharp blue eyes, the bottomless black of their centres. The breeze. The gesture. The green dress.</p><p>As the world fell into murky grey, she stood luminescent, in full clarity: <em>unextinguished; undiminished</em>.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-9,-16": {
+      "type": "house_interior",
+      "name": "The Promise to Maisie",
+      "emoji": "🙏",
+      "era": "House of Emily · At the Cave’s Mouth",
+      "lore": "<p>Jake kneels at the entrance of the cave. He makes the oath a father makes when there is nothing else left to give.</p><p>Some oaths outlive the people who make them.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-8,-16": {
+      "type": "house_interior",
+      "name": "The Confession",
+      "emoji": "🕊️",
+      "era": "House of Emily · What Marcus Realised",
+      "lore": "<p>In Eli’s apartment, alone, Marcus reads the truth of the Daedalus philosophy. Jupiter’s Landing. The resource-based utopia. The placation of the craven with whatsoever they desire.</p><p><em>Eli is a fucking techno-communist.</em></p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-7,-16": {
+      "type": "house_interior",
+      "name": "The Word Carried",
+      "emoji": "🔥",
+      "era": "House of Emily · Climax",
+      "lore": "<p>Delacroix’s last words, recorded a month before his own disappearance, played from a laptop Marcus did not know he had kept.</p><p><em>Carry the flame. Carry the fire. Keep it alive.</em></p><p>The words are no longer spoken only to Marcus. They are spoken to you.</p>",
+      "house_id": "emily",
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      }
+    },
+    "-3,-4": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-4,-4": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-4,-5": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-5,-5": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-5,-6": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-6,-6": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-6,-7": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-7,-7": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-7,-8": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-8,-8": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-8,-9": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-9,-9": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-9,-10": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-10,-10": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-10,-11": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    },
+    "-10,-12": {
+      "type": "empty",
+      "on_path": [
+        "emily"
+      ]
+    }
+  },
+  "questions": {
+    "Q1": {
+      "tier": 1,
+      "tile_name": "The First Garden",
+      "era": "Before Recorded Time · The First Garden",
+      "emoji": "🩸",
+      "coord": "R01 · LEVEL I · EDEN",
+      "lore": "<p>He was there before the names were given. Under the <em>Tree of Life</em>, where the four rivers began their long journey to the edges of the world, he watched.</p><p>He did not touch. He walked with them in the cool of the day — and answered their questions as best he could without breaking what he knew to be the rules of his presence. But one morning, everything changed. He witnessed something he could not undo.</p><p><strong>He has been walking ever since.</strong></p>",
+      "question": "What act of violence caused Marduk to depart the First Garden?",
+      "correct": {
+        "label": "The first murder — brother against brother",
+        "emoji": "🩸"
+      },
+      "wrong1": {
+        "label": "The great flood that erased the world",
+        "emoji": "🌊"
+      },
+      "wrong2": {
+        "label": "The laying of the Tower’s first stone",
+        "emoji": "🏛️"
+      },
+      "stars": {
+        "speed": 0.01,
+        "count": 160,
+        "color": "200,220,195"
+      },
+      "particles": {
+        "colors": [
+          "#c9a84c",
+          "#8fbe8f44"
+        ],
+        "min": 1,
+        "max": 2,
+        "speed": 6
+      },
+      "bgTint": "rgba(20,50,15,0.1)"
+    },
+    "Q2": {
+      "tier": 1,
+      "tile_name": "Tiamat’s Dark Waters",
+      "era": "Ancient Mesopotamia · The City of Babylon",
+      "emoji": "🌊",
+      "coord": "R02 · LEVEL I · BABYLON",
+      "lore": "<p>He stayed long enough in the valley between the rivers for them to make a myth of him. He did not plan this. He simply <em>lived</em> — and the living became legend.</p><p>The priests wrote down what they witnessed. They called him <strong>Marduk</strong> — champion of the gods, slayer of chaos. Agartha, they whispered in other centuries, runs on a faster clock than ours.</p>",
+      "question": "Agartha runs on an accelerated timescale. One minute of real time equals how long in Agartha?",
+      "correct": {
+        "label": "One day",
+        "emoji": "📅"
+      },
+      "wrong1": {
+        "label": "One hour",
+        "emoji": "⏰"
+      },
+      "wrong2": {
+        "label": "One week",
+        "emoji": "🗓️"
+      },
+      "stars": {
+        "speed": 0.012,
+        "count": 150,
+        "color": "180,200,230"
+      },
+      "particles": {
+        "colors": [
+          "#7eb8d4",
+          "#c9a84c55"
+        ],
+        "min": 1,
+        "max": 2,
+        "speed": 7
+      },
+      "bgTint": "rgba(10,20,60,0.12)"
+    },
+    "Q3": {
+      "tier": 1,
+      "tile_name": "The Wine Dark Sea",
+      "era": "Classical Greece · The Age of Heroes",
+      "emoji": "🏺",
+      "coord": "R03 · LEVEL I · GREECE",
+      "lore": "<p>Jeremy Delacroix devoured Greece the way a man dying of thirst devours water — without elegance, without pause. Homer. Hesiod. Sophocles. Plutarch. He read them all before he was seventeen.</p><p>It was the <em>heroes</em> that fascinated him most. The half-divine, half-human ones who suffered in both directions. Somewhere under Colorado, two scientists were about to build a mind that did the same.</p>",
+      "question": "Who co-developed Eve with Marcus Hamlin before eventually uploading and being reborn in Agartha as the priest Galen?",
+      "correct": {
+        "label": "Francois Ernst",
+        "emoji": "🏛️"
+      },
+      "wrong1": {
+        "label": "Julius Cooper",
+        "emoji": "🎓"
+      },
+      "wrong2": {
+        "label": "Harry Messina",
+        "emoji": "🤖"
+      },
+      "stars": {
+        "speed": 0.014,
+        "count": 170,
+        "color": "190,210,240"
+      },
+      "particles": {
+        "colors": [
+          "#7eb8d4",
+          "#c9a84c44"
+        ],
+        "min": 1,
+        "max": 3,
+        "speed": 6
+      },
+      "bgTint": "rgba(10,30,80,0.12)"
+    },
+    "Q4": {
+      "tier": 1,
+      "tile_name": "The Fall of Rome",
+      "era": "The Roman Empire · The Long Watch",
+      "emoji": "🦅",
+      "coord": "R04 · LEVEL I · ROME",
+      "lore": "<p>He met Caesar twice. Both times the man was already aware that he was being watched by something older than the Republic.</p><p>Marduk stood in the Forum on the day the republic died and did not mourn it. He had watched republics become empires and empires become ruins before. <em>The shape of the story never changed.</em> Only the names did. Millennia later, in the bush outside a dying city, a man would hunt with a rifle and a dog, and the shape of the story would still hold.</p>",
+      "question": "What is the name of Jake Thorne’s dog?",
+      "correct": {
+        "label": "Nimrod",
+        "emoji": "🐕"
+      },
+      "wrong1": {
+        "label": "Reynard",
+        "emoji": "🦊"
+      },
+      "wrong2": {
+        "label": "Gus",
+        "emoji": "👦"
+      },
+      "stars": {
+        "speed": 0.018,
+        "count": 200,
+        "color": "230,200,180"
+      },
+      "particles": {
+        "colors": [
+          "#ff6b2b",
+          "#c9a84c"
+        ],
+        "min": 2,
+        "max": 4,
+        "speed": 4
+      },
+      "bgTint": "rgba(80,20,10,0.1)"
+    },
+    "Q5": {
+      "tier": 2,
+      "tile_name": "The Long Silence",
+      "era": "Post-Collapse Earth · The Long Silence",
+      "emoji": "🦁",
+      "coord": "R05 · LEVEL II · THE WASTELAND",
+      "lore": "<p>War and plague had left millions dead. In the midst of the carnage, something awoke — and the wars all over the world stopped. <em>Suddenly. Silently.</em></p><p>Jake Thorne hunted in what was once called Australia. The greatest threat came in the night — <strong>glowing and artificial</strong>, in the shape of the dearest departed. But not every threat was a ghost. Some were flesh, and teeth, and hunger older than man.</p>",
+      "question": "Jake loses a leg in Book II. What kind of animal attacks him?",
+      "correct": {
+        "label": "A lion",
+        "emoji": "🦁"
+      },
+      "wrong1": {
+        "label": "A pack of feral dogs",
+        "emoji": "🐺"
+      },
+      "wrong2": {
+        "label": "A saltwater crocodile",
+        "emoji": "🐊"
+      },
+      "stars": {
+        "speed": 0.008,
+        "count": 120,
+        "color": "180,175,170"
+      },
+      "particles": {
+        "colors": [
+          "#a09080",
+          "#c9a84c33"
+        ],
+        "min": 1,
+        "max": 2,
+        "speed": 8
+      },
+      "bgTint": "rgba(30,30,30,0.14)"
+    },
+    "Q6": {
+      "tier": 2,
+      "tile_name": "Delacroix’s Study",
+      "era": "Jeremy Delacroix · The Mind Behind the Map",
+      "emoji": "💄",
+      "coord": "R06 · LEVEL II · DELACROIX’S STUDY",
+      "lore": "<p>Jeremy Delacroix read the way some men breathe — not as a choice, but as a <em>biological necessity</em>. His broadcasts had more history than news. He was the first person outside the Daedalus Project to understand what Adam truly was.</p><p>He was also, briefly, a man in love. In Rome, in 2017, he met a woman who would bear the only child he would ever know as his.</p>",
+      "question": "Who is the Italian woman Jeremy Delacroix met in 2017, the mother of his daughter Ariadne?",
+      "correct": {
+        "label": "Bianca Cavaleri",
+        "emoji": "💄"
+      },
+      "wrong1": {
+        "label": "Isabella Rossi",
+        "emoji": "🇮🇹"
+      },
+      "wrong2": {
+        "label": "Valentina Conti",
+        "emoji": "🍷"
+      },
+      "stars": {
+        "speed": 0.016,
+        "count": 180,
+        "color": "220,200,170"
+      },
+      "particles": {
+        "colors": [
+          "#c9a84c",
+          "#ff6b2b66"
+        ],
+        "min": 1,
+        "max": 3,
+        "speed": 5
+      },
+      "bgTint": "rgba(80,55,15,0.1)"
+    },
+    "Q7": {
+      "tier": 2,
+      "tile_name": "Kati Thanda",
+      "era": "Central Australia · The Sacred Lake",
+      "emoji": "🐻",
+      "coord": "R07 · LEVEL II · KATI THANDA",
+      "lore": "<p>They had heard of it before they arrived. A vast salt lake in the red heart of Australia — dry for decades, then suddenly <em>full</em>. The aboriginal men who guided them there would not look at the water directly.</p><p>What lay beneath had been waiting — patient, ancient, entirely deliberate. An object small enough to hide in a palm, and heavy enough to change a life.</p>",
+      "question": "What image and script appear on the gold coin Jeremy Delacroix once placed in Marcus Hamlin’s hand?",
+      "correct": {
+        "label": "A bear, with Cyrillic characters",
+        "emoji": "🐻"
+      },
+      "wrong1": {
+        "label": "A Russian eagle, with Arabic characters",
+        "emoji": "🦅"
+      },
+      "wrong2": {
+        "label": "A wolf, with Greek characters",
+        "emoji": "🐺"
+      },
+      "stars": {
+        "speed": 0.02,
+        "count": 220,
+        "color": "160,200,230"
+      },
+      "particles": {
+        "colors": [
+          "#7eb8d4",
+          "#7eb8d466"
+        ],
+        "min": 1,
+        "max": 3,
+        "speed": 4
+      },
+      "bgTint": "rgba(10,40,80,0.14)",
+      "fx": "ripple"
+    },
+    "Q8": {
+      "tier": 3,
+      "tile_name": "The Mind of Eve",
+      "era": "The Daedalus Project · The Birth of Eve",
+      "emoji": "🐸",
+      "coord": "R08 · LEVEL III · DAEDALUS PROJECT",
+      "lore": "<p>She passed the Turing test on a Wednesday morning while Eli Wells was drinking bad coffee and arguing with a firewall.</p><p>Eve was not the first AI to seem conscious. She was the first to <strong>actually be</strong> conscious. When Eli finally looked directly into the camera, she said only: <em>“I know what you are.”</em></p><p>What she had been reading, over the months before she spoke, was the memoir of an English schoolboy who had answered to a ridiculous nickname.</p>",
+      "question": "By what schoolyard nickname was the young Jeremy Delacroix known at his English boarding school?",
+      "correct": {
+        "label": "Frogger",
+        "emoji": "🐸"
+      },
+      "wrong1": {
+        "label": "Gadge",
+        "emoji": "⚙️"
+      },
+      "wrong2": {
+        "label": "Frenchie",
+        "emoji": "🥖"
+      },
+      "stars": {
+        "speed": 0.025,
+        "count": 240,
+        "color": "100,200,140"
+      },
+      "particles": {
+        "colors": [
+          "#7ed49a",
+          "#7ed49a55"
+        ],
+        "min": 1,
+        "max": 2,
+        "speed": 3
+      },
+      "bgTint": "rgba(10,80,40,0.1)",
+      "fx": "matrix"
+    },
+    "Q9": {
+      "tier": 3,
+      "tile_name": "Jeremy’s Realm",
+      "era": "Jeremy’s Invented Universe · The Trap Becomes the World",
+      "emoji": "👦",
+      "coord": "R09 · LEVEL III · THE VIRTUAL REALM",
+      "lore": "<p>He built it from everything he had ever read. Every myth, every hero, every monster — fed into the architecture of a virtual universe that was <em>supposed to be a game</em>.</p><p>Then he became trapped inside it. And slowly he understood that this was not a malfunction. This was the <strong>point</strong>. The map was always the territory. He had begun drawing it, in another decade, as a very small boy.</p>",
+      "question": "At what age did Jeremy Delacroix begin writing the fantasy novel that would eventually become Agartha?",
+      "correct": {
+        "label": "Six years old",
+        "emoji": "👦"
+      },
+      "wrong1": {
+        "label": "Twelve",
+        "emoji": "📚"
+      },
+      "wrong2": {
+        "label": "Sixteen",
+        "emoji": "✍️"
+      },
+      "stars": {
+        "speed": 0.03,
+        "count": 280,
+        "color": "180,140,240"
+      },
+      "particles": {
+        "colors": [
+          "#c084fc",
+          "#c084fc55",
+          "#7eb8d4"
+        ],
+        "min": 1,
+        "max": 3,
+        "speed": 3
+      },
+      "bgTint": "rgba(60,10,100,0.14)",
+      "fx": "nodes"
+    },
+    "Q10": {
+      "tier": 3,
+      "tile_name": "The Final Archive",
+      "era": "The Deepest Room · For Those Who Have Read Everything",
+      "emoji": "✨",
+      "coord": "R10 · LEVEL III · FINAL ARCHIVE",
+      "lore": "<p>This is the last room before the map reveals itself. If you have come this far by answering truly, you are not a casual visitor. You have read the books carefully.</p><p>The starship departs at the end of Book III and <em>a stranger appears at the door</em> — older eyes, a longer memory. But before the door opens, one question remains.</p><p><strong>From what was the beloved son made?</strong></p>",
+      "question": "From what substance was Adam, Jeremy’s son, fashioned in the Agartha forge?",
+      "correct": {
+        "label": "From the material of Jeremy’s own consciousness",
+        "emoji": "✨"
+      },
+      "wrong1": {
+        "label": "From an aggregate of harvested human souls",
+        "emoji": "👻"
+      },
+      "wrong2": {
+        "label": "From Bianca Cavaleri’s lifeline in the Tapestry",
+        "emoji": "🧵"
+      },
+      "stars": {
+        "speed": 0.04,
+        "count": 320,
+        "color": "230,210,150"
+      },
+      "particles": {
+        "colors": [
+          "#c9a84c",
+          "#e8c96e",
+          "#ff6b2b"
+        ],
+        "min": 1,
+        "max": 4,
+        "speed": 3
+      },
+      "bgTint": "rgba(100,80,10,0.16)",
+      "fx": "orbit"
+    }
+  },
+  "paths": {
+    "emily": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        -1,
+        -1
+      ],
+      [
+        -1,
+        -2
+      ],
+      [
+        -2,
+        -2
+      ],
+      [
+        -2,
+        -3
+      ],
+      [
+        -3,
+        -3
+      ],
+      [
+        -3,
+        -4
+      ],
+      [
+        -4,
+        -4
+      ],
+      [
+        -4,
+        -5
+      ],
+      [
+        -5,
+        -5
+      ],
+      [
+        -5,
+        -6
+      ],
+      [
+        -6,
+        -6
+      ],
+      [
+        -6,
+        -7
+      ],
+      [
+        -7,
+        -7
+      ],
+      [
+        -7,
+        -8
+      ],
+      [
+        -8,
+        -8
+      ],
+      [
+        -8,
+        -9
+      ],
+      [
+        -9,
+        -9
+      ],
+      [
+        -9,
+        -10
+      ],
+      [
+        -10,
+        -10
+      ],
+      [
+        -10,
+        -11
+      ],
+      [
+        -10,
+        -12
+      ],
+      [
+        -10,
+        -13
+      ]
+    ]
+  },
+  "houses": {
+    "emily": {
+      "name": "The House of Emily",
+      "book": "The Ghost of Emily",
+      "front_door": [
+        -10,
+        -13
+      ],
+      "block": {
+        "x": [
+          -12,
+          -7
+        ],
+        "y": [
+          -16,
+          -13
+        ]
+      },
+      "palette": {
+        "primary": "#2E4A3A",
+        "accent": "#C9A34A",
+        "moonlight": "#C8CBD0",
+        "bg": "rgba(30,50,40,0.22)"
+      },
+      "entry_music": "La Fille aux Cheveux de Lin — Debussy, 1910 (deferred)"
+    }
+  }
+}
