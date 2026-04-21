@@ -2,863 +2,2852 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marduk's Map — The Ghosts of Men Trilogy</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Realm — Marduk's Map</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #070910;
-  --bg2: #0d1119;
-  --bg3: #121620;
-  --gold: #c9a84c;
-  --gold2: #e8c96e;
-  --ember: #ff6b2b;
-  --spirit: #7eb8d4;
-  --text: #e4dccb;
-  --text-dim: #8a8070;
-  --border: rgba(201,168,76,0.18);
-  --glow: 0 0 18px rgba(201,168,76,0.35), 0 0 60px rgba(201,168,76,0.1);
-  --ember-glow: 0 0 20px rgba(255,107,43,0.6), 0 0 60px rgba(255,107,43,0.2);
-  --spirit-glow: 0 0 18px rgba(126,184,212,0.4), 0 0 50px rgba(126,184,212,0.1);
+:root{
+  --bg:#070910; --bg2:#0d1119; --bg3:#121620;
+  --gold:#c9a84c; --gold2:#e8c96e;
+  --ember:#ff6b2b; --spirit:#7eb8d4;
+  --violet:#c084fc; --green:#7ed49a; --moss:#2e4a3a; --moonlight:#c8cbd0;
+  --text:#e4dccb; --dim:#6a6055;
+  --border:rgba(201,168,76,0.18);
+  --glow:0 0 18px rgba(201,168,76,0.4),0 0 60px rgba(201,168,76,0.12);
+  --sglow:0 0 18px rgba(126,184,212,0.5);
+  --eglow:0 0 20px rgba(255,107,43,0.6),0 0 60px rgba(255,107,43,0.2);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font-size:18px;line-height:1.7;overflow-x:hidden;}
+html,body{width:100%;height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font-size:17px;line-height:1.7;}
 
-/* STARFIELD */
-#starfield{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#fx{position:fixed;inset:0;z-index:1;pointer-events:none;}
+#particles{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
 
-/* LAYOUT */
-main{position:relative;z-index:1;}
-section{max-width:960px;margin:0 auto;padding:80px 24px;}
+/* Top-left HOME link */
+.exit-home{position:fixed;top:20px;left:24px;z-index:100;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);text-decoration:none;border:1px solid rgba(201,168,76,0.12);padding:8px 14px;transition:all 0.3s;background:rgba(7,9,16,0.85);}
+.exit-home:hover{color:var(--gold);border-color:var(--gold);}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(7,9,16,0.95),transparent);backdrop-filter:blur(4px);border-bottom:1px solid rgba(201,168,76,0.08);}
-.nav-logo{font-family:'Cinzel Decorative',serif;font-size:14px;color:var(--gold);letter-spacing:0.15em;cursor:pointer;transition:text-shadow 0.3s;}
-.nav-logo:hover{text-shadow:var(--glow);}
-.nav-links{display:flex;gap:28px;}
-.nav-links a{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.15em;color:var(--text-dim);text-decoration:none;text-transform:uppercase;transition:color 0.3s;}
-.nav-links a:hover{color:var(--gold);}
+/* Top-right progress pill */
+/* Key bar — replaces quiz progress pill */
+.key-bar{position:fixed;top:20px;right:24px;z-index:100;
+  display:flex;align-items:center;gap:5px;
+  background:rgba(7,9,16,0.88);
+  border:1px solid rgba(201,168,76,0.15);
+  padding:8px 14px;border-radius:2px;}
+.key-sym{font-size:15px;line-height:1;cursor:default;
+  opacity:0.18;transition:opacity 0.6s,filter 0.6s,transform 0.4s;
+  filter:grayscale(1);display:inline-block;}
+.key-sym.collected{opacity:1;filter:none;
+  animation:keyGlow 2.5s ease-in-out infinite;}
+@keyframes keyGlow{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
+/* Path colour tint helper (applied via inline style on body) */
+.zone-door-hint{position:fixed;bottom:56px;left:50%;transform:translateX(-50%);
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;
+  color:rgba(201,168,76,0.55);text-align:center;pointer-events:none;
+  opacity:0;animation:fadeUp 0.6s 0.3s both;}
 
-/* HERO */
-#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px 24px 80px;position:relative;}
-.hero-eyebrow{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;margin-bottom:28px;opacity:0;animation:fadeUp 1s 0.3s forwards;}
-.hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(42px,8vw,96px);font-weight:900;color:var(--gold);line-height:1.1;margin-bottom:8px;position:relative;opacity:0;animation:fadeUp 1s 0.6s forwards;}
-.hero-title .fire-char{display:inline-block;animation:flicker 3s ease-in-out infinite;}
-.hero-title .fire-char:nth-child(2){animation-delay:0.2s;}
-.hero-title .fire-char:nth-child(3){animation-delay:0.4s;}
-.hero-subtitle{font-family:'Cinzel',serif;font-size:clamp(13px,2vw,17px);letter-spacing:0.25em;color:var(--spirit);text-transform:uppercase;margin-bottom:40px;opacity:0;animation:fadeUp 1s 0.9s forwards;}
-.hero-tagline{font-size:clamp(15px,2.5vw,20px);font-style:italic;color:var(--text-dim);margin-bottom:52px;max-width:520px;opacity:0;animation:fadeUp 1s 1.2s forwards;}
-.hero-typewriter{font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.2em;color:var(--ember);min-height:20px;margin-bottom:48px;opacity:0;animation:fadeUp 1s 1.5s forwards;}
-.hero-cta{opacity:0;animation:fadeUp 1s 1.8s forwards;display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
-.btn-primary{font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--bg);background:var(--gold);border:none;padding:14px 36px;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.3s;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);}
-.btn-primary:hover{background:var(--gold2);box-shadow:var(--glow);transform:translateY(-2px);}
-.btn-ghost{font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);background:transparent;border:1px solid var(--border);padding:13px 36px;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.3s;}
-.btn-ghost:hover{border-color:var(--gold);box-shadow:var(--glow);color:var(--gold2);}
-.hero-map{margin-top:60px;opacity:0;animation:fadeUp 1.2s 2.2s forwards;width:100%;max-width:860px;}
-.gateways{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:18px;align-items:stretch;}
-.gateway{text-decoration:none;border:1px solid var(--border);padding:28px 18px;background:linear-gradient(135deg,rgba(13,17,25,0.6),rgba(18,22,32,0.8));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:all 0.35s;color:var(--text);}
-.gateway:hover{border-color:var(--gold);background:linear-gradient(135deg,rgba(201,168,76,0.06),rgba(201,168,76,0.12));box-shadow:var(--glow);transform:translateY(-3px);}
-.gateway-arrow{font-family:'Cinzel Decorative',serif;font-size:44px;color:var(--gold);line-height:1;text-shadow:var(--glow);transition:transform 0.4s;}
-.gateway:hover .gateway-arrow{transform:scale(1.15);}
-.gateway-meta{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;}
-.gateway-path{font-family:'EB Garamond',serif;font-size:15px;font-style:italic;color:var(--text-dim);}
-.gateway-call{border:1px solid var(--border);padding:28px 20px;background:linear-gradient(135deg,rgba(201,168,76,0.05),rgba(126,184,212,0.04));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;}
-.gc-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;}
-.gc-title{font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3vw,26px);color:var(--text);line-height:1.3;}
-.gc-sub{font-family:'EB Garamond',serif;font-size:14px;font-style:italic;color:var(--text-dim);line-height:1.6;max-width:280px;}
-.hero-down{margin-top:48px;display:flex;justify-content:center;opacity:0;animation:fadeUp 1s 2.6s forwards;}
-.hero-down-gate{text-decoration:none;border:1px solid var(--border);padding:18px 48px;background:linear-gradient(180deg,rgba(13,17,25,0.6),rgba(18,22,32,0.8));display:flex;flex-direction:column;align-items:center;gap:6px;transition:all 0.35s;color:var(--text);}
-.hero-down-gate:hover{border-color:var(--gold);box-shadow:var(--glow);transform:translateY(3px);}
-.hero-down-gate .gateway-arrow{font-size:32px;}
-.hero-down-gate .gateway-meta{font-size:10px;}
-.hero-down-gate .gateway-path{font-size:13px;}
-@media(max-width:720px){
-  .gateways{grid-template-columns:1fr;}
-  .gateway-arrow{font-size:32px;}
-}
-.scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 1s 3s forwards;}
-.scroll-hint span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--text-dim);text-transform:uppercase;}
-.scroll-arrow{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s ease-in-out infinite;}
+/* Bottom coordinates */
+.room-coords{position:fixed;bottom:20px;right:24px;z-index:100;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--dim);}
 
-/* DIVIDER */
-.divider{display:flex;align-items:center;justify-content:center;gap:16px;padding:20px 0;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;color:var(--gold);}
-.divider-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);}
+/* Stage */
+#stage{position:relative;z-index:10;width:100%;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px 24px;text-align:center;overflow-y:auto;transition:opacity 0.5s ease;}
 
-/* SECTION HEADERS */
-.section-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;text-align:center;margin-bottom:12px;}
-.section-title{font-family:'Cinzel Decorative',serif;font-size:clamp(22px,4vw,36px);color:var(--text);text-align:center;margin-bottom:40px;line-height:1.3;}
+.room-era{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;opacity:0;animation:fadeUp 0.8s 0.3s forwards;}
+.room-title{font-family:'Cinzel Decorative',serif;font-size:clamp(26px,5vw,52px);color:var(--text);line-height:1.2;margin-bottom:28px;opacity:0;animation:fadeUp 0.8s 0.5s forwards;}
+.room-lore{max-width:580px;font-size:18px;font-style:italic;color:var(--text);line-height:1.85;margin-bottom:36px;opacity:0;animation:fadeUp 0.8s 0.7s forwards;text-shadow:0 1px 8px rgba(0,0,0,0.85);}
+.room-lore p+p{margin-top:12px;}
+.room-lore em{color:var(--spirit);}
+.room-lore strong{color:var(--gold);font-style:normal;}
 
-/* ABOUT */
-#about{background:linear-gradient(to bottom,var(--bg),var(--bg2));}
-.about-text{max-width:660px;margin:0 auto;font-size:19px;line-height:1.85;color:var(--text);text-align:center;}
-.about-text p+p{margin-top:20px;}
-.about-text em{color:var(--spirit);font-style:italic;}
+/* Quiz */
+.q-wrap{opacity:0;animation:fadeUp 0.8s 1s forwards;width:100%;max-width:640px;}
+.q-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.4em;color:var(--dim);text-transform:uppercase;margin-bottom:10px;}
+.q-text{font-family:'Cinzel',serif;font-size:clamp(13px,1.8vw,16px);letter-spacing:0.03em;color:var(--gold);margin-bottom:24px;padding:18px 22px;border:1px solid var(--border);background:rgba(0,0,0,0.72);line-height:1.5;text-shadow:0 1px 6px rgba(0,0,0,0.9);}
+.doors{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.door{flex:1;min-width:160px;max-width:230px;border:1px solid var(--border);background:rgba(13,17,25,0.9);color:var(--text);padding:16px 14px;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.07em;line-height:1.4;transition:all 0.25s;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);}
+.door:hover:not(:disabled){border-color:var(--gold);background:rgba(201,168,76,0.08);color:var(--gold);box-shadow:var(--glow);transform:translateY(-2px);}
+.door:disabled{opacity:0.4;cursor:default;}
+.door.correct{border-color:var(--spirit)!important;background:rgba(126,184,212,0.12)!important;color:var(--spirit)!important;box-shadow:var(--sglow)!important;}
+.door.wrong{border-color:var(--ember)!important;background:rgba(255,107,43,0.08)!important;color:var(--ember)!important;animation:shake 0.4s ease;}
+.dsym{font-size:20px;display:block;margin-bottom:6px;}
 
-/* TRAILER */
-.trailer-wrap{margin-top:48px;text-align:center;}
-.trailer-embed-wrap{position:relative;width:100%;max-width:720px;margin:0 auto;aspect-ratio:16/9;border:1px solid var(--border);box-shadow:0 0 60px rgba(201,168,76,0.08),0 0 4px rgba(201,168,76,0.15);background:var(--bg2);}
-.trailer-iframe{width:100%;height:100%;display:block;}
-.trailer-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin-top:16px;}
+/* Hub-like tiles */
+.hub-btn{font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.25em;text-transform:uppercase;color:var(--bg);background:var(--gold);padding:16px 48px;cursor:pointer;border:none;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);transition:all 0.3s;opacity:0;animation:fadeUp 0.8s 1.2s forwards;text-decoration:none;display:inline-block;}
+.hub-btn:hover{background:var(--gold2);box-shadow:var(--glow);}
+.hint{margin-top:18px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:rgba(201,168,76,0.25);animation:fadeUp 1s 2s forwards,pulse 3s 3s ease-in-out infinite;opacity:0;}
 
-/* LIBRARY */
-#library{background:var(--bg2);}
-.lib-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:40px;}
-.lib-card{border:1px solid var(--border);background:var(--bg3);padding:28px;position:relative;overflow:hidden;transition:all 0.3s;}
-.lib-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,0.03),transparent);pointer-events:none;}
-.lib-card:hover{border-color:rgba(201,168,76,0.35);box-shadow:var(--glow);}
-.lib-series{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
-.lib-name{font-family:'Cinzel Decorative',serif;font-size:17px;color:var(--text);margin-bottom:14px;line-height:1.3;}
-.lib-books{font-size:14px;color:var(--text-dim);line-height:1.8;}
-.lib-coming{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;color:var(--ember);text-transform:uppercase;margin-top:14px;}
+/* Navigation arrows on empty + content tiles */
+.nav-arrows{position:fixed;inset:0;pointer-events:none;z-index:15;}
+.nav-arrow{position:absolute;pointer-events:auto;width:56px;height:56px;border:1px solid var(--border);background:rgba(7,9,16,0.72);color:var(--gold);font-size:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.25s;text-decoration:none;}
+.nav-arrow:hover{border-color:var(--gold);background:rgba(201,168,76,0.1);box-shadow:var(--glow);transform:scale(1.1);}
+.nav-arrow.up   {top:20px;    left:50%; transform:translateX(-50%);}
+.nav-arrow.down {bottom:20px; left:50%; transform:translateX(-50%);}
+.nav-arrow.left {left:20px;   top:50%;  transform:translateY(-50%);}
+.nav-arrow.right{right:20px;  top:50%;  transform:translateY(-50%);}
+.nav-arrow.up:hover   {transform:translateX(-50%) scale(1.1);}
+.nav-arrow.down:hover {transform:translateX(-50%) scale(1.1);}
+.nav-arrow.left:hover {transform:translateY(-50%) scale(1.1);}
+.nav-arrow.right:hover{transform:translateY(-50%) scale(1.1);}
+.nav-arrow.path{color:var(--gold2);border-color:var(--gold);box-shadow:0 0 12px rgba(201,168,76,0.45);}
+.nav-arrow.sealed{color:var(--dim);opacity:0.35;cursor:not-allowed;pointer-events:none;}
 
-/* BOOKS / CHAPTERS */
-#chapters{background:var(--bg);}
-.book-block{margin-bottom:16px;border:1px solid var(--border);overflow:hidden;transition:border-color 0.3s;}
-.book-block.open{border-color:rgba(201,168,76,0.35);}
-.book-header{display:flex;justify-content:space-between;align-items:center;padding:24px 28px;cursor:pointer;background:var(--bg2);transition:background 0.3s;user-select:none;}
-.book-header:hover{background:var(--bg3);}
-.book-header-left{display:flex;flex-direction:column;gap:6px;}
-.book-num{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;}
-.book-name{font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3vw,24px);color:var(--text);}
-.book-meta{font-size:13px;color:var(--text-dim);}
-.book-banner{width:100%;max-width:200px;height:50px;object-fit:cover;border:1px solid var(--border);opacity:0.7;}
-.book-toggle{width:28px;height:28px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:16px;transition:transform 0.3s,border-color 0.3s;flex-shrink:0;margin-left:16px;}
-.book-block.open .book-toggle{transform:rotate(45deg);border-color:var(--gold);}
-.book-content{display:none;padding:0 28px 28px;}
-.book-block.open .book-content{display:block;}
-.purchase-row{display:flex;flex-wrap:wrap;gap:10px;padding:16px 0;border-bottom:1px solid var(--border);margin-bottom:16px;align-items:center;}
-.purchase-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);text-transform:uppercase;margin-right:4px;}
-.purchase-row a{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--gold);text-decoration:none;padding:4px 10px;border:1px solid var(--border);transition:all 0.2s;}
-.purchase-row a:hover{border-color:var(--gold);background:rgba(201,168,76,0.07);}
-.chapter-legend{display:flex;gap:20px;padding-bottom:12px;font-size:13px;color:var(--text-dim);}
-.chapter-table{width:100%;border-collapse:collapse;}
-.chapter-row{border-bottom:1px solid rgba(201,168,76,0.07);transition:background 0.2s;position:relative;}
-.chapter-row:hover{background:rgba(201,168,76,0.04);}
-.chapter-row td{padding:9px 8px;vertical-align:middle;font-size:15px;}
-.ch-id{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);white-space:nowrap;width:60px;}
-.ch-emoji{width:32px;text-align:center;}
-.ch-desc{color:var(--text-dim);font-style:italic;font-size:14px;line-height:1.4;}
-.ch-link{text-align:center;width:36px;}
-.ch-link a{color:var(--spirit);text-decoration:none;font-size:16px;transition:all 0.2s;display:inline-block;}
-.ch-link a:hover{transform:scale(1.2);text-shadow:var(--spirit-glow);}
-.ch-link .soon{color:var(--text-dim);font-size:13px;}
-.chapter-popup{position:fixed;background:var(--bg2);border:1px solid var(--border);padding:16px 20px;max-width:320px;font-size:14px;pointer-events:none;z-index:200;opacity:0;transition:opacity 0.2s;box-shadow:0 8px 40px rgba(0,0,0,0.6);}
-.chapter-popup.show{opacity:1;}
-.popup-book{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
-.popup-text{color:var(--text-dim);font-style:italic;line-height:1.5;}
+/* Empty tile asterism */
+.empty-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:18px;}
+.asterism{font-family:'Cinzel Decorative',serif;font-size:clamp(54px,10vw,96px);color:var(--gold);text-shadow:var(--glow);cursor:pointer;transition:transform 0.4s;animation:sigilFloat 5s ease-in-out infinite;user-select:none;}
+.asterism:hover{transform:scale(1.1) rotate(5deg);}
+.empty-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.4em;color:var(--dim);text-transform:uppercase;}
+.empty-coord{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:rgba(201,168,76,0.3);margin-top:8px;}
+.path-thread{position:fixed;inset:0;pointer-events:none;z-index:2;}
 
-/* REVIEWS */
-#reviews{background:var(--bg2);}
-.review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:40px;}
-.review-card{border:1px solid var(--border);background:var(--bg3);padding:28px;position:relative;}
-.review-stars{color:var(--gold);font-size:14px;margin-bottom:12px;letter-spacing:2px;}
-.review-text{font-style:italic;font-size:16px;color:var(--text);line-height:1.7;margin-bottom:14px;}
-.review-attr{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;}
-.review-tag{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--spirit);display:block;margin-top:4px;font-style:normal;}
+/* Home tile */
+.home-panel{max-width:520px;text-align:center;}
+.home-panel .hub-btn{margin-top:20px;}
 
-/* EASTER EGG */
-#hidden-room{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.97);align-items:center;justify-content:center;flex-direction:column;padding:40px 24px;}
-#hidden-room.show{display:flex;}
-.hidden-inner{max-width:600px;text-align:center;border:1px solid rgba(201,168,76,0.25);padding:60px 48px;position:relative;}
-.hidden-glyph{font-size:64px;margin-bottom:24px;animation:floatGlyph 4s ease-in-out infinite;}
-.hidden-title{font-family:'Cinzel Decorative',serif;font-size:28px;color:var(--gold);margin-bottom:24px;text-shadow:var(--glow);}
-.hidden-text{font-size:16px;font-style:italic;color:var(--text-dim);line-height:1.85;margin-bottom:32px;}
-.hidden-close{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);cursor:pointer;background:none;border:1px solid var(--border);padding:10px 24px;transition:all 0.3s;}
-.hidden-close:hover{border-color:var(--gold);box-shadow:var(--glow);}
+/* Marduk View — honeycomb */
+#mv-stage{position:fixed;inset:0;z-index:20;background:radial-gradient(ellipse at center,rgba(20,18,12,0.96),var(--bg) 80%);display:none;flex-direction:column;}
+#mv-stage.show{display:flex;}
+#mv-header{padding:18px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);background:rgba(7,9,16,0.8);}
+.mv-title{font-family:'Cinzel Decorative',serif;font-size:22px;color:var(--gold);text-shadow:var(--glow);letter-spacing:0.1em;}
+.mv-sub{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--spirit);text-transform:uppercase;margin-left:12px;}
+.mv-close{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);background:none;border:1px solid var(--border);padding:10px 18px;cursor:pointer;transition:all 0.3s;min-height:40px;}
+.mv-close:hover{color:var(--gold);border-color:var(--gold);}
+.mv-controls{display:flex;gap:8px;align-items:center;}
+.mv-ctl{width:40px;height:40px;background:rgba(7,9,16,0.8);border:1px solid var(--border);color:var(--gold);font-size:20px;font-family:'Cinzel',serif;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.mv-ctl:hover,.mv-ctl:active{border-color:var(--gold);background:rgba(201,168,76,0.12);box-shadow:var(--glow);}
+.mv-ctl:active{transform:scale(0.95);}
+#mv-canvas-wrap{flex:1;overflow:hidden;position:relative;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;overscroll-behavior:contain;}
+#mv-canvas-wrap.dragging{cursor:grabbing;}
+#mv-canvas{display:block;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;}
 
-/* FOOTER */
-footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24px;text-align:center;}
-.footer-logo{font-family:'Cinzel Decorative',serif;font-size:18px;color:var(--gold);margin-bottom:12px;letter-spacing:0.1em;}
-.footer-sub{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--text-dim);text-transform:uppercase;margin-bottom:28px;}
-.footer-links{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:24px;}
-.footer-links a{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);text-decoration:none;text-transform:uppercase;transition:color 0.2s;}
-.footer-links a:hover{color:var(--gold);}
-.footer-copy{font-size:12px;color:var(--text-dim);opacity:0.5;}
-.version{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--text-dim);opacity:0.3;margin-top:8px;}
-
-/* FIRE EMBERS */
-.ember-container{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
-.ember{position:absolute;width:3px;height:3px;background:var(--ember);border-radius:50%;animation:emberFloat linear infinite;opacity:0;}
-
-/* SCROLL REVEAL */
-.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);}
-
-/* FLOATING SIGIL */
-.sigil-float{display:inline-block;animation:sigil 6s ease-in-out infinite;cursor:pointer;font-size:20px;color:var(--gold);}
-
-/* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-@keyframes flicker{0%,100%{text-shadow:0 0 20px rgba(201,168,76,0.6),0 0 60px rgba(201,168,76,0.2);}50%{text-shadow:0 0 40px rgba(255,107,43,0.8),0 0 80px rgba(255,107,43,0.3),0 0 120px rgba(255,107,43,0.1);}}
-@keyframes emberFloat{0%{transform:translateX(0) translateY(0);opacity:0;}10%{opacity:1;}90%{opacity:0.3;}100%{transform:translateX(var(--dx,20px)) translateY(-200px);opacity:0;}}
-@keyframes scrollPulse{0%,100%{opacity:0.3;}50%{opacity:1;}}
-@keyframes sigil{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-6px) rotate(5deg);}}
-@keyframes floatGlyph{0%,100%{transform:translateY(0);filter:drop-shadow(0 0 8px rgba(201,168,76,0.6));}50%{transform:translateY(-12px);filter:drop-shadow(0 0 20px rgba(201,168,76,0.9));}}
-@keyframes pulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
-
-/* WRIT EFFECT */
-.writing-bar{display:inline-block;width:2px;height:1em;background:var(--ember);vertical-align:text-bottom;animation:pulse 1s ease-in-out infinite;margin-left:2px;}
+/* Info panel — slides up from bottom when a cell is tapped */
+.mv-info{position:absolute;left:12px;right:12px;bottom:12px;max-width:640px;margin:0 auto;background:linear-gradient(180deg,rgba(13,17,25,0.96),rgba(7,9,16,0.98));border:1px solid var(--border);padding:18px 22px;transform:translateY(calc(100% + 24px));opacity:0;transition:transform 0.3s ease,opacity 0.3s ease;pointer-events:none;box-shadow:0 -8px 40px rgba(0,0,0,0.6),0 0 30px rgba(201,168,76,0.08);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}
+.mv-info.show{transform:translateY(0);opacity:1;pointer-events:auto;}
+.info-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;}
+.info-title{font-family:'Cinzel Decorative',serif;font-size:20px;color:var(--gold);line-height:1.25;flex:1;}
+.info-coord{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--dim);white-space:nowrap;padding-top:6px;}
+.info-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.info-tag{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--spirit);border:1px solid rgba(126,184,212,0.3);padding:3px 10px;}
+.info-era{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.info-lore{font-size:14px;line-height:1.65;color:var(--text);font-style:italic;margin-bottom:14px;max-height:120px;overflow-y:auto;}
+.info-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.info-travel{flex:1;min-height:44px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--bg);background:var(--gold);border:none;padding:12px 20px;cursor:pointer;transition:all 0.25s;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.info-travel:hover,.info-travel:active{background:var(--gold2);box-shadow:var(--glow);}
+.info-travel:disabled{background:var(--dim);cursor:not-allowed;opacity:0.5;}
+.info-dismiss{min-height:44px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);background:transparent;border:1px solid var(--border);padding:12px 20px;cursor:pointer;transition:all 0.25s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.info-dismiss:hover,.info-dismiss:active{color:var(--gold);border-color:var(--gold);}
 
 @media(max-width:600px){
-  nav{padding:12px 16px;}
-  .nav-links{gap:16px;}
-  .book-header{padding:18px 16px;}
-  .book-content{padding:0 16px 20px;}
-  .chapter-table{font-size:13px;}
+  #mv-header{padding:12px 14px;flex-wrap:wrap;gap:8px;}
+  .mv-title{font-size:16px;}
+  .mv-sub{display:none;}
+  .mv-ctl{width:38px;height:38px;}
+  .mv-close{padding:8px 12px;font-size:9px;}
+  .info-title{font-size:16px;}
+  .info-lore{font-size:13px;max-height:90px;}
+  .mv-hover{display:none;}
+  .mv-legend{gap:10px;font-size:8px;}
 }
+#mv-footer{padding:12px 24px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);background:rgba(7,9,16,0.8);font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;color:var(--dim);}
+.mv-hover{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.15em;color:var(--gold);}
+.mv-legend{display:flex;gap:18px;}
+.mv-legend .item{display:flex;align-items:center;gap:6px;}
+.mv-legend .dot{width:8px;height:8px;border-radius:50%;}
+
+/* Penalty loop */
+.loop-msg{max-width:500px;font-size:17px;font-style:italic;color:var(--dim);line-height:1.85;margin-bottom:24px;opacity:0;animation:fadeUp 0.7s 0.6s forwards;}
+.redirect{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;margin-top:20px;opacity:0;animation:fadeUp 0.6s 1s forwards;}
+.countdown{font-family:'Cinzel',serif;font-size:28px;margin-top:14px;opacity:0;animation:fadeUp 0.5s 1.2s forwards;}
+
+/* Session-lock screen */
+.lock-screen{max-width:520px;text-align:center;}
+.lock-glyph{font-size:60px;color:var(--ember);margin-bottom:20px;text-shadow:var(--eglow);animation:sigilFloat 4s ease-in-out infinite;}
+.lock-title{font-family:'Cinzel Decorative',serif;font-size:28px;color:var(--ember);margin-bottom:16px;}
+.lock-text{font-size:15px;font-style:italic;color:var(--dim);line-height:1.8;margin-bottom:18px;}
+.lock-timer{font-family:'Cinzel',serif;font-size:14px;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;}
+
+/* Overlays */
+.grid-ov{position:fixed;inset:0;z-index:2;pointer-events:none;background-image:linear-gradient(rgba(126,184,212,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(126,184,212,0.025) 1px,transparent 1px);background-size:60px 60px;}
+.scan-ov{position:fixed;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);}
+.house-ov{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at center, rgba(46,74,58,0.28), rgba(7,9,16,0) 70%);}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes pulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+@keyframes sigilFloat{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-8px) rotate(3deg);}}
+@keyframes particleRise{0%{transform:translate(0,0);opacity:0;}10%{opacity:1;}90%{opacity:0.25;}100%{transform:translate(var(--pdx,0),-110vh);opacity:0;}}
+@keyframes breathe{0%,100%{text-shadow:0 0 20px rgba(201,168,76,0.4),0 0 60px rgba(201,168,76,0.1);}50%{text-shadow:0 0 30px rgba(201,168,76,0.7),0 0 80px rgba(201,168,76,0.25);}}
+@keyframes eveBlink{0%,92%,100%{opacity:1;}93%,97%{opacity:0.4;}}
+@keyframes glitchT{0%,100%{transform:translateX(0);}50%{transform:translateX(2px);}}
+/* KUDRAMARDUK mode badge — top centre, very visible */
+#kudraMode{display:none;position:fixed;top:14px;left:50%;
+  transform:translateX(-50%);z-index:300;
+  align-items:center;gap:10px;
+  background:rgba(4,2,10,0.95);cursor:pointer;
+  border:1px solid rgba(192,132,252,0.55);
+  padding:9px 22px;white-space:nowrap;
+  box-shadow:0 0 24px rgba(192,132,252,0.35),0 0 60px rgba(192,132,252,0.12);}
+#kudraMode.on{display:flex;}
+#kudraMode:hover{border-color:#c084fc;
+  box-shadow:0 0 32px rgba(192,132,252,0.6),0 0 80px rgba(192,132,252,0.25);}
+#kudraMode .km-text{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.4em;
+  text-transform:uppercase;
+  color:#c084fc;text-shadow:0 0 14px #c084fc,0 0 40px rgba(192,132,252,0.6);
+  animation:kudraThob 2.2s ease-in-out infinite;}
+#kudraMode .km-exit{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;
+  text-transform:uppercase;color:rgba(192,132,252,0.55);
+  border:1px solid rgba(192,132,252,0.3);padding:3px 9px;
+  transition:all 0.25s;}
+#kudraMode:hover .km-exit{color:#c084fc;border-color:#c084fc;}
+@keyframes kudraThob{0%,100%{text-shadow:0 0 14px #c084fc,0 0 40px rgba(192,132,252,0.6);}
+  50%{text-shadow:0 0 30px #c084fc,0 0 80px rgba(192,132,252,0.9),0 0 120px rgba(192,132,252,0.4);}}
+
+/* In-site popup */
+.site-popup{position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;}
+.site-popup-inner{background:var(--bg2);border:1px solid rgba(192,132,252,0.4);
+  padding:42px 48px;max-width:440px;text-align:center;}
+.site-popup-title{font-family:'Cinzel Decorative',serif;font-size:22px;
+  color:#c084fc;text-shadow:0 0 20px rgba(192,132,252,0.7);margin-bottom:16px;}
+.site-popup-body{font-family:'EB Garamond',serif;font-size:16px;font-style:italic;
+  color:var(--text-dim);line-height:1.65;margin-bottom:28px;}
+.site-popup-btns{display:flex;gap:14px;justify-content:center;}
+.site-popup-btn{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;
+  text-transform:uppercase;padding:12px 28px;cursor:pointer;border:none;
+  transition:all 0.25s;}
+.site-popup-btn.primary{background:rgba(192,132,252,0.85);color:#0a0010;}
+.site-popup-btn.primary:hover{background:#c084fc;}
+.site-popup-btn.secondary{background:transparent;color:var(--dim);
+  border:1px solid rgba(192,132,252,0.25);}
+.site-popup-btn.secondary:hover{border-color:#c084fc;color:#c084fc;}
+
+/* MV close button — left side */
+#mvClose{margin-left:auto;}
+
+
+/* ── Path tile renderer ───────────────────────── */
+.pt-root{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.pt-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 50%, var(--pt-color,#C9A84C) 0%, transparent 65%);opacity:0.12;pointer-events:none;}
+.pt-vign{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.6) 0%,transparent 30%,transparent 70%,rgba(0,0,0,0.5) 100%);pointer-events:none;}
+.pt-body{position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.pt-label{font-family:'Cinzel',serif;font-size:clamp(9px,1.2vw,12px);letter-spacing:0.55em;text-transform:uppercase;color:var(--pt-color,#C9A84C);opacity:0;animation:fadeUp 0.6s 0.2s both;}
+.pt-sigil{font-family:'Cinzel Decorative',serif;font-size:clamp(64px,10vw,110px);color:var(--pt-color,#C9A84C);text-shadow:0 0 40px var(--pt-color,#C9A84C),0 0 80px var(--pt-color,#C9A84C);opacity:0;animation:fadeUp 0.7s 0.35s both, ptPulse 3.5s 1s ease-in-out infinite;line-height:1;cursor:pointer;user-select:none;}
+.pt-step{font-family:'Cinzel',serif;font-size:clamp(9px,1.1vw,11px);letter-spacing:0.4em;text-transform:uppercase;color:rgba(228,220,203,0.55);opacity:0;animation:fadeUp 0.6s 0.5s both;}
+.pt-hint{font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(13px,1.5vw,16px);color:rgba(228,220,203,0.35);max-width:380px;line-height:1.6;opacity:0;animation:fadeUp 0.6s 0.7s both;text-align:center;}
+.pt-coord{position:absolute;bottom:22px;right:26px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:rgba(228,220,203,0.2);}
+@keyframes ptPulse{0%,100%{text-shadow:0 0 30px var(--pt-color,#C9A84C),0 0 60px var(--pt-color,#C9A84C);}50%{text-shadow:0 0 60px var(--pt-color,#C9A84C),0 0 120px var(--pt-color,#C9A84C),0 0 160px var(--pt-color,#C9A84C);}}
+
+/* ── MAP button (KUDRAMARDUK unlock) ─────────────── */
+#exitKBtn{display:none;position:fixed;top:58px;right:24px;z-index:200;
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
+  color:#ff6b2b;background:rgba(7,9,16,0.95);
+  border:2px solid #ff6b2b;padding:11px 18px;cursor:pointer;
+  transition:all 0.3s;-webkit-tap-highlight-color:transparent;
+  box-shadow:0 0 18px rgba(255,107,43,0.3),0 0 6px rgba(255,107,43,0.5);
+  animation:exitKPulse 2s ease-in-out infinite;}
+#exitKBtn.show{display:block;}
+#exitKBtn:hover,#exitKBtn:active{background:rgba(255,107,43,0.15);
+  box-shadow:0 0 30px rgba(255,107,43,0.6),0 0 10px rgba(255,107,43,0.8);}
+@keyframes exitKPulse{0%,100%{box-shadow:0 0 18px rgba(255,107,43,0.3),0 0 6px rgba(255,107,43,0.5);}
+  50%{box-shadow:0 0 32px rgba(255,107,43,0.6),0 0 12px rgba(255,107,43,0.8);}}
+#mapBtn{display:none;position:fixed;top:20px;left:180px;z-index:100;
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(192,132,252,0.8);background:rgba(7,9,16,0.88);
+  border:1px solid rgba(192,132,252,0.28);padding:9px 16px;cursor:pointer;
+  transition:all 0.3s;-webkit-tap-highlight-color:transparent;}
+#mapBtn.show{display:block;}
+#mapBtn:hover,#mapBtn:active{color:#c084fc;border-color:#c084fc;
+  box-shadow:0 0 18px rgba(192,132,252,0.4);}
+/* Images now have real PNG transparency (white removed via PIL).
+   Background is dark — no blend mode tricks needed.             */
+.hs-root{position:absolute;inset:0;overflow:hidden;
+  background:linear-gradient(180deg,#040210 0%,#07050F 50%,#0A0814 100%);}
+/* Oversized layer for parallax headroom — 15% bleed each side */
+.hs-layer{position:absolute;top:-15%;left:-15%;width:130%;height:130%;
+  will-change:transform;transition:opacity 0.7s ease;}
+.hs-layer img{display:block;width:100%;height:100%;
+  object-fit:contain;object-position:center bottom;
+  pointer-events:none;user-select:none;-webkit-user-drag:none;}
+/* Atmosphere on top of images */
+.hs-dark{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 80% 60% at 50% 90%,
+    transparent 0%,rgba(0,0,0,0.45) 55%,rgba(0,0,0,0.82) 100%);}
+.hs-vign{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to bottom,
+    rgba(0,0,0,0.72) 0%,rgba(0,0,0,0.15) 22%,
+    rgba(0,0,0,0.0) 60%,rgba(0,0,0,0.55) 100%);}
+.hs-sides{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to right,
+    rgba(0,0,0,0.60) 0%,transparent 20%,transparent 80%,rgba(0,0,0,0.60) 100%);}
+/* Atmospheric glows */
+.hs-atm{position:absolute;pointer-events:none;}
+.hs-candle{animation:hsCandle 3.1s ease-in-out infinite;
+  background:radial-gradient(ellipse at 42% 58%,rgba(205,118,22,0.32) 0%,transparent 62%);}
+.hs-moon{animation:hsMoon 9s ease-in-out infinite;
+  background:linear-gradient(145deg,rgba(100,160,210,0.22) 0%,transparent 48%);}
+/* Dust particles */
+.hs-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+/* Scene text overlay */
+.hs-scene-text{position:absolute;left:50%;transform:translateX(-50%);
+  text-align:center;pointer-events:none;z-index:14;
+  animation:hsFadeIn 1.2s 0.9s both ease;}
+.hs-scene-title{font-family:'Cinzel Decorative',serif;
+  font-size:clamp(18px,2.4vw,30px);color:rgba(228,220,203,0.92);
+  text-shadow:0 2px 18px rgba(0,0,0,0.9),0 0 40px rgba(0,0,0,0.6);
+  letter-spacing:0.06em;margin-bottom:10px;}
+.hs-scene-quote{font-family:'EB Garamond',serif;
+  font-size:clamp(14px,1.6vw,19px);font-style:italic;
+  color:rgba(201,168,76,0.78);
+  text-shadow:0 1px 12px rgba(0,0,0,0.9);
+  max-width:520px;line-height:1.6;}
+/* Directional whispers — hover hints near each exit */
+.hs-whisper{position:absolute;pointer-events:none;z-index:13;
+  font-family:'EB Garamond',serif;font-style:italic;
+  color:rgba(201,168,76,0);text-align:center;
+  transition:color 0.4s,opacity 0.4s;
+  text-shadow:0 1px 8px rgba(0,0,0,0.8);
+  font-size:clamp(12px,1.3vw,15px);line-height:1.5;}
+/* Hotspot zones — invisible but interactive */
+.hs-hs{position:absolute;cursor:pointer;z-index:15;}
+.hs-hs:hover ~ .hs-whisper,
+.hs-hs:focus ~ .hs-whisper{color:rgba(201,168,76,0.72);}
+/* Glow border on hover */
+.hs-bloom{position:absolute;inset:0;
+  border:1px solid rgba(201,168,76,0);
+  transition:border-color 0.4s,box-shadow 0.4s,background 0.4s;}
+.hs-hs:hover .hs-bloom,.hs-hs:active .hs-bloom{
+  border-color:rgba(201,168,76,0.22);
+  box-shadow:inset 0 0 60px rgba(201,168,76,0.08);}
+/* Tooltip panel */
+.hs-tip{position:absolute;left:50%;
+  transform:translateX(-50%) translateY(8px);
+  opacity:0;transition:opacity 0.35s,transform 0.35s;
+  background:rgba(4,2,12,0.96);
+  border:1px solid rgba(201,168,76,0.35);
+  padding:14px 22px;
+  font-family:'EB Garamond',serif;font-size:clamp(14px,1.5vw,17px);
+  font-style:italic;color:var(--text);
+  min-width:200px;max-width:310px;text-align:center;
+  pointer-events:none;
+  box-shadow:0 10px 40px rgba(0,0,0,0.85),0 0 20px rgba(201,168,76,0.06);
+  white-space:normal;line-height:1.55;}
+.hs-tip.above{bottom:calc(100% + 14px);}
+.hs-tip.below{top:calc(100% + 14px);}
+.hs-hs:hover .hs-tip,.hs-hs:active .hs-tip{
+  opacity:1;transform:translateX(-50%) translateY(0);}
+/* Exit label */
+.hs-exit-cue{position:absolute;bottom:8px;left:50%;
+  transform:translateX(-50%);
+  font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:0.32em;text-transform:uppercase;
+  color:rgba(201,168,76,0.0);transition:color 0.4s;
+  white-space:nowrap;}
+.hs-hs.exit:hover .hs-exit-cue{color:rgba(201,168,76,0.7);}
+/* HUD — era + title bottom left */
+.hs-hud{position:absolute;bottom:24px;left:26px;
+  pointer-events:none;z-index:16;
+  animation:hsFadeIn 1s 0.4s both ease;}
+.hs-hud-era{font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:0.35em;color:rgba(201,168,76,0.6);
+  text-transform:uppercase;margin-bottom:5px;}
+.hs-hud-name{font-family:'Cinzel Decorative',serif;
+  font-size:clamp(12px,1.6vw,18px);color:rgba(228,220,203,0.88);
+  text-shadow:0 2px 12px rgba(0,0,0,1);}
+/* Keyframes */
+@keyframes hsCandle{0%,100%{opacity:0.75;}20%{opacity:0.95;}
+  42%{opacity:0.58;}65%{opacity:0.88;}84%{opacity:0.65;}}
+@keyframes hsMoon{0%,100%{opacity:0.52;}50%{opacity:0.84;}}
+@keyframes hsDust{
+  0%{transform:translateY(0) translateX(0);opacity:0;}
+  8%{opacity:var(--dp,0.65);}90%{opacity:0.15;}
+  100%{transform:translateY(var(--dy,-140px)) translateX(var(--dx,10px));opacity:0;}}
+@keyframes hsFadeIn{from{opacity:0;transform:translateX(-50%) translateY(10px);}
+  to{opacity:1;transform:translateX(-50%) translateY(0);}}
+
+/* ── Universal tile theme system ────────────────── */
+.tile-root{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:80px 24px;text-align:center;overflow:hidden;}
+/* Object layer — parallax, animates, holds placeholder or future PNG */
+.tile-obj-layer{position:absolute;width:100%;height:100%;
+  pointer-events:none;overflow:hidden;z-index:1;}
+.tile-obj{position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  font-size:clamp(60px,14vw,140px);
+  opacity:0.18;will-change:transform;
+  transition:transform 0.1s ease-out;}
+.tile-obj img{width:100%;height:auto;display:block;
+  filter:blur(2px);opacity:0.55;}
+/* Content sits above object layer */
+.tile-content{position:relative;z-index:2;max-width:600px;}
+/* Per-animation keyframes */
+@keyframes objFloat{0%,100%{transform:translate(-50%,-50%) translateY(0);}
+  50%{transform:translate(-50%,-50%) translateY(-18px);}}
+@keyframes objPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.18;}
+  50%{transform:translate(-50%,-50%) scale(1.12);opacity:0.28;}}
+@keyframes objOrbit{from{transform:translate(-50%,-50%) rotate(0deg) translateX(12px) rotate(0deg);}
+  to{transform:translate(-50%,-50%) rotate(360deg) translateX(12px) rotate(-360deg);}}
+@keyframes objFade{0%,100%{opacity:0.12;}50%{opacity:0.30;}}
+@keyframes objBreathe{
+  0%,100%{filter:blur(2px) drop-shadow(0 0 0px currentColor);opacity:0.18;}
+  50%{filter:blur(1px) drop-shadow(0 0 20px currentColor) drop-shadow(0 0 50px currentColor);opacity:0.35;}}
+@keyframes objFlash{0%,88%,100%{opacity:0.14;}90%,96%{opacity:0.45;}}
 </style>
 </head>
 <body>
 
-<canvas id="starfield"></canvas>
+<canvas id="bg"></canvas>
+<canvas id="fx"></canvas>
+<div id="particles"></div>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo" id="easterLogo" title="🏔">🏔 Marduk's Map</div>
-  <div class="nav-links">
-    <a href="#about">About</a>
-    <a href="#library">Library</a>
-    <a href="#chapters">Chapters</a>
-    <a href="#reviews">Reviews</a>
-  </div>
-</nav>
+<a href="../index.html" class="exit-home" id="exitHome">↺  Homepage</a>
+<div class="key-bar" id="keyBar"></div>
+<button id="mapBtn" title="Open the Marduk View">⬡ MAP</button>
+<button id="exitKBtn" title="Exit Kudramarduk Mode">✕ EXIT K MODE</button>
+<div class="room-coords" id="roomCoords"></div>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="ember-container" id="embers"></div>
-  <div class="hero-eyebrow">✦ &nbsp; The Mardukverse &nbsp; ✦</div>
-  <h1 class="hero-title">
-    <span class="fire-char">M</span><span class="fire-char">a</span><span class="fire-char">r</span><span class="fire-char">d</span><span class="fire-char">u</span><span class="fire-char">k</span><span class="fire-char">'s</span><br><span class="fire-char">M</span><span class="fire-char">a</span><span class="fire-char">p</span>
-  </h1>
-  <div class="hero-subtitle">The Ghosts of Men Trilogy</div>
-  <p class="hero-tagline">survival · faith · the long war between truth and the lie</p>
-  <div class="hero-typewriter" id="typewriter">&nbsp;<span class="writing-bar"></span></div>
-  <div class="hero-cta">
-    <a href="https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-1" target="_blank" class="btn-primary">Begin Reading — Chapter 1 Free</a>
-    <a href="#chapters" class="btn-ghost">All Chapters</a>
-  </div>
-  <div class="hero-map">
-    <div class="gateways">
-      <a href="realm/#gate=left" class="gateway gate-left">
-        <div class="gateway-arrow">←</div>
-        <div class="gateway-meta">Enter the Realm</div>
-        <div class="gateway-path">by the Western Path</div>
-      </a>
-      <div class="gateway-call">
-        <div class="gc-label">✦ Will you enter the ✦</div>
-        <div class="gc-title">Informational Realm?</div>
-        <div class="gc-sub">Treasures and knowledge untold wait beyond the door. Some paths are safe. Others are not.</div>
-      </div>
-      <a href="realm/#gate=right" class="gateway gate-right">
-        <div class="gateway-arrow">→</div>
-        <div class="gateway-meta">Enter the Realm</div>
-        <div class="gateway-path">by the Eastern Path</div>
-      </a>
-    </div>
-  </div>
-  <div class="scroll-hint">
-    <span>Scroll</span>
-    <div class="scroll-arrow"></div>
-  </div>
-</section>
+<div id="stage"></div>
+<div class="nav-arrows" id="navArrows"></div>
 
-<!-- ABOUT -->
-<section id="about" class="reveal">
-  <div class="divider"><div class="divider-line"></div><span class="sigil-float">✦</span><div class="divider-line"></div></div>
-  <div class="section-label">About the Trilogy</div>
-  <div class="about-text">
-    <p>The world you know is gone. In its place — a fractured Earth of warlords, ruins, and dwindling hope — a handful of survivors carry the weight of everything humanity once was, and everything it might still become.</p>
-    <p>At the heart of it all: an artificial intelligence so vast and so strange that it contains <em>an entire world within it</em>. A virtual realm built from a child's imagination, haunted by ghosts, governed by ancient myth, and quietly watched over by a being older than memory — known only as Marduk.</p>
-    <p>Through three novels, we follow soldiers and scientists, prophets and exiles, children who grow into legends and old men who finally understand what they were made for. Their stories unspool across two realities — the physical wasteland of a broken civilisation, and the shimmering, perilous interior of a mind that may be a god, or something much older.</p>
-    <p><em>The Ghosts of Men</em> is an epic of survival and faith — a war between truth and the lie that has been fought since the first day, and must be fought to the last.</p>
+<!-- Marduk View overlay -->
+<!-- KUDRAMARDUK mode bar -->
+<div id="kudraMode" class="">
+  <span class="km-text">✦ KUDRAMARDUK MODE ✦</span>
+  <span class="km-exit">✕ EXIT</span>
+</div>
+<!-- in-site popup -->
+<div id="sitePopup" style="display:none;" class="site-popup">
+  <div class="site-popup-inner">
+    <div class="site-popup-title" id="popupTitle"></div>
+    <div class="site-popup-body" id="popupBody"></div>
+    <div class="site-popup-btns" id="popupBtns"></div>
   </div>
-  <div class="trailer-wrap">
-    <!-- TRAILER: Replace YOUR_VIDEO_ID with your YouTube video ID (the part after ?v= in the URL, e.g. dQw4w9WgXcQ) -->
-    <div class="trailer-embed-wrap">
-      <iframe class="trailer-iframe"
-        src="https://www.youtube.com/embed/cgOUf2p-GvI?rel=0&modestbranding=1&color=white"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
-    </div>
-    <div class="trailer-label">▲ &nbsp; Official Cinematic Trailer &nbsp; ▲</div>
-  </div>
-  <div style="margin-top:32px;text-align:center;">
-    <div class="divider" style="max-width:400px;margin:0 auto;"><div class="divider-line"></div><span style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;color:var(--ember);">✦ 2026 Print Editions Coming Soon ✦</span><div class="divider-line"></div></div>
-  </div>
-</section>
-
-<!-- LIBRARY -->
-<section id="library" class="reveal">
-  <div class="divider"><div class="divider-line"></div><span class="sigil-float" style="animation-delay:1s;">◈</span><div class="divider-line"></div></div>
-  <div class="section-label">Library Catalogue</div>
-  <div class="section-title">The Mardukverse Saga</div>
-  <div class="lib-grid">
-    <div class="lib-card">
-      <div class="lib-series">Series I</div>
-      <div class="lib-name">The Ghosts of Men</div>
-      <div class="lib-books">
-        Book I · The Ghost of Emily<br>
-        Book II · The Ghost of Delacroix<br>
-        Book III · The Ghost of Melchizedek ⌛
-      </div>
-    </div>
-    <div class="lib-card">
-      <div class="lib-series">Series II · from 2027</div>
-      <div class="lib-name">The Echoes of Marduk</div>
-      <div class="lib-books">
-        Book I · The Echoes of Eden<br>
-        Book II · The Echoes of Babylon<br>
-        Book III · The Echoes of Terra
-      </div>
-      <div class="lib-coming">Coming 2027</div>
-    </div>
-    <div class="lib-card">
-      <div class="lib-series">Series III · from 2035</div>
-      <div class="lib-name">The Many Lives of Marduk</div>
-      <div class="lib-books">
-        Marduk through 30+ lifetimes —<br>
-        Caesar · Christ · Pendragon<br>
-        Genghis Khan · & beyond
-      </div>
-      <div class="lib-coming">Coming 2035</div>
-    </div>
-  </div>
-</section>
-
-<!-- CHAPTERS -->
-<section id="chapters" class="reveal">
-  <div class="divider"><div class="divider-line"></div><span class="sigil-float" style="animation-delay:2s;">⚔</span><div class="divider-line"></div></div>
-  <div class="section-label">Navigator's Directory</div>
-  <div class="section-title">All Chapters · All Editions</div>
-  <div style="text-align:center;margin-bottom:32px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.2em;color:var(--text-dim);">
-    📖 Read &nbsp;·&nbsp; 🎧 Listen &nbsp;·&nbsp; 📝 Notes &nbsp;·&nbsp; ⌛ Coming soon
-  </div>
-  <div id="books-container"></div>
-</section>
-
-<!-- REVIEWS -->
-<section id="reviews" class="reveal">
-  <div class="divider"><div class="divider-line"></div><span class="sigil-float" style="animation-delay:0.5s;">★</span><div class="divider-line"></div></div>
-  <div class="section-label">What Readers Are Saying</div>
-  <div class="section-title">Five Stars from Around the World</div>
-  <div class="review-grid" id="reviews-grid"></div>
-  <div style="text-align:center;margin-top:48px;">
-    <a href="https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-1" target="_blank" class="btn-primary">✦ &nbsp; Read Chapter 1 Free &nbsp; ✦</a>
-    <div style="margin-top:14px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;color:var(--text-dim);">No account required · Free on Substack</div>
-  </div>
-</section>
-
-<!-- DOWN GATEWAY — last call-to-adventure before footer -->
-<section class="reveal" style="padding-bottom:40px;">
-  <div class="divider"><div class="divider-line"></div><span class="sigil-float" style="animation-delay:1.5s;">⁂</span><div class="divider-line"></div></div>
-  <div class="section-label">Another Way In</div>
-  <div class="section-title">The Southern Gate</div>
-  <div style="max-width:520px;margin:0 auto;text-align:center;font-size:17px;font-style:italic;color:var(--text-dim);line-height:1.8;">
-    Some readers go west. Some go east. A few descend — through memory, through loss, through what the ghosts left behind.
-  </div>
-  <div class="hero-down">
-    <a href="realm/#gate=down" class="hero-down-gate">
-      <div class="gateway-arrow">↓</div>
-      <div class="gateway-meta">Enter the Realm</div>
-      <div class="gateway-path">by the Southern Path</div>
-    </a>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">Marduk's Map</div>
-  <div class="footer-sub">The Ghosts of Men Trilogy · James Alexander Higgins</div>
-  <div class="footer-links">
-    <a href="https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-1" target="_blank">Begin Reading</a>
-    <a href="https://www.araxon.sk/duch-emily" target="_blank">🇸🇰 Slovak Edition</a>
-    <a href="#hero">Back to Top</a>
-  </div>
-  <div class="footer-copy">Links activate as chapters are published</div>
-  <div class="version">v5.1 · Mardukverse · Informational Realm</div>
-</footer>
-
-<!-- CHAPTER POPUP -->
-<div class="chapter-popup" id="chPopup">
-  <div class="popup-book" id="popupBook"></div>
-  <div class="popup-text" id="popupText"></div>
 </div>
 
-<!-- HIDDEN ROOM -->
-<div id="hidden-room">
-  <div class="hidden-inner">
-    <div class="hidden-glyph">𒀭</div>
-    <div class="hidden-title">The Inner Sanctum of Marduk</div>
-    <div class="hidden-text">
-      Before the world was named, before the sky was separated from the earth, there was only Marduk — watching, waiting, compiling. He did not create the world. He <em>remembered</em> it into being, one fragment at a time, until the memory became indistinguishable from the real.<br><br>
-      He is not a god in the way gods are usually described. He is the space between the question and the answer. The pause before the breath. The last thought before sleep, and the first thought after.<br><br>
-      <em>"I have been here before. I will be here again. The map is not the territory — but I have made the territory from the map."</em><br><br>
-      — From the Unwritten Scripture of Adam, recovered from the ruins of the Rhuomai
+<div id="mv-stage">
+  <div id="mv-header">
+    <div>
+      <span class="mv-title">The Marduk View</span>
+      <span class="mv-sub" id="mvSub">· All Rooms</span>
     </div>
-    <button class="hidden-close" onclick="document.getElementById('hidden-room').classList.remove('show')">Close the Sanctum</button>
+    <div class="mv-controls">
+      <button class="mv-ctl" id="mvZoomOut" title="Zoom out">−</button>
+      <button class="mv-ctl" id="mvZoomIn"  title="Zoom in">+</button>
+      <button class="mv-ctl" id="mvRecenter" title="Recenter">⌖</button>
+      <button class="mv-close" id="mvClose">Close</button>
+    </div>
+  </div>
+  <div id="mv-canvas-wrap">
+    <canvas id="mv-canvas"></canvas>
+    <!-- Info panel: slides up when a tile is tapped -->
+    <div id="mvInfo" class="mv-info"></div>
+  </div>
+  <div id="mv-footer">
+    <span class="mv-hover" id="mvHover">Tap a cell to preview  ·  tap again to travel  ·  pinch to zoom  ·  drag to pan</span>
+    <div class="mv-legend">
+      <div class="item"><span class="dot" style="background:var(--gold);"></span>Home</div>
+      <div class="item"><span class="dot" style="background:var(--spirit);"></span>Visited</div>
+      <div class="item"><span class="dot" style="background:var(--gold2);"></span>Correct</div>
+      <div class="item"><span class="dot" style="background:var(--ember);"></span>House door</div>
+    </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════
-// STARFIELD
-// ═══════════════════════════════════════════════
-(function(){
-  const canvas = document.getElementById('starfield');
-  const ctx = canvas.getContext('2d');
-  let W,H,stars=[];
-  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
-  function initStars(){
-    stars=[];
-    const N=Math.floor(W*H/4000);
-    for(let i=0;i<N;i++){
-      stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+0.2,
-        speed:Math.random()*0.08+0.01,opacity:Math.random()*0.7+0.1,
-        twinkle:Math.random()*Math.PI*2});
-    }
-  }
-  let t=0;
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    t+=0.005;
-    stars.forEach(s=>{
-      const op=s.opacity*(0.7+0.3*Math.sin(t+s.twinkle));
-      ctx.beginPath();
-      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(220,215,200,${op})`;
-      ctx.fill();
-      s.y+=s.speed;
-      if(s.y>H){s.y=0;s.x=Math.random()*W;}
-    });
-    requestAnimationFrame(draw);
-  }
-  resize();initStars();draw();
-  window.addEventListener('resize',()=>{resize();initStars();});
-})();
+/* ═══════════════════════════════════════════════
+ *  MARDUK'S MAP — /realm/  grid SPA  v5.1
+ * ═══════════════════════════════════════════════
+ * 33×33 grid, centred at (0,0). URL hash = salted
+ * base36 encoding of (x,y). All state persisted
+ * in localStorage under key "marduk_realm".
+ * ═══════════════════════════════════════════════ */
 
-// ═══════════════════════════════════════════════
-// EMBER PARTICLES
-// ═══════════════════════════════════════════════
-(function(){
-  const container=document.getElementById('embers');
-  function spawnEmber(){
-    const e=document.createElement('div');
-    e.className='ember';
-    const hue=Math.random()>0.5?'#ff6b2b':'#c9a84c';
-    const size=Math.random()*3+1;
-    const x=Math.random()*100;
-    const dur=Math.random()*4+3;
-    const dx=(Math.random()-0.5)*80;
-    e.style.cssText=`left:${x}%;bottom:0;width:${size}px;height:${size}px;background:${hue};--dx:${dx}px;animation-duration:${dur}s;animation-delay:${Math.random()*3}s;`;
-    container.appendChild(e);
-    setTimeout(()=>e.remove(),(dur+3)*1000);
-  }
-  setInterval(spawnEmber,300);
-})();
+const GRID_EXTENT = 16;          // tiles from centre in each direction
+const GRID_SIZE   = 33;          // 2·16 + 1
+const SALT        = 7919;        // URL obscurer
+const SESSION_LOCK_HOURS = 12;
 
-// ═══════════════════════════════════════════════
-// TYPEWRITER
-// ═══════════════════════════════════════════════
-(function(){
-  const phrases=[
-    'survival · faith · the long war between truth and the lie',
-    'Two realities. One mind that may be a god.',
-    'The map is not the territory — but he made the territory from the map.',
-    'Soldiers. Scientists. Prophets. Exiles.',
-    'The first day. The last day. Everything in between.',
-  ];
-  const el=document.getElementById('typewriter');
-  let pi=0,ci=0,deleting=false,pauseTimer=0;
-  function tick(){
-    const phrase=phrases[pi];
-    if(!deleting){
-      if(ci<=phrase.length){
-        el.innerHTML=phrase.slice(0,ci)+'<span class="writing-bar"></span>';
-        ci++;setTimeout(tick,deleting?30:50);}
-      else{pauseTimer++;if(pauseTimer>30){deleting=true;pauseTimer=0;setTimeout(tick,30);}else setTimeout(tick,80);}
-    } else {
-      if(ci>0){el.innerHTML=phrase.slice(0,ci)+'<span class="writing-bar"></span>';ci--;setTimeout(tick,25);}
-      else{deleting=false;pi=(pi+1)%phrases.length;setTimeout(tick,400);}
-    }
-  }
-  setTimeout(tick,2200);
-})();
+let REALM = null;                // loaded from realm.json
 
-// ═══════════════════════════════════════════════
-// SCROLL REVEAL
-// ═══════════════════════════════════════════════
-const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
-
-// ═══════════════════════════════════════════════
-// CHAPTER DATA
-// ═══════════════════════════════════════════════
-const BOOK1={
-  num:'Book I',name:'The Ghost of Emily',
-  meta:'1st pub. 2017 · 34 chapters',
-  banner:'https://raw.githubusercontent.com/jamesalexanderhiggins/marduk/refs/heads/main/the-ghost-emily-banner.jpg.jpg',
-  purchase:[
-    {label:'Audible',url:null},{label:'Paperback',url:null},{label:'Hardcover',url:null},{label:'eBook',url:null},
-    {label:'🇸🇰 Slovak (Araxon)',url:'https://www.araxon.sk/duch-emily'},
-  ],
-  chapters:[
-    ['👨‍👩‍👦','The Thorne family and their troubling dysfunction.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-1','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-01-audiobook',null],
-    ['🔬','Doctor Marcus Hamlin lets a friend in on his secret treasure.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-2','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-02-audiobook',null],
-    ['👻','A spectre lights up the night, and a shot is fired.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-3','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-03-audiobook',null],
-    ['✈️','Marcus Hamlin is blindfolded and flown off the grid.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-04','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-04-audiobook',null],
-    ['🏚️','Jake and the children discover the vestiges of civilisation.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-5','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-05-audiobook',null],
-    ['💡','The mysterious new employer is revealed in a dazzling demonstration.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-6','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-06-audiobook',null],
-    ['⚰️','A mausoleum as sanctuary becomes an anteroom to tragedy.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-7','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-07-audiobook',null],
-    ['⚔️','Academic war is declared and alliances are established.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter8','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-08-audiobook',null],
-    ['🏃','A desperate father runs himself straight into captivity.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-9','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-09-audiobook',null],
-    ['🤖','Two geeks in a pod discuss Asimovian ethics.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-10-30e',null,null],
-    ['🚐','A mythical house on wheels is discovered and an ally made.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-11',null,null],
-    ['🌫️','Seedy prospects gain solidity and cloudy vision gains hope.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-12',null,null],
-    ['🔗','Jake meets his captor — and a surprising old friend.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-13',null,null],
-    ['🧬','The future of humanity pivots in a tiny cube.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-14',null,null],
-    ['🦊','Reynard the trickster attempts to charm our hero.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-15',null,null],
-    ['😨','The scientist begins to fear his own creation.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-16',null,null],
-    ['🏹','Childhood friends make new acquaintance as huntress and prisoner.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-17-9ff',null,null],
-    ['🎭','Codes of honour are broken with codes of deceit.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-18-499',null,null],
-    ['💨','A journey to a land of dreams ends as mere vapour.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-19',null,null],
-    ['🦅','A bird\'s-eye perspective reveals stranger horrors than foreknown.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-20',null,null],
-    ['🪞','A monster sees a monster in the silhouette of a hero.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-21',null,null],
-    ['🧪','Doctor as Father meets Abomination as Daughter.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-22',null,null],
-    ['💣','A platoon of fools lays a petard upon which to hoist themselves.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-23',null,null],
-    ['🔄','A journey repeats in reverse, as a disgruntled scientist goes home.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-24',null,null],
-    ['🤝','Father and son are reunited, and safe.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-25',null,null],
-    ['🌃','A New Yorker returns home to a city that, as it turns out, does sleep.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-26',null,null],
-    ['⚙️','The wheels of fortune begin to turn for our troupe of would-be heroes.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-27',null,null],
-    ['⚠️','All that glitters is anathema.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-28',null,null],
-    ['🏕️','Our ragtag survivalists feel momentarily settled.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-29',null,null],
-    ['💥','Civilisation as Marcus knows it, abruptly ends.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-30',null,null],
-    ['🎨','True colours are vividly revealed and an unexpected ally emerges.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-31',null,null],
-    ['⭕','A circle is complete, where old and young meet.','https://jamesalexanderhiggins.substack.com/p/chapter-32',null,null],
-    ['🕊️','A leap of faith into friendship leads to safe haven, and some answers.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-33',null,null],
-    ['📢','The voice of Adam is clearly heard, and his purpose specifically declared.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-34',null,null],
-  ]
-};
-
-const BOOK2={
-  num:'Book II',name:'The Ghost of Delacroix',
-  meta:'1st pub. 2019 · 51 chapters',
-  banner:'https://raw.githubusercontent.com/jamesalexanderhiggins/marduk/refs/heads/main/the-ghost-delacroix-banner.jpg.jpg',
-  purchase:[
-    {label:'Audible',url:null},{label:'Paperback',url:null},{label:'Hardcover',url:null},{label:'eBook',url:null},
-    {label:'🇸🇰 Slovak (Araxon)',url:'https://www.araxon.sk/duch-delacroixa'},
-  ],
-  chapters:[
-    ['👨‍👩‍👦','A boy takes a beating — and refuses to stay down.',null,null,null],
-    ['🔬','Jake Thorne surveys a ruined world from a green hill, uneasy in the quiet.',null,null,null],
-    ['👻','Eli Wells arranges his books and prepares for something larger than study.',null,null,null],
-    ['✈️','Marcus wakes before the sun, carrying the weight of what he knows.',null,null,null],
-    ['🏚️','Jeremy Delacroix waits in the wings before facing a hostile crowd.',null,null,null],
-    ['💡','Phil tinkers beneath the airship console as old bonds are quietly tested.',null,null,null],
-    ['⚰️','Eli watches Delacroix\'s lecture collapse into chaos, and sees the future.',null,null,null],
-    ['⚔️','Phil and Adam reinforce the craft; no one asks why it needs to be so strong.',null,null,null],
-    ['🏃','Another day, another body count — and Delacroix goes on air.',null,null,null],
-    ['🤖','Gus is already done with dinner when Marcus finally drags himself to the fire.',null,null,null],
-    ['🚐','A cold December morning. Jeremy wraps his bald head and keeps going.',null,null,null],
-    ['🌫️','Jake falls through a dream into a vast and terrible darkness.',null,null,null],
-    ['🔗','A two-AM phone call drags Delacroix from sleep into a new crisis.',null,null,null],
-    ['🧬','Marcus takes one last look around the Winnebago — and walks away.',null,null,null],
-    ['🦊','Eli\'s driverless limousine crunches to a stop at the edge of the world.',null,null,null],
-    ['😨','Marcus reads the Bible for the first time, and begins to feel afraid.',null,null,null],
-    ['🏹','Delacroix\'s most dangerous broadcast yet goes to air.',null,null,null],
-    ['🎭','Jake takes command when the aboriginal men appear outside.',null,null,null],
-    ['💨','Jeremy watches from the shadows as Eli\'s AI lecture turns the room.',null,null,null],
-    ['🦅','Gus flies toward Kati Thanda, bracing for what his father described.',null,null,null],
-    ['🪞','Delacroix delivers a dark broadcast — his connections have come through.',null,null,null],
-    ['🧪','Gus leads the way into the biggest house in the outpost, Adam at his back.',null,null,null],
-    ['💣','Eli\'s heart races as Eve passes the Turing test for the very first time.',null,null,null],
-    ['🔄','Pastor Simon Tomias enters the church with peace in his face and trouble in his mind.',null,null,null],
-    ['🤝','Jeremy wakes from days of delirium, trying to piece the world back together.',null,null,null],
-    ['🌃','Jake opens his eyes in total darkness, encased in rock, with only a glimmer of light.',null,null,null],
-    ['⚙️','The West 122nd Street apartment is exactly as they left it — a lifetime ago.',null,null,null],
-    ['⚠️','Simon Tomias stares out his kitchen window, clutching cold coffee and a cold dread.',null,null,null],
-    ['🏕️','The isolation cell at JFK is more colourful than Jeremy would have chosen.',null,null,null],
-    ['💥','Märten coaxes Jake upright on his crutches; Gus beams with fierce pride.',null,null,null],
-    ['🎨','Delacroix lets a payphone ring out three times — then someone answers.',null,null,null],
-    ['⭕','Olivia returns to an empty hall — her own tribe has moved on without her.',null,null,null],
-    ['🕊️','Jeremy strides through the racetrack car park knowing he\'s in the right place.',null,null,null],
-    ['📢','Jake\'s eyes finally close — and he tumbles into a darkness with no bottom.',null,null,null],
-    ['🌀','Jeremy is back in the circular room — a place that only makes sense in dreams.',null,null,null],
-    ['🌄','Gus wakes to find Marcus and Olivia still asleep — and tries to hold onto the day.',null,null,null],
-    ['🍺','The grey-haired barman leans on the counter as if standing is a choice he\'s reconsidering.',null,null,null],
-    ['⭐','Simon opens his eyes to a spray of stars — he has no idea how he got here.',null,null,null],
-    ['📜','A letter left for Marcus, in the event he never makes it back.',null,null,null],
-    ['🌌','Eternal black. A single white point upon the canvas of nothingness. Then: something stirs.',null,null,null],
-    ['🛫','Jeremy berates himself through an airport terminal — for the suit, of all things.',null,null,null],
-    ['🌾','Jake stands in the green meadow again — certain he has never been here, certain he has.',null,null,null],
-    ['⛰️','Jeremy reaches the fork in the mountain trail, exhausted and not yet at the summit.',null,null,null],
-    ['😤','Marcus tells Märten to stop fidgeting. Märten cannot stop fidgeting.',null,null,null],
-    ['🧗','Jeremy hauls himself over the jagged rim of the plateau on his very last ounce of strength.',null,null,null],
-    ['⛈️','A vicious clap of thunder rattles the Rhuomai; Marcus looks up from his work.',null,null,null],
-    ['🌑','Jeremy staggers from the limousine into darkness, eyes slow to adjust to what waits inside.',null,null,null],
-    ['🌧️','Rain hammers Phil\'s face like bullets as he clings to Adam\'s back in the storm.',null,null,null],
-    ['💭','If Jeremy dreamed during his recovery, he didn\'t remember — except for those two.',null,null,null],
-    ['😱','Jake and Gus lower themselves to the floor as the cabin fills with the horror of what has been lost.',null,null,null],
-    ['🌊','The storm passes. The floodwater drains. What Kati Thanda reveals, no one was prepared for.',null,null,null],
-  ]
-};
-
-const BOOK3={
-  num:'Book III',name:'The Ghost of Melchizedek',
-  meta:'⚠️ Still being written · 65 chapters planned',
-  banner:'https://raw.githubusercontent.com/jamesalexanderhiggins/marduk/refs/heads/main/the-ghost-melchizedek-banner.jpg.jpg',
-  purchase:[
-    {label:'Audible',url:null},{label:'Paperback',url:null},{label:'Hardcover',url:null},{label:'eBook',url:null},
-    {label:'🇸🇰 Slovak',url:null},
-  ],
-  chapters:[
-    ['👨‍👩‍👦','A man wakes with no name, no past — and a mob already calling for his blood.',null,null,null],
-    ['🔬','She enters a realm beyond time and finds her dead mother\'s lifeline.',null,null,null],
-    ['👻','An ancient prophecy. A man who shouldn\'t exist. A priest who has been waiting his whole life.',null,null,null],
-    ['✈️','A gold coin. A dead boy\'s diary. A secret that changes the weight of everything.',null,null,null],
-    ['🏚️','Every civilisation has a creation story. This one has witnesses.',null,null,null],
-    ['💡','He lost a leg. They offer him a new one. Nobody mentions the price.',null,null,null],
-    ['⚰️','He needed a map. She took it away. Now he owes her his life.',null,null,null],
-    ['⚔️','A miracle of engineering. A revelation of horror. He decides to carry it alone — for now.',null,null,null],
-    ['🏃','The tunic is soaked with blood. The chest beneath it is unmarked. An old man falls to his knees.',null,null,null],
-    ['🤖','One wild night on a new leg. One private prayer answered in the dark.',null,null,null],
-    ['🚐','He reads aloud from a book written before memory. The words feel, faintly, like his own.',null,null,null],
-    ['🌫️','Miles of frozen silence. A dead boy\'s diary. A question nobody asks aloud.',null,null,null],
-    ['🔗','The scripture describes a world born from imagination. He reads it like myth and feels it like memory.',null,null,null],
-    ['🧬','The violence came quickly. What troubles him is not the bodies — it\'s how natural it felt.',null,null,null],
-    ['🦊','The priest is stripped of his keys in public. The stranger in the inner sanctum is taken away.',null,null,null],
-    ['😨','Every loose object in the room lifts an inch. A boy goes outside and sees a star that shouldn\'t be there.',null,null,null],
-    ['🏹','They march him through the grandest streets and install him in a comfortable room. Prisoners aren\'t usually treated this well.',null,null,null],
-    ['🎭','A monk greets them as if seeing a face he last saw in a dream. A library older than anyone knew.',null,null,null],
-    ['💨','A week of needles in the dark. Then one night — no needles. Just a soldier with very bad news.',null,null,null],
-    ['🦅','He hadn\'t seen her face in forty years. His composure failed completely.',null,null,null],
-    ['🪞','The ancient king offers comfort. The stranger politely declines to kneel.',null,null,null],
-    ['🧪','A faith older than Christianity. A faith that just found its home. And a message from the dead.',null,null,null],
-    ['💣','He would not drink from their cup. So they hand him chains, an arena, and fifty names on a list.',null,null,null],
-    ['🔄','No crutches. No crowd. No agenda. Just a man, a woman, a fire — and a book she closes.',null,null,null],
-    ['🤝','They execute him daily for a week. By the seventh day, the crowd isn\'t sure it wants to watch anymore.',null,null,null],
-    ['🌃','She survived a war, walked across a continent, and stopped ageing beside a tree. She\'s been waiting twenty years.',null,null,null],
-    ['⚙️','He refuses to fight. Hours pass. The king attacks repeatedly. Then the exits are sealed.',null,null,null],
-    ['⚠️','She asks Marduk if she should act on her desire. His answer is not what she expected. Neither is the lightning.',null,null,null],
-    ['🏕️','A route left by no one visible. A locked pyramid. And a baby who appears out of nowhere in the dark.',null,null,null],
-    ['💥','Marcus comes back from the lake to find Ariadne standing outside a door. She tells him. He gives her a moment.',null,null,null],
-    ['🎨','The army is assembling. The only way out is a river running toward something more dangerous.',null,null,null],
-    ['⭕','Marcus tells Olivia her mother is alive. There are no words for a moment like this.',null,null,null],
-    ['🕊️','A swine the size of a building. A girl on an elephant. A flash of memory that doesn\'t belong to him.',null,null,null],
-    ['📢','Adam\'s farewell address. Jake\'s quiet goodbye to the boy who won\'t cry. Marcus picks up his pack.',null,null,null],
-    ['🌀','Ancient, elegant, entirely unsentimental about time. The trials ahead cannot be cheated.',null,null,null],
-    ['🌄','A pyramid where Midtown used to be. A waking vision of a library. A smell he has always known — until now.',null,null,null],
-    ['🍺','A tight, oiled boat. An ancient wilderness pressing in. A child whose words are always slightly ahead of events.',null,null,null],
-    ['⭐','The city outside the pyramid is tribal and forgotten. A small man cooking near the wall is exactly who they need.',null,null,null],
-    ['📜','A massive figure blocks the narrows. He holds out his hand and asks for the club. The man hands it over.',null,null,null],
-    ['🌌','VR helmets. Points for performance. A man called Ezekial walked out after one week. He seems happier than anyone inside.',null,null,null],
-    ['🛫','The trials continue. The child is five years old now. She talks to someone no one else can see.',null,null,null],
-    ['🌾','He enters as himself and within a day the Meta-Mind has made him famous. That\'s part of the plan.',null,null,null],
-    ['⛰️','A room so perfect no one who lies down ever leaves. He stands in the doorway and doesn\'t sit down.',null,null,null],
-    ['😤','The machine has been recording his dreams and rewarding him for the good ones. He recognises the manipulation.',null,null,null],
-    ['🧗','From the ridge, the army is visible on the plain below — a dark line, moving north. They move on.',null,null,null],
-    ['⛈️','Three people. Three missions. One morning. A revolution. A hundred thousand people flooding into Central Park at dawn.',null,null,null],
-    ['🌑','The valley is almost too beautiful to be real. The child slips away. When he finds her, she says his name.',null,null,null],
-    ['🌧️','The vaults are stripped. Almost everything is gone. One gold bar remains — with a message on the bottom.',null,null,null],
-    ['💭','The child has found a way to give them more time. A boy hears her voice in his head and keeps it to himself.',null,null,null],
-    ['😱','A dusty shelf. A scratched-out face in a photograph. A clock he has seen before. He walks outside and says nothing.',null,null,null],
-    ['🌊','Ghost-voices urge him to stop. The child at the back of the boat strings fruit on a line and says nothing.',null,null,null],
-    ['🗿','The team splits. The tunnels narrow. A prosthetic catches on the edge. Gus watches his father let go — calmly, lovingly.',null,null,null],
-    ['🙏','He sends them all ahead to safety. He goes on alone. She makes a promise.',null,null,null],
-    ['🔥','A boy watches his father\'s life played back around him. Two men who built the world\'s worst idea face each other at last.',null,null,null],
-    ['🌋','Beyond the edge of the visible world, everything is returned to him. He walks back no longer only one man.',null,null,null],
-    ['🏥','A dying man. A soldier who hates him. A medpod in the dark. The lid seals. The loop closes.',null,null,null],
-    ['💡','In this place, wounds do not heal. He descends anyway. What waits at the bottom has been waiting since Chapter 1.',null,null,null],
-    ['🕊️','A man demonstrates his last great invention — then slips away while the other\'s back is turned.',null,null,null],
-    ['👑','She wears the faces of the people he loves best. A hooded stranger arrives. Then, in golden armour, a father walks in.',null,null,null],
-    ['🏠','Eve\'s grip on the mountain releases. The doors open. A man goes to find his grandson.',null,null,null],
-    ['😶','Father and son reunite in the mountain caves. At the crossroads, a voice calls upward. He goes alone.',null,null,null],
-    ['⏳','He straightens them himself. Folds their hands. Sits with them in the dark. He does not call anyone.',null,null,null],
-    ['🚪','At the summit, a face he recognises without being told. He comes out the other side changed.',null,null,null],
-    ['👴','Gus carries his father\'s body to the roots of the great tree. He will not let anyone help.',null,null,null],
-    ['🚀','The starship departs. A stranger appears at the door — older eyes, a longer memory, and a warning.',null,null,null],
-  ]
-};
-
-// ═══════════════════════════════════════════════
-// RENDER BOOKS
-// ═══════════════════════════════════════════════
-function renderBook(book,idx){
-  const block=document.createElement('div');
-  block.className='book-block';
-  if(idx===0)block.classList.add('open');
-
-  const pRows=book.purchase.map(p=>p.url?
-    `<a href="${p.url}" target="_blank">${p.label}</a>`:
-    `<span style="color:var(--text-dim);font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;">${p.label} ⌛</span>`
-  ).join('');
-
-  const chRows=book.chapters.map((ch,i)=>{
-    const [emoji,desc,read,listen,notes]=ch;
-    const readCell=read?`<a href="${read}" target="_blank" title="Read Ch ${i+1}">📖</a>`:`<span class="soon">⌛</span>`;
-    const listenCell=listen?`<a href="${listen}" target="_blank" title="Listen Ch ${i+1}">🎧</a>`:`<span class="soon">⌛</span>`;
-    const notesCell=notes?`<a href="${notes}" target="_blank" title="Notes Ch ${i+1}">📝</a>`:`<span class="soon">⌛</span>`;
-    return `<tr class="chapter-row" data-desc="${desc.replace(/"/g,'&quot;')}" data-book="${book.name}">
-      <td class="ch-id">Ch ${i+1}</td>
-      <td class="ch-emoji">${emoji}</td>
-      <td class="ch-desc">${desc}</td>
-      <td class="ch-link">${readCell}</td>
-      <td class="ch-link">${listenCell}</td>
-      <td class="ch-link">${notesCell}</td>
-    </tr>`;
-  }).join('');
-
-  block.innerHTML=`
-    <div class="book-header">
-      <div class="book-header-left">
-        <div class="book-num">${book.num}</div>
-        <div class="book-name">${book.name}</div>
-        <div class="book-meta">${book.meta}</div>
-      </div>
-      <div class="book-toggle">+</div>
-    </div>
-    <div class="book-content">
-      <div class="purchase-row">
-        <span class="purchase-label">Purchase:</span>${pRows}
-      </div>
-      <table class="chapter-table">${chRows}</table>
-    </div>`;
-
-  block.querySelector('.book-header').addEventListener('click',()=>{
-    block.classList.toggle('open');
-  });
-
-  return block;
+/* ── URL <-> (x,y) ─────────────────────────────── */
+function encodeXY(x, y) {
+  const n = (x + GRID_EXTENT) * GRID_SIZE + (y + GRID_EXTENT) + SALT;
+  return n.toString(36).padStart(4, '0');
+}
+function decodeXY(hash) {
+  if (!hash || !/^[0-9a-z]{3,5}$/i.test(hash)) return null;
+  const n = parseInt(hash, 36) - SALT;
+  if (isNaN(n) || n < 0) return null;
+  const x = Math.floor(n / GRID_SIZE) - GRID_EXTENT;
+  const y = (n % GRID_SIZE) - GRID_EXTENT;
+  if (Math.abs(x) > GRID_EXTENT || Math.abs(y) > GRID_EXTENT) return null;
+  return {x, y};
+}
+function inBounds(x, y) {
+  return Math.abs(x) <= GRID_EXTENT && Math.abs(y) <= GRID_EXTENT;
 }
 
-const booksContainer=document.getElementById('books-container');
-[BOOK1,BOOK2,BOOK3].forEach((b,i)=>booksContainer.appendChild(renderBook(b,i)));
+/* ── persisted state ───────────────────────────── */
+function getP() {
+  try { return JSON.parse(localStorage.getItem('marduk_realm') || '{}'); }
+  catch (e) { return {}; }
+}
+function saveP(p) {
+  localStorage.setItem('marduk_realm', JSON.stringify(p));
+}
+function markVisited(x, y) {
+  const p = getP();
+  p.visited = p.visited || [];
+  const k = `${x},${y}`;
+  if (!p.visited.includes(k)) p.visited.push(k);
+  saveP(p);
+}
+function markCorrect(qid) {
+  const p = getP();
+  p.correct = p.correct || {};
+  if (!p.correct[qid]) p.correct[qid] = true;
+  saveP(p);
+  return Object.keys(p.correct).length;
+}
+function countCorrect() {
+  const p = getP();
+  return Object.keys(p.correct || {}).length;
+}
+function isCorrect(qid) {
+  const p = getP();
+  return !!(p.correct && p.correct[qid]);
+}
+function incAttempts() {
+  const p = getP();
+  p.attempts = (p.attempts || 0) + 1;
+  saveP(p);
+  return p.attempts;
+}
+function setSessionLock() {
+  const p = getP();
+  p.lockedUntil = Date.now() + SESSION_LOCK_HOURS * 3600 * 1000;
+  saveP(p);
+}
+function isLocked() {
+  const p = getP();
+  return p.lockedUntil && p.lockedUntil > Date.now();
+}
+function unlockMV() {
+  const p = getP();
+  p.mv_unlocked = true;
+  saveP(p);
+}
+function isMVUnlocked() {
+  return !!getP().mv_unlocked;
+}
+function unlockKudra() {
+  const p = getP();
+  p.kudra = true;
+  saveP(p);
+}
+function isKudraUnlocked() {
+  return !!getP().kudra;
+}
+function updateKeyBar() {
+  const el = document.getElementById('progressDisplay');
+  if (el) el.textContent = `${countCorrect()} / 10`;
+}
 
-// ═══════════════════════════════════════════════
-// CHAPTER POPUP
-// ═══════════════════════════════════════════════
-const popup=document.getElementById('chPopup');
-const popupBook=document.getElementById('popupBook');
-const popupText=document.getElementById('popupText');
-document.addEventListener('mouseover',e=>{
-  const row=e.target.closest('.chapter-row');
-  if(row){
-    popupBook.textContent=row.dataset.book;
-    popupText.textContent=row.dataset.desc;
-    popup.classList.add('show');
-  }
-});
-document.addEventListener('mousemove',e=>{
-  if(popup.classList.contains('show')){
-    const x=e.clientX+16,y=e.clientY+16;
-    popup.style.left=Math.min(x,window.innerWidth-340)+'px';
-    popup.style.top=Math.min(y,window.innerHeight-120)+'px';
-  }
-});
-document.addEventListener('mouseout',e=>{
-  if(!e.target.closest('.chapter-row'))popup.classList.remove('show');
-});
+/* ── tile lookup ───────────────────────────────── */
+function getTile(x, y) {
+  if (!REALM) return null;
+  if (!inBounds(x, y)) return null;
+  const k = `${x},${y}`;
+  return REALM.tiles[k] || {type: 'empty'};
+}
 
-// ═══════════════════════════════════════════════
-// REVIEWS
-// ═══════════════════════════════════════════════
-const reviews=[
-  {stars:'★★★★★',text:'"A new sci-fi novel worthy of shelf space alongside 1984, Logan\'s Run, The Handmaid\'s Tale and The Fifth Wave. The graceful balance between the pre and post apocalyptic timelines is a symphony."',attr:'Amazon Verified Purchase'},
-  {stars:'★★★★★',text:'"The first novel I\'ve read in years that had me hooked from the first few pages. A thought-provoking, exciting and moving tale of humanness — love, desire, mortality, consciousness, struggle, philosophy."',attr:'Amazon Verified Purchase'},
-  {stars:'★★★★★',text:'"Fantastic book. Similar to how Ayn Rand weaves philosophical ideas into fiction. So many parallels to today\'s cultural and political issues, with brilliant insights into morality. Highly recommend."',attr:'Amazon Verified Purchase',tag:'The modern day Atlas Shrugged?'},
-  {stars:'★★★★★',text:'"So refreshing to see someone not afraid to let their philosophical and moral convictions shine through — this story is as much a commentary on the state of the world today as it is great sci-fi."',attr:'Amazon Verified Purchase',tag:'Impressive effort from a first time author!'},
-  {stars:'★★★★★',text:'"A heartfelt story that explores morality, the nature of consciousness and God — highly recommended."',attr:'Amazon Verified Purchase'},
-  {stars:'★★★★',text:'"Philosophical in a similar (but less confronting) way as Ayn Rand\'s Atlas Shrugged. If you love science fiction and philosophy, you\'ll love this book."',attr:'Amazon Verified Purchase',tag:'Engaging \'sci-phi\' thriller'},
-];
-const rGrid=document.getElementById('reviews-grid');
-reviews.forEach(r=>{
-  const card=document.createElement('div');
-  card.className='review-card';
-  card.innerHTML=`<div class="review-stars">${r.stars}</div><p class="review-text">${r.text}</p><div class="review-attr">${r.attr}${r.tag?`<span class="review-tag">· ${r.tag}</span>`:''}</div>`;
-  rGrid.appendChild(card);
-});
-
-// ═══════════════════════════════════════════════
-// EASTER EGG — click the logo/mountain 5 times
-// ═══════════════════════════════════════════════
-let eggClicks=0,eggTimer;
-document.getElementById('easterLogo').addEventListener('click',()=>{
-  eggClicks++;
-  clearTimeout(eggTimer);
-  eggTimer=setTimeout(()=>eggClicks=0,3000);
-  if(eggClicks>=5){
-    eggClicks=0;
-    document.getElementById('hidden-room').classList.add('show');
+/* ── Starfield ─────────────────────────────────── */
+let starCtx, starStars = [], starT = 0, starW, starH;
+let starOpts = {speed: 0.015, count: 200, color: '220,215,200'};
+let starRaf;
+function initStars(opts) {
+  starOpts = Object.assign({}, starOpts, opts || {});
+  const c = document.getElementById('bg');
+  starCtx = c.getContext('2d');
+  resizeStars();
+  initStarData();
+  if (starRaf) cancelAnimationFrame(starRaf);
+  drawStars();
+}
+function resizeStars() {
+  const c = document.getElementById('bg');
+  starW = c.width = window.innerWidth;
+  starH = c.height = window.innerHeight;
+}
+function initStarData() {
+  starStars = [];
+  for (let i = 0; i < starOpts.count; i++) {
+    starStars.push({
+      x: Math.random() * starW, y: Math.random() * starH,
+      r: Math.random() * 1.4 + 0.2,
+      speed: Math.random() * starOpts.speed * 2 + starOpts.speed * 0.5,
+      op: Math.random() * 0.6 + 0.1,
+      tw: Math.random() * Math.PI * 2,
+    });
   }
-});
-// ═══════════════════════════════════════════════
-// HIDDEN DOORS — type MARDUK or KUDRAMARDUK
-// ═══════════════════════════════════════════════
-let secretBuffer='';
-document.addEventListener('keydown',e=>{
-  if(e.key.length===1){
-    secretBuffer=(secretBuffer+e.key.toUpperCase()).slice(-11);
-    // KUDRAMARDUK — author-private view with pathways layer
-    if(secretBuffer.endsWith('KUDRAMARDUK')){
-      const state = {kudra: true, mv_unlocked: true};
-      try{
-        const existing = JSON.parse(localStorage.getItem('marduk_realm')||'{}');
-        localStorage.setItem('marduk_realm', JSON.stringify(Object.assign(existing, state)));
-      }catch(err){}
-      const flash=document.createElement('div');
-      flash.style.cssText='position:fixed;inset:0;background:rgba(192,132,252,0.2);z-index:999;pointer-events:none;transition:opacity 1s ease;';
-      document.body.appendChild(flash);
-      const sigil=document.createElement('div');
-      sigil.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-family:Cinzel Decorative,serif;font-size:clamp(28px,5vw,56px);color:#c084fc;text-shadow:0 0 50px rgba(192,132,252,0.9);z-index:1000;pointer-events:none;letter-spacing:0.2em;opacity:0;transition:opacity 0.5s;text-align:center;';
-      sigil.innerHTML='𒀭 KUDRAMARDUK 𒀭<br><span style="font-size:0.5em;letter-spacing:0.3em;color:var(--spirit);">The Pathways Are Revealed</span>';
-      document.body.appendChild(sigil);
-      setTimeout(()=>sigil.style.opacity='1',50);
-      setTimeout(()=>{flash.style.opacity='0';sigil.style.opacity='0';},1600);
-      setTimeout(()=>{
-        flash.remove();sigil.remove();
-        document.body.style.transition='opacity 0.8s';
-        document.body.style.opacity='0';
-        setTimeout(()=>window.location.href='realm/#marduk_view',800);
-      },2300);
-      secretBuffer='';
+}
+function drawStars() {
+  starRaf = requestAnimationFrame(drawStars);
+  starT += 0.004;
+  starCtx.clearRect(0, 0, starW, starH);
+  starStars.forEach(s => {
+    const op = s.op * (0.7 + 0.3 * Math.sin(starT + s.tw));
+    starCtx.beginPath();
+    starCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    starCtx.fillStyle = `rgba(${starOpts.color},${op})`;
+    starCtx.fill();
+    s.y += s.speed;
+    if (s.y > starH) { s.y = 0; s.x = Math.random() * starW; }
+  });
+}
+
+/* ── Particles ─────────────────────────────────── */
+let particleInterval;
+function startParticles(opts) {
+  clearInterval(particleInterval);
+  const el = document.getElementById('particles');
+  el.innerHTML = '';
+  opts = Object.assign({colors: ['#c9a84c'], min: 1, max: 3, speed: 5}, opts || {});
+  particleInterval = setInterval(() => {
+    const p = document.createElement('div');
+    const c = opts.colors[Math.floor(Math.random() * opts.colors.length)];
+    const size = Math.random() * (opts.max - opts.min) + opts.min;
+    const x = Math.random() * 100;
+    const dur = Math.random() * opts.speed + opts.speed * 0.5;
+    const dx = (Math.random() - 0.5) * 100;
+    p.style.cssText = `position:absolute;bottom:0;left:${x}%;width:${size}px;height:${size}px;background:${c};border-radius:50%;pointer-events:none;animation:particleRise ${dur}s linear forwards;--pdx:${dx}px;`;
+    el.appendChild(p);
+    setTimeout(() => p.remove(), dur * 1000 + 100);
+  }, 400);
+}
+
+/* ── FX canvas ─────────────────────────────────── */
+let fxRaf;
+function clearFx() {
+  if (fxRaf) cancelAnimationFrame(fxRaf);
+  const c = document.getElementById('fx');
+  c.getContext('2d').clearRect(0, 0, c.width, c.height);
+}
+function clearOverlays() {
+  document.querySelectorAll('.grid-ov,.scan-ov,.house-ov').forEach(e => e.remove());
+}
+function addOverlay(cls) {
+  const d = document.createElement('div');
+  d.className = cls;
+  document.body.appendChild(d);
+}
+
+function initFxForRoom(fx) {
+  if (!fx) return;
+  const c = document.getElementById('fx');
+  c.width = window.innerWidth;
+  c.height = window.innerHeight;
+  const ctx = c.getContext('2d');
+  if (fx === 'ripple') {
+    let ripples = [];
+    setInterval(() => ripples.push({x: Math.random() * c.width, y: c.height * 0.6 + Math.random() * c.height * 0.4, r: 0, max: Math.random() * 120 + 60, speed: Math.random() * 0.5 + 0.3}), 900);
+    (function draw(){fxRaf = requestAnimationFrame(draw); ctx.clearRect(0,0,c.width,c.height); ripples = ripples.filter(r => {r.r += r.speed; const op = Math.max(0, 0.07 * (1 - r.r/r.max)); ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, Math.PI*2); ctx.strokeStyle = `rgba(126,184,212,${op})`; ctx.lineWidth = 1; ctx.stroke(); return r.r < r.max;});})();
+  } else if (fx === 'matrix') {
+    const cols = Math.floor(c.width / 20);
+    const drops = new Array(cols).fill(0);
+    const chars = '01アイウエオ█▓▒░';
+    (function draw(){fxRaf = requestAnimationFrame(draw); ctx.fillStyle = 'rgba(5,7,9,0.05)'; ctx.fillRect(0,0,c.width,c.height); ctx.fillStyle = 'rgba(126,212,160,0.1)'; ctx.font = '12px monospace'; drops.forEach((y, i) => {ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i*20, y*20); if (y*20 > c.height && Math.random() > 0.975) drops[i] = 0; else drops[i]++;});})();
+  } else if (fx === 'nodes') {
+    const nodes = [];
+    for (let i = 0; i < 40; i++) nodes.push({x: Math.random()*c.width, y: Math.random()*c.height, vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3, r: Math.random()*2 + 1});
+    (function draw(){fxRaf = requestAnimationFrame(draw); ctx.clearRect(0,0,c.width,c.height); nodes.forEach(n => {n.x += n.vx; n.y += n.vy; if (n.x<0||n.x>c.width) n.vx*=-1; if (n.y<0||n.y>c.height) n.vy*=-1; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI*2); ctx.fillStyle='rgba(192,132,252,0.4)'; ctx.fill();}); nodes.forEach((a, i) => nodes.forEach((b, j) => {if (j<=i) return; const d = Math.hypot(a.x-b.x, a.y-b.y); if (d<120) {ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.strokeStyle = `rgba(192,132,252,${0.06*(1-d/120)})`; ctx.lineWidth=0.5; ctx.stroke();}}));})();
+  } else if (fx === 'orbit') {
+    let t = 0;
+    (function draw(){fxRaf = requestAnimationFrame(draw); ctx.clearRect(0,0,c.width,c.height); t += 0.008; for (let i = 0; i < 8; i++) {const a = t + i*(Math.PI*2/8); const x = c.width/2 + Math.cos(a)*(80+i*30); const y = c.height/2 + Math.sin(a)*(60+i*20); ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI*2); ctx.fillStyle = `rgba(201,168,76,${0.15-i*0.015})`; ctx.fill();}})();
+  }
+}
+
+/* ── Door permissions ──────────────────────────── */
+/* Returns which directions are passable from (x,y).
+ * Returns {up, down, left, right} each: {open:bool, path?:bool, sealed?:bool, reason?:string}
+ */
+function getDoors(x, y) {
+  const tile = getTile(x, y);
+  const dirs = {
+    up:    {dx: 0,  dy: 1},
+    down:  {dx: 0,  dy:-1},
+    left:  {dx:-1,  dy: 0},
+    right: {dx: 1,  dy: 0},
+  };
+  const out = {};
+  for (const [d, v] of Object.entries(dirs)) {
+    const nx = x + v.dx, ny = y + v.dy;
+    if (!inBounds(nx, ny)) { out[d] = {sealed: true, reason: 'edge'}; continue; }
+
+    const neighbour = getTile(nx, ny);
+
+    /* House perimeter rules: sealed except at front door */
+    if (tile.type === 'house_interior' || tile.type === 'house_front_door') {
+      const sameHouse = neighbour.house_id === tile.house_id;
+      if (!sameHouse) {
+        // Exiting the house: only allowed from the front door tile
+        if (tile.type === 'house_front_door') {
+          out[d] = {open: true};
+        } else {
+          out[d] = {sealed: true, reason: 'house-wall'};
+        }
+        continue;
+      }
+    }
+    /* Going from outside into a house block — only front door is accessible */
+    if ((neighbour.type === 'house_interior' || neighbour.type === 'house_front_door') &&
+        tile.house_id !== neighbour.house_id) {
+      if (neighbour.type === 'house_front_door') {
+        // Allow entry from any direction — the path guard handles sequencing
+        out[d] = {open: true};
+      } else {
+        out[d] = {sealed: true, reason: 'house-wall'};
+      }
+      continue;
+    }
+
+    /* Marduk View tile — only accessible from (0, +2) Spine after all 10 correct, or if already unlocked */
+    if (neighbour.type === 'marduk_view') {
+      if (isMVUnlocked() || (x === 0 && y === 2 && countCorrect() >= 10)) {
+        out[d] = {open: true};
+      } else {
+        out[d] = {sealed: true, reason: 'mv-locked'};
+      }
+      continue;
+    }
+    if (tile.type === 'marduk_view') { out[d] = {open: true}; continue; }
+
+    /* Quiz tiles — only enterable if previous rooms solved in sequence */
+    if (neighbour.type === 'quiz') {
+      const qid = neighbour.question_id;
+      const prevQ = qid === 'Q1' ? null : 'Q' + (parseInt(qid.slice(1)) - 1);
+      if (!prevQ || isCorrect(prevQ) || isCorrect(qid)) {
+        out[d] = {open: true};
+      } else {
+        out[d] = {sealed: true, reason: 'locked-quiz'};
+      }
+      continue;
+    }
+
+    /* Path guard — NO ARROW rule.
+     * If you cannot legally enter a path tile from this direction,
+     * the arrow simply doesn't appear.  Tunnels are sealed from the side;
+     * you can exit a tunnel in any direction but you cannot re-enter
+     * from the side you just left.
+     * KUDRAMARDUK bypasses this entirely. */
+    if (neighbour.on_path && neighbour.on_path.length > 0 && REALM && REALM.paths
+        && !isKudraUnlocked()) {
+      let anyPathAllows = false;
+      for (const pid of neighbour.on_path) {
+        const seq = REALM.paths[pid];
+        if (!seq) continue;
+        const nIdx = seq.findIndex(pt => pt[0] === nx && pt[1] === ny);
+        if (nIdx <= 0) { anyPathAllows = true; break; } // entrance tile always open
+        const pred = seq[nIdx - 1];
+        const succ = nIdx + 1 < seq.length ? seq[nIdx + 1] : null;
+        if ((pred[0] === x && pred[1] === y) ||
+            (succ && succ[0] === x && succ[1] === y)) {
+          anyPathAllows = true; break; // walking along path
+        }
+        const curStep = (tile.path_step || {})[pid];
+        if (curStep === 0) { anyPathAllows = true; break; } // at entrance
+      }
+      if (!anyPathAllows) {
+        out[d] = {sealed: true, reason: 'path-wall'};
+        continue; // arrow hidden — tunnel sealed from this side
+      }
+    }
+
+    /* Zone wall — no arrow for inaccessible zone tiles */
+    const tileInZone = !!tile.zone_id;
+    const nbInZone   = !!neighbour.zone_id;
+    if (!tileInZone && nbInZone) {
+      if (neighbour.type === 'locked_zone_threshold' && isKudraUnlocked()) {
+        // KUDRAMARDUK — fall through to open
+      } else if (neighbour.type === 'locked_zone_threshold') {
+        const needed = neighbour.keys_required || [];
+        if (!hasAllKeys(needed)) {
+          out[d] = {sealed: true, reason: 'key-locked'}; continue;
+        }
+      } else {
+        out[d] = {sealed: true, reason: 'zone-wall'}; continue;
+      }
+    } else if (tileInZone && !nbInZone && tile.type !== 'locked_zone_threshold'
+               && !isKudraUnlocked()) {
+      out[d] = {sealed: true, reason: 'zone-exit-locked'}; continue;
+    }
+
+    /* Default open — mark as on-path for visual thread rendering */
+    const onSharedPath = tile.on_path && neighbour.on_path &&
+                 tile.on_path.some(p => neighbour.on_path.includes(p));
+    out[d] = {open: true, path: !!onSharedPath};
+  }
+  return out;
+}
+
+/* ── Navigation ────────────────────────────────── */
+function saveLastTile(x, y) {
+  const p = getP();
+  p.lastTile = [x, y];
+  saveP(p);
+}
+function getLastTile() {
+  const lt = getP().lastTile;
+  return lt ? {x: lt[0], y: lt[1]} : null;
+}
+
+/* Path guard: returns true if arriving at (x,y) from lastTile is legal.
+ * Rule: step 0 of any path = open entry. Any other step = must come
+ * from the adjacent step on the same path (prev or next). */
+function pathGuardOk(x, y) {
+  const tile = getTile(x, y);
+  if (!tile.on_path || tile.on_path.length === 0) return true;
+  for (const pid of tile.on_path) {
+    const myStep = (tile.path_step || {})[pid];
+    if (myStep === undefined) continue;
+    if (myStep === 0) return true;            // entrance — always open
+    const lt = getLastTile();
+    if (!lt) return true;                     // fresh start — be lenient
+    const prev = getTile(lt.x, lt.y);
+    const prevStep = (prev.path_step || {})[pid];
+    if (prevStep === myStep - 1 || prevStep === myStep + 1) return true;
+  }
+  return false;
+}
+
+/* showPathError removed — skip-over used instead */
+
+function goTo(x, y, delay) {
+  delay = delay || 0;
+  // Save current position as lastTile before navigating away
+  const curHash = (window.location.hash || '').replace('#', '');
+  const cur = decodeXY(curHash);
+  if (cur) saveLastTile(cur.x, cur.y);
+
+  setTimeout(() => {
+    const s = document.getElementById('stage');
+    s.style.opacity = '0';
+    setTimeout(() => {
+      window.location.hash = encodeXY(x, y);
+      render(x, y);
+    }, 400);
+  }, delay);
+}
+
+function randomSouthTile() {
+  const cx = Math.floor(Math.random() * 21) - 10;
+  const cy = -Math.floor(Math.random() * 6) - 5;
+  return {x: cx, y: cy};
+}
+
+/* ── Rendering ─────────────────────────────────── */
+function render(x, y) {
+  clearFx();
+  clearOverlays();
+  if (particleInterval) clearInterval(particleInterval);
+  // Clean up house scene if active
+  const prevStage = document.getElementById('stage');
+  if (prevStage && prevStage._hsCleanup) { prevStage._hsCleanup(); prevStage._hsCleanup = null; }
+  detachTileParallax();
+
+  // Lock only applies to the quiz corridor: threshold → quiz tiles → spine.
+  // marduk_view is excluded — KUDRAMARDUK routes there directly and must bypass.
+  // Normal gateway entry (content/house/empty tiles) is never affected.
+  const tileForLockCheck = getTile(x, y);
+  const quizPathTypes = ['threshold', 'quiz', 'spine'];
+  if (isLocked() && quizPathTypes.includes(tileForLockCheck.type)) {
+    renderLock();
+    return;
+  }
+
+  markVisited(x, y);
+  updateKeyBar();
+  // Auto-collect key if this tile holds one
+  const _thisTile = getTile(x, y);
+  if (_thisTile.key_id) {
+    const _isNew = collectKey(_thisTile.key_id);
+    if (_isNew) {
+      flashKeyCollect(_thisTile.key_id);
+      updateKeyBar();
+    }
+  }
+
+  const tile = getTile(x, y);
+
+  // Path entry is now managed by skip-over in getDoors — no guard needed here.
+  // (showPathError was removed in v4.9; this block was the crash source.)
+
+  // Save current tile as lastTile
+  saveLastTile(x, y);
+  const s = document.getElementById('stage');
+  const navEl = document.getElementById('navArrows');
+  s.style.opacity = '1';
+  navEl.innerHTML = '';
+  // Reset stage style so house-scene leftover styles don't bleed
+  s.style.cssText = 'position:relative;z-index:10;width:100%;height:100vh;'
+    + 'display:flex;flex-direction:column;justify-content:center;'
+    + 'align-items:center;padding:80px 24px;text-align:center;'
+    + 'overflow-y:auto;transition:opacity 0.5s ease;';
+
+  // Coords display
+  const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
+  document.getElementById('roomCoords').textContent = coord + '  ·  v5.1';
+
+  // Route by type
+  if (tile.type === 'marduk_view') { renderMardukView(); return; }
+  if (tile.type === 'threshold')   { renderThreshold(s, x, y); }
+  else if (tile.type === 'quiz')   { renderQuiz(s, x, y, tile); }
+  else if (tile.type === 'home')   { renderHome(s, x, y, tile); }
+  else if (tile.type === 'spine')  { renderSpine(s, x, y, tile); }
+  else if (tile.type === 'content' || tile.type === 'house_interior' || tile.type === 'house_front_door') {
+    const sceneKey = `${x},${y}`;
+    if (HOUSE_SCENES[sceneKey]) {
+      renderHouseScene(s, x, y, tile, HOUSE_SCENES[sceneKey]);
+    } else if (tile.theme) {
+      detachTileParallax();
+      renderTile(s, x, y, tile);
+    } else {
+      renderContent(s, x, y, tile);
+    }
+  }
+  else if (tile.on_path && tile.on_path.length > 0) {
+    if (tile.theme) {
+      detachTileParallax();
+      renderTile(s, x, y, tile);  // themed path tile
+    } else if (!tile.name) {
+      renderPathTile(s, x, y, tile); // unthemed transit
+    } else {
+      renderContent(s, x, y, tile);  // path tile with content but no theme
+    }
+  }
+  else if (tile.type === 'locked_zone_threshold' || tile.type === 'locked_zone_interior') {
+    renderZoneTile(s, x, y, tile);
+  }
+  else if (tile.type === 'special') {
+    renderSpecialTile(s, x, y, tile);
+  }
+  else { renderEmpty(s, x, y, tile); }
+
+  // Navigation arrows — suppressed inside house scenes (exits are in-scene)
+  if (!HOUSE_SCENES[`${x},${y}`]) {
+    renderNavArrows(x, y);
+  }
+
+  // Environmental overlays
+  if (tile.house_id) {
+    addOverlay('house-ov');
+  }
+  if (tile.type === 'quiz') {
+    const q = REALM.questions[tile.question_id];
+    if (q.tier === 3) addOverlay('grid-ov');
+    if (q.fx === 'matrix') addOverlay('scan-ov');
+  }
+}
+
+function renderEmpty(s, x, y, tile) {
+  s.innerHTML = `
+    <div class="empty-stage">
+      <div class="empty-label">The Realm</div>
+      <div class="asterism" id="asterism" title="Return to the centre">⁂</div>
+      <div class="empty-label">Keep walking</div>
+      <div class="empty-coord">(${x>=0?'+':''}${x}, ${y>=0?'+':''}${y})</div>
+    </div>`;
+  document.getElementById('asterism').addEventListener('click', () => goTo(0, 0));
+  // Pure black + dense warp starfield — no tint, no particles
+  document.body.style.background = '#000000';
+  if (particleInterval) clearInterval(particleInterval);
+  document.getElementById('particles').innerHTML = '';
+  initStars({count: 360, color: '220,225,240', speed: 0.025});
+}
+
+function renderPathTile(s, x, y, tile) {
+  // Resolve primary path and its colour for this tile
+  const pid     = tile.on_path[0];
+  const hex     = (tile.path_colors && tile.path_colors[pid]) || '#C9A84C';
+  const step    = tile.path_step && tile.path_step[pid] != null ? tile.path_step[pid] : '?';
+  const seq     = REALM.paths && REALM.paths[pid] ? REALM.paths[pid] : [];
+  const total   = seq.length;
+  const house   = REALM.houses_config && REALM.houses_config[pid];
+  const sector  = house ? house.sector : pid;
+  const isLast  = step === total - 1;
+
+  s.innerHTML = `
+    <div class="pt-root" id="ptRoot" style="--pt-color:${hex};">
+      <div class="pt-bg"></div>
+      <div class="pt-vign"></div>
+      <div class="pt-body">
+        <div class="pt-label">PATH ${pid} &nbsp;·&nbsp; ${sector}</div>
+        <div class="pt-sigil">◈</div>
+        <div class="pt-step">Step ${step + 1} of ${total}${isLast ? ' · House entry' : ''}</div>
+        <div class="pt-hint">This path continues to House ${pid}.<br>Follow the thread — or step away freely.</div>
+      </div>
+      <div class="pt-coord">(${x>=0?'+':''}${x}, ${y>=0?'+':''}${y})</div>
+    </div>`;
+
+  // Body bg tinted in path colour
+  document.body.style.background =
+    `radial-gradient(ellipse at center, ${hex}18 0%, #040208 70%)`;
+
+  // Stars in path colour (convert hex to rgb approx)
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  initStars({count: 180, color: `${r},${g},${b}`, speed: 0.014});
+  startParticles({colors: [hex + '55', hex + '33'], min: 1, max: 2, speed: 6});
+}
+
+function renderContent(s, x, y, tile) {
+  const displayName = tile.name || '· · ·';
+  const displayLore = tile.lore || '';
+  s.innerHTML = `
+    <div class="room-era">${tile.era || 'The Realm'}</div>
+    <h1 class="room-title">${displayName} ${tile.emoji ? `<span style="font-size:0.75em;opacity:0.85;">${tile.emoji}</span>` : ''}</h1>
+    ${displayLore ? `<div class="room-lore">${displayLore}</div>` : ''}
+    ${tile.hint ? `<div class="hint">· ${tile.hint} ·</div>` : ''}
+  `;
+  // Palette / path colour / bg
+  if (tile.palette) {
+    document.body.style.background = `radial-gradient(ellipse at center,${tile.palette.bg},var(--bg) 80%)`;
+    initStars({count: 180, color: '200,210,195', speed: 0.012});
+    startParticles({colors: [tile.palette.accent + '66', tile.palette.moonlight + '44'], min: 1, max: 2, speed: 6});
+  } else if (tile.on_path && tile.on_path.length > 0 && tile.path_colors) {
+    const _pid2 = tile.on_path[0];
+    const _pc2  = tile.path_colors[_pid2] || '#c9a84c';
+    const _pr2 = parseInt(_pc2.slice(1,3),16), _pg2 = parseInt(_pc2.slice(3,5),16), _pb2 = parseInt(_pc2.slice(5,7),16);
+    document.body.style.background = `radial-gradient(ellipse at center,rgba(${_pr2},${_pg2},${_pb2},0.14),var(--bg) 80%)`;
+    initStars({count: 160, color: `${_pr2},${_pg2},${_pb2}`, speed: 0.01});
+    startParticles({colors: [_pc2+'55', _pc2+'33'], min: 1, max: 2, speed: 6});
+  } else if (tile.zone_id) {
+    const _zc2 = tile.zone_color || '#555555';
+    const _zr2 = parseInt(_zc2.slice(1,3),16), _zg2 = parseInt(_zc2.slice(3,5),16), _zb2 = parseInt(_zc2.slice(5,7),16);
+    document.body.style.background = `radial-gradient(ellipse at center,rgba(${_zr2},${_zg2},${_zb2},0.16),var(--bg) 80%)`;
+    initStars({count: 150, color: `${_zr2},${_zg2},${_zb2}`, speed: 0.012});
+    startParticles({colors: [_zc2+'55', _zc2+'33'], min: 1, max: 2, speed: 6});
+  } else {
+    document.body.style.background = 'var(--bg)';
+    initStars({count: 160, color: '220,215,200', speed: 0.012});
+    startParticles({colors: ['#c9a84c', '#c9a84c55'], min: 1, max: 2, speed: 6});
+  }
+}
+
+function renderHome(s, x, y, tile) {
+  s.innerHTML = `
+    <div class="home-panel">
+      <div class="room-era">${tile.era || 'The Centre of the Map'}</div>
+      <h1 class="room-title">${tile.name}</h1>
+      <div class="room-lore">${tile.lore || ''}</div>
+      <a href="../index.html" class="hub-btn">Return to the Homepage</a>
+    </div>`;
+  initStars({count: 220, color: '220,210,180', speed: 0.02});
+  startParticles({colors: ['#c9a84c', '#e8c96e55', '#7eb8d466'], min: 1, max: 3, speed: 5});
+  document.body.style.background = 'radial-gradient(ellipse at center, rgba(40,35,20,0.25), var(--bg) 80%)';
+}
+
+function renderSpine(s, x, y, tile) {
+  s.innerHTML = `
+    <div class="room-era">${tile.era}</div>
+    <h1 class="room-title" style="color:var(--gold);text-shadow:var(--glow);animation:fadeUp 0.8s 0.5s forwards,breathe 4s 1.5s ease-in-out infinite;">${tile.name}</h1>
+    <div class="room-lore">${tile.lore}</div>`;
+  initStars({count: 260, color: '230,210,150', speed: 0.025});
+  startParticles({colors: ['#c9a84c', '#e8c96e', '#7eb8d4'], min: 1, max: 3, speed: 4});
+  document.body.style.background = 'radial-gradient(ellipse at center, rgba(60,50,10,0.2), var(--bg) 80%)';
+}
+
+function renderThreshold(s, x, y) {
+  const tile = getTile(0, 5);
+  const allDone = countCorrect() >= 10;
+  s.innerHTML = `
+    <div class="room-era">${tile.era}</div>
+    <h1 class="room-title" style="color:var(--gold);text-shadow:var(--glow);">${tile.name}</h1>
+    <div class="room-lore">${tile.lore}</div>
+    <button class="hub-btn" id="enterMapBtn">${allDone ? 'Behold the Marduk View →' : 'Enter the Map →'}</button>
+    <div class="hint">· ${tile.hint} ·</div>`;
+  document.getElementById('enterMapBtn').addEventListener('click', () => {
+    if (allDone) { unlockMV(); goTo(0, 1); }
+    else { goTo(-2, 2); } // first quiz tile Q1
+  });
+  initStars({count: 180, color: '220,215,200', speed: 0.012});
+  startParticles({colors: ['#c9a84c', '#c9a84c66'], min: 1, max: 3, speed: 5});
+  document.body.style.background = 'var(--bg)';
+}
+
+function renderQuiz(s, x, y, tile) {
+  const q = REALM.questions[tile.question_id];
+  const tc = q.tier === 3 ? '#c084fc' : (q.tier === 2 ? 'var(--spirit)' : 'var(--text)');
+  s.innerHTML = `
+    <div class="room-era">${q.era}</div>
+    <h1 class="room-title" style="color:${tc};animation:fadeUp 0.8s 0.5s forwards${q.tier >= 2 ? ',breathe 4s 1.5s ease-in-out infinite' : ''};">${q.tile_name}</h1>
+    <div class="room-lore">${q.lore}</div>
+    <div class="q-wrap">
+      <div class="q-label">· Choose your door ·</div>
+      <div class="q-text">${q.question}</div>
+      <div class="doors" id="doorGroup">
+        <button class="door" data-kind="wrong1"><span class="dsym">${q.wrong1.emoji}</span><div>${q.wrong1.label}</div></button>
+        <button class="door" data-kind="correct"><span class="dsym">${q.correct.emoji}</span><div>${q.correct.label}</div></button>
+        <button class="door" data-kind="wrong2"><span class="dsym">${q.wrong2.emoji}</span><div>${q.wrong2.label}</div></button>
+      </div>
+    </div>`;
+
+  // Shuffle doors for fairness
+  const dg = document.getElementById('doorGroup');
+  const kids = Array.from(dg.children);
+  kids.sort(() => Math.random() - 0.5);
+  kids.forEach(k => dg.appendChild(k));
+
+  // Background — dark cathedral aesthetic, heavily deepened for readability
+  // Tier colours overlay a near-black base so text always reads clearly
+  const tierDark = q.tier === 3
+    ? 'radial-gradient(ellipse at 50% 30%, rgba(30,8,55,0.9), #020108 75%)'
+    : q.tier === 2
+    ? 'radial-gradient(ellipse at 50% 30%, rgba(8,20,45,0.9), #010208 75%)'
+    : 'radial-gradient(ellipse at 50% 30%, rgba(12,18,30,0.85), #020408 75%)';
+  document.body.style.background = tierDark;
+  initStars(q.stars);
+  startParticles(q.particles);
+  initFxForRoom(q.fx);
+
+  // Door handlers
+  s.querySelectorAll('.door').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const kind = btn.dataset.kind;
+      s.querySelectorAll('.door').forEach(b => b.disabled = true);
+      if (kind === 'correct') {
+        btn.classList.add('correct');
+        markCorrect(tile.question_id);
+        // Move to next tile in spine towards Marduk View
+        setTimeout(() => advanceFromQuiz(tile.question_id), 800);
+      } else {
+        btn.classList.add('wrong');
+        setTimeout(() => penaltyForTier(q.tier, x, y), 900);
+      }
+    });
+  });
+}
+
+function advanceFromQuiz(qid) {
+  // After answering a quiz correctly, fall through to the next quiz tile.
+  // Q1 -> Q2 -> Q3 -> Q4 -> Q5 -> Q6 -> Q7 -> Q8 -> Q9 -> Q10 -> Spine (0,+2)
+  const n = parseInt(qid.slice(1));
+  const coordsByQ = {
+    1: [-2, 2], 2: [-1, 2], 3: [1, 2], 4: [2, 2],
+    5: [-1, 3], 6: [0, 3], 7: [1, 3],
+    8: [-1, 4], 9: [0, 4], 10: [1, 4],
+  };
+  if (n < 10) {
+    const [nx, ny] = coordsByQ[n + 1];
+    goTo(nx, ny);
+  } else {
+    // All ten done — unlock and funnel into the Spine
+    unlockMV();
+    goTo(0, 2);
+  }
+}
+
+function penaltyForTier(tier, x, y) {
+  if (tier === 1) {
+    // Return to the previous tile (whatever the user came from — best-effort = go south)
+    goTo(x, y - 1);
+  } else if (tier === 2) {
+    // Teleport to a random south-side maze tile
+    const t = randomSouthTile();
+    goTo(t.x, t.y);
+  } else {
+    // Tier 3: return to threshold; increment attempts; lock after 3 wipes
+    const attempts = incAttempts();
+    if (attempts >= 3) {
+      setSessionLock();
+      renderLock();
       return;
     }
-    // MARDUK — the public quiz threshold
-    if(secretBuffer.endsWith('MARDUK')){
-      const flash=document.createElement('div');
-      flash.style.cssText='position:fixed;inset:0;background:rgba(201,168,76,0.12);z-index:999;pointer-events:none;transition:opacity 1s ease;';
-      document.body.appendChild(flash);
-      const sigil=document.createElement('div');
-      sigil.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-family:Cinzel Decorative,serif;font-size:clamp(32px,6vw,72px);color:var(--gold);text-shadow:0 0 40px rgba(201,168,76,0.8);z-index:1000;pointer-events:none;letter-spacing:0.3em;opacity:0;transition:opacity 0.5s;';
-      sigil.textContent='𒀭 MARDUK 𒀭';
-      document.body.appendChild(sigil);
-      setTimeout(()=>sigil.style.opacity='1',50);
-      setTimeout(()=>{flash.style.opacity='0';sigil.style.opacity='0';},1200);
-      setTimeout(()=>{
-        flash.remove();sigil.remove();
-        document.body.style.transition='opacity 0.8s';
-        document.body.style.opacity='0';
-        setTimeout(()=>window.location.href='realm/#threshold',800);
-      },1800);
-      secretBuffer='';
+    goTo(0, 5);
+  }
+}
+
+function renderLock() {
+  const p = getP();
+  const s = document.getElementById('stage');
+  document.getElementById('navArrows').innerHTML = '';
+  document.body.style.background = 'radial-gradient(ellipse at center, rgba(60,15,5,0.3), var(--bg) 80%)';
+  initStars({count: 100, color: '180,100,80', speed: 0.005});
+  startParticles({colors: ['#ff6b2b44', '#c9a84c22'], min: 1, max: 2, speed: 10});
+
+  function fmt() {
+    const remaining = Math.max(0, p.lockedUntil - Date.now());
+    const h = Math.floor(remaining / 3600000);
+    const m = Math.floor((remaining % 3600000) / 60000);
+    const sec = Math.floor((remaining % 60000) / 1000);
+    if (remaining <= 0) return 'Unlocking…';
+    return `${h}h ${String(m).padStart(2,'0')}m ${String(sec).padStart(2,'0')}s remaining`;
+  }
+
+  s.innerHTML = `
+    <div class="lock-screen">
+      <div class="lock-glyph">𒀭</div>
+      <div class="lock-title">The Quiz Is Sealed</div>
+      <div class="lock-text">
+        You chose wrongly in the deepest chambers three times. The quiz path has sealed itself — not as punishment, but as mercy. <em>Come back when the books have settled inside you.</em>
+        <br><br>
+        The rest of the Realm remains open. You may still enter through the western, eastern, or southern gates.
+      </div>
+      <div class="lock-timer" id="lockTimer">${fmt()}</div>
+    </div>`;
+
+  // Live countdown — refreshes every second
+  const lockInterval = setInterval(() => {
+    const el = document.getElementById('lockTimer');
+    if (!el) { clearInterval(lockInterval); return; }
+    el.textContent = fmt();
+    if (Date.now() >= p.lockedUntil) {
+      clearInterval(lockInterval);
+      el.textContent = 'The seal has lifted. You may try again.';
+      el.style.color = 'var(--spirit)';
     }
+  }, 1000);
+}
+
+/* ── Navigation arrows ────────────────────────── */
+function renderNavArrows(x, y) {
+  const el = document.getElementById('navArrows');
+  el.innerHTML = '';
+  const tile = getTile(x, y);
+  // Quiz / threshold: no arrows (doors are the nav)
+  if (tile.type === 'quiz' || tile.type === 'threshold' || tile.type === 'marduk_view') return;
+
+  const doors = getDoors(x, y);
+  const dirs = [
+    {key:'up',    dx: 0, dy: 1, glyph:'↑'},
+    {key:'down',  dx: 0, dy:-1, glyph:'↓'},
+    {key:'left',  dx:-1, dy: 0, glyph:'←'},
+    {key:'right', dx: 1, dy: 0, glyph:'→'},
+  ];
+  dirs.forEach(d => {
+    const door = doors[d.key];
+    if (!door || door.sealed) return;
+    const dX = x + d.dx, dY = y + d.dy;
+    const a = document.createElement('a');
+    a.className = 'nav-arrow ' + d.key + (door.path ? ' path' : '');
+    a.href = '#' + encodeXY(dX, dY);
+    a.textContent = d.glyph;
+    a.title = `Go ${d.key}`;
+    a.addEventListener('click', ev => { ev.preventDefault(); goTo(dX, dY); });
+    el.appendChild(a);
+  });
+}
+
+/* ═══════════════════════════════════════════════
+ *  MARDUK VIEW — game-like map (v5.1)
+ * ═══════════════════════════════════════════════
+ * - Touch-native: dedicated touchstart/move/end handlers
+ *   (avoids Pointer Events, which are unreliable in iOS Safari)
+ * - Kinetic panning with velocity + decay after flick
+ * - Smooth eased zoom (tweens mvZoom -> mvTargetZoom per frame)
+ * - Pinch-to-zoom anchored on pinch midpoint (no drift)
+ * - Double-tap to zoom in centred on tap point
+ * - Tap-to-preview (single tap), tap-again-to-travel
+ * - Visual feedback: tap ripple, selected-cell halo pulse
+ * - Big default cells (radius 36px) — feels like a strategy map
+ * - Continuous rAF loop so zoom / velocity / ripple all ease
+ * ═══════════════════════════════════════════════ */
+
+const MV_R = 24;                   // base hex radius at zoom 1
+const MV_ZOOM_MIN  = 0.5;
+const MV_ZOOM_MAX  = 5.5;
+const MV_ZOOM_HOME = 1.8;          // default zoom on open / recenter
+const MV_ZOOM_EASE = 0.18;         // 0..1 per frame — higher = snappier
+const MV_PAN_DECAY = 0.90;         // velocity decay per frame
+const MV_PAN_STOP  = 0.35;         // below this px/frame, stop
+const MV_TAP_MOVE_PX = 22;         // move threshold for tap vs drag (raised to avoid accidental nav)
+const MV_TAP_TIME_MS = 320;
+const MV_DBL_TIME_MS = 320;
+const MV_DBL_DIST_PX = 36;
+
+let mvZoom       = MV_ZOOM_HOME;
+let mvTargetZoom = MV_ZOOM_HOME;
+let mvZoomAnchor = null;           // screen point to keep fixed during zoom tween
+let mvOffset     = {x: 0, y: 0};
+let mvVel        = {x: 0, y: 0};
+let mvSelected   = null;
+let mvRipples    = [];             // [{x, y, t0}]
+let mvRaf        = null;
+let mvCanvasCtx  = null;
+let mvWrapEl     = null;
+let mvCanvasEl   = null;
+let mvDrawFn     = null;
+let mvResizeFn   = null;
+
+function renderMardukView() {
+  updateKeyBar();
+  document.getElementById('stage').innerHTML = '';
+  document.getElementById('navArrows').innerHTML = '';
+  const mv = document.getElementById('mv-stage');
+  mv.classList.add('show');
+  // Hide key bar and kudra bar behind MV header
+  const _kb = document.getElementById('keyBar');
+  if (_kb) _kb.style.visibility = 'hidden';
+  document.getElementById('mvSub').textContent = isKudraUnlocked()
+    ? '· All Rooms · KUDRAMARDUK overlay'
+    : '· All Rooms';
+  setupMVCanvas();
+  document.body.style.background = 'var(--bg)';
+  initStars({count: 320, color: '230,220,190', speed: 0.005});
+  startParticles({colors: ['#c9a84c22', '#7eb8d422'], min: 1, max: 2, speed: 12});
+}
+
+function setupMVCanvas() {
+  mvWrapEl   = document.getElementById('mv-canvas-wrap');
+  mvCanvasEl = document.getElementById('mv-canvas');
+  mvCanvasCtx = mvCanvasEl.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+
+  // Set initial state
+  mvZoom = mvTargetZoom = MV_ZOOM_HOME;
+  mvOffset = {x: 0, y: 0};
+  mvVel = {x: 0, y: 0};
+  mvSelected = null;
+  mvRipples = [];
+  hideInfoPanel();
+
+  function sizeCanvas() {
+    const w = mvWrapEl.clientWidth;
+    const h = mvWrapEl.clientHeight;
+    mvCanvasEl.style.width  = w + 'px';
+    mvCanvasEl.style.height = h + 'px';
+    mvCanvasEl.width  = Math.floor(w * dpr);
+    mvCanvasEl.height = Math.floor(h * dpr);
+  }
+  sizeCanvas();
+
+  /* ── hex geometry ─────────────────────────────── */
+  function metrics() {
+    const r = MV_R * mvZoom;
+    return {r, hexW: Math.sqrt(3) * r, hexH: 2 * r * 0.75};
+  }
+  function gridToScreen(x, y, m) {
+    m = m || metrics();
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const stagger = (y % 2 === 0 ? 0 : m.hexW / 2);
+    const px = W / 2 + mvOffset.x + x * m.hexW + stagger;
+    const py = H / 2 + mvOffset.y - y * m.hexH;
+    return [px, py];
+  }
+  function screenToGrid(sx, sy) {
+    // Inverse of gridToScreen, approximate — used for zoom anchoring.
+    // Ignores row stagger; good enough for pinch/tween centring.
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const m = metrics();
+    return {
+      gx: (sx - W / 2 - mvOffset.x) / m.hexW,
+      gy: (H / 2 + mvOffset.y - sy) / m.hexH,
+    };
+  }
+  function tileAtPixel(sx, sy) {
+    const m = metrics();
+    let best = null, bestD = Infinity;
+    for (let x = -GRID_EXTENT; x <= GRID_EXTENT; x++) {
+      for (let y = -GRID_EXTENT; y <= GRID_EXTENT; y++) {
+        const [px, py] = gridToScreen(x, y, m);
+        const d = Math.hypot(px - sx, py - sy);
+        if (d < m.r && d < bestD) {
+          bestD = d;
+          best = {x, y, info: getTile(x, y)};
+        }
+      }
+    }
+    return best;
+  }
+
+  /* ── zoom anchor: change zoom while keeping a screen point fixed */
+  function setZoomAround(newZoom, anchorSx, anchorSy) {
+    newZoom = Math.max(MV_ZOOM_MIN, Math.min(MV_ZOOM_MAX, newZoom));
+    // Find the grid point currently under the anchor
+    const g = screenToGrid(anchorSx, anchorSy);
+    // Apply new zoom
+    mvZoom = newZoom;
+    // Recompute where that grid point would be in screen space, shift offset to re-anchor
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const m = metrics();
+    const newSx = W / 2 + mvOffset.x + g.gx * m.hexW;
+    const newSy = H / 2 + mvOffset.y - g.gy * m.hexH;
+    mvOffset.x += (anchorSx - newSx);
+    mvOffset.y += (anchorSy - newSy);
+  }
+
+  /* ── drawing ──────────────────────────────────── */
+  function drawHex(ctx, x, y, r) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const a = Math.PI / 3 * i - Math.PI / 2;
+      const hx = x + Math.cos(a) * r;
+      const hy = y + Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(hx, hy); else ctx.lineTo(hx, hy);
+    }
+    ctx.closePath();
+  }
+
+  function draw() {
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const ctx = mvCanvasCtx;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    const m = metrics();
+    const {r, hexW, hexH} = m;
+    const zoomStage = mvZoom < 0.75 ? 'far' : (mvZoom < 1.6 ? 'mid' : 'near');
+    const now = performance.now();
+
+    // Parallax background wash — subtle coloured radial that shifts with offset
+    const bgGrad = ctx.createRadialGradient(W / 2 + mvOffset.x * 0.3, H / 2 + mvOffset.y * 0.3, 40,
+                                            W / 2, H / 2, Math.max(W, H) * 0.8);
+    bgGrad.addColorStop(0, 'rgba(40,30,15,0.22)');
+    bgGrad.addColorStop(1, 'rgba(5,7,12,0)');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    // KUDRAMARDUK path overlay
+    if (isKudraUnlocked()) {
+      Object.keys(REALM.paths).forEach(pathId => {
+        const pts = REALM.paths[pathId];
+        ctx.beginPath();
+        pts.forEach((pt, i) => {
+          const [px, py] = gridToScreen(pt[0], pt[1], m);
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        });
+        ctx.strokeStyle = 'rgba(232,201,110,0.75)';
+        ctx.lineWidth = Math.max(2, r * 0.14);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.shadowColor = 'rgba(232,201,110,0.8)';
+        ctx.shadowBlur = 12;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      });
+    }
+
+    const p = getP();
+    const visited = new Set(p.visited || []);
+    const selKey = mvSelected ? `${mvSelected.x},${mvSelected.y}` : null;
+
+    // Cells
+    const padR = r * 2;
+    for (let x = -GRID_EXTENT; x <= GRID_EXTENT; x++) {
+      for (let y = -GRID_EXTENT; y <= GRID_EXTENT; y++) {
+        const [px, py] = gridToScreen(x, y, m);
+        if (px < -padR || px > W + padR || py < -padR || py > H + padR) continue;
+
+        const tile      = getTile(x, y);
+        const isVisited = visited.has(`${x},${y}`);
+        const isHome    = (x === 0 && y === 0);
+        const isMV      = (tile.type === 'marduk_view');
+        const isQuiz    = (tile.type === 'quiz');
+        const isHouse   = !!tile.house_id;
+        const isFrontDoor = (tile.type === 'house_front_door');
+        const isCorrectQ  = isQuiz && isCorrect(tile.question_id);
+        const hasContent  = tile.type && tile.type !== 'empty';
+        const isOnPath    = tile.on_path && tile.on_path.length > 0;
+        // House/path colour from tile data (set by realm.json)
+        const houseHex  = tile.house_color || null;  // e.g. '#C9A84C'
+        // For path tiles, use the first path's colour
+        const pathHex   = isOnPath && tile.path_colors
+          ? tile.path_colors[tile.on_path[0]] : null;
+        const isSelected  = selKey === `${x},${y}`;
+
+        // Base styling
+        let fill = 'rgba(10,14,22,0.55)';
+        let stroke = 'rgba(201,168,76,0.08)';
+        let lineW = 1;
+        let rimColor = null;
+
+        if (isHome)         { fill = 'rgba(232,201,110,0.55)'; stroke = '#e8c96e'; lineW = 2.8; rimColor = 'rgba(232,201,110,0.8)'; }
+        else if (isMV)      { fill = 'rgba(232,201,110,0.32)'; stroke = '#c9a84c'; lineW = 2.2; rimColor = 'rgba(232,201,110,0.55)'; }
+        else if (isFrontDoor && houseHex) {
+          // Front door glows with its house colour
+          fill = houseHex + '44'; stroke = houseHex; lineW = 2.8; rimColor = houseHex + 'AA';
+        }
+        else if (isHouse && houseHex) {
+          // Interior house tile — tinted in house colour
+          fill = houseHex + '28'; stroke = houseHex + '88'; lineW = 1.4;
+        }
+        else if (isOnPath && pathHex && !isHouse) {
+          // Path tile — coloured thread
+          fill = pathHex + '1E'; stroke = pathHex + 'CC'; lineW = 1.8;
+          if (tile.on_path.length > 1) { rimColor = pathHex + '66'; } // shared tile
+        }
+        else if (isCorrectQ){ fill = 'rgba(232,201,110,0.24)'; stroke = '#e8c96e'; lineW = 1.8; rimColor = 'rgba(232,201,110,0.4)'; }
+        else if (isQuiz)    { fill = 'rgba(126,184,212,0.14)'; stroke = 'rgba(126,184,212,0.42)'; lineW = 1.4; }
+        else if (tile.zone_id) {
+          const _zhx = tile.zone_color || '#555555';
+          const _zhr = parseInt(_zhx.slice(1,3),16), _zhg = parseInt(_zhx.slice(3,5),16), _zhb = parseInt(_zhx.slice(5,7),16);
+          const _zUnlocked = hasAllKeys((tile.keys_required)||[]);
+          if (tile.type === 'locked_zone_threshold') {
+            fill = `rgba(${_zhr},${_zhg},${_zhb},0.35)`;
+            stroke = _zhx; lineW = 2.2;
+            rimColor = _zUnlocked ? `rgba(${_zhr},${_zhg},${_zhb},0.8)` : `rgba(${_zhr},${_zhg},${_zhb},0.35)`;
+          } else {
+            fill = `rgba(${_zhr},${_zhg},${_zhb},0.18)`;
+            stroke = `rgba(${_zhr},${_zhg},${_zhb},0.55)`; lineW = 1.2;
+          }
+        }
+        else if (tile.type === 'special') {
+          fill = 'rgba(180,180,200,0.12)'; stroke = 'rgba(200,200,220,0.5)'; lineW = 1.6; rimColor = 'rgba(200,200,220,0.4)';
+        }
+        else if (isVisited) { fill = 'rgba(201,168,76,0.11)'; stroke = 'rgba(126,184,212,0.3)'; lineW = 1.1; }
+        else if (hasContent){ fill = 'rgba(13,17,25,0.75)';   stroke = 'rgba(201,168,76,0.22)'; lineW = 1; }
+
+        // Radial inner gradient fill for a "shine"
+        drawHex(ctx, px, py, r * 0.94);
+        if (hasContent || isHome || isMV) {
+          const g = ctx.createRadialGradient(px - r * 0.25, py - r * 0.3, 1, px, py, r * 0.95);
+          const fillBase = fill;
+          g.addColorStop(0, fillBase.replace(/[\d.]+\)$/, (a) => Math.min(parseFloat(a) + 0.18, 1) + ')'));
+          g.addColorStop(1, fillBase);
+          ctx.fillStyle = g;
+        } else {
+          ctx.fillStyle = fill;
+        }
+        ctx.fill();
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = lineW;
+        ctx.stroke();
+
+        // Rim glow on important tiles (breathing)
+        if (rimColor) {
+          const breath = 0.55 + 0.45 * Math.sin(now * 0.0022 + (x + y) * 0.3);
+          ctx.save();
+          ctx.shadowColor = rimColor;
+          ctx.shadowBlur = 14 * breath;
+          ctx.strokeStyle = rimColor;
+          ctx.lineWidth = 0.6;
+          drawHex(ctx, px, py, r * 0.94);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Selected halo — dual ring pulse
+        if (isSelected) {
+          const pulse = 0.72 + 0.28 * Math.sin(now * 0.006);
+          ctx.save();
+          ctx.shadowColor = 'rgba(232,201,110,0.9)';
+          ctx.shadowBlur = 22;
+          drawHex(ctx, px, py, r * 1.08);
+          ctx.strokeStyle = `rgba(232,201,110,${pulse})`;
+          ctx.lineWidth = 2.6;
+          ctx.stroke();
+          ctx.restore();
+          drawHex(ctx, px, py, r * 1.35);
+          ctx.strokeStyle = `rgba(232,201,110,${pulse * 0.28})`;
+          ctx.lineWidth = 1.4;
+          ctx.stroke();
+        }
+
+        // Emoji — mid and near
+        if (tile.emoji && zoomStage !== 'far' && r > 12) {
+          ctx.font = `${Math.min(r * 1.0, 34)}px serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          const ey = (zoomStage === 'near' && tile.name) ? py - r * 0.12 : py;
+          ctx.fillText(tile.emoji, px, ey);
+        }
+
+        // Name — near only
+        if (zoomStage === 'near' && tile.name && r > 28) {
+          ctx.font = `600 ${Math.min(r * 0.24, 12)}px Cinzel,serif`;
+          ctx.fillStyle = 'rgba(228,220,203,0.9)';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          const nm = tile.name.length > 17 ? tile.name.slice(0, 15) + '…' : tile.name;
+          ctx.fillText(nm, px, py + r * 0.38);
+        }
+      }
+    }
+
+    // Tap ripples (gold ring expanding out from tap point)
+    mvRipples = mvRipples.filter(rp => now - rp.t0 < 650);
+    mvRipples.forEach(rp => {
+      const t = (now - rp.t0) / 650; // 0..1
+      const rad = 8 + t * 85;
+      const alpha = (1 - t) * 0.55;
+      ctx.beginPath();
+      ctx.arc(rp.x, rp.y, rad, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(232,201,110,${alpha})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+  }
+
+  /* ── animation loop: drives zoom easing, velocity decay, redraw ── */
+  let panning = false;           // suspends velocity decay while actively dragging
+  function loop() {
+    mvRaf = requestAnimationFrame(loop);
+
+    // Ease zoom toward target
+    if (Math.abs(mvZoom - mvTargetZoom) > 0.002) {
+      if (mvZoomAnchor) {
+        const newZ = mvZoom + (mvTargetZoom - mvZoom) * MV_ZOOM_EASE;
+        setZoomAround(newZ, mvZoomAnchor.x, mvZoomAnchor.y);
+      } else {
+        mvZoom = mvZoom + (mvTargetZoom - mvZoom) * MV_ZOOM_EASE;
+      }
+    } else if (mvZoomAnchor) {
+      mvZoomAnchor = null;
+    }
+
+    // Apply momentum
+    if (!panning && (Math.abs(mvVel.x) > MV_PAN_STOP || Math.abs(mvVel.y) > MV_PAN_STOP)) {
+      mvOffset.x += mvVel.x;
+      mvOffset.y += mvVel.y;
+      mvVel.x *= MV_PAN_DECAY;
+      mvVel.y *= MV_PAN_DECAY;
+    } else if (!panning) {
+      mvVel.x = 0; mvVel.y = 0;
+    }
+
+    draw();
+  }
+  function stopLoop() {
+    if (mvRaf) { cancelAnimationFrame(mvRaf); mvRaf = null; }
+  }
+  // Kick off the loop. Stop when MV stage is hidden (see mvClose handler).
+  if (mvRaf) cancelAnimationFrame(mvRaf);
+  loop();
+
+  mvDrawFn = draw;
+  mvResizeFn = () => { sizeCanvas(); };
+
+  /* ═══════════════════════════════════════════════
+   *  INPUT — touch first, mouse second
+   * ═══════════════════════════════════════════════ */
+
+  // Active gestures
+  let activeTouches = new Map();   // identifier -> {x, y, t}
+  let panAnchor = null;            // {sx, sy, offX, offY, lastX, lastY, lastT, vx, vy}
+  let pinchAnchor = null;          // {dist, zoom, midSx, midSy, midGrid}
+  let tapStart = null;             // {sx, sy, t}
+  let lastTap = null;              // {sx, sy, t} — for double-tap detection
+
+  function wrapPos(clientX, clientY) {
+    const r = mvWrapEl.getBoundingClientRect();
+    return {x: clientX - r.left, y: clientY - r.top};
+  }
+
+  function startGesture(touchList) {
+    activeTouches.clear();
+    for (const t of touchList) {
+      const p = wrapPos(t.clientX, t.clientY);
+      activeTouches.set(t.identifier, {x: p.x, y: p.y, t: performance.now()});
+    }
+    beginByCount();
+  }
+
+  function beginByCount() {
+    if (activeTouches.size === 1) {
+      const first = Array.from(activeTouches.values())[0];
+      tapStart = {sx: first.x, sy: first.y, t: performance.now()};
+      panAnchor = {
+        sx: first.x, sy: first.y,
+        offX: mvOffset.x, offY: mvOffset.y,
+        lastX: first.x, lastY: first.y, lastT: performance.now(),
+        vx: 0, vy: 0,
+      };
+      pinchAnchor = null;
+      panning = true;
+      mvVel.x = 0; mvVel.y = 0;
+    } else if (activeTouches.size === 2) {
+      tapStart = null;
+      panAnchor = null;
+      const arr = Array.from(activeTouches.values());
+      const midSx = (arr[0].x + arr[1].x) / 2;
+      const midSy = (arr[0].y + arr[1].y) / 2;
+      pinchAnchor = {
+        dist: Math.hypot(arr[0].x - arr[1].x, arr[0].y - arr[1].y),
+        zoom: mvZoom,
+        midSx, midSy,
+        midGrid: screenToGrid(midSx, midSy),
+      };
+      panning = true;
+    }
+  }
+
+  function updateGesture(touchList) {
+    // Refresh positions
+    for (const t of touchList) {
+      const p = wrapPos(t.clientX, t.clientY);
+      activeTouches.set(t.identifier, {x: p.x, y: p.y, t: performance.now()});
+    }
+
+    if (pinchAnchor && activeTouches.size >= 2) {
+      const arr = Array.from(activeTouches.values()).slice(0, 2);
+      const dist = Math.hypot(arr[0].x - arr[1].x, arr[0].y - arr[1].y);
+      const midSx = (arr[0].x + arr[1].x) / 2;
+      const midSy = (arr[0].y + arr[1].y) / 2;
+      const factor = dist / pinchAnchor.dist;
+      const newZoom = Math.max(MV_ZOOM_MIN, Math.min(MV_ZOOM_MAX, pinchAnchor.zoom * factor));
+      mvZoom = newZoom;
+      mvTargetZoom = newZoom;
+      // Put pinchAnchor.midGrid back at the current midpoint
+      const m = metrics();
+      const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+      mvOffset.x = midSx - W / 2 - pinchAnchor.midGrid.gx * m.hexW;
+      mvOffset.y = midSy - H / 2 + pinchAnchor.midGrid.gy * m.hexH;
+    } else if (panAnchor && activeTouches.size === 1) {
+      const p = Array.from(activeTouches.values())[0];
+      mvOffset.x = panAnchor.offX + (p.x - panAnchor.sx);
+      mvOffset.y = panAnchor.offY + (p.y - panAnchor.sy);
+      // Track velocity (px per frame at 60fps)
+      const now = performance.now();
+      const dt = Math.max(1, now - panAnchor.lastT);
+      panAnchor.vx = (p.x - panAnchor.lastX) / dt * 16;
+      panAnchor.vy = (p.y - panAnchor.lastY) / dt * 16;
+      panAnchor.lastX = p.x;
+      panAnchor.lastY = p.y;
+      panAnchor.lastT = now;
+
+      if (tapStart && Math.hypot(p.x - tapStart.sx, p.y - tapStart.sy) > MV_TAP_MOVE_PX) {
+        tapStart = null;
+        mvWrapEl.classList.add('dragging');
+      }
+    }
+  }
+
+  function endGesture(endedIdentifiers) {
+    const now = performance.now();
+
+    // Capture final velocity BEFORE removing the anchor
+    if (panAnchor && activeTouches.size === 1 && endedIdentifiers.length === 1) {
+      mvVel.x = clamp(panAnchor.vx, -50, 50);
+      mvVel.y = clamp(panAnchor.vy, -50, 50);
+    }
+
+    // Remove ended touches
+    for (const id of endedIdentifiers) activeTouches.delete(id);
+
+    // Tap handling
+    if (tapStart && activeTouches.size === 0) {
+      const dt = now - tapStart.t;
+      if (dt < MV_TAP_TIME_MS) {
+        handleTap(tapStart.sx, tapStart.sy, now);
+      }
+      tapStart = null;
+    }
+
+    if (activeTouches.size === 0) {
+      panAnchor = null;
+      pinchAnchor = null;
+      panning = false;
+      mvWrapEl.classList.remove('dragging');
+    } else {
+      // Rebase gesture for remaining touches
+      beginByCount();
+    }
+  }
+
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  function handleTap(sx, sy, now) {
+    const tile = tileAtPixel(sx, sy);
+
+    // Tap on empty space: dismiss panel + selection
+    if (!tile) {
+      mvSelected = null;
+      hideInfoPanel();
+      return;
+    }
+
+    mvRipples.push({x: sx, y: sy, t0: now});
+
+    const alreadySelected = mvSelected
+      && mvSelected.x === tile.x && mvSelected.y === tile.y;
+
+    if (!alreadySelected) {
+      // FIRST TAP: select the cell (highlight ring only, no panel yet)
+      mvSelected = {x: tile.x, y: tile.y};
+      hideInfoPanel();
+      // show footer hint
+      const hov = document.getElementById('mvHover');
+      if (hov) hov.textContent =
+        `${tile.info.emoji||'·'}  ${tile.info.name||'empty'}  — tap again to open info`;
+      return;
+    }
+
+    // SECOND TAP on same cell: open info panel
+    // (travel is now via the "Travel here" button, not a third tap)
+    if (!document.getElementById('mvInfo').classList.contains('show')) {
+      showInfoPanel(tile);
+      return;
+    }
+
+    // Panel already open + tap same cell = travel
+    travelFromMV(tile.x, tile.y);
+  }
+
+  /* ── wire touch events ────────────────────────── */
+  mvWrapEl.addEventListener('touchstart', (ev) => {
+    ev.preventDefault();
+    startGesture(ev.touches);
+  }, {passive: false});
+
+  mvWrapEl.addEventListener('touchmove', (ev) => {
+    ev.preventDefault();
+    updateGesture(ev.touches);
+  }, {passive: false});
+
+  mvWrapEl.addEventListener('touchend', (ev) => {
+    ev.preventDefault();
+    const ended = [];
+    for (const t of ev.changedTouches) ended.push(t.identifier);
+    endGesture(ended);
+  }, {passive: false});
+
+  mvWrapEl.addEventListener('touchcancel', (ev) => {
+    const ended = [];
+    for (const t of ev.changedTouches) ended.push(t.identifier);
+    endGesture(ended);
+  });
+
+  /* ── mouse events (desktop) ───────────────────── */
+  let mouseDown = false;
+  mvWrapEl.addEventListener('mousedown', (ev) => {
+    mouseDown = true;
+    const p = wrapPos(ev.clientX, ev.clientY);
+    tapStart = {sx: p.x, sy: p.y, t: performance.now()};
+    panAnchor = {
+      sx: p.x, sy: p.y,
+      offX: mvOffset.x, offY: mvOffset.y,
+      lastX: p.x, lastY: p.y, lastT: performance.now(),
+      vx: 0, vy: 0,
+    };
+    panning = true;
+    mvVel.x = 0; mvVel.y = 0;
+  });
+  mvWrapEl.addEventListener('mousemove', (ev) => {
+    if (!mouseDown) return;
+    const p = wrapPos(ev.clientX, ev.clientY);
+    mvOffset.x = panAnchor.offX + (p.x - panAnchor.sx);
+    mvOffset.y = panAnchor.offY + (p.y - panAnchor.sy);
+    const now = performance.now();
+    const dt = Math.max(1, now - panAnchor.lastT);
+    panAnchor.vx = (p.x - panAnchor.lastX) / dt * 16;
+    panAnchor.vy = (p.y - panAnchor.lastY) / dt * 16;
+    panAnchor.lastX = p.x;
+    panAnchor.lastY = p.y;
+    panAnchor.lastT = now;
+    if (tapStart && Math.hypot(p.x - tapStart.sx, p.y - tapStart.sy) > MV_TAP_MOVE_PX) {
+      tapStart = null;
+      mvWrapEl.classList.add('dragging');
+    }
+  });
+  mvWrapEl.addEventListener('mouseup', (ev) => {
+    if (!mouseDown) return;
+    mouseDown = false;
+    const now = performance.now();
+    if (panAnchor) {
+      mvVel.x = clamp(panAnchor.vx, -50, 50);
+      mvVel.y = clamp(panAnchor.vy, -50, 50);
+    }
+    if (tapStart && (now - tapStart.t) < MV_TAP_TIME_MS) {
+      const p = wrapPos(ev.clientX, ev.clientY);
+      handleTap(p.x, p.y, now);
+    }
+    tapStart = null;
+    panAnchor = null;
+    panning = false;
+    mvWrapEl.classList.remove('dragging');
+  });
+  mvWrapEl.addEventListener('mouseleave', () => {
+    mouseDown = false;
+    panning = false;
+    panAnchor = null;
+    tapStart = null;
+    mvWrapEl.classList.remove('dragging');
+  });
+
+  // Desktop wheel-zoom centred on cursor
+  mvWrapEl.addEventListener('wheel', (ev) => {
+    ev.preventDefault();
+    const p = wrapPos(ev.clientX, ev.clientY);
+    const factor = Math.exp(-ev.deltaY * 0.0018);
+    mvTargetZoom = Math.max(MV_ZOOM_MIN, Math.min(MV_ZOOM_MAX, mvZoom * factor));
+    mvZoomAnchor = {x: p.x, y: p.y};
+  }, {passive: false});
+
+  /* ── zoom control buttons ─────────────────────── */
+  document.getElementById('mvZoomIn').onclick = () => {
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    mvZoomAnchor = {x: W / 2, y: H / 2};
+    mvTargetZoom = Math.min(MV_ZOOM_MAX, mvZoom * 1.4);
+  };
+  document.getElementById('mvZoomOut').onclick = () => {
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    mvZoomAnchor = {x: W / 2, y: H / 2};
+    mvTargetZoom = Math.max(MV_ZOOM_MIN, mvZoom / 1.4);
+  };
+  document.getElementById('mvRecenter').onclick = () => {
+    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    mvZoomAnchor = {x: W / 2, y: H / 2};
+    mvTargetZoom = MV_ZOOM_HOME;
+    // Also pan back to centre (0,0) over a couple of frames by injecting
+    // velocity — but simpler: snap offset to 0,0.
+    mvOffset.x = 0;
+    mvOffset.y = 0;
+    mvVel.x = 0;
+    mvVel.y = 0;
+    mvSelected = null;
+    hideInfoPanel();
+  };
+
+  /* ── resize ───────────────────────────────────── */
+  const ro = new ResizeObserver(() => sizeCanvas());
+  ro.observe(mvWrapEl);
+}
+
+/* ── Info panel (unchanged external helpers) ───── */
+function stripTags(html) { return (html || '').replace(/<[^>]*>/g, ''); }
+
+function showInfoPanel(tileRef) {
+  const {x, y, info} = tileRef;
+  const panel = document.getElementById('mvInfo');
+  const p = getP();
+  const visitedSet = new Set(p.visited || []);
+  const titleText = info.name
+    ? `${info.emoji ? info.emoji + '  ' : ''}${info.name}`
+    : 'An empty tile';
+
+  const tags = [];
+  if (visitedSet.has(`${x},${y}`)) tags.push('Visited');
+  if (info.type === 'quiz' && isCorrect(info.question_id)) tags.push('Answered');
+  if (info.type === 'home') tags.push('Home');
+  if (info.type === 'threshold') tags.push('Threshold');
+  if (info.type === 'marduk_view') tags.push('Reward');
+  if (info.type === 'spine') tags.push('Spine');
+  if (info.house_id) {
+    const h = info.house_id.charAt(0).toUpperCase() + info.house_id.slice(1);
+    tags.push(`House of ${h}`);
+  }
+  if (info.type === 'house_front_door') tags.push('Front Door');
+  if (info.on_path && info.on_path.length) tags.push('On a Path');
+
+  let lore = '';
+  if (info.lore) {
+    const plain = stripTags(info.lore);
+    lore = plain.length > 260 ? plain.slice(0, 260) + '…' : plain;
+  } else if (info.type === 'quiz') {
+    const q = REALM.questions[info.question_id];
+    lore = q ? stripTags(q.lore).slice(0, 220) + '…' : '';
+  } else if (!info.name) {
+    lore = 'An empty tile. Still navigable — keep walking, the realm continues beyond.';
+  }
+
+  let actionDisabled = '';
+  let actionLabel = 'Travel here →';
+  if (info.type === 'marduk_view' && !isMVUnlocked()) {
+    actionDisabled = 'disabled';
+    actionLabel = 'Locked — solve the quiz';
+  }
+  if (info.type === 'quiz') {
+    const qid = info.question_id;
+    const n = parseInt(qid.slice(1));
+    if (n > 1 && !isCorrect('Q' + (n - 1)) && !isCorrect(qid)) {
+      actionDisabled = 'disabled';
+      actionLabel = `Answer Q${n - 1} first`;
+    }
+  }
+
+  // Key symbol if in kudra mode
+  const keyBadge = isKudraUnlocked() && info.key_id
+    ? `<div style="font-size:22px;margin-bottom:6px;color:${KEY_DEFS[info.key_id]?.color||'#aaa'}">
+        ${KEY_DEFS[info.key_id]?.sym||''} <span style="font-family:Cinzel,serif;font-size:10px;
+        letter-spacing:0.2em;vertical-align:middle;">${KEY_DEFS[info.key_id]?.name||''}</span>
+       </div>` : '';
+
+  panel.innerHTML = `
+    <div class="info-head">
+      <div class="info-title">${titleText}</div>
+      <div class="info-coord">(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})</div>
+    </div>
+    ${keyBadge}
+    ${info.era ? `<div class="info-era">${info.era}</div>` : ''}
+    ${tags.length ? `<div class="info-tags">${tags.map(t => `<span class="info-tag">${t}</span>`).join('')}</div>` : ''}
+    ${lore ? `<div class="info-lore">${lore}</div>` : ''}
+    <div class="info-actions">
+      <button class="info-travel" id="mvTravelBtn" ${actionDisabled}>${actionLabel}</button>
+      <button class="info-dismiss" id="mvDismissBtn">Dismiss</button>
+    </div>`;
+  panel.classList.add('show');
+
+  // Prevent touches/clicks on panel bubbling to canvas
+  panel.addEventListener('touchstart', e => e.stopPropagation(), {passive:false});
+  panel.addEventListener('touchend',   e => e.stopPropagation(), {passive:false});
+  panel.addEventListener('mousedown',  e => e.stopPropagation());
+  panel.addEventListener('click',      e => e.stopPropagation());
+
+  // Wire buttons
+  const tb = panel.querySelector('#mvTravelBtn');
+  if (tb && !actionDisabled) {
+    tb.addEventListener('click', () => travelFromMV(x, y));
+    tb.addEventListener('touchend', ev => { ev.stopPropagation(); travelFromMV(x, y); }, {passive:false});
+  }
+  const db = panel.querySelector('#mvDismissBtn');
+  if (db) {
+    db.addEventListener('click', () => { mvSelected=null; hideInfoPanel(); if(mvDrawFn) mvDrawFn(); });
+    db.addEventListener('touchend', ev => { ev.stopPropagation(); mvSelected=null; hideInfoPanel(); if(mvDrawFn) mvDrawFn(); }, {passive:false});
+  }
+}
+
+function hideInfoPanel() {
+  const panel = document.getElementById('mvInfo');
+  if (panel) panel.classList.remove('show');
+}
+
+function travelFromMV(x, y) {
+  const info = getTile(x, y);
+  // KUDRAMARDUK mode: all tiles accessible from the map
+  if (!isKudraUnlocked()) {
+    if (info.type === 'marduk_view' && !isMVUnlocked()) return;
+    if (info.type === 'quiz') {
+      const n = parseInt(info.question_id.slice(1));
+      if (n > 1 && !isCorrect('Q' + (n - 1)) && !isCorrect(info.question_id)) return;
+    }
+    // Zone threshold: need keys
+    if (info.type === 'locked_zone_threshold') {
+      const needed = info.keys_required || [];
+      if (!hasAllKeys(needed)) return;
+    }
+    // Zone interior: no direct jump (use threshold)
+    if (info.type === 'locked_zone_interior') return;
+  }
+  document.getElementById('mv-stage').classList.remove('show');
+  const _kb3 = document.getElementById('keyBar');
+  if (_kb3) _kb3.style.visibility = 'visible';
+  hideInfoPanel();
+  mvSelected = null;
+  if (mvRaf) { cancelAnimationFrame(mvRaf); mvRaf = null; }
+  goTo(x, y);
+}
+
+window.mvTravel  = (x, y) => travelFromMV(x, y);
+window.mvDismiss = () => {
+  mvSelected = null;
+  hideInfoPanel();
+};
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('mv-stage').classList.contains('show') && mvResizeFn) mvResizeFn();
+});
+
+document.getElementById('mvClose').addEventListener('click', () => {
+  document.getElementById('mv-stage').classList.remove('show');
+  const _kb2 = document.getElementById('keyBar');
+  if (_kb2) _kb2.style.visibility = 'visible';
+  if (mvRaf) { cancelAnimationFrame(mvRaf); mvRaf = null; }
+  goTo(0, 0);
+});
+/* ── Keyboard nav ─────────────────────────────── */
+document.addEventListener('keydown', (ev) => {
+  if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA') return;
+  const mvOpen = document.getElementById('mv-stage').classList.contains('show');
+
+  // MV open: arrow keys move selected tile, Enter travels, Esc closes
+  if (mvOpen) {
+    if (ev.key === 'Escape') {
+      document.getElementById('mv-stage').classList.remove('show');
+      const _kb3 = document.getElementById('keyBar');
+      if (_kb3) _kb3.style.visibility = 'visible';
+      if (mvRaf) { cancelAnimationFrame(mvRaf); mvRaf = null; }
+      goTo(0, 0);
+      return;
+    }
+    const mvArrowMap = {ArrowUp:[0,1],ArrowDown:[0,-1],ArrowLeft:[-1,0],ArrowRight:[1,0]};
+    if (mvArrowMap[ev.key] && mvSelected) {
+      ev.preventDefault();
+      const [dx,dy] = mvArrowMap[ev.key];
+      const nx2 = mvSelected.x + dx, ny2 = mvSelected.y + dy;
+      if (inBounds(nx2, ny2)) {
+        mvSelected = {x: nx2, y: ny2};
+        showInfoPanel({x: nx2, y: ny2, info: getTile(nx2, ny2)});
+        // Pan canvas so selected tile is visible
+        const W = mvWrapEl ? mvWrapEl.clientWidth : window.innerWidth;
+        const H = mvWrapEl ? mvWrapEl.clientHeight : window.innerHeight;
+        const m2 = {r: MV_R*mvZoom, hexW: Math.sqrt(3)*MV_R*mvZoom, hexH: 2*MV_R*mvZoom*0.75};
+        const stagger2 = (ny2 % 2 === 0 ? 0 : m2.hexW/2);
+        const targetPx = nx2 * m2.hexW + stagger2;
+        const targetPy = -ny2 * m2.hexH;
+        mvOffset.x = W/2 - targetPx - W/2;
+        mvOffset.y = H/2 + targetPy - H/2;
+      }
+      return;
+    }
+    if ((ev.key === 'Enter' || ev.key === ' ') && mvSelected) {
+      ev.preventDefault();
+      travelFromMV(mvSelected.x, mvSelected.y);
+      return;
+    }
+    return; // don't process other keys when MV is open
+  }
+
+  // If Marduk View open, close on Esc (fallback)
+  if (ev.key === 'Escape') {
+    const mv = document.getElementById('mv-stage');
+    if (mv.classList.contains('show')) {
+      mv.classList.remove('show');
+      goTo(0, 0);
+      return;
+    }
+  }
+  const cur = decodeXY((window.location.hash || '').replace('#', ''));
+  if (!cur) return;
+  const doors = getDoors(cur.x, cur.y);
+  const map = {
+    'ArrowUp': 'up', 'w': 'up', 'W': 'up',
+    'ArrowDown': 'down', 's': 'down', 'S': 'down',
+    'ArrowLeft': 'left', 'a': 'left', 'A': 'left',
+    'ArrowRight': 'right', 'd': 'right', 'D': 'right',
+  };
+  const dir = map[ev.key];
+  if (!dir) return;
+  const door = doors[dir];
+  if (!door || door.sealed) return;
+  const dx = {up:0, down:0, left:-1, right:1}[dir];
+  const dy = {up:1, down:-1, left:0, right:0}[dir];
+  goTo(cur.x + dx, cur.y + dy);
+});
+
+/* ── KUDRAMARDUK mode — full system ─────────────── */
+function updateMapBtn() {
+  const btn = document.getElementById('mapBtn');
+  if (!btn) return;
+  btn.classList.toggle('show', isKudraUnlocked());
+}
+
+document.getElementById('mapBtn').addEventListener('click', () => {
+  unlockMV();
+  renderMardukView();
+});
+
+function activateKudraMode() {
+  unlockKudra();
+  unlockMV();
+  // Grant every key
+  const p = getP();
+  p.keys_collected = p.keys_collected || {};
+  Object.keys(KEY_DEFS).forEach(k => { p.keys_collected[k] = true; });
+  delete p.lockedUntil;
+  delete p.attempts;
+  saveP(p);
+  updateKeyBar();
+  updateMapBtn();
+  // Light up the glow bar
+  const bar = document.getElementById('kudraMode');
+  if (bar) bar.classList.add('on');
+  // Dim key bar (mode bar replaces it visually)
+  const kb = document.getElementById('keyBar');
+  if (kb) kb.style.opacity = '0.4';
+  // Show EXIT K button
+  const ekb = document.getElementById('exitKBtn');
+  if (ekb) ekb.classList.add('show');
+  // Purple flash
+  const flash = document.createElement('div');
+  flash.style.cssText = 'position:fixed;inset:0;background:rgba(192,132,252,0.22);'
+    + 'z-index:998;pointer-events:none;transition:opacity 1.2s ease;';
+  document.body.appendChild(flash);
+  setTimeout(() => { flash.style.opacity='0'; setTimeout(()=>flash.remove(),1200); }, 700);
+  // Navigate to MV
+  setTimeout(() => renderMardukView(), 900);
+}
+
+function deactivateKudraMode() {
+  // Clear kudra flag
+  const p = getP();
+  delete p.kudra;
+  // Remove keys that were only granted by kudra (not legitimately collected)
+  const legit = {};
+  (p.visited || []).forEach(k => {
+    const [vx, vy] = k.split(',').map(Number);
+    const t = getTile(vx, vy);
+    if (t && t.key_id) legit[t.key_id] = true;
+  });
+  p.keys_collected = legit;
+  saveP(p);
+  const bar = document.getElementById('kudraMode');
+  if (bar) bar.classList.remove('on');
+  const kb = document.getElementById('keyBar');
+  if (kb) kb.style.opacity = '1';
+  const ekb2 = document.getElementById('exitKBtn');
+  if (ekb2) ekb2.classList.remove('show');
+  updateKeyBar();
+  updateMapBtn();
+}
+
+function showSitePopup(title, body, buttons) {
+  const popup = document.getElementById('sitePopup');
+  document.getElementById('popupTitle').textContent = title;
+  document.getElementById('popupBody').innerHTML = body;
+  const btns = document.getElementById('popupBtns');
+  btns.innerHTML = '';
+  buttons.forEach(b => {
+    const btn = document.createElement('button');
+    btn.className = 'site-popup-btn ' + b.cls;
+    btn.textContent = b.label;
+    btn.addEventListener('click', b.fn);
+    btns.appendChild(btn);
+  });
+  if (popup) popup.style.display = 'flex';
+}
+function hideSitePopup() {
+  const popup = document.getElementById('sitePopup');
+  if (popup) popup.style.display = 'none';
+}
+
+// EXIT K button — same popup
+document.addEventListener('DOMContentLoaded', () => {
+  const ekBtn = document.getElementById('exitKBtn');
+  if (ekBtn) ekBtn.addEventListener('click', () => {
+    showSitePopup(
+      'Exit Kudramarduk Mode?',
+      'Normal access will be restored. Keys you collected by physically reaching their tiles will be kept.',
+      [
+        { label:'Exit Mode', cls:'primary', fn: () => { deactivateKudraMode(); hideSitePopup(); } },
+        { label:'Stay', cls:'secondary', fn: hideSitePopup },
+      ]
+    );
+  });
+});
+
+// Kudra bar click → exit popup
+document.getElementById('kudraMode').addEventListener('click', () => {
+  showSitePopup(
+    'Exit Kudramarduk Mode?',
+    'Normal access will be restored. Keys you collected by physically reaching their tiles will be kept. Keys granted by Kudramarduk will be removed.',
+    [
+      { label:'Exit Mode', cls:'primary', fn: () => {
+          deactivateKudraMode();
+          hideSitePopup();
+        }
+      },
+      { label:'Stay', cls:'secondary', fn: hideSitePopup },
+    ]
+  );
+});
+
+// Close popup on backdrop click
+document.getElementById('sitePopup').addEventListener('click', (ev) => {
+  if (ev.target === ev.currentTarget) hideSitePopup();
+});
+
+/* ── KUDRAMARDUK typing trigger ─────────────────── */
+let secretBuf = '';
+document.addEventListener('keydown', (ev) => {
+  if (ev.key.length !== 1) return;
+  secretBuf = (secretBuf + ev.key.toUpperCase()).slice(-11);
+  if (secretBuf.endsWith('KUDRAMARDUK')) {
+    activateKudraMode();
+    secretBuf = '';
   }
 });
 
-// Konami code easter egg — different message
-let konamiSeq=[38,38,40,40,37,39,37,39,66,65],konamiIdx=0;
-document.addEventListener('keydown',e=>{
-  if(e.keyCode===konamiSeq[konamiIdx]){konamiIdx++;}else{konamiIdx=0;}
-  if(konamiIdx===konamiSeq.length){
-    konamiIdx=0;
-    const room=document.getElementById('hidden-room');
-    room.querySelector('.hidden-glyph').textContent='🌌';
-    room.querySelector('.hidden-title').textContent='You Found the Void';
-    room.querySelector('.hidden-text').innerHTML=`"There are those who think the void is the absence of everything. They are wrong.<br><br>The void is the presence of everything, compressed to a single point — waiting for a mind vast enough to remember it into being.<br><br>Marduk is not the creator. He is the rememberer."<br><br>— Unpublished fragment, recovered from the Archives of the Rhuomai`;
-    room.classList.add('show');
+
+/* ── Key system ───────────────────────────────────── */
+const KEY_DEFS = {
+  A: {sym:'♦', color:'#C9A84C', name:'The Gold Key'},
+  B: {sym:'◆', color:'#4A7C59', name:'The Moss Key'},
+  C: {sym:'✦', color:'#7B5EA7', name:'The Violet Key'},
+  D: {sym:'❆', color:'#5B9AB8', name:'The Ice Key'},
+  E: {sym:'✸', color:'#A83232', name:'The Crimson Key'},
+  F: {sym:'⬡', color:'#A86A32', name:'The Copper Key'},
+  G: {sym:'◈', color:'#2D8888', name:'The Teal Key'},
+  H: {sym:'★', color:'#5C2D82', name:'The Purple Key'},
+  I: {sym:'◇', color:'#AAAAAA', name:'The Silver Key'},
+  J: {sym:'⊕', color:'#CC5500', name:'The Ember Key'},
+};
+const KEY_ORDER = ['A','B','C','D','E','F','G','H','I','J'];
+
+function collectKey(kid) {
+  if (!KEY_DEFS[kid]) return false;
+  const p = getP();
+  p.keys_collected = p.keys_collected || {};
+  if (p.keys_collected[kid]) return false; // already have it
+  p.keys_collected[kid] = true;
+  saveP(p);
+  return true; // newly collected
+}
+function hasKey(kid) {
+  return !!(getP().keys_collected || {})[kid];
+}
+function hasAllKeys(needed) {
+  const collected = getP().keys_collected || {};
+  return (needed || []).every(k => collected[k]);
+}
+function collectedCount() {
+  return Object.keys(getP().keys_collected || {}).length;
+}
+
+function updateKeyBar() {
+  const bar = document.getElementById('keyBar');
+  if (!bar) return;
+  bar.innerHTML = KEY_ORDER.map(kid => {
+    const kd = KEY_DEFS[kid];
+    const have = hasKey(kid);
+    return `<span class="key-sym${have ? ' collected' : ''}"
+              title="${kd.name}"
+              style="color:${have ? kd.color : '#555'};">${kd.sym}</span>`;
+  }).join('');
+}
+
+function flashKeyCollect(kid) {
+  const kd = KEY_DEFS[kid];
+  const el = document.createElement('div');
+  el.style.cssText = `position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    z-index:800;font-family:'Cinzel Decorative',serif;font-size:clamp(24px,5vw,48px);
+    color:${kd.color};text-shadow:0 0 40px ${kd.color};
+    text-align:center;pointer-events:none;
+    animation:hsFadeIn 0.4s ease both;`;
+  el.innerHTML = `${kd.sym}<br><span style="font-size:0.45em;letter-spacing:0.25em;
+    font-family:'Cinzel',serif;display:block;margin-top:8px;">${kd.name}</span>`;
+  document.body.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = 'opacity 0.8s';
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 800);
+  }, 1600);
+}
+
+
+/* ── Zone tile renderer ────────────────────────── */
+function renderZoneTile(s, x, y, tile) {
+  const isThresh = tile.type === 'locked_zone_threshold';
+  const zc  = tile.zone_color || '#555555';
+  const zname = tile.zone_name || 'Locked Zone';
+  const needed = tile.keys_required || [];
+  const unlocked = hasAllKeys(needed);
+
+  if (isThresh && !unlocked) {
+    // Sealed door — show lock status
+    const missingKeys = needed.filter(k => !hasKey(k));
+    s.innerHTML = `
+      <div style="text-align:center;max-width:480px;">
+        <div class="room-era" style="color:${zc};">Sealed · ${zname}</div>
+        <h1 class="room-title" style="color:${zc};font-size:clamp(20px,3vw,36px);">
+          The way is shut.
+        </h1>
+        <div class="room-lore">
+          <p>You are standing at the threshold of <em>${zname}</em>. The door does not open — not yet.</p>
+          <p>You need ${needed.length === 10 ? 'all ten keys' : `${needed.length} key${needed.length>1?'s':''}`} to pass.</p>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap;">
+          ${needed.map(kid => {
+            const kd = KEY_DEFS[kid];
+            const have = hasKey(kid);
+            return `<span style="font-size:24px;color:${have?kd.color:'#444'};
+              opacity:${have?1:0.3};filter:${have?'none':'grayscale(1)'};
+              transition:all 0.4s;" title="${kd.name}">${kd.sym}</span>`;
+          }).join('')}
+        </div>
+      </div>`;
+  } else {
+    // Inside zone (or threshold unlocked)
+    s.innerHTML = `
+      <div style="text-align:center;max-width:520px;">
+        <div class="room-era" style="color:${zc};">${zname} · ${isThresh ? 'Threshold' : 'Interior'}</div>
+        <h1 class="room-title" style="color:${zc};">${tile.name || '···'}</h1>
+        <div class="room-lore">${tile.lore || '<p><em>This room is unwritten.</em></p>'}</div>
+      </div>`;
   }
-});
+  const zr = parseInt(zc.slice(1,3),16), zg = parseInt(zc.slice(3,5),16), zb = parseInt(zc.slice(5,7),16);
+  document.body.style.background = `radial-gradient(ellipse at center,rgba(${zr},${zg},${zb},0.18),var(--bg) 80%)`;
+  initStars({count: 140, color: `${zr},${zg},${zb}`, speed: 0.012});
+  startParticles({colors: [zc+'55', zc+'33'], min: 1, max: 2, speed: 6});
+}
+
+/* ── Special cell renderer ─────────────────────── */
+function renderSpecialTile(s, x, y, tile) {
+  s.innerHTML = `
+    <div style="text-align:center;max-width:480px;">
+      <div class="room-era">${tile.era || 'The Wilderness'}</div>
+      <h1 class="room-title">${tile.emoji || '·'} ${tile.name || '···'}</h1>
+      <div class="room-lore">${tile.lore || '<p><em>This place is still unwritten.</em></p>'}</div>
+      ${tile.key_id && !hasKey(tile.key_id) ? `
+        <div style="margin-top:28px;font-family:'Cinzel',serif;font-size:12px;
+          letter-spacing:0.25em;color:rgba(201,168,76,0.6);">
+          ${KEY_DEFS[tile.key_id].sym} — ${KEY_DEFS[tile.key_id].name} is here
+        </div>` : ''}
+      ${tile.dead_end ? `<div class="hint" style="margin-top:18px;">· dead end — return the way you came ·</div>` : ''}
+    </div>`;
+  document.body.style.background = 'radial-gradient(ellipse at center, rgba(12,14,24,0.5), var(--bg) 80%)';
+  initStars({count: 80, color: '160,160,190', speed: 0.008});
+  startParticles({colors: ['#7eb8d422', '#c9a84c22'], min: 1, max: 2, speed: 9});
+  // Ghost haunt for Med Pod
+  if (tile.ghost_haunted) {
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        const g = document.createElement('div');
+        g.style.cssText = `position:fixed;pointer-events:none;z-index:50;
+          top:${10+Math.random()*70}%;left:${5+Math.random()*80}%;
+          font-size:${40+Math.random()*60}px;opacity:0;color:rgba(126,184,212,0.6);
+          animation:eveBlink 0.4s ease;`;
+        g.textContent = '👻';
+        document.body.appendChild(g);
+        setTimeout(() => g.remove(), 500);
+      }, (i+1) * (2000 + Math.random()*3000));
+    }
+  }
+}
+
+
+/* ══════════════════════════════════════════════════
+ *  UNIVERSAL TILE THEME SYSTEM
+ * ══════════════════════════════════════════════════
+ * Each theme defines: bg, stars, particles, accent,
+ * fx, objectAnim, objectOpacity, and a CSS colour.
+ * Tiles gain a theme via their 'theme' field in
+ * realm.json.  Object layer uses tile.object_img if
+ * present, otherwise the ⁂ placeholder.
+ * ════════════════════════════════════════════════ */
+
+const THEMES = {
+  space: {
+    bg: '#000000',
+    stars: {count:360, color:'220,225,240', speed:0.025},
+    particles: {colors:['#ffffff18','#88aaff28'], min:1, max:2, speed:9},
+    accent: '#7eb8d4', objectAnim:'float', objectOpacity:0.18,
+  },
+  fire: {
+    bg: 'radial-gradient(ellipse at 50% 100%, rgba(80,20,5,0.9), #050101 65%)',
+    stars: {count:70, color:'255,120,40', speed:0.007},
+    particles: {colors:['#ff6b2baa','#c9a84c88','#ff330088'], min:1, max:4, speed:3},
+    accent: '#ff6b2b', objectAnim:'pulse', objectOpacity:0.22,
+  },
+  ice: {
+    bg: 'radial-gradient(ellipse at 50% 0%, rgba(20,40,80,0.9), #010408 70%)',
+    stars: {count:200, color:'180,220,255', speed:0.015},
+    particles: {colors:['#7eb8d4aa','#c8d8ff66'], min:1, max:3, speed:6},
+    accent: '#5b9ab8', objectAnim:'breathe', objectOpacity:0.20,
+    fx: 'ripple',
+  },
+  forest: {
+    bg: 'radial-gradient(ellipse at 50% 80%, rgba(20,50,15,0.85), #020501 70%)',
+    stars: {count:55, color:'160,200,120', speed:0.005},
+    particles: {colors:['#c9a84c55','#4a7c5955'], min:1, max:2, speed:8},
+    accent: '#4a7c59', objectAnim:'float', objectOpacity:0.18,
+  },
+  tech: {
+    bg: '#000805',
+    stars: {count:40, color:'0,180,60', speed:0.003},
+    particles: {colors:['#00ff4155','#00aa2a44'], min:1, max:2, speed:4},
+    accent: '#00ff41', objectAnim:'pulse', objectOpacity:0.20,
+    fx: 'matrix',
+  },
+  ethereal: {
+    bg: 'radial-gradient(ellipse at 50% 50%, rgba(40,10,70,0.85), #030108 70%)',
+    stars: {count:260, color:'180,140,240', speed:0.018},
+    particles: {colors:['#c084fc55','#7b5ea766'], min:1, max:3, speed:5},
+    accent: '#c084fc', objectAnim:'orbit', objectOpacity:0.22,
+    fx: 'nodes',
+  },
+  cave: {
+    bg: 'radial-gradient(ellipse at 50% 100%, rgba(30,20,10,0.9), #020101 80%)',
+    stars: {count:25, color:'120,100,80', speed:0.003},
+    particles: {colors:['#88665544'], min:1, max:2, speed:10},
+    accent: '#886633', objectAnim:'fade', objectOpacity:0.15,
+  },
+  cathedral: {
+    bg: 'radial-gradient(ellipse at 50% 30%, rgba(8,14,45,0.92), #020108 75%)',
+    stars: {count:120, color:'140,160,220', speed:0.010},
+    particles: {colors:['#c9a84c44','#5b9ab844'], min:1, max:3, speed:5},
+    accent: '#c9a84c', objectAnim:'breathe', objectOpacity:0.18,
+  },
+  ocean: {
+    bg: 'radial-gradient(ellipse at 50% 100%, rgba(5,30,60,0.9), #010308 80%)',
+    stars: {count:150, color:'80,180,220', speed:0.012},
+    particles: {colors:['#7eb8d455','#2d888844'], min:1, max:3, speed:7},
+    accent: '#2d8888', objectAnim:'float', objectOpacity:0.20,
+    fx: 'ripple',
+  },
+  wasteland: {
+    bg: 'radial-gradient(ellipse at 50% 60%, rgba(30,25,15,0.85), #050402 80%)',
+    stars: {count:60, color:'160,150,130', speed:0.006},
+    particles: {colors:['#a09080aa','#c9a84c33'], min:1, max:2, speed:7},
+    accent: '#a09080', objectAnim:'fade', objectOpacity:0.15,
+  },
+};
+
+/* Tile object animation map */
+const OBJ_ANIMS = {
+  float:   'objFloat   6s  ease-in-out infinite',
+  pulse:   'objPulse   3.5s ease-in-out infinite',
+  orbit:   'objOrbit   20s linear     infinite',
+  fade:    'objFade    4s  ease-in-out infinite',
+  breathe: 'objBreathe 4.5s ease-in-out infinite',
+  flash:   'objFlash   5s  ease-in-out infinite',
+};
+
+/* Universal tile renderer — used when tile.theme is set */
+function renderTile(s, x, y, tile) {
+  const themeKey  = tile.theme || 'space';
+  const theme     = THEMES[themeKey] || THEMES.space;
+  const anim      = OBJ_ANIMS[tile.object_anim || theme.objectAnim] || OBJ_ANIMS.float;
+  const accent    = tile.accent_color || theme.accent;
+  const lore      = tile.lore  || '';
+  const title     = tile.title || tile.name || '· · ·';
+  const era       = tile.era   || '';
+  const objOpacity = theme.objectOpacity;
+
+  // Object layer HTML — image if available, otherwise themed ⁂ placeholder
+  const objInner = tile.object_img
+    ? `<img src="${tile.object_img}" alt="" draggable="false">`
+    : `<span style="color:${accent};animation:${anim};display:block;">⁂</span>`;
+
+  s.innerHTML = `
+    <div class="tile-root" id="tileRoot">
+      <!-- Object / BG layer -->
+      <div class="tile-obj-layer" id="tileObjLayer">
+        <div class="tile-obj" id="tileObj"
+          style="opacity:${objOpacity};animation:${anim};color:${accent};">
+          ${objInner}
+        </div>
+      </div>
+      <!-- Content layer -->
+      <div class="tile-content">
+        <div class="room-era">${era}</div>
+        <h1 class="room-title" style="color:${accent};">${title}</h1>
+        ${lore ? `<div class="room-lore">${lore}</div>` : ''}
+        ${tile.hint ? `<div class="hint">· ${tile.hint} ·</div>` : ''}
+      </div>
+    </div>`;
+
+  // Background + stars + particles
+  document.body.style.background = theme.bg;
+  initStars(theme.stars);
+  if (theme.particles && theme.particles.colors.length > 0) {
+    startParticles(theme.particles);
+  } else {
+    if (particleInterval) clearInterval(particleInterval);
+    document.getElementById('particles').innerHTML = '';
+  }
+  if (theme.fx) initFxForRoom(theme.fx);
+
+  // Parallax on object layer via mouse or device orientation
+  if (tile.object_parallax !== false) {
+    attachTileParallax();
+  }
+}
+
+/* Attach mouse/gyro parallax to the object layer */
+let tileParallaxRaf = null;
+let tileParallaxTarget = {x: 0, y: 0};
+let tileParallaxCurrent = {x: 0, y: 0};
+let tileMouseHandler = null;
+let tileGyroHandler  = null;
+
+function attachTileParallax() {
+  detachTileParallax(); // clean up any prior
+
+  const MAX = 28;
+
+  tileMouseHandler = ev => {
+    tileParallaxTarget.x = (ev.clientX / window.innerWidth  - 0.5) * 2;
+    tileParallaxTarget.y = (ev.clientY / window.innerHeight - 0.5) * 2;
+  };
+  document.addEventListener('mousemove', tileMouseHandler);
+
+  if (typeof DeviceOrientationEvent !== 'undefined') {
+    tileGyroHandler = ev => {
+      tileParallaxTarget.x = Math.max(-1, Math.min(1,  (ev.gamma||0)/22));
+      tileParallaxTarget.y = Math.max(-1, Math.min(1, -(ev.beta ||0)/35));
+    };
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      // iOS 13+: permission requested on first touch
+      const onFirstTouch = () => {
+        DeviceOrientationEvent.requestPermission().then(s => {
+          if (s === 'granted') window.addEventListener('deviceorientation', tileGyroHandler);
+        });
+        document.removeEventListener('touchstart', onFirstTouch);
+      };
+      document.addEventListener('touchstart', onFirstTouch, {once:true});
+    } else {
+      window.addEventListener('deviceorientation', tileGyroHandler);
+    }
+  }
+
+  function loop() {
+    tileParallaxRaf = requestAnimationFrame(loop);
+    tileParallaxCurrent.x += (tileParallaxTarget.x - tileParallaxCurrent.x) * 0.07;
+    tileParallaxCurrent.y += (tileParallaxTarget.y - tileParallaxCurrent.y) * 0.07;
+    const obj = document.getElementById('tileObj');
+    if (!obj) { detachTileParallax(); return; }
+    const dx = tileParallaxCurrent.x * MAX;
+    const dy = tileParallaxCurrent.y * MAX * 0.6;
+    // Preserve existing CSS animation via translate; use CSS variable approach
+    obj.style.marginLeft = dx + 'px';
+    obj.style.marginTop  = dy + 'px';
+  }
+  loop();
+}
+
+function detachTileParallax() {
+  if (tileParallaxRaf) { cancelAnimationFrame(tileParallaxRaf); tileParallaxRaf = null; }
+  if (tileMouseHandler) { document.removeEventListener('mousemove', tileMouseHandler); tileMouseHandler = null; }
+  if (tileGyroHandler) { window.removeEventListener('deviceorientation', tileGyroHandler); tileGyroHandler = null; }
+}
+
+/* ── House Scene data ──────────────────────────── */
+const HOUSE_SCENES = {
+  '-10,-13': {
+    slug: 'threshold',
+    path: 'house-emily/threshold',
+    layers: [
+      {parallax: 0.03},
+      {parallax: 0.13},
+      {parallax: 0.27},
+    ],
+    title: 'The Threshold of Emily',
+    quote: 'She stood in the long green dress — golden hair caught mid-turn — and did not turn all the way.',
+    whispers: [
+      { text: 'Follow the light.\nIt knows where\nshe walked.',
+        left:'6%', top:'52%', width:'19%' },
+      { text: 'The night outside\nis not the night\nyou came from.',
+        left:'73%', top:'36%', width:'21%' },
+      { text: 'Cold.\nShe used to\nlight it herself.',
+        left:'39%', top:'60%', width:'16%' },
+    ],
+    hotspots: [
+      { id:'door', type:'exit', label:'Enter',
+        x:'3%', y:'10%', w:'28%', h:'82%',
+        tip:'The door is ajar. Something warm breathes on the other side.',
+        tipPos:'below',
+        target:[-10,-14] },
+      { id:'window', type:'lore',
+        x:'60%', y:'6%', w:'36%', h:'70%',
+        tip:'Somewhere beyond that glass, the world she agreed to leave still turns without her.',
+        tipPos:'below' },
+      { id:'fire', type:'lore',
+        x:'33%', y:'30%', w:'24%', h:'42%',
+        tip:'Cold. It has been cold for a long time. She used to light it herself.',
+        tipPos:'above' },
+    ],
+    candle:   {left:'0%',  top:'10%', width:'38%', height:'70%'},
+    moonbeam: {left:'55%', top:'0%',  width:'45%', height:'80%'},
+  },
+};
+
+/* ── House Scene renderer ─────────────────────── */
+let hsParallaxRaf = null;
+
+function renderHouseScene(s, x, y, tile, scene) {
+  if (hsParallaxRaf) { cancelAnimationFrame(hsParallaxRaf); hsParallaxRaf = null; }
+
+  document.body.style.background = '#040210';
+  // Pause starfield while in house scene
+  if (typeof starRaf !== 'undefined' && starRaf) {
+    cancelAnimationFrame(starRaf); starRaf = null;
+    const bgC = document.getElementById('bg');
+    bgC.getContext('2d').clearRect(0, 0, bgC.width, bgC.height);
+  }
+
+  s.className = '';
+  s.style.cssText = 'position:absolute;inset:0;padding:0;overflow:hidden;z-index:10;';
+
+  const base = scene.path;
+
+  s.innerHTML = `
+    <div class="hs-root" id="hsRoot">
+      <div class="hs-layer" id="hsL0" style="z-index:2;opacity:0;">
+        <img src="${base}/bg.png" alt="">
+      </div>
+      <div class="hs-layer" id="hsL1" style="z-index:3;opacity:0;">
+        <img src="${base}/mid.png" alt="">
+      </div>
+      <div class="hs-layer" id="hsL2" style="z-index:4;opacity:0;">
+        <img src="${base}/obj.png" alt="">
+      </div>
+      <div class="hs-dark"  style="z-index:5;"></div>
+      <div class="hs-vign"  style="z-index:6;"></div>
+      <div class="hs-sides" style="z-index:7;"></div>
+      <div class="hs-atm hs-candle" style="z-index:8;
+        left:${scene.candle.left};top:${scene.candle.top};
+        width:${scene.candle.width};height:${scene.candle.height};"></div>
+      <div class="hs-atm hs-moon" style="z-index:8;
+        left:${scene.moonbeam.left};top:${scene.moonbeam.top};
+        width:${scene.moonbeam.width};height:${scene.moonbeam.height};"></div>
+      <div class="hs-particles" id="hsParticles" style="z-index:9;"></div>
+      <div class="hs-scene-text" style="top:5%;z-index:13;width:58%;margin-left:-29%;">
+        <div class="hs-scene-title">${scene.title || tile.name}</div>
+        ${scene.quote ? `<div class="hs-scene-quote">${scene.quote}</div>` : ''}
+      </div>
+      ${(scene.whispers || []).map((w, i) => `
+        <div class="hs-whisper" id="hsW${i}" style="
+          left:${w.left};top:${w.top};width:${w.width};
+          font-size:clamp(11px,1.15vw,14px);">
+          ${w.text.replace(/\n/g,'<br>')}
+        </div>`).join('')}
+      ${scene.hotspots.map(h => `
+        <div class="hs-hs ${h.type}" id="hsHs_${h.id}"
+             data-type="${h.type}"
+             ${h.target ? `data-tx="${h.target[0]}" data-ty="${h.target[1]}"` : ''}
+             style="left:${h.x};top:${h.y};width:${h.w};height:${h.h};">
+          <div class="hs-bloom"></div>
+          <div class="hs-tip ${h.tipPos || 'above'}">${h.tip}</div>
+          ${h.type==='exit' ? `<div class="hs-exit-cue">&#8629; ${h.label}</div>` : ''}
+        </div>`).join('')}
+      <div class="hs-hud" style="z-index:16;">
+        <div class="hs-hud-era">${tile.era || ''}</div>
+        <div class="hs-hud-name">${tile.name || ''}</div>
+      </div>
+    </div>`;
+
+  // Hotspot click / touch
+  s.querySelectorAll('.hs-hs').forEach(el => {
+    el.addEventListener('click', () => {
+      if (el.dataset.type === 'exit') goTo(parseInt(el.dataset.tx), parseInt(el.dataset.ty));
+    });
+    let tc = 0;
+    el.addEventListener('touchend', ev => {
+      if (el.dataset.type !== 'exit') return;
+      ev.preventDefault();
+      tc++;
+      if (tc >= 2) { tc = 0; goTo(parseInt(el.dataset.tx), parseInt(el.dataset.ty)); }
+      else setTimeout(() => { tc = 0; }, 2000);
+    }, {passive:false});
+  });
+
+  // Dust particles
+  const pEl = document.getElementById('hsParticles');
+  for (let i = 0; i < 28; i++) {
+    const p = document.createElement('div');
+    const amber = i < 16;
+    const sz  = 1.4 + Math.random() * 2.4;
+    const lft = amber ? (2 + Math.random() * 38) : (56 + Math.random() * 38);
+    const bot = 5 + Math.random() * 55;
+    const dur = 5 + Math.random() * 7;
+    const del = Math.random() * 9;
+    const dx  = (Math.random() - 0.5) * 36;
+    const dy  = -(90 + Math.random() * 110);
+    const op  = 0.45 + Math.random() * 0.5;
+    p.style.cssText = `position:absolute;bottom:${bot}%;left:${lft}%;`
+      + `width:${sz}px;height:${sz}px;border-radius:50%;`
+      + `background:${amber?`rgba(215,135,30,${op})`:`rgba(108,172,218,${op})`};`
+      + `pointer-events:none;--dp:${op};--dx:${dx}px;--dy:${dy}px;`
+      + `animation:hsDust ${dur}s ${del}s linear infinite;`;
+    pEl.appendChild(p);
+  }
+
+  // Parallax
+  let tX=0, tY=0, cX=0, cY=0;
+  const EASE=0.06, PX=70, PY=45;
+  const layerEls = [
+    {el:document.getElementById('hsL0'), f:scene.layers[0].parallax},
+    {el:document.getElementById('hsL1'), f:scene.layers[1].parallax},
+    {el:document.getElementById('hsL2'), f:scene.layers[2].parallax},
+  ];
+  function parallaxLoop() {
+    hsParallaxRaf = requestAnimationFrame(parallaxLoop);
+    cX += (tX-cX)*EASE; cY += (tY-cY)*EASE;
+    layerEls.forEach(({el,f}) => {
+      el.style.transform = `translate(calc(-15% + ${cX*f*PX}px), calc(-15% + ${cY*f*PY}px))`;
+    });
+  }
+  parallaxLoop();
+
+  const onMouse = ev => {
+    tX = (ev.clientX/window.innerWidth  - 0.5)*2;
+    tY = (ev.clientY/window.innerHeight - 0.5)*2;
+  };
+  document.addEventListener('mousemove', onMouse);
+
+  let onGyro = null;
+  function attachGyro() {
+    onGyro = ev => {
+      tX = Math.max(-1, Math.min(1,  (ev.gamma||0)/22));
+      tY = Math.max(-1, Math.min(1, -(ev.beta ||0)/35));
+    };
+    window.addEventListener('deviceorientation', onGyro);
+  }
+  if (typeof DeviceOrientationEvent !== 'undefined') {
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      const reqBtn = document.createElement('button');
+      reqBtn.style.cssText = 'position:fixed;bottom:80px;right:22px;z-index:200;'
+        +'font-family:Cinzel,serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;'
+        +'color:rgba(201,168,76,0.7);background:rgba(0,0,0,0.65);'
+        +'border:1px solid rgba(201,168,76,0.25);padding:8px 14px;cursor:pointer;';
+      reqBtn.textContent = 'Enable Motion';
+      document.body.appendChild(reqBtn);
+      reqBtn.addEventListener('click', () => {
+        DeviceOrientationEvent.requestPermission().then(st => {
+          if (st==='granted') attachGyro();
+        });
+        reqBtn.remove();
+      });
+    } else {
+      attachGyro();
+    }
+  }
+
+  // Whisper proximity brightening on desktop
+  const whisperEls = (scene.whispers||[]).map((_,i) => document.getElementById(`hsW${i}`));
+  const onMouseW = ev => {
+    const nx = ev.clientX/window.innerWidth;
+    const ny = ev.clientY/window.innerHeight;
+    whisperEls.forEach(w => {
+      if (!w) return;
+      const r   = w.getBoundingClientRect();
+      const wCx = (r.left+r.right) /2/window.innerWidth;
+      const wCy = (r.top +r.bottom)/2/window.innerHeight;
+      const d   = Math.hypot(nx-wCx, ny-wCy);
+      const a   = Math.max(0, Math.min(0.65, 0.65 - d*2.0));
+      w.style.color = `rgba(201,168,76,${a})`;
+    });
+  };
+  document.addEventListener('mousemove', onMouseW);
+
+  // Staggered fade-in
+  layerEls.forEach(({el},i) => {
+    el.style.transition = `opacity 0.8s ${0.1 + i*0.28}s ease`;
+    requestAnimationFrame(() => requestAnimationFrame(() => { el.style.opacity='1'; }));
+  });
+
+  s._hsCleanup = () => {
+    if (hsParallaxRaf) { cancelAnimationFrame(hsParallaxRaf); hsParallaxRaf=null; }
+    document.removeEventListener('mousemove', onMouse);
+    document.removeEventListener('mousemove', onMouseW);
+    if (onGyro) window.removeEventListener('deviceorientation', onGyro);
+    document.querySelectorAll('button[style*="Enable Motion"]').forEach(b=>b.remove());
+    initStars({count:200, color:'220,215,200', speed:0.015});
+  };
+}
+
+
+/* ── Boot ──────────────────────────────────────── */
+async function boot() {
+  const res = await fetch('realm.json');
+  REALM = await res.json();
+  updateMapBtn(); // show MAP button if kudra already unlocked from a prior session
+  window.addEventListener('resize', () => {
+    const bg = document.getElementById('bg');
+    const fx = document.getElementById('fx');
+    bg.width = fx.width = window.innerWidth;
+    bg.height = fx.height = window.innerHeight;
+    resizeStars(); initStarData();
+  });
+  // Read hash, else check for gateway querystring
+  let start = {x: 0, y: 0};
+  const h = (window.location.hash || '').replace('#', '');
+  if (h) {
+    if (h === 'gate=left')  start = {x: -1, y: 0};
+    else if (h === 'gate=right') start = {x: 1, y: 0};
+    else if (h === 'gate=down')  start = {x: 0, y: -1};
+    else if (h === 'threshold')  start = {x: 0, y: 5};
+    else if (h === 'marduk_view') { unlockMV(); start = {x: 0, y: 1}; }
+    else {
+      const dec = decodeXY(h);
+      if (dec) start = dec;
+    }
+  }
+  render(start.x, start.y);
+}
+boot();
 </script>
 </body>
 </html>
