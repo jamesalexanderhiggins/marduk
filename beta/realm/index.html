@@ -1140,6 +1140,12 @@ function setupMVCanvas() {
         const isFrontDoor = (tile.type === 'house_front_door');
         const isCorrectQ  = isQuiz && isCorrect(tile.question_id);
         const hasContent  = tile.type && tile.type !== 'empty';
+        const isOnPath    = tile.on_path && tile.on_path.length > 0;
+        // House/path colour from tile data (set by realm.json)
+        const houseHex  = tile.house_color || null;  // e.g. '#C9A84C'
+        // For path tiles, use the first path's colour
+        const pathHex   = isOnPath && tile.path_colors
+          ? tile.path_colors[tile.on_path[0]] : null;
         const isSelected  = selKey === `${x},${y}`;
 
         // Base styling
@@ -1150,8 +1156,19 @@ function setupMVCanvas() {
 
         if (isHome)         { fill = 'rgba(232,201,110,0.55)'; stroke = '#e8c96e'; lineW = 2.8; rimColor = 'rgba(232,201,110,0.8)'; }
         else if (isMV)      { fill = 'rgba(232,201,110,0.32)'; stroke = '#c9a84c'; lineW = 2.2; rimColor = 'rgba(232,201,110,0.55)'; }
-        else if (isFrontDoor){ fill = 'rgba(255,107,43,0.25)'; stroke = '#ff6b2b'; lineW = 2.6; rimColor = 'rgba(255,107,43,0.5)'; }
-        else if (isHouse)   { fill = 'rgba(46,74,58,0.45)';   stroke = 'rgba(201,163,74,0.5)'; lineW = 1.5; }
+        else if (isFrontDoor && houseHex) {
+          // Front door glows with its house colour
+          fill = houseHex + '44'; stroke = houseHex; lineW = 2.8; rimColor = houseHex + 'AA';
+        }
+        else if (isHouse && houseHex) {
+          // Interior house tile — tinted in house colour
+          fill = houseHex + '28'; stroke = houseHex + '88'; lineW = 1.4;
+        }
+        else if (isOnPath && pathHex && !isHouse) {
+          // Path tile — coloured thread
+          fill = pathHex + '1E'; stroke = pathHex + 'CC'; lineW = 1.8;
+          if (tile.on_path.length > 1) { rimColor = pathHex + '66'; } // shared tile
+        }
         else if (isCorrectQ){ fill = 'rgba(232,201,110,0.24)'; stroke = '#e8c96e'; lineW = 1.8; rimColor = 'rgba(232,201,110,0.4)'; }
         else if (isQuiz)    { fill = 'rgba(126,184,212,0.14)'; stroke = 'rgba(126,184,212,0.42)'; lineW = 1.4; }
         else if (isVisited) { fill = 'rgba(201,168,76,0.11)'; stroke = 'rgba(126,184,212,0.3)'; lineW = 1.1; }

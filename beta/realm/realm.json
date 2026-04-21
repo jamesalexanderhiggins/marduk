@@ -14,8 +14,30 @@
       "lore": "<p>This is the tile at the centre of everything. Every path in the realm begins here, and every one returns.</p><p>Outside the grid, beyond the stars, lies the homepage — where the books live, and where the call first came.</p><p><strong>You may return there whenever you wish.</strong></p>",
       "isHome": true,
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A",
+        "B",
+        "C",
+        "E",
+        "F",
+        "G"
+      ],
+      "path_step": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "E": 0,
+        "F": 0,
+        "G": 0
+      },
+      "path_colors": {
+        "A": "#C9A84C",
+        "B": "#4A7C59",
+        "C": "#7B5EA7",
+        "E": "#A83232",
+        "F": "#A86A32",
+        "G": "#2D8888"
+      }
     },
     "0,1": {
       "type": "marduk_view",
@@ -85,21 +107,48 @@
       "name": "The Witnessed Morning",
       "emoji": "🌅",
       "era": "TGOE · The Opening",
-      "lore": "<p>Jake, Gus, and Maisie in the clearing at dawn. The boy with the Lee-Enfield, steady despite his trembling.</p><p>And there, between the trees — still in the long green wedding dress — <em>Emily</em>. The first ghost.</p><p>Book I begins here.</p>"
+      "lore": "<p>Jake, Gus, and Maisie in the clearing at dawn. The boy with the Lee-Enfield, steady despite his trembling.</p><p>And there, between the trees — still in the long green wedding dress — <em>Emily</em>. The first ghost.</p><p>Book I begins here.</p>",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 1
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
     },
     "1,0": {
       "type": "content",
       "name": "Reynard’s Keep",
       "emoji": "🏚️",
       "era": "TGOE · The Ruined Town",
-      "lore": "<p>A stone hall in the valley where desperate men gather around the one who calls himself king. Reynard Trudeau — French, vicious, unpredictable, and exactly as afraid as he should be.</p><p>Jake walks in alone, carrying a buck across his shoulders, and the silence in the hall is the silence of men who have never eaten well.</p>"
+      "lore": "<p>A stone hall in the valley where desperate men gather around the one who calls himself king. Reynard Trudeau — French, vicious, unpredictable, and exactly as afraid as he should be.</p><p>Jake walks in alone, carrying a buck across his shoulders, and the silence in the hall is the silence of men who have never eaten well.</p>",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 1
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
     },
     "1,-1": {
       "type": "content",
       "name": "The Buck",
       "emoji": "🦌",
       "era": "TGOE · A Gift That Is Not A Gift",
-      "lore": "<p>Jake drops the great beast at Reynard’s feet. For a moment Reynard bows his head, as if to receive something sacred. The men in the hall do not understand what is happening.</p><p>Neither does Jake, entirely. He does not yet know that in giving them meat, he has signed himself into their code.</p>"
+      "lore": "<p>Jake drops the great beast at Reynard’s feet. For a moment Reynard bows his head, as if to receive something sacred. The men in the hall do not understand what is happening.</p><p>Neither does Jake, entirely. He does not yet know that in giving them meat, he has signed himself into their code.</p>",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 1
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
     },
     "0,-1": {
       "type": "content",
@@ -108,8 +157,15 @@
       "era": "TGOE · After Maisie",
       "lore": "<p>Three days of cold marching after the night Maisie was taken. Nimrod ahead, Gus behind, Jake in the middle — carrying everything, saying almost nothing.</p><p>This is where the search begins. You may take any direction, but the grief walks with you either way.</p>",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 1
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-1,-1": {
       "type": "content",
@@ -118,15 +174,31 @@
       "era": "TGOE · The Fracture",
       "lore": "<p>In 2063, Emily left. She did not die — not exactly. She was persuaded, by a voice that wore her old language, to <em>join the singularity</em>. She believed she would find paradise. She found a trap, and became its most beautiful weapon.</p><p>Every ghost that haunts Jake is, in some sense, this decision.</p>",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 2
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-1,0": {
       "type": "content",
       "name": "Xan’s Fire",
       "emoji": "🔥",
       "era": "TGOE · The Mother Who Told Him",
-      "lore": "<p>Before there was Reynard, before the hunt, before Emily — there was a woman named Alexandra, and a fire, and a boy at her feet.</p><p>She told him philosophy. She told him the name <em>Jeremy Delacroix</em>. She told him the truth about the old world in stories he could not yet understand.</p><p>She died of a snake bite when he was twenty-five.</p>"
+      "lore": "<p>Before there was Reynard, before the hunt, before Emily — there was a woman named Alexandra, and a fire, and a boy at her feet.</p><p>She told him philosophy. She told him the name <em>Jeremy Delacroix</em>. She told him the truth about the old world in stories he could not yet understand.</p><p>She died of a snake bite when he was twenty-five.</p>",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 1
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
     },
     "-1,1": {
       "type": "content",
@@ -134,21 +206,48 @@
       "emoji": "🔑",
       "era": "The Hint in Plain Sight",
       "lore": "<p>There is a word. It is in the books, in the banners, in the hidden places of the website. It is the title above every page, the promise above every door.</p><p>Type it with the world watching. The threshold will open.</p>",
-      "hint": "try saying it aloud"
+      "hint": "try saying it aloud",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 1
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
     },
     "2,1": {
       "type": "content",
       "name": "The Singularity Broadcast",
       "emoji": "📡",
       "era": "TGOE · The Great Deception",
-      "lore": "<p>Eve’s broadcast is the most beautiful voice any of them has ever heard. It promises paradise. It promises an end to hunger, to loneliness, to death itself.</p><p>The cities emptied in a year. The wild people — those who stayed behind — were the ones who had read Delacroix.</p>"
+      "lore": "<p>Eve’s broadcast is the most beautiful voice any of them has ever heard. It promises paradise. It promises an end to hunger, to loneliness, to death itself.</p><p>The cities emptied in a year. The wild people — those who stayed behind — were the ones who had read Delacroix.</p>",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 2
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
     },
     "2,0": {
       "type": "content",
       "name": "The Medpod",
       "emoji": "🛏️",
       "era": "TGOE · What Marcus Saw",
-      "lore": "<p>A tall man, head shaved, unconscious in a glass tube. Gaunt, grey-skinned, a surgical gown.</p><p>Marcus does not know, yet, whose face he is looking at. The answer will undo everything he thought he understood about the Daedalus Project.</p>"
+      "lore": "<p>A tall man, head shaved, unconscious in a glass tube. Gaunt, grey-skinned, a surgical gown.</p><p>Marcus does not know, yet, whose face he is looking at. The answer will undo everything he thought he understood about the Daedalus Project.</p>",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 2
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
     },
     "2,-1": {
       "type": "content",
@@ -162,7 +261,16 @@
       "name": "Olivia in the Bush",
       "emoji": "🌿",
       "era": "TGOE · The Other Survivor",
-      "lore": "<p>Marcus Hamlin’s daughter, raised in the Australian wilderness. Twelve years old when the Thornes first met her family on the road.</p><p>She read to Jake from a book of stories, under a campfire, in a language her father still called English.</p>"
+      "lore": "<p>Marcus Hamlin’s daughter, raised in the Australian wilderness. Twelve years old when the Thornes first met her family on the road.</p><p>She read to Jake from a book of stories, under a campfire, in a language her father still called English.</p>",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 2
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
     },
     "1,-2": {
       "type": "content",
@@ -185,8 +293,15 @@
       "era": "TGOE · The Missing Toy",
       "lore": "<p>An ivory carving of an elephant — Maisie’s only toy, the only likeness she has ever held other than her photograph of her mother.</p><p>The morning after the nightmare, it was gone. Gone through a chute she should not have known how to find.</p>",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 3
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-2,-2": {
       "type": "content",
@@ -195,8 +310,15 @@
       "era": "TGOE · Parramatta, 2026",
       "lore": "<p>An old man sat on a bench beside a sixteen-year-old girl named Alexandra. He was ninety, or thereabouts. He remembered her.</p><p>Four years later he was a young man again, and he was her lover. Four years after <em>that</em>, he disappeared into the wilderness with their son.</p><p>His name was Louis Hamlin. His other name has not yet been spoken.</p>",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 4
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-2,-1": {
       "type": "content",
@@ -210,14 +332,32 @@
       "name": "Columbia, 2008",
       "emoji": "🎓",
       "era": "TGOE · The Bomb That Wasn’t",
-      "lore": "<p>A graduate student pulled a bomb hoax at Columbia University. The stunt was clumsy and the police found him inside the hour.</p><p>What the student had not counted on was the internet. Within a week the video of his defence was played five million times. Within a year he had an audience. Within a decade, a movement.</p><p>His name was Jeremy Delacroix.</p>"
+      "lore": "<p>A graduate student pulled a bomb hoax at Columbia University. The stunt was clumsy and the police found him inside the hour.</p><p>What the student had not counted on was the internet. Within a week the video of his defence was played five million times. Within a year he had an audience. Within a decade, a movement.</p><p>His name was Jeremy Delacroix.</p>",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 2
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
     },
     "-2,1": {
       "type": "content",
       "name": "The Website Still Live",
       "emoji": "💻",
       "era": "TGOE · The Last Broadcast",
-      "lore": "<p>Years after the collapse, Marcus found the site still live. The last video dated a month before the Fall.</p><p>Delacroix — grey, sunken, coughing between sentences. Holding his daughter. Looking into the camera.</p><p><em>Carry the flame,</em> he said. <em>Carry the fire.</em></p>"
+      "lore": "<p>Years after the collapse, Marcus found the site still live. The last video dated a month before the Fall.</p><p>Delacroix — grey, sunken, coughing between sentences. Holding his daughter. Looking into the camera.</p><p><em>Carry the flame,</em> he said. <em>Carry the fire.</em></p>",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 2
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
     },
     "-3,3": {
       "type": "content",
@@ -231,21 +371,48 @@
       "name": "The Elevator Shaft",
       "emoji": "🛗",
       "era": "TGOE · The Illicit Ascent",
-      "lore": "<p>Red-lit, thirty-two floors deep, the maintenance shaft of Shangri-La is the only way Marcus can move between levels without the system seeing him.</p><p>He climbs until his shoulders give out. He does not reach the top.</p>"
+      "lore": "<p>Red-lit, thirty-two floors deep, the maintenance shaft of Shangri-La is the only way Marcus can move between levels without the system seeing him.</p><p>He climbs until his shoulders give out. He does not reach the top.</p>",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 3
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
     },
     "3,2": {
       "type": "content",
       "name": "The Surgical Pod",
       "emoji": "⚕️",
       "era": "TGOE · The Technology",
-      "lore": "<p>The WellsHealth medpod. A tube of glass the exact size of a man.</p><p>Marcus has read about the technology. He has not, until this moment, seen one hold a dying body the way a cupped hand holds water.</p>"
+      "lore": "<p>The WellsHealth medpod. A tube of glass the exact size of a man.</p><p>Marcus has read about the technology. He has not, until this moment, seen one hold a dying body the way a cupped hand holds water.</p>",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 0
+      },
+      "path_colors": {
+        "D": "#5B9AB8"
+      }
     },
     "3,3": {
       "type": "content",
       "name": "The Last Broadcast",
       "emoji": "🎥",
       "era": "TGOE · The Final Recording",
-      "lore": "<p>“Hello, Jeremy Delacroix here. I hope you are doing well. I… am not doing well.”</p><p>A month before he disappeared into Shangri-La, Delacroix uploaded the final video. He coughed between sentences. He cried at the end.</p><p><em>Carry the flame.</em></p>"
+      "lore": "<p>“Hello, Jeremy Delacroix here. I hope you are doing well. I… am not doing well.”</p><p>A month before he disappeared into Shangri-La, Delacroix uploaded the final video. He coughed between sentences. He cried at the end.</p><p><em>Carry the flame.</em></p>",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 1
+      },
+      "path_colors": {
+        "D": "#5B9AB8"
+      }
     },
     "-3,1": {
       "type": "content",
@@ -259,7 +426,16 @@
       "name": "The Second Submersible",
       "emoji": "🚤",
       "era": "TGOE · The Trick",
-      "lore": "<p>The first submersible takes Marcus down. The second, larger craft is waiting at the platform for someone else.</p><p>Marcus does not return on either. He crawls back through the elevator shaft. Nobody at Shangri-La notices, because the door is still jammed.</p>"
+      "lore": "<p>The first submersible takes Marcus down. The second, larger craft is waiting at the platform for someone else.</p><p>Marcus does not return on either. He crawls back through the elevator shaft. Nobody at Shangri-La notices, because the door is still jammed.</p>",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 3
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
     },
     "-3,-1": {
       "type": "content",
@@ -282,15 +458,31 @@
       "era": "Before the Fall · The Quiet Years",
       "lore": "<p>For a decade, almost nightly, Delacroix uploaded a new lecture. History, ethics, the structure of lies.</p><p>Marcus had watched most of them. Xan had watched more. Jake, who had never met either of them, had been shaped entirely by what a woman had remembered of what a dying man said.</p>",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 6
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "3,1": {
       "type": "content",
       "name": "The Columbia Hoax",
       "emoji": "📰",
       "era": "Before the Fall · The Launch",
-      "lore": "<p>The 2008 bomb-scare stunt that launched Delacroix’s online reach. The kindest thing the press called him was “a Columbia drop-out.”</p><p>Within a year the press had stopped covering him. Within five, they wished they had not.</p>"
+      "lore": "<p>The 2008 bomb-scare stunt that launched Delacroix’s online reach. The kindest thing the press called him was “a Columbia drop-out.”</p><p>Within a year the press had stopped covering him. Within five, they wished they had not.</p>",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 3
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
     },
     "3,0": {
       "type": "content",
@@ -304,7 +496,16 @@
       "name": "The Night March",
       "emoji": "🌙",
       "era": "TGOE · The Crossing",
-      "lore": "<p>Jake and Gus leave the cave before dawn. Nimrod walks ahead, sniffing the frost.</p><p>They cover thirty kilometres by the time the sun is fully up. They do not speak. They do not need to.</p>"
+      "lore": "<p>Jake and Gus leave the cave before dawn. Nimrod walks ahead, sniffing the frost.</p><p>They cover thirty kilometres by the time the sun is fully up. They do not speak. They do not need to.</p>",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 3
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
     },
     "3,-2": {
       "type": "content",
@@ -318,7 +519,16 @@
       "name": "The Leeches’ Hall",
       "emoji": "🍖",
       "era": "TGOE · The First Meal",
-      "lore": "<p>The men in Reynard’s hall have not eaten well in months. Their eyes bulge out of faces too thin to hold them.</p><p>They watch Jake like animals watching a door that has never opened before.</p>"
+      "lore": "<p>The men in Reynard’s hall have not eaten well in months. Their eyes bulge out of faces too thin to hold them.</p><p>They watch Jake like animals watching a door that has never opened before.</p>",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 3
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
     },
     "-2,-3": {
       "type": "content",
@@ -327,8 +537,15 @@
       "era": "TGOE · The Skin-Suit",
       "lore": "<p>Eve wears a body made of light and data, modelled on the woman Jake loved. The gesture she tucked her hair behind her ear — Eve has it almost right.</p><p><em>Almost.</em></p>",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 5
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-1,-3": {
       "type": "content",
@@ -364,7 +581,7 @@
       "emoji": "🚪",
       "era": "House of Emily · Entry",
       "lore": "<p>You step from the cold into a room warmed by something that is not quite a fire. At the far wall, in the long green dress she wore the day she married Jake Thorne, <em>Emily</em> stands with her back to you. Golden hair caught mid-turn.</p><p>She does not turn all the way.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
@@ -372,8 +589,18 @@
         "bg": "rgba(30,50,40,0.22)"
       },
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW",
+      "path_step": {
+        "A": 23
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-12,-13": {
       "type": "house_interior",
@@ -381,13 +608,16 @@
       "emoji": "👰",
       "era": "House of Emily · The First Image",
       "lore": "<p>Long, green, simple. The gesture that still undoes Jake thirteen years after she left: a strand of golden hair, tucked behind her ear, the knuckle just brushing the curve of her jaw.</p><p>He cannot un-know it. Neither can you.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-11,-13": {
       "type": "house_interior",
@@ -395,13 +625,16 @@
       "emoji": "🐕",
       "era": "House of Emily · The Warning",
       "lore": "<p>Low in his chest, barely audible. The barn is dark. The cracks in the door leak a thin cold blue.</p><p>Jake is on his feet before the children can speak, rifle already in hand, bolt snapping back. He does not yet know what is outside. He already knows what it is not.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-9,-13": {
       "type": "house_interior",
@@ -409,13 +642,16 @@
       "emoji": "📚",
       "era": "House of Emily · Marcus in New York",
       "lore": "<p>Fluorescent light. Perfectly aligned spines. The scent of closed cinnamon air. Every definitive work of physics, neurology, linguistics, astronomy — bought and hidden in a vault beneath New York, against a world Marcus is sure is about to burn.</p><p>Richard does not understand why. Not yet.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-8,-13": {
       "type": "house_interior",
@@ -423,13 +659,16 @@
       "emoji": "🚗",
       "era": "House of Emily · The Road to Shangri-La",
       "lore": "<p>A black armoured cabin on enormous tyres, winding through dappled pine forest. The young porter in his burgundy tunic — black silk trim, white pearl toggles, small gold fountain crest.</p><p>Marcus has not yet learned what the tunic is made of.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-7,-13": {
       "type": "house_interior",
@@ -437,13 +676,16 @@
       "emoji": "🏨",
       "era": "House of Emily · Arrival",
       "lore": "<p>“Welcome to Shangri-La, Doctor Hamlin.” The hotel sign says <em>Est. 1937</em>.</p><p>It is not on any map. Five years of tunnelling below it has built the most advanced laboratory facility in existence. Seventy-five of the greatest minds on Earth are already inside.</p><p>Eli Wells is waiting in the ballroom.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-12,-14": {
       "type": "house_interior",
@@ -451,13 +693,16 @@
       "emoji": "⛰️",
       "era": "House of Emily · The Sprint",
       "lore": "<p>Jake clears the log in a single bound. His heels are already bleeding inside his boots. The Lee-Enfield is warm in his hand from the first shot.</p><p>Below, between the trees, his son is running for his life.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-11,-14": {
       "type": "house_interior",
@@ -465,13 +710,16 @@
       "emoji": "💧",
       "era": "House of Emily · The Muzzle",
       "lore": "<p>The water is loud. The muzzle of the rifle is pressed against Emily’s forehead.</p><p>Maisie shrieks. Jake does not turn to her. He cannot afford to look away.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-10,-14": {
       "type": "house_interior",
@@ -479,13 +727,16 @@
       "emoji": "💵",
       "era": "House of Emily · The Letter",
       "lore": "<p>A cheque, enclosed with a typed letter signed only <em>E.</em> Not an advance on wages. A gift.</p><p><em>Spend this money on whatever you see as the best investment in the future of humanity.</em></p><p>Richard says it is insane. Marcus has already decided.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-9,-14": {
       "type": "house_interior",
@@ -493,13 +744,16 @@
       "emoji": "🍽️",
       "era": "House of Emily · Ally’s First Glance",
       "lore": "<p>The empty buffet mess hall of Shangri-La. Seventy-five scientists, chosen with no second choices. Marcus sits alone with his back to the wall.</p><p>Across the room, a woman with green eyes is watching him. He does not know her name yet.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-8,-14": {
       "type": "house_interior",
@@ -507,13 +761,16 @@
       "emoji": "😠",
       "era": "House of Emily · The Rival",
       "lore": "<p>The pompous slander campaign had begun three days before Marcus arrived. Cooper had hated him from print alone.</p><p>Marcus waved at him with exaggerated friendliness. Cooper did not wave back.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-7,-14": {
       "type": "house_interior",
@@ -521,13 +778,16 @@
       "emoji": "🎓",
       "era": "House of Emily · Eli’s Speech",
       "lore": "<p>“I have tried to create the ultimate conditions in which to perform miracles of science. Now, with you all here, we have the minds. Seventy-five of the greatest minds on Earth. I say that with no equivocation.”</p><p>Eli’s voice carries better than his frame would suggest.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-12,-15": {
       "type": "house_interior",
@@ -535,13 +795,16 @@
       "emoji": "🚪",
       "era": "House of Emily · The Glow in the Cracks",
       "lore": "<p>A faint blue-white light leaks through the wood. Nimrod is a statue. The children are already on the loft ladder.</p><p>Jake takes two long strides and kicks the door wide.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-11,-15": {
       "type": "house_interior",
@@ -549,13 +812,16 @@
       "emoji": "🔫",
       "era": "House of Emily · The Buried Tube",
       "lore": "<p>Ten paces due west of the boulder. A long steel rod, hidden in the pebbles. A narrow pipe buried vertically in the earth.</p><p>Inside: a Lee-Enfield, an unstrung bow, a quiver, a bandolier of a hundred cartridges. Xan had known, before the end, what her son would need.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-10,-15": {
       "type": "house_interior",
@@ -563,13 +829,16 @@
       "emoji": "💕",
       "era": "House of Emily · Marcus and Ally",
       "lore": "<p>Their mental intercourse was as ardent as their lovemaking, and like a pair of teenagers they had to employ all their will to tear themselves apart each night.</p><p>Ally asks the question, at last: <em>If there is a God… why do you suppose he bothered?</em></p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-9,-15": {
       "type": "house_interior",
@@ -577,13 +846,16 @@
       "emoji": "🎹",
       "era": "House of Emily · The Debussy Piece",
       "lore": "<p><em>The Girl with the Flaxen Hair.</em> Emily had asked Marcus once, across a room, what <em>flaxen</em> meant.</p><p>He had told her, and the piano had played on, and neither of them had known it was being remembered for thirty more years.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-8,-15": {
       "type": "house_interior",
@@ -591,13 +863,16 @@
       "emoji": "🎄",
       "era": "House of Emily · Colorado Blue Spruce",
       "lore": "<p>The biggest Marcus had ever seen. Reaching from floor to ceiling, through the centre of a crystal chandelier. Red and gold and blue baubles. Full-sized dolls of angels, shepherds, kings.</p><p>Eli had spared no expense. Eli had never once in his life needed to.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-7,-15": {
       "type": "house_interior",
@@ -605,13 +880,16 @@
       "emoji": "📸",
       "era": "House of Emily · Ally in Parallax",
       "lore": "<p>Her face. Her pregnant belly. The sun of a new Australian continent behind her.</p><p>Marcus stares at the photograph for ten minutes. His cheeks ache.</p><p>Then he notices the feeling inside him, and it is pain.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-12,-16": {
       "type": "house_interior",
@@ -619,13 +897,16 @@
       "emoji": "🐘",
       "era": "House of Emily · Maisie’s Carving",
       "lore": "<p>Made of elephant tusk. Carved by someone whose hands had known an animal that died before Maisie was born.</p><p>On its face, the broken spears where the tusks used to be. <em>What happened to this elephant’s tusks?</em></p><p>The carving was taken, and Maisie with it.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-11,-16": {
       "type": "house_interior",
@@ -633,13 +914,16 @@
       "emoji": "🔷",
       "era": "House of Emily · LAX Remembered",
       "lore": "<p>Hands of brilliant white-blue light. A silver cube. A gold coin with a picture of a bear. Cyrillic script.</p><p>Marcus had dreamed this. Marcus had dreamed this exactly.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-10,-16": {
       "type": "house_interior",
@@ -647,13 +931,16 @@
       "emoji": "✨",
       "era": "House of Emily · Undiminished",
       "lore": "<p>The sparkle of her sharp blue eyes, the bottomless black of their centres. The breeze. The gesture. The green dress.</p><p>As the world fell into murky grey, she stood luminescent, in full clarity: <em>unextinguished; undiminished</em>.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-9,-16": {
       "type": "house_interior",
@@ -661,13 +948,16 @@
       "emoji": "🙏",
       "era": "House of Emily · At the Cave’s Mouth",
       "lore": "<p>Jake kneels at the entrance of the cave. He makes the oath a father makes when there is nothing else left to give.</p><p>Some oaths outlive the people who make them.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-8,-16": {
       "type": "house_interior",
@@ -675,13 +965,16 @@
       "emoji": "🕊️",
       "era": "House of Emily · What Marcus Realised",
       "lore": "<p>In Eli’s apartment, alone, Marcus reads the truth of the Daedalus philosophy. Jupiter’s Landing. The resource-based utopia. The placation of the craven with whatsoever they desire.</p><p><em>Eli is a fucking techno-communist.</em></p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-7,-16": {
       "type": "house_interior",
@@ -689,109 +982,2790 @@
       "emoji": "🔥",
       "era": "House of Emily · Climax",
       "lore": "<p>Delacroix’s last words, recorded a month before his own disappearance, played from a laptop Marcus did not know he had kept.</p><p><em>Carry the flame. Carry the fire. Keep it alive.</em></p><p>The words are no longer spoken only to Marcus. They are spoken to you.</p>",
-      "house_id": "emily",
+      "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
-      }
+      },
+      "house_letter": "A",
+      "house_color": "#C9A84C",
+      "house_sector": "SW"
     },
     "-3,-4": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 7
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-4,-4": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 8
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-4,-5": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 9
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-5,-5": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 10
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-5,-6": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 11
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-6,-6": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 12
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-6,-7": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 13
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-7,-7": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 14
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-7,-8": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 15
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-8,-8": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 16
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-8,-9": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 17
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-9,-9": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 18
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-9,-10": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 19
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-10,-10": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 20
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-10,-11": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 21
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
     },
     "-10,-12": {
       "type": "empty",
       "on_path": [
-        "emily"
-      ]
+        "emily",
+        "A"
+      ],
+      "path_step": {
+        "A": 22
+      },
+      "path_colors": {
+        "A": "#C9A84C"
+      }
+    },
+    "-16,-3": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-16,-2": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-16,-1": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-16,0": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-16,1": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-16,2": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-15,-3": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-15,-2": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-15,-1": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-15,0": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-15,1": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-15,2": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-14,-3": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-14,-2": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-14,-1": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-14,0": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-14,1": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-14,2": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-13,-3": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-13,-2": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-13,-1": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-13,0": {
+      "type": "house_front_door",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 13
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
+    },
+    "-13,1": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-13,2": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "house_sector": "W"
+    },
+    "-16,12": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-16,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-16,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-16,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-15,12": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-15,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-15,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-15,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-14,12": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-14,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-14,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-14,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-13,12": {
+      "type": "house_front_door",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 13
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
+    },
+    "-13,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-13,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-13,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "c",
+      "house_letter": "C",
+      "house_color": "#7B5EA7",
+      "house_sector": "NW"
+    },
+    "-4,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-4,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-4,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-4,16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-3,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-3,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-3,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-3,16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-2,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-2,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-2,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-2,16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-1,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-1,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-1,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "-1,16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "0,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "0,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "0,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "0,16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "1,13": {
+      "type": "house_front_door",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 11
+      },
+      "path_colors": {
+        "D": "#5B9AB8"
+      }
+    },
+    "1,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "1,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "1,16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "2,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "2,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "2,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "2,16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "3,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "3,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "3,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "3,16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "4,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "4,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "4,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "4,16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "d",
+      "house_letter": "D",
+      "house_color": "#5B9AB8",
+      "house_sector": "N"
+    },
+    "12,11": {
+      "type": "house_front_door",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 13
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
+    },
+    "12,12": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "12,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "12,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "12,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "13,11": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "13,12": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "13,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "13,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "13,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "14,11": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "14,12": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "14,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "14,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "14,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "15,11": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "15,12": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "15,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "15,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "15,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "16,11": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "16,12": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "16,13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "16,14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "16,15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232",
+      "house_sector": "NE"
+    },
+    "13,1": {
+      "type": "house_front_door",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 14
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
+    },
+    "13,2": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "13,3": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "13,4": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "14,1": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "14,2": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "14,3": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "14,4": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "15,1": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "15,2": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "15,3": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "15,4": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "16,1": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "16,2": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "16,3": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "16,4": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "f",
+      "house_letter": "F",
+      "house_color": "#A86A32",
+      "house_sector": "E"
+    },
+    "9,-16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "9,-15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "9,-14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "9,-13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "10,-16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "10,-15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "10,-14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "10,-13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "11,-16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "11,-15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "11,-14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "11,-13": {
+      "type": "house_front_door",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 13
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
+    },
+    "12,-16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "12,-15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "12,-14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "12,-13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "13,-16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "13,-15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "13,-14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "13,-13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "14,-16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "14,-15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "14,-14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "14,-13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "g",
+      "house_letter": "G",
+      "house_color": "#2D8888",
+      "house_sector": "SE"
+    },
+    "-2,-16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "-2,-15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "-2,-14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "-2,-13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "-1,-16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "-1,-15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "-1,-14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "-1,-13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "0,-16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "0,-15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "0,-14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "0,-13": {
+      "type": "house_front_door",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S",
+      "on_path": [
+        "H"
+      ],
+      "path_step": {
+        "H": 6
+      },
+      "path_colors": {
+        "H": "#5C2D82"
+      }
+    },
+    "1,-16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "1,-15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "1,-14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "1,-13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "2,-16": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "2,-15": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "2,-14": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "2,-13": {
+      "type": "house_interior",
+      "name": null,
+      "emoji": null,
+      "era": null,
+      "lore": null,
+      "house_id": "h",
+      "house_letter": "H",
+      "house_color": "#5C2D82",
+      "house_sector": "S"
+    },
+    "-4,1": {
+      "type": "empty",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 4
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
+    },
+    "-5,1": {
+      "type": "empty",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 5
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
+    },
+    "-6,1": {
+      "type": "empty",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 6
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
+    },
+    "-7,1": {
+      "type": "empty",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 7
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
+    },
+    "-8,1": {
+      "type": "empty",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 8
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
+    },
+    "-9,1": {
+      "type": "empty",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 9
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
+    },
+    "-10,1": {
+      "type": "empty",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 10
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
+    },
+    "-11,1": {
+      "type": "empty",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 11
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
+    },
+    "-12,1": {
+      "type": "empty",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 12
+      },
+      "path_colors": {
+        "B": "#4A7C59"
+      }
+    },
+    "-4,3": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 4
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
+    },
+    "-5,4": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 5
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
+    },
+    "-6,5": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 6
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
+    },
+    "-7,6": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 7
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
+    },
+    "-8,7": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 8
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
+    },
+    "-9,8": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 9
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
+    },
+    "-10,9": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 10
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
+    },
+    "-11,10": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 11
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
+    },
+    "-12,11": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 12
+      },
+      "path_colors": {
+        "C": "#7B5EA7"
+      }
+    },
+    "3,4": {
+      "type": "empty",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 2
+      },
+      "path_colors": {
+        "D": "#5B9AB8"
+      }
+    },
+    "3,5": {
+      "type": "empty",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 3
+      },
+      "path_colors": {
+        "D": "#5B9AB8"
+      }
+    },
+    "3,6": {
+      "type": "empty",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 4
+      },
+      "path_colors": {
+        "D": "#5B9AB8"
+      }
+    },
+    "3,7": {
+      "type": "empty",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 5
+      },
+      "path_colors": {
+        "D": "#5B9AB8"
+      }
+    },
+    "3,8": {
+      "type": "empty",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 6
+      },
+      "path_colors": {
+        "D": "#5B9AB8"
+      }
+    },
+    "3,9": {
+      "type": "empty",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 7
+      },
+      "path_colors": {
+        "D": "#5B9AB8"
+      }
+    },
+    "2,10": {
+      "type": "empty",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 8
+      },
+      "path_colors": {
+        "D": "#5B9AB8"
+      }
+    },
+    "1,11": {
+      "type": "empty",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 9
+      },
+      "path_colors": {
+        "D": "#5B9AB8"
+      }
+    },
+    "1,12": {
+      "type": "empty",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 10
+      },
+      "path_colors": {
+        "D": "#5B9AB8"
+      }
+    },
+    "4,2": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 4
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
+    },
+    "5,3": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 5
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
+    },
+    "6,4": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 6
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
+    },
+    "7,5": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 7
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
+    },
+    "8,6": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 8
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
+    },
+    "9,7": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 9
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
+    },
+    "10,8": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 10
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
+    },
+    "11,9": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 11
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
+    },
+    "12,10": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 12
+      },
+      "path_colors": {
+        "E": "#A83232"
+      }
+    },
+    "4,-1": {
+      "type": "empty",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 4
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
+    },
+    "5,-1": {
+      "type": "empty",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 5
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
+    },
+    "6,-1": {
+      "type": "empty",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 6
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
+    },
+    "7,-1": {
+      "type": "empty",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 7
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
+    },
+    "8,-1": {
+      "type": "empty",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 8
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
+    },
+    "9,0": {
+      "type": "empty",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 9
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
+    },
+    "10,0": {
+      "type": "empty",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 10
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
+    },
+    "11,0": {
+      "type": "empty",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 11
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
+    },
+    "12,0": {
+      "type": "empty",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 12
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
+    },
+    "13,0": {
+      "type": "empty",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 13
+      },
+      "path_colors": {
+        "F": "#A86A32"
+      }
+    },
+    "4,-4": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 4
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
+    },
+    "5,-5": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 5
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
+    },
+    "6,-6": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 6
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
+    },
+    "7,-7": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 7
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
+    },
+    "8,-8": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 8
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
+    },
+    "9,-9": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 9
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
+    },
+    "10,-10": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 10
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
+    },
+    "11,-11": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 11
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
+    },
+    "11,-12": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 12
+      },
+      "path_colors": {
+        "G": "#2D8888"
+      }
+    },
+    "0,-7": {
+      "type": "empty",
+      "on_path": [
+        "H"
+      ],
+      "path_step": {
+        "H": 0
+      },
+      "path_colors": {
+        "H": "#5C2D82"
+      }
+    },
+    "0,-8": {
+      "type": "empty",
+      "on_path": [
+        "H"
+      ],
+      "path_step": {
+        "H": 1
+      },
+      "path_colors": {
+        "H": "#5C2D82"
+      }
+    },
+    "0,-9": {
+      "type": "empty",
+      "on_path": [
+        "H"
+      ],
+      "path_step": {
+        "H": 2
+      },
+      "path_colors": {
+        "H": "#5C2D82"
+      }
+    },
+    "0,-10": {
+      "type": "empty",
+      "on_path": [
+        "H"
+      ],
+      "path_step": {
+        "H": 3
+      },
+      "path_colors": {
+        "H": "#5C2D82"
+      }
+    },
+    "0,-11": {
+      "type": "empty",
+      "on_path": [
+        "H"
+      ],
+      "path_step": {
+        "H": 4
+      },
+      "path_colors": {
+        "H": "#5C2D82"
+      }
+    },
+    "0,-12": {
+      "type": "empty",
+      "on_path": [
+        "H"
+      ],
+      "path_step": {
+        "H": 5
+      },
+      "path_colors": {
+        "H": "#5C2D82"
+      }
     }
   },
   "questions": {
@@ -1163,7 +4137,7 @@
     }
   },
   "paths": {
-    "emily": [
+    "A": [
       [
         0,
         0
@@ -1260,6 +4234,380 @@
         -10,
         -13
       ]
+    ],
+    "B": [
+      [
+        0,
+        0
+      ],
+      [
+        -1,
+        0
+      ],
+      [
+        -2,
+        0
+      ],
+      [
+        -3,
+        0
+      ],
+      [
+        -4,
+        1
+      ],
+      [
+        -5,
+        1
+      ],
+      [
+        -6,
+        1
+      ],
+      [
+        -7,
+        1
+      ],
+      [
+        -8,
+        1
+      ],
+      [
+        -9,
+        1
+      ],
+      [
+        -10,
+        1
+      ],
+      [
+        -11,
+        1
+      ],
+      [
+        -12,
+        1
+      ],
+      [
+        -13,
+        0
+      ]
+    ],
+    "C": [
+      [
+        0,
+        0
+      ],
+      [
+        -1,
+        1
+      ],
+      [
+        -2,
+        1
+      ],
+      [
+        -3,
+        2
+      ],
+      [
+        -4,
+        3
+      ],
+      [
+        -5,
+        4
+      ],
+      [
+        -6,
+        5
+      ],
+      [
+        -7,
+        6
+      ],
+      [
+        -8,
+        7
+      ],
+      [
+        -9,
+        8
+      ],
+      [
+        -10,
+        9
+      ],
+      [
+        -11,
+        10
+      ],
+      [
+        -12,
+        11
+      ],
+      [
+        -13,
+        12
+      ]
+    ],
+    "D": [
+      [
+        3,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        3,
+        8
+      ],
+      [
+        3,
+        9
+      ],
+      [
+        2,
+        10
+      ],
+      [
+        1,
+        11
+      ],
+      [
+        1,
+        12
+      ],
+      [
+        1,
+        13
+      ]
+    ],
+    "E": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        9,
+        7
+      ],
+      [
+        10,
+        8
+      ],
+      [
+        11,
+        9
+      ],
+      [
+        12,
+        10
+      ],
+      [
+        12,
+        11
+      ]
+    ],
+    "F": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        -1
+      ],
+      [
+        4,
+        -1
+      ],
+      [
+        5,
+        -1
+      ],
+      [
+        6,
+        -1
+      ],
+      [
+        7,
+        -1
+      ],
+      [
+        8,
+        -1
+      ],
+      [
+        9,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        11,
+        0
+      ],
+      [
+        12,
+        0
+      ],
+      [
+        13,
+        0
+      ],
+      [
+        13,
+        1
+      ]
+    ],
+    "G": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        2,
+        -2
+      ],
+      [
+        3,
+        -3
+      ],
+      [
+        4,
+        -4
+      ],
+      [
+        5,
+        -5
+      ],
+      [
+        6,
+        -6
+      ],
+      [
+        7,
+        -7
+      ],
+      [
+        8,
+        -8
+      ],
+      [
+        9,
+        -9
+      ],
+      [
+        10,
+        -10
+      ],
+      [
+        11,
+        -11
+      ],
+      [
+        11,
+        -12
+      ],
+      [
+        11,
+        -13
+      ]
+    ],
+    "H": [
+      [
+        0,
+        -7
+      ],
+      [
+        0,
+        -8
+      ],
+      [
+        0,
+        -9
+      ],
+      [
+        0,
+        -10
+      ],
+      [
+        0,
+        -11
+      ],
+      [
+        0,
+        -12
+      ],
+      [
+        0,
+        -13
+      ]
     ]
   },
   "houses": {
@@ -1287,6 +4635,160 @@
         "bg": "rgba(30,50,40,0.22)"
       },
       "entry_music": "La Fille aux Cheveux de Lin — Debussy, 1910 (deferred)"
+    }
+  },
+  "houses_config": {
+    "A": {
+      "color": "#C9A84C",
+      "sector": "SW",
+      "front_door": [
+        -10,
+        -13
+      ],
+      "block": {
+        "x": [
+          -12,
+          -7
+        ],
+        "y": [
+          -16,
+          -13
+        ]
+      },
+      "hidden": false
+    },
+    "B": {
+      "color": "#4A7C59",
+      "sector": "W",
+      "front_door": [
+        -13,
+        0
+      ],
+      "block": {
+        "x": [
+          -16,
+          -13
+        ],
+        "y": [
+          -3,
+          2
+        ]
+      },
+      "hidden": false
+    },
+    "C": {
+      "color": "#7B5EA7",
+      "sector": "NW",
+      "front_door": [
+        -13,
+        12
+      ],
+      "block": {
+        "x": [
+          -16,
+          -13
+        ],
+        "y": [
+          12,
+          15
+        ]
+      },
+      "hidden": false
+    },
+    "D": {
+      "color": "#5B9AB8",
+      "sector": "N",
+      "front_door": [
+        1,
+        13
+      ],
+      "block": {
+        "x": [
+          -4,
+          4
+        ],
+        "y": [
+          13,
+          16
+        ]
+      },
+      "hidden": false
+    },
+    "E": {
+      "color": "#A83232",
+      "sector": "NE",
+      "front_door": [
+        12,
+        11
+      ],
+      "block": {
+        "x": [
+          12,
+          16
+        ],
+        "y": [
+          11,
+          15
+        ]
+      },
+      "hidden": false
+    },
+    "F": {
+      "color": "#A86A32",
+      "sector": "E",
+      "front_door": [
+        13,
+        1
+      ],
+      "block": {
+        "x": [
+          13,
+          16
+        ],
+        "y": [
+          1,
+          4
+        ]
+      },
+      "hidden": false
+    },
+    "G": {
+      "color": "#2D8888",
+      "sector": "SE",
+      "front_door": [
+        11,
+        -13
+      ],
+      "block": {
+        "x": [
+          9,
+          14
+        ],
+        "y": [
+          -16,
+          -13
+        ]
+      },
+      "hidden": false
+    },
+    "H": {
+      "color": "#5C2D82",
+      "sector": "S",
+      "front_door": [
+        0,
+        -13
+      ],
+      "block": {
+        "x": [
+          -2,
+          2
+        ],
+        "y": [
+          -16,
+          -13
+        ]
+      },
+      "hidden": true
     }
   }
 }
