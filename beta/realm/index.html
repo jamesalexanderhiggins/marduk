@@ -635,10 +635,11 @@ function render(x, y) {
   const prevStage = document.getElementById('stage');
   if (prevStage && prevStage._hsCleanup) { prevStage._hsCleanup(); prevStage._hsCleanup = null; }
 
-  // Lock only applies to the quiz path (threshold, quiz, spine, marduk_view).
-  // Normal gateway entry and all content/house tiles are always accessible.
+  // Lock only applies to the quiz corridor: threshold → quiz tiles → spine.
+  // marduk_view is excluded — KUDRAMARDUK routes there directly and must bypass.
+  // Normal gateway entry (content/house/empty tiles) is never affected.
   const tileForLockCheck = getTile(x, y);
-  const quizPathTypes = ['threshold', 'quiz', 'spine', 'marduk_view'];
+  const quizPathTypes = ['threshold', 'quiz', 'spine'];
   if (isLocked() && quizPathTypes.includes(tileForLockCheck.type)) {
     renderLock();
     return;
