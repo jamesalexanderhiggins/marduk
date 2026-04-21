@@ -181,16 +181,26 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 @keyframes breathe{0%,100%{text-shadow:0 0 20px rgba(201,168,76,0.4),0 0 60px rgba(201,168,76,0.1);}50%{text-shadow:0 0 30px rgba(201,168,76,0.7),0 0 80px rgba(201,168,76,0.25);}}
 @keyframes eveBlink{0%,92%,100%{opacity:1;}93%,97%{opacity:0.4;}}
 @keyframes glitchT{0%,100%{transform:translateX(0);}50%{transform:translateX(2px);}}
-/* KUDRAMARDUK mode glow strip */
-#kudraMode{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;
-  height:34px;align-items:center;justify-content:center;
-  background:rgba(4,2,10,0.92);cursor:pointer;
-  border-top:1px solid rgba(192,132,252,0.35);}
+/* KUDRAMARDUK mode badge — top centre, very visible */
+#kudraMode{display:none;position:fixed;top:14px;left:50%;
+  transform:translateX(-50%);z-index:300;
+  align-items:center;gap:10px;
+  background:rgba(4,2,10,0.95);cursor:pointer;
+  border:1px solid rgba(192,132,252,0.55);
+  padding:9px 22px;white-space:nowrap;
+  box-shadow:0 0 24px rgba(192,132,252,0.35),0 0 60px rgba(192,132,252,0.12);}
 #kudraMode.on{display:flex;}
-#kudraMode span{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.42em;
+#kudraMode:hover{border-color:#c084fc;
+  box-shadow:0 0 32px rgba(192,132,252,0.6),0 0 80px rgba(192,132,252,0.25);}
+#kudraMode .km-text{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.4em;
   text-transform:uppercase;
   color:#c084fc;text-shadow:0 0 14px #c084fc,0 0 40px rgba(192,132,252,0.6);
   animation:kudraThob 2.2s ease-in-out infinite;}
+#kudraMode .km-exit{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;
+  text-transform:uppercase;color:rgba(192,132,252,0.55);
+  border:1px solid rgba(192,132,252,0.3);padding:3px 9px;
+  transition:all 0.25s;}
+#kudraMode:hover .km-exit{color:#c084fc;border-color:#c084fc;}
 @keyframes kudraThob{0%,100%{text-shadow:0 0 14px #c084fc,0 0 40px rgba(192,132,252,0.6);}
   50%{text-shadow:0 0 30px #c084fc,0 0 80px rgba(192,132,252,0.9),0 0 120px rgba(192,132,252,0.4);}}
 
@@ -362,7 +372,8 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 <!-- Marduk View overlay -->
 <!-- KUDRAMARDUK mode bar -->
 <div id="kudraMode" class="">
-  <span>✦ KUDRAMARDUK MODE ✦ — click to exit</span>
+  <span class="km-text">✦ KUDRAMARDUK MODE ✦</span>
+  <span class="km-exit">✕ EXIT</span>
 </div>
 <!-- in-site popup -->
 <div id="sitePopup" style="display:none;" class="site-popup">
