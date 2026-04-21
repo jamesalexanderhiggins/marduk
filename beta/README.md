@@ -1,4 +1,4 @@
-# Marduk's Map — v4.0 Informational Realm
+# Marduk's Map — v4.2 Informational Realm
 
 A web-based literary maze, map, and sanctum built around the novels of James Alexander Higgins (The Ghosts of Men trilogy, and the wider Mardukverse).
 
@@ -55,11 +55,24 @@ Paths used by the homepage for images:
   - Three Tier III resets → 12-hour session lock
 - Correct answer through Q10 auto-unlocks the Marduk View and funnels through the Spine tile
 
-**Marduk View** (reward at (0, +1))
-- Zoomable, pannable honeycomb visualisation of the full grid
-- Click a cell to jump to that tile
-- Emojis for every named tile
-- KUDRAMARDUK overlay adds gold-thread path layer showing route to HOUSE OF EMILY
+**Marduk View** (reward at (0, +1)) — game-like interactive world map
+- **Touch-native** input using dedicated `touchstart`/`touchmove`/`touchend` handlers (not Pointer Events — those are flakey in iOS Safari)
+- **Kinetic panning**: flick with your finger and the map keeps moving, decelerating smoothly (velocity decay + minimum-threshold stop)
+- **Smooth eased zoom**: zoom animates to the target value over several frames rather than snapping, driven by a continuous `requestAnimationFrame` loop
+- **Pinch-to-zoom** anchored on the pinch midpoint — the point between your fingers stays fixed under them, no drift
+- **Double-tap to zoom** in ~1.8× centred on the tap point
+- **Single tap** on a cell slides up an info panel (name, era, coords, tags, lore excerpt)
+- **Second tap on the same cell** travels there, or use the Travel button in the panel
+- **Tap ripple** feedback (gold ring expanding from the tap point)
+- **Selected cell** pulses with a dual-ring gold halo so you can still see your selection while panning
+- **Big default cells** (radius 24px at zoom 1×, rendered at zoom 1.8× by default = ~43px) — feels like a strategy map, not a minimap
+- **Progressive detail on zoom**: far = coloured cells only, mid = + emojis, near = + tile names
+- **Rim glow breathing** on important tiles (Home, Marduk View, Front Door) — subtle life in the grid
+- **Parallax background wash** shifts with the offset as you pan, giving depth
+- **Zoom +/- and recentre** buttons in the header; recentre snaps back to (0,0) at default zoom and clears selection
+- **Gated tiles** (Marduk View before quiz solved, out-of-sequence quiz rooms) show a disabled Travel button with the reason
+- **KUDRAMARDUK overlay** adds a glowing gold-thread path layer showing the route to HOUSE OF EMILY
+- `Esc` closes the view on desktop
 
 **Inner Rings 1–3** (48 tiles minus the 10 quiz tiles = 38 content tiles)
 - All populated with Book I source material
@@ -121,4 +134,4 @@ location.reload();
 
 ## Version
 
-v4.0.0 · 21 April 2026
+v4.2.0 · 21 April 2026
