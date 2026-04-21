@@ -181,6 +181,41 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 @keyframes breathe{0%,100%{text-shadow:0 0 20px rgba(201,168,76,0.4),0 0 60px rgba(201,168,76,0.1);}50%{text-shadow:0 0 30px rgba(201,168,76,0.7),0 0 80px rgba(201,168,76,0.25);}}
 @keyframes eveBlink{0%,92%,100%{opacity:1;}93%,97%{opacity:0.4;}}
 @keyframes glitchT{0%,100%{transform:translateX(0);}50%{transform:translateX(2px);}}
+/* KUDRAMARDUK mode glow strip */
+#kudraMode{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;
+  height:34px;align-items:center;justify-content:center;
+  background:rgba(4,2,10,0.92);cursor:pointer;
+  border-top:1px solid rgba(192,132,252,0.35);}
+#kudraMode.on{display:flex;}
+#kudraMode span{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.42em;
+  text-transform:uppercase;
+  color:#c084fc;text-shadow:0 0 14px #c084fc,0 0 40px rgba(192,132,252,0.6);
+  animation:kudraThob 2.2s ease-in-out infinite;}
+@keyframes kudraThob{0%,100%{text-shadow:0 0 14px #c084fc,0 0 40px rgba(192,132,252,0.6);}
+  50%{text-shadow:0 0 30px #c084fc,0 0 80px rgba(192,132,252,0.9),0 0 120px rgba(192,132,252,0.4);}}
+
+/* In-site popup */
+.site-popup{position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;}
+.site-popup-inner{background:var(--bg2);border:1px solid rgba(192,132,252,0.4);
+  padding:42px 48px;max-width:440px;text-align:center;}
+.site-popup-title{font-family:'Cinzel Decorative',serif;font-size:22px;
+  color:#c084fc;text-shadow:0 0 20px rgba(192,132,252,0.7);margin-bottom:16px;}
+.site-popup-body{font-family:'EB Garamond',serif;font-size:16px;font-style:italic;
+  color:var(--text-dim);line-height:1.65;margin-bottom:28px;}
+.site-popup-btns{display:flex;gap:14px;justify-content:center;}
+.site-popup-btn{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;
+  text-transform:uppercase;padding:12px 28px;cursor:pointer;border:none;
+  transition:all 0.25s;}
+.site-popup-btn.primary{background:rgba(192,132,252,0.85);color:#0a0010;}
+.site-popup-btn.primary:hover{background:#c084fc;}
+.site-popup-btn.secondary{background:transparent;color:var(--dim);
+  border:1px solid rgba(192,132,252,0.25);}
+.site-popup-btn.secondary:hover{border-color:#c084fc;color:#c084fc;}
+
+/* MV close button — left side */
+#mvClose{margin-left:auto;}
+
 
 /* ── Path tile renderer ───────────────────────── */
 .pt-root{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
@@ -325,6 +360,19 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 <div class="nav-arrows" id="navArrows"></div>
 
 <!-- Marduk View overlay -->
+<!-- KUDRAMARDUK mode bar -->
+<div id="kudraMode" class="">
+  <span>✦ KUDRAMARDUK MODE ✦ — click to exit</span>
+</div>
+<!-- in-site popup -->
+<div id="sitePopup" style="display:none;" class="site-popup">
+  <div class="site-popup-inner">
+    <div class="site-popup-title" id="popupTitle"></div>
+    <div class="site-popup-body" id="popupBody"></div>
+    <div class="site-popup-btns" id="popupBtns"></div>
+  </div>
+</div>
+
 <div id="mv-stage">
   <div id="mv-header">
     <div>
@@ -635,58 +683,71 @@ function getDoors(x, y) {
       continue;
     }
 
-    /* Path guard — sequential entry enforcement.
-     * Exiting a path tile: always free (any direction).
-     * Entering a path tile: you must be the immediately preceding tile
-     * in that path's sequence. Step 0 (entrance) is always open.
-     * KUDRAMARDUK holders bypass the guard (can teleport via MV). */
-    if (neighbour.on_path && neighbour.on_path.length > 0 && REALM && REALM.paths) {
+    /* Path guard — skip-over rule.
+     * Walking into a path tile from the wrong direction skips OVER it
+     * to the tile beyond, rather than blocking.  The path itself is
+     * still a tunnel: you just pass through without entering it.
+     * Step-0 (entrance) tiles of every path are always enterable.
+     * KUDRAMARDUK mode bypasses the guard entirely. */
+    if (neighbour.on_path && neighbour.on_path.length > 0 && REALM && REALM.paths
+        && !isKudraUnlocked()) {
       let anyPathAllows = false;
       for (const pid of neighbour.on_path) {
         const seq = REALM.paths[pid];
         if (!seq) continue;
         const nIdx = seq.findIndex(pt => pt[0] === nx && pt[1] === ny);
-        if (nIdx <= 0) { anyPathAllows = true; break; } // entrance tile: open
+        if (nIdx <= 0) { anyPathAllows = true; break; }
+        // Allow if coming from the true predecessor OR successor (walk both ways)
         const pred = seq[nIdx - 1];
-        if (pred[0] === x && pred[1] === y) { anyPathAllows = true; break; }
+        const succ = nIdx + 1 < seq.length ? seq[nIdx + 1] : null;
+        if ((pred[0] === x && pred[1] === y) ||
+            (succ && succ[0] === x && succ[1] === y)) {
+          anyPathAllows = true; break;
+        }
+        // Also allow if the CURRENT tile is at step 0 of this path
+        // (i.e. we are the path entrance and entering step 1)
+        const curStep = (tile.path_step || {})[pid];
+        if (curStep === 0) { anyPathAllows = true; break; }
       }
       if (!anyPathAllows) {
-        out[d] = {sealed: true, reason: 'path-guard'};
+        // Skip over the path tile to the one beyond in the same direction
+        const skipX = nx + v.dx, skipY = ny + v.dy;
+        if (inBounds(skipX, skipY)) {
+          out[d] = {open: true, skip_to: [skipX, skipY]};
+        }
+        // No arrow if skip target is out of bounds
         continue;
       }
     }
 
-    /* ── Locked zone gate ──────────────────────────────
-     * Can only enter a zone through its threshold tile (with required keys).
-     * Zone interior tiles sealed on the perimeter.
-     * Exiting a zone: always allowed (any direction from threshold). */
+    /* Zone wall — skip-over rule.
+     * Approaching a zone boundary without keys or from the wrong side
+     * skips to the tile beyond the zone.  No lock screen is shown. */
     const tileInZone = !!tile.zone_id;
     const nbInZone   = !!neighbour.zone_id;
-    if (tileInZone && !nbInZone) {
-      // Exiting zone: only from threshold tile
-      if (tile.type !== 'locked_zone_threshold') {
-        out[d] = {sealed: true, reason: 'zone-wall'};
-        continue;
-      }
-      // Threshold can exit freely
-    } else if (!tileInZone && nbInZone) {
-      // Entering zone from outside
-      if (neighbour.type === 'locked_zone_threshold') {
+    if (!tileInZone && nbInZone) {
+      if (neighbour.type === 'locked_zone_threshold' && isKudraUnlocked()) {
+        // KUDRAMARDUK — let through, fall to default open
+      } else if (neighbour.type === 'locked_zone_threshold') {
         const needed = neighbour.keys_required || [];
-        if (needed.length > 0 && !hasAllKeys(needed)) {
-          out[d] = {sealed: true, reason: 'key-locked', keys_needed: needed};
+        if (!hasAllKeys(needed)) {
+          const skipX = nx + v.dx, skipY = ny + v.dy;
+          if (inBounds(skipX, skipY)) out[d] = {open: true, skip_to: [skipX, skipY]};
           continue;
         }
-        // Has keys — fall through to open
       } else {
-        // Zone interior: no entry from outside except through threshold
-        out[d] = {sealed: true, reason: 'zone-wall'};
+        // Perimeter interior — skip over
+        const skipX = nx + v.dx, skipY = ny + v.dy;
+        if (inBounds(skipX, skipY)) out[d] = {open: true, skip_to: [skipX, skipY]};
         continue;
       }
-    } else if (tileInZone && nbInZone && tile.zone_id !== neighbour.zone_id) {
-      // Different zones adjacent — treat as wall
-      out[d] = {sealed: true, reason: 'zone-wall'};
-      continue;
+    } else if (tileInZone && !nbInZone) {
+      if (tile.type !== 'locked_zone_threshold' && !isKudraUnlocked()) {
+        // Can't exit zone interior tiles sideways
+        const skipX = nx + v.dx, skipY = ny + v.dy;
+        if (inBounds(skipX, skipY)) out[d] = {open: true, skip_to: [skipX, skipY]};
+        continue;
+      }
     }
 
     /* Default open — mark as on-path for visual thread rendering */
@@ -727,31 +788,7 @@ function pathGuardOk(x, y) {
   return false;
 }
 
-/* Error overlay for illegal path entry — ejects after 2s */
-function showPathError(onComplete) {
-  const ov = document.createElement('div');
-  ov.style.cssText =
-    'position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.9);'
-    +'display:flex;flex-direction:column;align-items:center;justify-content:center;'
-    +'animation:hsFadeIn 0.25s ease;';
-  ov.innerHTML = `
-    <div style="font-family:'Cinzel Decorative',serif;
-      font-size:clamp(22px,4vw,46px);color:var(--ember);
-      text-shadow:0 0 40px rgba(255,107,43,0.9);
-      letter-spacing:0.12em;margin-bottom:18px;
-      animation:shake 0.45s ease;">THIS WAY IS SEALED</div>
-    <div style="font-family:'EB Garamond',serif;font-size:clamp(14px,1.6vw,18px);
-      font-style:italic;color:rgba(228,220,203,0.65);
-      max-width:440px;text-align:center;line-height:1.65;">
-      A path cannot be entered from the side. Find where it begins.
-    </div>`;
-  document.body.appendChild(ov);
-  setTimeout(() => {
-    ov.style.transition = 'opacity 0.5s';
-    ov.style.opacity = '0';
-    setTimeout(() => { ov.remove(); onComplete(); }, 500);
-  }, 1900);
-}
+/* showPathError removed — skip-over used instead */
 
 function goTo(x, y, delay) {
   delay = delay || 0;
@@ -886,27 +923,10 @@ function renderEmpty(s, x, y, tile) {
   // Use a neutral starfield
   const ring = Math.max(Math.abs(x), Math.abs(y));
   const hue = 200 + Math.floor(Math.cos((Math.atan2(y, x))) * 30);
-  // Path colour tinting if on a path
-  const _tileE = getTile(x, y);
-  if (_tileE.on_path && _tileE.on_path.length > 0 && _tileE.path_colors) {
-    const _pid = _tileE.on_path[0];
-    const _pc  = _tileE.path_colors[_pid] || '#c9a84c';
-    // Convert hex to rgb for star colour
-    const _pr = parseInt(_pc.slice(1,3),16), _pg = parseInt(_pc.slice(3,5),16), _pb = parseInt(_pc.slice(5,7),16);
-    initStars({count: 140, color: `${_pr},${_pg},${_pb}`, speed: 0.012});
-    startParticles({colors: [_pc+'44', _pc+'22'], min: 1, max: 2, speed: 6});
-    document.body.style.background = `radial-gradient(ellipse at center,rgba(${_pr},${_pg},${_pb},0.12),var(--bg) 80%)`;
-  } else if (_tileE.zone_id) {
-    const _zc = (_tileE.zone_color || '#555555');
-    const _zr = parseInt(_zc.slice(1,3),16), _zg = parseInt(_zc.slice(3,5),16), _zb = parseInt(_zc.slice(5,7),16);
-    initStars({count: 130, color: `${_zr},${_zg},${_zb}`, speed: 0.014});
-    startParticles({colors: [_zc+'55', _zc+'33'], min: 1, max: 2, speed: 6});
-    document.body.style.background = `radial-gradient(ellipse at center,rgba(${_zr},${_zg},${_zb},0.14),var(--bg) 80%)`;
-  } else {
-    initStars({count: 120, color: `${hue-20},${hue},${hue+20}`, speed: 0.015});
-    startParticles({colors: ['#c9a84c33', '#7eb8d422'], min: 1, max: 2, speed: 7});
-    document.body.style.background = `radial-gradient(ellipse at center,rgba(20,25,35,${0.1 + ring*0.01}),var(--bg) 80%)`;
-  }
+  // Empty tile: pure black + dense starfield (travelling through deep space)
+  document.body.style.background = '#000000';
+  initStars({count: 320, color: '220,220,230', speed: 0.022});
+  startParticles({colors: [], min: 0, max: 0, speed: 0}); // no particles, just stars
 }
 
 function renderPathTile(s, x, y, tile) {
@@ -1171,14 +1191,19 @@ function renderNavArrows(x, y) {
     const door = doors[d.key];
     if (!door) return;
     if (door.sealed) return; // don't render sealed-edge arrows at all
+    // skip_to: arrow navigates to the tile beyond the blocked one
+    const destX = door.skip_to ? door.skip_to[0] : x + d.dx;
+    const destY = door.skip_to ? door.skip_to[1] : x + d.dx === destX ? y + d.dy : y + d.dy;
+    const dX = door.skip_to ? door.skip_to[0] : x + d.dx;
+    const dY = door.skip_to ? door.skip_to[1] : y + d.dy;
     const a = document.createElement('a');
     a.className = 'nav-arrow ' + d.key + (door.path ? ' path' : '');
-    a.href = '#' + encodeXY(x + d.dx, y + d.dy);
+    a.href = '#' + encodeXY(dX, dY);
     a.textContent = d.glyph;
     a.title = `Go ${d.key}`;
     a.addEventListener('click', (ev) => {
       ev.preventDefault();
-      goTo(x + d.dx, y + d.dy);
+      goTo(dX, dY);
     });
     el.appendChild(a);
   });
@@ -1206,7 +1231,7 @@ const MV_ZOOM_HOME = 1.8;          // default zoom on open / recenter
 const MV_ZOOM_EASE = 0.18;         // 0..1 per frame — higher = snappier
 const MV_PAN_DECAY = 0.90;         // velocity decay per frame
 const MV_PAN_STOP  = 0.35;         // below this px/frame, stop
-const MV_TAP_MOVE_PX = 14;         // move threshold for tap vs drag
+const MV_TAP_MOVE_PX = 22;         // move threshold for tap vs drag (raised to avoid accidental nav)
 const MV_TAP_TIME_MS = 320;
 const MV_DBL_TIME_MS = 320;
 const MV_DBL_DIST_PX = 36;
@@ -1231,6 +1256,9 @@ function renderMardukView() {
   document.getElementById('navArrows').innerHTML = '';
   const mv = document.getElementById('mv-stage');
   mv.classList.add('show');
+  // Hide key bar and kudra bar behind MV header
+  const _kb = document.getElementById('keyBar');
+  if (_kb) _kb.style.visibility = 'hidden';
   document.getElementById('mvSub').textContent = isKudraUnlocked()
     ? '· All Rooms · KUDRAMARDUK overlay'
     : '· All Rooms';
@@ -1891,19 +1919,33 @@ function showInfoPanel(tileRef) {
     }
   }
 
+  // Key symbol if in kudra mode
+  const keyBadge = isKudraUnlocked() && info.key_id
+    ? `<div style="font-size:22px;margin-bottom:6px;color:${KEY_DEFS[info.key_id]?.color||'#aaa'}">
+        ${KEY_DEFS[info.key_id]?.sym||''} <span style="font-family:Cinzel,serif;font-size:10px;
+        letter-spacing:0.2em;vertical-align:middle;">${KEY_DEFS[info.key_id]?.name||''}</span>
+       </div>` : '';
+
   panel.innerHTML = `
     <div class="info-head">
       <div class="info-title">${titleText}</div>
       <div class="info-coord">(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})</div>
     </div>
+    ${keyBadge}
     ${info.era ? `<div class="info-era">${info.era}</div>` : ''}
     ${tags.length ? `<div class="info-tags">${tags.map(t => `<span class="info-tag">${t}</span>`).join('')}</div>` : ''}
     ${lore ? `<div class="info-lore">${lore}</div>` : ''}
     <div class="info-actions">
-      <button class="info-travel" ${actionDisabled} onclick="mvTravel(${x},${y})">${actionLabel}</button>
-      <button class="info-dismiss" onclick="mvDismiss()">Dismiss</button>
+      <button class="info-travel" id="mvTravelBtn" ${actionDisabled}>${actionLabel}</button>
+      <button class="info-dismiss" id="mvDismissBtn">Dismiss</button>
     </div>`;
   panel.classList.add('show');
+
+  // Wire buttons with event listeners (not onclick — avoids scope issues)
+  const tb = panel.querySelector('#mvTravelBtn');
+  if (tb && !actionDisabled) tb.addEventListener('click', () => travelFromMV(x, y));
+  const db = panel.querySelector('#mvDismissBtn');
+  if (db) db.addEventListener('click', () => { mvSelected=null; hideInfoPanel(); });
 }
 
 function hideInfoPanel() {
@@ -1937,13 +1979,55 @@ window.addEventListener('resize', () => {
 
 document.getElementById('mvClose').addEventListener('click', () => {
   document.getElementById('mv-stage').classList.remove('show');
+  const _kb2 = document.getElementById('keyBar');
+  if (_kb2) _kb2.style.visibility = 'visible';
   if (mvRaf) { cancelAnimationFrame(mvRaf); mvRaf = null; }
   goTo(0, 0);
 });
 /* ── Keyboard nav ─────────────────────────────── */
 document.addEventListener('keydown', (ev) => {
   if (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA') return;
-  // If Marduk View open, close on Esc
+  const mvOpen = document.getElementById('mv-stage').classList.contains('show');
+
+  // MV open: arrow keys move selected tile, Enter travels, Esc closes
+  if (mvOpen) {
+    if (ev.key === 'Escape') {
+      document.getElementById('mv-stage').classList.remove('show');
+      const _kb3 = document.getElementById('keyBar');
+      if (_kb3) _kb3.style.visibility = 'visible';
+      if (mvRaf) { cancelAnimationFrame(mvRaf); mvRaf = null; }
+      goTo(0, 0);
+      return;
+    }
+    const mvArrowMap = {ArrowUp:[0,1],ArrowDown:[0,-1],ArrowLeft:[-1,0],ArrowRight:[1,0]};
+    if (mvArrowMap[ev.key] && mvSelected) {
+      ev.preventDefault();
+      const [dx,dy] = mvArrowMap[ev.key];
+      const nx2 = mvSelected.x + dx, ny2 = mvSelected.y + dy;
+      if (inBounds(nx2, ny2)) {
+        mvSelected = {x: nx2, y: ny2};
+        showInfoPanel({x: nx2, y: ny2, info: getTile(nx2, ny2)});
+        // Pan canvas so selected tile is visible
+        const W = mvWrapEl ? mvWrapEl.clientWidth : window.innerWidth;
+        const H = mvWrapEl ? mvWrapEl.clientHeight : window.innerHeight;
+        const m2 = {r: MV_R*mvZoom, hexW: Math.sqrt(3)*MV_R*mvZoom, hexH: 2*MV_R*mvZoom*0.75};
+        const stagger2 = (ny2 % 2 === 0 ? 0 : m2.hexW/2);
+        const targetPx = nx2 * m2.hexW + stagger2;
+        const targetPy = -ny2 * m2.hexH;
+        mvOffset.x = W/2 - targetPx - W/2;
+        mvOffset.y = H/2 + targetPy - H/2;
+      }
+      return;
+    }
+    if ((ev.key === 'Enter' || ev.key === ' ') && mvSelected) {
+      ev.preventDefault();
+      travelFromMV(mvSelected.x, mvSelected.y);
+      return;
+    }
+    return; // don't process other keys when MV is open
+  }
+
+  // If Marduk View open, close on Esc (fallback)
   if (ev.key === 'Escape') {
     const mv = document.getElementById('mv-stage');
     if (mv.classList.contains('show')) {
