@@ -240,6 +240,14 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 @keyframes ptPulse{0%,100%{text-shadow:0 0 30px var(--pt-color,#C9A84C),0 0 60px var(--pt-color,#C9A84C);}50%{text-shadow:0 0 60px var(--pt-color,#C9A84C),0 0 120px var(--pt-color,#C9A84C),0 0 160px var(--pt-color,#C9A84C);}}
 
 /* ── MAP button (KUDRAMARDUK unlock) ─────────────── */
+#exitKBtn{display:none;position:fixed;top:20px;left:260px;z-index:100;
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(255,107,43,0.85);background:rgba(7,9,16,0.88);
+  border:1px solid rgba(255,107,43,0.35);padding:9px 14px;cursor:pointer;
+  transition:all 0.3s;-webkit-tap-highlight-color:transparent;}
+#exitKBtn.show{display:block;}
+#exitKBtn:hover,#exitKBtn:active{color:#ff6b2b;border-color:#ff6b2b;
+  box-shadow:0 0 16px rgba(255,107,43,0.4);}
 #mapBtn{display:none;position:fixed;top:20px;left:180px;z-index:100;
   font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
   color:rgba(192,132,252,0.8);background:rgba(7,9,16,0.88);
@@ -353,6 +361,34 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
   100%{transform:translateY(var(--dy,-140px)) translateX(var(--dx,10px));opacity:0;}}
 @keyframes hsFadeIn{from{opacity:0;transform:translateX(-50%) translateY(10px);}
   to{opacity:1;transform:translateX(-50%) translateY(0);}}
+
+/* ── Universal tile theme system ────────────────── */
+.tile-root{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:80px 24px;text-align:center;overflow:hidden;}
+/* Object layer — parallax, animates, holds placeholder or future PNG */
+.tile-obj-layer{position:absolute;width:100%;height:100%;
+  pointer-events:none;overflow:hidden;z-index:1;}
+.tile-obj{position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  font-size:clamp(60px,14vw,140px);
+  opacity:0.18;will-change:transform;
+  transition:transform 0.1s ease-out;}
+.tile-obj img{width:100%;height:auto;display:block;
+  filter:blur(2px);opacity:0.55;}
+/* Content sits above object layer */
+.tile-content{position:relative;z-index:2;max-width:600px;}
+/* Per-animation keyframes */
+@keyframes objFloat{0%,100%{transform:translate(-50%,-50%) translateY(0);}
+  50%{transform:translate(-50%,-50%) translateY(-18px);}}
+@keyframes objPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.18;}
+  50%{transform:translate(-50%,-50%) scale(1.12);opacity:0.28;}}
+@keyframes objOrbit{from{transform:translate(-50%,-50%) rotate(0deg) translateX(12px) rotate(0deg);}
+  to{transform:translate(-50%,-50%) rotate(360deg) translateX(12px) rotate(-360deg);}}
+@keyframes objFade{0%,100%{opacity:0.12;}50%{opacity:0.30;}}
+@keyframes objBreathe{
+  0%,100%{filter:blur(2px) drop-shadow(0 0 0px currentColor);opacity:0.18;}
+  50%{filter:blur(1px) drop-shadow(0 0 20px currentColor) drop-shadow(0 0 50px currentColor);opacity:0.35;}}
+@keyframes objFlash{0%,88%,100%{opacity:0.14;}90%,96%{opacity:0.45;}}
 </style>
 </head>
 <body>
@@ -364,6 +400,7 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 <a href="../index.html" class="exit-home" id="exitHome">↺  Homepage</a>
 <div class="key-bar" id="keyBar"></div>
 <button id="mapBtn" title="Open the Marduk View">⬡ MAP</button>
+<button id="exitKBtn" title="Exit Kudramarduk Mode">✕ EXIT K</button>
 <div class="room-coords" id="roomCoords"></div>
 
 <div id="stage"></div>
@@ -694,12 +731,12 @@ function getDoors(x, y) {
       continue;
     }
 
-    /* Path guard — skip-over rule.
-     * Walking into a path tile from the wrong direction skips OVER it
-     * to the tile beyond, rather than blocking.  The path itself is
-     * still a tunnel: you just pass through without entering it.
-     * Step-0 (entrance) tiles of every path are always enterable.
-     * KUDRAMARDUK mode bypasses the guard entirely. */
+    /* Path guard — NO ARROW rule.
+     * If you cannot legally enter a path tile from this direction,
+     * the arrow simply doesn't appear.  Tunnels are sealed from the side;
+     * you can exit a tunnel in any direction but you cannot re-enter
+     * from the side you just left.
+     * KUDRAMARDUK bypasses this entirely. */
     if (neighbour.on_path && neighbour.on_path.length > 0 && REALM && REALM.paths
         && !isKudraUnlocked()) {
       let anyPathAllows = false;
@@ -707,58 +744,39 @@ function getDoors(x, y) {
         const seq = REALM.paths[pid];
         if (!seq) continue;
         const nIdx = seq.findIndex(pt => pt[0] === nx && pt[1] === ny);
-        if (nIdx <= 0) { anyPathAllows = true; break; }
-        // Allow if coming from the true predecessor OR successor (walk both ways)
+        if (nIdx <= 0) { anyPathAllows = true; break; } // entrance tile always open
         const pred = seq[nIdx - 1];
         const succ = nIdx + 1 < seq.length ? seq[nIdx + 1] : null;
         if ((pred[0] === x && pred[1] === y) ||
             (succ && succ[0] === x && succ[1] === y)) {
-          anyPathAllows = true; break;
+          anyPathAllows = true; break; // walking along path
         }
-        // Also allow if the CURRENT tile is at step 0 of this path
-        // (i.e. we are the path entrance and entering step 1)
         const curStep = (tile.path_step || {})[pid];
-        if (curStep === 0) { anyPathAllows = true; break; }
+        if (curStep === 0) { anyPathAllows = true; break; } // at entrance
       }
       if (!anyPathAllows) {
-        // Skip over the path tile to the one beyond in the same direction
-        const skipX = nx + v.dx, skipY = ny + v.dy;
-        if (inBounds(skipX, skipY)) {
-          out[d] = {open: true, skip_to: [skipX, skipY]};
-        }
-        // No arrow if skip target is out of bounds
-        continue;
+        out[d] = {sealed: true, reason: 'path-wall'};
+        continue; // arrow hidden — tunnel sealed from this side
       }
     }
 
-    /* Zone wall — skip-over rule.
-     * Approaching a zone boundary without keys or from the wrong side
-     * skips to the tile beyond the zone.  No lock screen is shown. */
+    /* Zone wall — no arrow for inaccessible zone tiles */
     const tileInZone = !!tile.zone_id;
     const nbInZone   = !!neighbour.zone_id;
     if (!tileInZone && nbInZone) {
       if (neighbour.type === 'locked_zone_threshold' && isKudraUnlocked()) {
-        // KUDRAMARDUK — let through, fall to default open
+        // KUDRAMARDUK — fall through to open
       } else if (neighbour.type === 'locked_zone_threshold') {
         const needed = neighbour.keys_required || [];
         if (!hasAllKeys(needed)) {
-          const skipX = nx + v.dx, skipY = ny + v.dy;
-          if (inBounds(skipX, skipY)) out[d] = {open: true, skip_to: [skipX, skipY]};
-          continue;
+          out[d] = {sealed: true, reason: 'key-locked'}; continue;
         }
       } else {
-        // Perimeter interior — skip over
-        const skipX = nx + v.dx, skipY = ny + v.dy;
-        if (inBounds(skipX, skipY)) out[d] = {open: true, skip_to: [skipX, skipY]};
-        continue;
+        out[d] = {sealed: true, reason: 'zone-wall'}; continue;
       }
-    } else if (tileInZone && !nbInZone) {
-      if (tile.type !== 'locked_zone_threshold' && !isKudraUnlocked()) {
-        // Can't exit zone interior tiles sideways
-        const skipX = nx + v.dx, skipY = ny + v.dy;
-        if (inBounds(skipX, skipY)) out[d] = {open: true, skip_to: [skipX, skipY]};
-        continue;
-      }
+    } else if (tileInZone && !nbInZone && tile.type !== 'locked_zone_threshold'
+               && !isKudraUnlocked()) {
+      out[d] = {sealed: true, reason: 'zone-exit-locked'}; continue;
     }
 
     /* Default open — mark as on-path for visual thread rendering */
@@ -832,6 +850,7 @@ function render(x, y) {
   // Clean up house scene if active
   const prevStage = document.getElementById('stage');
   if (prevStage && prevStage._hsCleanup) { prevStage._hsCleanup(); prevStage._hsCleanup = null; }
+  detachTileParallax();
 
   // Lock only applies to the quiz corridor: threshold → quiz tiles → spine.
   // marduk_view is excluded — KUDRAMARDUK routes there directly and must bypass.
@@ -886,13 +905,22 @@ function render(x, y) {
     const sceneKey = `${x},${y}`;
     if (HOUSE_SCENES[sceneKey]) {
       renderHouseScene(s, x, y, tile, HOUSE_SCENES[sceneKey]);
+    } else if (tile.theme) {
+      detachTileParallax();
+      renderTile(s, x, y, tile);
     } else {
       renderContent(s, x, y, tile);
     }
   }
-  else if (tile.on_path && tile.on_path.length > 0 && !tile.name) {
-    // Unmarked path tile — show coloured transit render
-    renderPathTile(s, x, y, tile);
+  else if (tile.on_path && tile.on_path.length > 0) {
+    if (tile.theme) {
+      detachTileParallax();
+      renderTile(s, x, y, tile);  // themed path tile
+    } else if (!tile.name) {
+      renderPathTile(s, x, y, tile); // unthemed transit
+    } else {
+      renderContent(s, x, y, tile);  // path tile with content but no theme
+    }
   }
   else if (tile.type === 'locked_zone_threshold' || tile.type === 'locked_zone_interior') {
     renderZoneTile(s, x, y, tile);
@@ -1196,22 +1224,14 @@ function renderNavArrows(x, y) {
   ];
   dirs.forEach(d => {
     const door = doors[d.key];
-    if (!door) return;
-    if (door.sealed) return; // don't render sealed-edge arrows at all
-    // skip_to: arrow navigates to the tile beyond the blocked one
-    const destX = door.skip_to ? door.skip_to[0] : x + d.dx;
-    const destY = door.skip_to ? door.skip_to[1] : x + d.dx === destX ? y + d.dy : y + d.dy;
-    const dX = door.skip_to ? door.skip_to[0] : x + d.dx;
-    const dY = door.skip_to ? door.skip_to[1] : y + d.dy;
+    if (!door || door.sealed) return;
+    const dX = x + d.dx, dY = y + d.dy;
     const a = document.createElement('a');
     a.className = 'nav-arrow ' + d.key + (door.path ? ' path' : '');
     a.href = '#' + encodeXY(dX, dY);
     a.textContent = d.glyph;
     a.title = `Go ${d.key}`;
-    a.addEventListener('click', (ev) => {
-      ev.preventDefault();
-      goTo(dX, dY);
-    });
+    a.addEventListener('click', ev => { ev.preventDefault(); goTo(dX, dY); });
     el.appendChild(a);
   });
 }
@@ -1725,33 +1745,40 @@ function setupMVCanvas() {
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
   function handleTap(sx, sy, now) {
-    // Double-tap detection
-    if (lastTap && (now - lastTap.t) < MV_DBL_TIME_MS &&
-        Math.hypot(sx - lastTap.sx, sy - lastTap.sy) < MV_DBL_DIST_PX) {
-      // Zoom in centred on tap point
-      mvTargetZoom = Math.min(MV_ZOOM_MAX, mvZoom * 1.8);
-      mvZoomAnchor = {x: sx, y: sy};
-      mvRipples.push({x: sx, y: sy, t0: now});
-      lastTap = null;
-      return;
-    }
-    lastTap = {sx, sy, t: now};
-
-    // Single tap on cell
     const tile = tileAtPixel(sx, sy);
+
+    // Tap on empty space: dismiss panel + selection
     if (!tile) {
       mvSelected = null;
       hideInfoPanel();
       return;
     }
+
     mvRipples.push({x: sx, y: sy, t0: now});
 
-    if (mvSelected && mvSelected.x === tile.x && mvSelected.y === tile.y) {
-      travelFromMV(tile.x, tile.y);
+    const alreadySelected = mvSelected
+      && mvSelected.x === tile.x && mvSelected.y === tile.y;
+
+    if (!alreadySelected) {
+      // FIRST TAP: select the cell (highlight ring only, no panel yet)
+      mvSelected = {x: tile.x, y: tile.y};
+      hideInfoPanel();
+      // show footer hint
+      const hov = document.getElementById('mvHover');
+      if (hov) hov.textContent =
+        `${tile.info.emoji||'·'}  ${tile.info.name||'empty'}  — tap again to open info`;
       return;
     }
-    mvSelected = {x: tile.x, y: tile.y};
-    showInfoPanel(tile);
+
+    // SECOND TAP on same cell: open info panel
+    // (travel is now via the "Travel here" button, not a third tap)
+    if (!document.getElementById('mvInfo').classList.contains('show')) {
+      showInfoPanel(tile);
+      return;
+    }
+
+    // Panel already open + tap same cell = travel
+    travelFromMV(tile.x, tile.y);
   }
 
   /* ── wire touch events ────────────────────────── */
@@ -1948,11 +1975,23 @@ function showInfoPanel(tileRef) {
     </div>`;
   panel.classList.add('show');
 
-  // Wire buttons with event listeners (not onclick — avoids scope issues)
+  // Prevent touches/clicks on panel bubbling to canvas
+  panel.addEventListener('touchstart', e => e.stopPropagation(), {passive:false});
+  panel.addEventListener('touchend',   e => e.stopPropagation(), {passive:false});
+  panel.addEventListener('mousedown',  e => e.stopPropagation());
+  panel.addEventListener('click',      e => e.stopPropagation());
+
+  // Wire buttons
   const tb = panel.querySelector('#mvTravelBtn');
-  if (tb && !actionDisabled) tb.addEventListener('click', () => travelFromMV(x, y));
+  if (tb && !actionDisabled) {
+    tb.addEventListener('click', () => travelFromMV(x, y));
+    tb.addEventListener('touchend', ev => { ev.stopPropagation(); travelFromMV(x, y); }, {passive:false});
+  }
   const db = panel.querySelector('#mvDismissBtn');
-  if (db) db.addEventListener('click', () => { mvSelected=null; hideInfoPanel(); });
+  if (db) {
+    db.addEventListener('click', () => { mvSelected=null; hideInfoPanel(); if(mvDrawFn) mvDrawFn(); });
+    db.addEventListener('touchend', ev => { ev.stopPropagation(); mvSelected=null; hideInfoPanel(); if(mvDrawFn) mvDrawFn(); }, {passive:false});
+  }
 }
 
 function hideInfoPanel() {
@@ -2068,13 +2107,9 @@ document.addEventListener('keydown', (ev) => {
   if (!dir) return;
   const door = doors[dir];
   if (!door || door.sealed) return;
-  if (door.skip_to) {
-    goTo(door.skip_to[0], door.skip_to[1]);
-  } else {
-    const dx = {up:0, down:0, left:-1, right:1}[dir];
-    const dy = {up:1, down:-1, left:0, right:0}[dir];
-    goTo(cur.x + dx, cur.y + dy);
-  }
+  const dx = {up:0, down:0, left:-1, right:1}[dir];
+  const dy = {up:1, down:-1, left:0, right:0}[dir];
+  goTo(cur.x + dx, cur.y + dy);
 });
 
 /* ── KUDRAMARDUK mode — full system ─────────────── */
@@ -2107,6 +2142,9 @@ function activateKudraMode() {
   // Dim key bar (mode bar replaces it visually)
   const kb = document.getElementById('keyBar');
   if (kb) kb.style.opacity = '0.4';
+  // Show EXIT K button
+  const ekb = document.getElementById('exitKBtn');
+  if (ekb) ekb.classList.add('show');
   // Purple flash
   const flash = document.createElement('div');
   flash.style.cssText = 'position:fixed;inset:0;background:rgba(192,132,252,0.22);'
@@ -2134,6 +2172,8 @@ function deactivateKudraMode() {
   if (bar) bar.classList.remove('on');
   const kb = document.getElementById('keyBar');
   if (kb) kb.style.opacity = '1';
+  const ekb2 = document.getElementById('exitKBtn');
+  if (ekb2) ekb2.classList.remove('show');
   updateKeyBar();
   updateMapBtn();
 }
@@ -2157,6 +2197,21 @@ function hideSitePopup() {
   const popup = document.getElementById('sitePopup');
   if (popup) popup.style.display = 'none';
 }
+
+// EXIT K button — same popup
+document.addEventListener('DOMContentLoaded', () => {
+  const ekBtn = document.getElementById('exitKBtn');
+  if (ekBtn) ekBtn.addEventListener('click', () => {
+    showSitePopup(
+      'Exit Kudramarduk Mode?',
+      'Normal access will be restored. Keys you collected by physically reaching their tiles will be kept.',
+      [
+        { label:'Exit Mode', cls:'primary', fn: () => { deactivateKudraMode(); hideSitePopup(); } },
+        { label:'Stay', cls:'secondary', fn: hideSitePopup },
+      ]
+    );
+  });
+});
 
 // Kudra bar click → exit popup
 document.getElementById('kudraMode').addEventListener('click', () => {
@@ -2335,6 +2390,203 @@ function renderSpecialTile(s, x, y, tile) {
       }, (i+1) * (2000 + Math.random()*3000));
     }
   }
+}
+
+
+/* ══════════════════════════════════════════════════
+ *  UNIVERSAL TILE THEME SYSTEM
+ * ══════════════════════════════════════════════════
+ * Each theme defines: bg, stars, particles, accent,
+ * fx, objectAnim, objectOpacity, and a CSS colour.
+ * Tiles gain a theme via their 'theme' field in
+ * realm.json.  Object layer uses tile.object_img if
+ * present, otherwise the ⁂ placeholder.
+ * ════════════════════════════════════════════════ */
+
+const THEMES = {
+  space: {
+    bg: '#000000',
+    stars: {count:360, color:'220,225,240', speed:0.025},
+    particles: {colors:['#ffffff18','#88aaff28'], min:1, max:2, speed:9},
+    accent: '#7eb8d4', objectAnim:'float', objectOpacity:0.18,
+  },
+  fire: {
+    bg: 'radial-gradient(ellipse at 50% 100%, rgba(80,20,5,0.9), #050101 65%)',
+    stars: {count:70, color:'255,120,40', speed:0.007},
+    particles: {colors:['#ff6b2baa','#c9a84c88','#ff330088'], min:1, max:4, speed:3},
+    accent: '#ff6b2b', objectAnim:'pulse', objectOpacity:0.22,
+  },
+  ice: {
+    bg: 'radial-gradient(ellipse at 50% 0%, rgba(20,40,80,0.9), #010408 70%)',
+    stars: {count:200, color:'180,220,255', speed:0.015},
+    particles: {colors:['#7eb8d4aa','#c8d8ff66'], min:1, max:3, speed:6},
+    accent: '#5b9ab8', objectAnim:'breathe', objectOpacity:0.20,
+    fx: 'ripple',
+  },
+  forest: {
+    bg: 'radial-gradient(ellipse at 50% 80%, rgba(20,50,15,0.85), #020501 70%)',
+    stars: {count:55, color:'160,200,120', speed:0.005},
+    particles: {colors:['#c9a84c55','#4a7c5955'], min:1, max:2, speed:8},
+    accent: '#4a7c59', objectAnim:'float', objectOpacity:0.18,
+  },
+  tech: {
+    bg: '#000805',
+    stars: {count:40, color:'0,180,60', speed:0.003},
+    particles: {colors:['#00ff4155','#00aa2a44'], min:1, max:2, speed:4},
+    accent: '#00ff41', objectAnim:'pulse', objectOpacity:0.20,
+    fx: 'matrix',
+  },
+  ethereal: {
+    bg: 'radial-gradient(ellipse at 50% 50%, rgba(40,10,70,0.85), #030108 70%)',
+    stars: {count:260, color:'180,140,240', speed:0.018},
+    particles: {colors:['#c084fc55','#7b5ea766'], min:1, max:3, speed:5},
+    accent: '#c084fc', objectAnim:'orbit', objectOpacity:0.22,
+    fx: 'nodes',
+  },
+  cave: {
+    bg: 'radial-gradient(ellipse at 50% 100%, rgba(30,20,10,0.9), #020101 80%)',
+    stars: {count:25, color:'120,100,80', speed:0.003},
+    particles: {colors:['#88665544'], min:1, max:2, speed:10},
+    accent: '#886633', objectAnim:'fade', objectOpacity:0.15,
+  },
+  cathedral: {
+    bg: 'radial-gradient(ellipse at 50% 30%, rgba(8,14,45,0.92), #020108 75%)',
+    stars: {count:120, color:'140,160,220', speed:0.010},
+    particles: {colors:['#c9a84c44','#5b9ab844'], min:1, max:3, speed:5},
+    accent: '#c9a84c', objectAnim:'breathe', objectOpacity:0.18,
+  },
+  ocean: {
+    bg: 'radial-gradient(ellipse at 50% 100%, rgba(5,30,60,0.9), #010308 80%)',
+    stars: {count:150, color:'80,180,220', speed:0.012},
+    particles: {colors:['#7eb8d455','#2d888844'], min:1, max:3, speed:7},
+    accent: '#2d8888', objectAnim:'float', objectOpacity:0.20,
+    fx: 'ripple',
+  },
+  wasteland: {
+    bg: 'radial-gradient(ellipse at 50% 60%, rgba(30,25,15,0.85), #050402 80%)',
+    stars: {count:60, color:'160,150,130', speed:0.006},
+    particles: {colors:['#a09080aa','#c9a84c33'], min:1, max:2, speed:7},
+    accent: '#a09080', objectAnim:'fade', objectOpacity:0.15,
+  },
+};
+
+/* Tile object animation map */
+const OBJ_ANIMS = {
+  float:   'objFloat   6s  ease-in-out infinite',
+  pulse:   'objPulse   3.5s ease-in-out infinite',
+  orbit:   'objOrbit   20s linear     infinite',
+  fade:    'objFade    4s  ease-in-out infinite',
+  breathe: 'objBreathe 4.5s ease-in-out infinite',
+  flash:   'objFlash   5s  ease-in-out infinite',
+};
+
+/* Universal tile renderer — used when tile.theme is set */
+function renderTile(s, x, y, tile) {
+  const themeKey  = tile.theme || 'space';
+  const theme     = THEMES[themeKey] || THEMES.space;
+  const anim      = OBJ_ANIMS[tile.object_anim || theme.objectAnim] || OBJ_ANIMS.float;
+  const accent    = tile.accent_color || theme.accent;
+  const lore      = tile.lore  || '';
+  const title     = tile.title || tile.name || '· · ·';
+  const era       = tile.era   || '';
+  const objOpacity = theme.objectOpacity;
+
+  // Object layer HTML — image if available, otherwise themed ⁂ placeholder
+  const objInner = tile.object_img
+    ? `<img src="${tile.object_img}" alt="" draggable="false">`
+    : `<span style="color:${accent};animation:${anim};display:block;">⁂</span>`;
+
+  s.innerHTML = `
+    <div class="tile-root" id="tileRoot">
+      <!-- Object / BG layer -->
+      <div class="tile-obj-layer" id="tileObjLayer">
+        <div class="tile-obj" id="tileObj"
+          style="opacity:${objOpacity};animation:${anim};color:${accent};">
+          ${objInner}
+        </div>
+      </div>
+      <!-- Content layer -->
+      <div class="tile-content">
+        <div class="room-era">${era}</div>
+        <h1 class="room-title" style="color:${accent};">${title}</h1>
+        ${lore ? `<div class="room-lore">${lore}</div>` : ''}
+        ${tile.hint ? `<div class="hint">· ${tile.hint} ·</div>` : ''}
+      </div>
+    </div>`;
+
+  // Background + stars + particles
+  document.body.style.background = theme.bg;
+  initStars(theme.stars);
+  if (theme.particles && theme.particles.colors.length > 0) {
+    startParticles(theme.particles);
+  } else {
+    if (particleInterval) clearInterval(particleInterval);
+    document.getElementById('particles').innerHTML = '';
+  }
+  if (theme.fx) initFxForRoom(theme.fx);
+
+  // Parallax on object layer via mouse or device orientation
+  if (tile.object_parallax !== false) {
+    attachTileParallax();
+  }
+}
+
+/* Attach mouse/gyro parallax to the object layer */
+let tileParallaxRaf = null;
+let tileParallaxTarget = {x: 0, y: 0};
+let tileParallaxCurrent = {x: 0, y: 0};
+let tileMouseHandler = null;
+let tileGyroHandler  = null;
+
+function attachTileParallax() {
+  detachTileParallax(); // clean up any prior
+
+  const MAX = 28;
+
+  tileMouseHandler = ev => {
+    tileParallaxTarget.x = (ev.clientX / window.innerWidth  - 0.5) * 2;
+    tileParallaxTarget.y = (ev.clientY / window.innerHeight - 0.5) * 2;
+  };
+  document.addEventListener('mousemove', tileMouseHandler);
+
+  if (typeof DeviceOrientationEvent !== 'undefined') {
+    tileGyroHandler = ev => {
+      tileParallaxTarget.x = Math.max(-1, Math.min(1,  (ev.gamma||0)/22));
+      tileParallaxTarget.y = Math.max(-1, Math.min(1, -(ev.beta ||0)/35));
+    };
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      // iOS 13+: permission requested on first touch
+      const onFirstTouch = () => {
+        DeviceOrientationEvent.requestPermission().then(s => {
+          if (s === 'granted') window.addEventListener('deviceorientation', tileGyroHandler);
+        });
+        document.removeEventListener('touchstart', onFirstTouch);
+      };
+      document.addEventListener('touchstart', onFirstTouch, {once:true});
+    } else {
+      window.addEventListener('deviceorientation', tileGyroHandler);
+    }
+  }
+
+  function loop() {
+    tileParallaxRaf = requestAnimationFrame(loop);
+    tileParallaxCurrent.x += (tileParallaxTarget.x - tileParallaxCurrent.x) * 0.07;
+    tileParallaxCurrent.y += (tileParallaxTarget.y - tileParallaxCurrent.y) * 0.07;
+    const obj = document.getElementById('tileObj');
+    if (!obj) { detachTileParallax(); return; }
+    const dx = tileParallaxCurrent.x * MAX;
+    const dy = tileParallaxCurrent.y * MAX * 0.6;
+    // Preserve existing CSS animation via translate; use CSS variable approach
+    obj.style.marginLeft = dx + 'px';
+    obj.style.marginTop  = dy + 'px';
+  }
+  loop();
+}
+
+function detachTileParallax() {
+  if (tileParallaxRaf) { cancelAnimationFrame(tileParallaxRaf); tileParallaxRaf = null; }
+  if (tileMouseHandler) { document.removeEventListener('mousemove', tileMouseHandler); tileMouseHandler = null; }
+  if (tileGyroHandler) { window.removeEventListener('deviceorientation', tileGyroHandler); tileGyroHandler = null; }
 }
 
 /* ── House Scene data ──────────────────────────── */
