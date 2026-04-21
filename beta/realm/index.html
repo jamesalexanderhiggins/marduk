@@ -41,7 +41,7 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 
 .room-era{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;opacity:0;animation:fadeUp 0.8s 0.3s forwards;}
 .room-title{font-family:'Cinzel Decorative',serif;font-size:clamp(26px,5vw,52px);color:var(--text);line-height:1.2;margin-bottom:28px;opacity:0;animation:fadeUp 0.8s 0.5s forwards;}
-.room-lore{max-width:580px;font-size:18px;font-style:italic;color:var(--text);line-height:1.85;margin-bottom:36px;opacity:0;animation:fadeUp 0.8s 0.7s forwards;}
+.room-lore{max-width:580px;font-size:18px;font-style:italic;color:var(--text);line-height:1.85;margin-bottom:36px;opacity:0;animation:fadeUp 0.8s 0.7s forwards;text-shadow:0 1px 8px rgba(0,0,0,0.85);}
 .room-lore p+p{margin-top:12px;}
 .room-lore em{color:var(--spirit);}
 .room-lore strong{color:var(--gold);font-style:normal;}
@@ -49,7 +49,7 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 /* Quiz */
 .q-wrap{opacity:0;animation:fadeUp 0.8s 1s forwards;width:100%;max-width:640px;}
 .q-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.4em;color:var(--dim);text-transform:uppercase;margin-bottom:10px;}
-.q-text{font-family:'Cinzel',serif;font-size:clamp(13px,1.8vw,16px);letter-spacing:0.03em;color:var(--gold);margin-bottom:24px;padding:16px 20px;border:1px solid var(--border);background:rgba(201,168,76,0.04);line-height:1.5;}
+.q-text{font-family:'Cinzel',serif;font-size:clamp(13px,1.8vw,16px);letter-spacing:0.03em;color:var(--gold);margin-bottom:24px;padding:18px 22px;border:1px solid var(--border);background:rgba(0,0,0,0.72);line-height:1.5;text-shadow:0 1px 6px rgba(0,0,0,0.9);}
 .doors{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
 .door{flex:1;min-width:160px;max-width:230px;border:1px solid var(--border);background:rgba(13,17,25,0.9);color:var(--text);padding:16px 14px;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.07em;line-height:1.4;transition:all 0.25s;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);}
 .door:hover:not(:disabled){border-color:var(--gold);background:rgba(201,168,76,0.08);color:var(--gold);box-shadow:var(--glow);transform:translateY(-2px);}
@@ -635,7 +635,14 @@ function render(x, y) {
   const prevStage = document.getElementById('stage');
   if (prevStage && prevStage._hsCleanup) { prevStage._hsCleanup(); prevStage._hsCleanup = null; }
 
-  if (isLocked()) { renderLock(); return; }
+  // Lock only applies to the quiz path (threshold, quiz, spine, marduk_view).
+  // Normal gateway entry and all content/house tiles are always accessible.
+  const tileForLockCheck = getTile(x, y);
+  const quizPathTypes = ['threshold', 'quiz', 'spine', 'marduk_view'];
+  if (isLocked() && quizPathTypes.includes(tileForLockCheck.type)) {
+    renderLock();
+    return;
+  }
 
   markVisited(x, y);
   updateProgressDisplay();
@@ -783,12 +790,14 @@ function renderQuiz(s, x, y, tile) {
   kids.sort(() => Math.random() - 0.5);
   kids.forEach(k => dg.appendChild(k));
 
-  // Background and FX
-  if (q.bgTint) {
-    document.body.style.background = `linear-gradient(135deg,${q.bgTint},var(--bg))`;
-  } else {
-    document.body.style.background = 'var(--bg)';
-  }
+  // Background — dark cathedral aesthetic, heavily deepened for readability
+  // Tier colours overlay a near-black base so text always reads clearly
+  const tierDark = q.tier === 3
+    ? 'radial-gradient(ellipse at 50% 30%, rgba(30,8,55,0.9), #020108 75%)'
+    : q.tier === 2
+    ? 'radial-gradient(ellipse at 50% 30%, rgba(8,20,45,0.9), #010208 75%)'
+    : 'radial-gradient(ellipse at 50% 30%, rgba(12,18,30,0.85), #020408 75%)';
+  document.body.style.background = tierDark;
   initStars(q.stars);
   startParticles(q.particles);
   initFxForRoom(q.fx);
@@ -852,23 +861,44 @@ function penaltyForTier(tier, x, y) {
 
 function renderLock() {
   const p = getP();
-  const remaining = Math.max(0, p.lockedUntil - Date.now());
-  const h = Math.floor(remaining / 3600000);
-  const m = Math.floor((remaining % 3600000) / 60000);
   const s = document.getElementById('stage');
-  s.innerHTML = `
-    <div class="lock-screen">
-      <div class="lock-glyph">𒀭</div>
-      <div class="lock-title">Begin Again, When You Are Ready</div>
-      <div class="lock-text">
-        You chose wrongly in the deepest chambers three times. The realm has sealed itself to you for a short while — not as punishment, but as mercy. <em>Come back when the books have settled inside you.</em>
-      </div>
-      <div class="lock-timer">${h}h ${m}m remaining</div>
-    </div>`;
   document.getElementById('navArrows').innerHTML = '';
   document.body.style.background = 'radial-gradient(ellipse at center, rgba(60,15,5,0.3), var(--bg) 80%)';
   initStars({count: 100, color: '180,100,80', speed: 0.005});
   startParticles({colors: ['#ff6b2b44', '#c9a84c22'], min: 1, max: 2, speed: 10});
+
+  function fmt() {
+    const remaining = Math.max(0, p.lockedUntil - Date.now());
+    const h = Math.floor(remaining / 3600000);
+    const m = Math.floor((remaining % 3600000) / 60000);
+    const sec = Math.floor((remaining % 60000) / 1000);
+    if (remaining <= 0) return 'Unlocking…';
+    return `${h}h ${String(m).padStart(2,'0')}m ${String(sec).padStart(2,'0')}s remaining`;
+  }
+
+  s.innerHTML = `
+    <div class="lock-screen">
+      <div class="lock-glyph">𒀭</div>
+      <div class="lock-title">The Quiz Is Sealed</div>
+      <div class="lock-text">
+        You chose wrongly in the deepest chambers three times. The quiz path has sealed itself — not as punishment, but as mercy. <em>Come back when the books have settled inside you.</em>
+        <br><br>
+        The rest of the Realm remains open. You may still enter through the western, eastern, or southern gates.
+      </div>
+      <div class="lock-timer" id="lockTimer">${fmt()}</div>
+    </div>`;
+
+  // Live countdown — refreshes every second
+  const lockInterval = setInterval(() => {
+    const el = document.getElementById('lockTimer');
+    if (!el) { clearInterval(lockInterval); return; }
+    el.textContent = fmt();
+    if (Date.now() >= p.lockedUntil) {
+      clearInterval(lockInterval);
+      el.textContent = 'The seal has lifted. You may try again.';
+      el.style.color = 'var(--spirit)';
+    }
+  }, 1000);
 }
 
 /* ── Navigation arrows ────────────────────────── */
@@ -1664,6 +1694,11 @@ document.addEventListener('keydown', (ev) => {
   if (secretBuf.endsWith('KUDRAMARDUK')) {
     unlockKudra();
     unlockMV();
+    // KUDRAMARDUK always bypasses the quiz lock — clear it
+    const p = getP();
+    delete p.lockedUntil;
+    delete p.attempts;
+    saveP(p);
     const flash = document.createElement('div');
     flash.style.cssText = 'position:fixed;inset:0;background:rgba(192,132,252,0.18);z-index:999;pointer-events:none;transition:opacity 1s ease;';
     document.body.appendChild(flash);
