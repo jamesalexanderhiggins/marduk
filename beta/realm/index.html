@@ -846,24 +846,20 @@ function render(x, y) {
 
   const tile = getTile(x, y);
 
-  // Path guard: if this tile is on a path, verify legal sequential entry.
-  // Illegal entry shows error overlay then ejects to a random Ring-1 tile.
-  if (tile.on_path && tile.on_path.length > 0 && !pathGuardOk(x, y)) {
-    const ring1 = [[1,1],[1,0],[1,-1],[0,-1],[-1,-1],[-1,0],[-1,1]];
-    const t = ring1[Math.floor(Math.random() * ring1.length)];
-    // Restore lastTile to where we were (before this failed entry)
-    const lt = getLastTile();
-    if (lt) saveLastTile(lt.x, lt.y);
-    showPathError(() => goTo(t[0], t[1]));
-    return;
-  }
+  // Path entry is now managed by skip-over in getDoors — no guard needed here.
+  // (showPathError was removed in v4.9; this block was the crash source.)
 
-  // Save current tile as lastTile now that entry is confirmed legal
+  // Save current tile as lastTile
   saveLastTile(x, y);
   const s = document.getElementById('stage');
   const navEl = document.getElementById('navArrows');
   s.style.opacity = '1';
   navEl.innerHTML = '';
+  // Reset stage style so house-scene leftover styles don't bleed
+  s.style.cssText = 'position:relative;z-index:10;width:100%;height:100vh;'
+    + 'display:flex;flex-direction:column;justify-content:center;'
+    + 'align-items:center;padding:80px 24px;text-align:center;'
+    + 'overflow-y:auto;transition:opacity 0.5s ease;';
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
@@ -920,13 +916,11 @@ function renderEmpty(s, x, y, tile) {
       <div class="empty-coord">(${x>=0?'+':''}${x}, ${y>=0?'+':''}${y})</div>
     </div>`;
   document.getElementById('asterism').addEventListener('click', () => goTo(0, 0));
-  // Use a neutral starfield
-  const ring = Math.max(Math.abs(x), Math.abs(y));
-  const hue = 200 + Math.floor(Math.cos((Math.atan2(y, x))) * 30);
-  // Empty tile: pure black + dense starfield (travelling through deep space)
+  // Pure black + dense warp starfield — no tint, no particles
   document.body.style.background = '#000000';
-  initStars({count: 320, color: '220,220,230', speed: 0.022});
-  startParticles({colors: [], min: 0, max: 0, speed: 0}); // no particles, just stars
+  if (particleInterval) clearInterval(particleInterval);
+  document.getElementById('particles').innerHTML = '';
+  initStars({count: 360, color: '220,225,240', speed: 0.025});
 }
 
 function renderPathTile(s, x, y, tile) {
@@ -966,10 +960,12 @@ function renderPathTile(s, x, y, tile) {
 }
 
 function renderContent(s, x, y, tile) {
+  const displayName = tile.name || '· · ·';
+  const displayLore = tile.lore || '';
   s.innerHTML = `
     <div class="room-era">${tile.era || 'The Realm'}</div>
-    <h1 class="room-title">${tile.name} ${tile.emoji ? `<span style="font-size:0.75em;opacity:0.85;">${tile.emoji}</span>` : ''}</h1>
-    <div class="room-lore">${tile.lore || ''}</div>
+    <h1 class="room-title">${displayName} ${tile.emoji ? `<span style="font-size:0.75em;opacity:0.85;">${tile.emoji}</span>` : ''}</h1>
+    ${displayLore ? `<div class="room-lore">${displayLore}</div>` : ''}
     ${tile.hint ? `<div class="hint">· ${tile.hint} ·</div>` : ''}
   `;
   // Palette / path colour / bg
