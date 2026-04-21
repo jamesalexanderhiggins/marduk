@@ -166,6 +166,32 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 @keyframes breathe{0%,100%{text-shadow:0 0 20px rgba(201,168,76,0.4),0 0 60px rgba(201,168,76,0.1);}50%{text-shadow:0 0 30px rgba(201,168,76,0.7),0 0 80px rgba(201,168,76,0.25);}}
 @keyframes eveBlink{0%,92%,100%{opacity:1;}93%,97%{opacity:0.4;}}
 @keyframes glitchT{0%,100%{transform:translateX(0);}50%{transform:translateX(2px);}}
+
+/* ── House Scene (RPG layer renderer) ────────────── */
+.hs-root{position:absolute;inset:0;overflow:hidden;background:#D6C8B4;}
+.hs-layer{position:absolute;top:-10%;left:-10%;width:120%;height:120%;will-change:transform;}
+.hs-layer img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;mix-blend-mode:multiply;pointer-events:none;user-select:none;}
+.hs-dark{position:absolute;inset:0;background:radial-gradient(ellipse 90% 75% at 50% 85%,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.55) 55%,rgba(0,0,0,0.88) 100%);pointer-events:none;}
+.hs-vign{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.55) 0%,transparent 25%,transparent 72%,rgba(0,0,0,0.45) 100%);pointer-events:none;}
+.hs-atm{position:absolute;pointer-events:none;}
+.hs-candle{background:radial-gradient(ellipse at 45% 55%,rgba(210,128,28,0.28) 0%,transparent 65%);animation:hsCandle 2.9s ease-in-out infinite;}
+.hs-moon{background:linear-gradient(148deg,rgba(110,168,210,0.18) 0%,transparent 52%);animation:hsMoon 8s ease-in-out infinite;}
+.hs-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.hs-hotspots{position:absolute;inset:0;}
+.hs-hs{position:absolute;cursor:pointer;}
+.hs-bloom{position:absolute;inset:0;border:1px solid rgba(201,168,76,0);transition:border-color 0.35s,box-shadow 0.35s;}
+.hs-hs:hover .hs-bloom{border-color:rgba(201,168,76,0.28);box-shadow:inset 0 0 48px rgba(201,168,76,0.12);}
+.hs-tip{position:absolute;bottom:calc(100% + 14px);left:50%;transform:translateX(-50%) translateY(6px);opacity:0;transition:opacity 0.3s,transform 0.3s;background:rgba(7,9,16,0.96);border:1px solid rgba(201,168,76,0.3);padding:13px 20px;font-family:'EB Garamond',serif;font-size:16px;font-style:italic;color:var(--text);min-width:180px;max-width:300px;text-align:center;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,0.7);white-space:normal;}
+.hs-hs:hover .hs-tip{opacity:1;transform:translateX(-50%) translateY(0);}
+.hs-exit-cue{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(201,168,76,0.75);opacity:0;transition:opacity 0.35s;white-space:nowrap;}
+.hs-hs.exit:hover .hs-exit-cue{opacity:1;}
+.hs-hud{position:absolute;bottom:26px;left:28px;pointer-events:none;z-index:20;}
+.hs-hud-era{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.32em;color:rgba(201,168,76,0.72);text-transform:uppercase;margin-bottom:4px;}
+.hs-hud-name{font-family:'Cinzel Decorative',serif;font-size:clamp(13px,1.8vw,20px);color:var(--text);text-shadow:0 2px 10px rgba(0,0,0,0.9);}
+@keyframes hsCandle{0%,100%{opacity:0.72;}18%{opacity:0.90;}40%{opacity:0.60;}68%{opacity:0.85;}85%{opacity:0.68;}}
+@keyframes hsMoon{0%,100%{opacity:0.55;}50%{opacity:0.82;}}
+@keyframes hsDust{0%{transform:translateY(0) translateX(0);opacity:0;}8%{opacity:var(--dp,0.7);}88%{opacity:0.2;}100%{transform:translateY(var(--dy,-130px)) translateX(var(--dx,12px));opacity:0;}}
+@keyframes hsFadeIn{from{opacity:0;}to{opacity:1;}}
 </style>
 </head>
 <body>
@@ -524,6 +550,9 @@ function render(x, y) {
   clearFx();
   clearOverlays();
   if (particleInterval) clearInterval(particleInterval);
+  // Clean up house scene if active
+  const prevStage = document.getElementById('stage');
+  if (prevStage && prevStage._hsCleanup) { prevStage._hsCleanup(); prevStage._hsCleanup = null; }
 
   if (isLocked()) { renderLock(); return; }
 
@@ -547,7 +576,12 @@ function render(x, y) {
   else if (tile.type === 'home')   { renderHome(s, x, y, tile); }
   else if (tile.type === 'spine')  { renderSpine(s, x, y, tile); }
   else if (tile.type === 'content' || tile.type === 'house_interior' || tile.type === 'house_front_door') {
-    renderContent(s, x, y, tile);
+    const sceneKey = `${x},${y}`;
+    if (HOUSE_SCENES[sceneKey]) {
+      renderHouseScene(s, x, y, tile, HOUSE_SCENES[sceneKey]);
+    } else {
+      renderContent(s, x, y, tile);
+    }
   }
   else { renderEmpty(s, x, y, tile); }
 
@@ -1555,6 +1589,201 @@ document.addEventListener('keydown', (ev) => {
     secretBuf = '';
   }
 });
+
+/* ── House Scene data ──────────────────────────── */
+const HOUSE_SCENES = {
+  '-10,-13': {
+    slug:    'threshold',
+    path:    'house-emily/threshold',
+    layers:  [
+      {parallax: 0.04},   // bg  — floats the least (farthest)
+      {parallax: 0.16},   // mid — mid-depth
+      {parallax: 0.32},   // obj — floats most (nearest)
+    ],
+    /* Hotspot zones in % coords — measured against viewport, NOT image.
+     * The images are offset/scaled inside the hs-root so these need
+     * to map to where the painted features appear at 1200px reference width.
+     * door  : left wooden door  (obj layer, left cluster)
+     * window: gothic window     (obj layer, right cluster)
+     * fire  : fireplace         (mid layer, centre)         */
+    hotspots: [
+      { id:'door',   type:'exit', label:'Open the door',
+        x:'4%',  y:'10%', w:'32%', h:'80%',
+        tip:'The door is ajar. Something warm breathes on the other side.',
+        target: [-10, -14] },
+      { id:'window', type:'lore',
+        x:'60%', y:'8%',  w:'35%', h:'70%',
+        tip:'The night outside is not the night you came from.' },
+      { id:'fire',   type:'lore',
+        x:'34%', y:'28%', w:'24%', h:'44%',
+        tip:'Cold. It has been cold for a long time. She used to light it herself.' },
+    ],
+    candle:   { left:'2%',   top:'12%', width:'40%', height:'68%' },
+    moonbeam: { left:'56%',  top:'0%',  width:'44%', height:'78%' },
+  },
+};
+
+/* ── House Scene renderer ─────────────────────── */
+let hsParallaxRaf = null;   // so we can cancel on navigation
+
+function renderHouseScene(s, x, y, tile, scene) {
+  // Cancel any prior parallax loop
+  if (hsParallaxRaf) { cancelAnimationFrame(hsParallaxRaf); hsParallaxRaf = null; }
+
+  // Body background — near-black, the dark overlay on top does the rest
+  document.body.style.background = '#06050C';
+
+  // Stage is full-bleed
+  s.className = '';
+  s.style.cssText = 'position:relative;z-index:10;width:100%;height:100vh;padding:0;overflow:hidden;';
+
+  const base = scene.path;
+
+  s.innerHTML = `
+    <div class="hs-root" id="hsRoot">
+      <!-- Parallax image layers: bg, mid, obj -->
+      <div class="hs-layer" id="hsL0" style="z-index:2;opacity:0;">
+        <img src="${base}/bg.png" alt="" draggable="false">
+      </div>
+      <div class="hs-layer" id="hsL1" style="z-index:3;opacity:0;">
+        <img src="${base}/mid.png" alt="" draggable="false">
+      </div>
+      <div class="hs-layer" id="hsL2" style="z-index:4;opacity:0;">
+        <img src="${base}/obj.png" alt="" draggable="false">
+      </div>
+
+      <!-- Darkness + vignette on top of images -->
+      <div class="hs-dark" style="z-index:5;"></div>
+      <div class="hs-vign" style="z-index:6;"></div>
+
+      <!-- Atmospheric glow layers -->
+      <div class="hs-atm hs-candle" style="z-index:7;
+        left:${scene.candle.left};top:${scene.candle.top};
+        width:${scene.candle.width};height:${scene.candle.height};"></div>
+      <div class="hs-atm hs-moon" style="z-index:7;
+        left:${scene.moonbeam.left};top:${scene.moonbeam.top};
+        width:${scene.moonbeam.width};height:${scene.moonbeam.height};"></div>
+
+      <!-- Dust particles -->
+      <div class="hs-particles" id="hsParticles" style="z-index:8;"></div>
+
+      <!-- Hotspot click zones -->
+      <div class="hs-hotspots" style="z-index:9;">
+        ${scene.hotspots.map(h => `
+          <div class="hs-hs ${h.type}" id="hsHs_${h.id}"
+               data-type="${h.type}"
+               ${h.target ? `data-tx="${h.target[0]}" data-ty="${h.target[1]}"` : ''}
+               style="left:${h.x};top:${h.y};width:${h.w};height:${h.h};">
+            <div class="hs-bloom"></div>
+            <div class="hs-tip">${h.tip}</div>
+            ${h.type === 'exit' ? `<div class="hs-exit-cue">↵ ${h.label}</div>` : ''}
+          </div>`).join('')}
+      </div>
+
+      <!-- HUD — era + title, bottom-left -->
+      <div class="hs-hud" style="z-index:10;">
+        <div class="hs-hud-era">${tile.era || ''}</div>
+        <div class="hs-hud-name">${tile.name || ''}</div>
+      </div>
+    </div>`;
+
+  // ── Hotspot interactions ──────────────────────────
+  s.querySelectorAll('.hs-hs').forEach(el => {
+    el.addEventListener('click', () => {
+      if (el.dataset.type === 'exit') {
+        goTo(parseInt(el.dataset.tx), parseInt(el.dataset.ty));
+      }
+    });
+    // iPad: show tooltip on first tap, navigate on second
+    let tapped = false;
+    el.addEventListener('touchend', (ev) => {
+      if (el.dataset.type !== 'exit') return;
+      ev.preventDefault();
+      if (!tapped) { tapped = true; setTimeout(() => tapped = false, 1800); return; }
+      goTo(parseInt(el.dataset.tx), parseInt(el.dataset.ty));
+    }, {passive: false});
+  });
+
+  // ── Dust particles (amber left, moonblue right) ───
+  const particleEl = document.getElementById('hsParticles');
+  for (let i = 0; i < 26; i++) {
+    const p   = document.createElement('div');
+    const isA = i < 14;                                    // amber vs blue split
+    const sz  = 1.5 + Math.random() * 2.5;
+    const lft = isA ? 3  + Math.random() * 40 : 58 + Math.random() * 36;
+    const dur = 4.5 + Math.random() * 6;
+    const del = Math.random() * 8;
+    const dx  = (Math.random() - 0.5) * 32;
+    const dy  = -(80 + Math.random() * 100);
+    const op  = 0.5 + Math.random() * 0.45;
+    const col = isA ? `rgba(218,138,34,${op})` : `rgba(114,176,220,${op})`;
+    p.style.cssText = `
+      position:absolute;
+      bottom:${5 + Math.random() * 55}%;
+      left:${lft}%;
+      width:${sz}px;height:${sz}px;
+      border-radius:50%;
+      background:${col};
+      pointer-events:none;
+      --dp:${op};--dx:${dx}px;--dy:${dy}px;
+      animation:hsDust ${dur}s ${del}s linear infinite;`;
+    particleEl.appendChild(p);
+  }
+
+  // ── Parallax: mouse on desktop, tilt on iPad ──────
+  const layerEls = [
+    { el: document.getElementById('hsL0'), f: scene.layers[0].parallax },
+    { el: document.getElementById('hsL1'), f: scene.layers[1].parallax },
+    { el: document.getElementById('hsL2'), f: scene.layers[2].parallax },
+  ];
+  let tX = 0, tY = 0, cX = 0, cY = 0;
+  const EASE = 0.07;
+  const MAX_PX = 55, MAX_PY = 38;
+
+  function parallaxLoop() {
+    hsParallaxRaf = requestAnimationFrame(parallaxLoop);
+    cX += (tX - cX) * EASE;
+    cY += (tY - cY) * EASE;
+    layerEls.forEach(({ el, f }) => {
+      // Base offset is -10% (the oversize bleed). Parallax shifts on top.
+      el.style.transform = `translate(calc(-10% + ${cX * f * MAX_PX}px), calc(-10% + ${cY * f * MAX_PY}px))`;
+    });
+  }
+  parallaxLoop();
+
+  // Mouse input (desktop)
+  const mouseHandler = (ev) => {
+    tX = (ev.clientX / window.innerWidth  - 0.5) * 2;
+    tY = (ev.clientY / window.innerHeight - 0.5) * 2;
+  };
+  document.addEventListener('mousemove', mouseHandler);
+
+  // Gyro input (iPad/iPhone)
+  let gyroHandler = null;
+  if (typeof DeviceOrientationEvent !== 'undefined') {
+    gyroHandler = (ev) => {
+      tX = Math.max(-1, Math.min(1,  (ev.gamma || 0) / 25));
+      tY = Math.max(-1, Math.min(1, -(ev.beta  || 0) / 40));
+    };
+    window.addEventListener('deviceorientation', gyroHandler);
+  }
+
+  // ── Staggered fade-in of layers ──────────────────
+  ['hsL0','hsL1','hsL2'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.style.transition = `opacity 0.7s ${0.2 + i * 0.3}s ease`;
+    // Force reflow then animate
+    requestAnimationFrame(() => requestAnimationFrame(() => { el.style.opacity = '1'; }));
+  });
+
+  // ── Cleanup on navigation ─────────────────────────
+  // Store handlers so render() teardown can remove them
+  s._hsCleanup = () => {
+    if (hsParallaxRaf) { cancelAnimationFrame(hsParallaxRaf); hsParallaxRaf = null; }
+    document.removeEventListener('mousemove', mouseHandler);
+    if (gyroHandler) window.removeEventListener('deviceorientation', gyroHandler);
+  };
+}
 
 /* ── Boot ──────────────────────────────────────── */
 async function boot() {
