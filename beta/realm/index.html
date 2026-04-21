@@ -230,7 +230,7 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 @keyframes ptPulse{0%,100%{text-shadow:0 0 30px var(--pt-color,#C9A84C),0 0 60px var(--pt-color,#C9A84C);}50%{text-shadow:0 0 60px var(--pt-color,#C9A84C),0 0 120px var(--pt-color,#C9A84C),0 0 160px var(--pt-color,#C9A84C);}}
 
 /* ── MAP button (KUDRAMARDUK unlock) ─────────────── */
-#mapBtn{display:none;position:fixed;top:20px;right:190px;z-index:100;
+#mapBtn{display:none;position:fixed;top:20px;left:180px;z-index:100;
   font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;
   color:rgba(192,132,252,0.8);background:rgba(7,9,16,0.88);
   border:1px solid rgba(192,132,252,0.28);padding:9px 16px;cursor:pointer;
@@ -1951,12 +1951,24 @@ function hideInfoPanel() {
 
 function travelFromMV(x, y) {
   const info = getTile(x, y);
-  if (info.type === 'marduk_view' && !isMVUnlocked()) return;
-  if (info.type === 'quiz') {
-    const n = parseInt(info.question_id.slice(1));
-    if (n > 1 && !isCorrect('Q' + (n - 1)) && !isCorrect(info.question_id)) return;
+  // KUDRAMARDUK mode: all tiles accessible from the map
+  if (!isKudraUnlocked()) {
+    if (info.type === 'marduk_view' && !isMVUnlocked()) return;
+    if (info.type === 'quiz') {
+      const n = parseInt(info.question_id.slice(1));
+      if (n > 1 && !isCorrect('Q' + (n - 1)) && !isCorrect(info.question_id)) return;
+    }
+    // Zone threshold: need keys
+    if (info.type === 'locked_zone_threshold') {
+      const needed = info.keys_required || [];
+      if (!hasAllKeys(needed)) return;
+    }
+    // Zone interior: no direct jump (use threshold)
+    if (info.type === 'locked_zone_interior') return;
   }
   document.getElementById('mv-stage').classList.remove('show');
+  const _kb3 = document.getElementById('keyBar');
+  if (_kb3) _kb3.style.visibility = 'visible';
   hideInfoPanel();
   mvSelected = null;
   if (mvRaf) { cancelAnimationFrame(mvRaf); mvRaf = null; }
@@ -2045,43 +2057,124 @@ document.addEventListener('keydown', (ev) => {
   if (!dir) return;
   const door = doors[dir];
   if (!door || door.sealed) return;
-  const dx = {up:0, down:0, left:-1, right:1}[dir];
-  const dy = {up:1, down:-1, left:0, right:0}[dir];
-  goTo(cur.x + dx, cur.y + dy);
+  if (door.skip_to) {
+    goTo(door.skip_to[0], door.skip_to[1]);
+  } else {
+    const dx = {up:0, down:0, left:-1, right:1}[dir];
+    const dy = {up:1, down:-1, left:0, right:0}[dir];
+    goTo(cur.x + dx, cur.y + dy);
+  }
 });
 
-/* ── MAP button visibility ─────────────────────── */
+/* ── KUDRAMARDUK mode — full system ─────────────── */
 function updateMapBtn() {
   const btn = document.getElementById('mapBtn');
   if (!btn) return;
-  if (isKudraUnlocked()) {
-    btn.classList.add('show');
-  }
+  btn.classList.toggle('show', isKudraUnlocked());
 }
+
 document.getElementById('mapBtn').addEventListener('click', () => {
   unlockMV();
   renderMardukView();
 });
 
-/* ── KUDRAMARDUK typing trigger inside /realm/ too ─ */
+function activateKudraMode() {
+  unlockKudra();
+  unlockMV();
+  // Grant every key
+  const p = getP();
+  p.keys_collected = p.keys_collected || {};
+  Object.keys(KEY_DEFS).forEach(k => { p.keys_collected[k] = true; });
+  delete p.lockedUntil;
+  delete p.attempts;
+  saveP(p);
+  updateKeyBar();
+  updateMapBtn();
+  // Light up the glow bar
+  const bar = document.getElementById('kudraMode');
+  if (bar) bar.classList.add('on');
+  // Dim key bar (mode bar replaces it visually)
+  const kb = document.getElementById('keyBar');
+  if (kb) kb.style.opacity = '0.4';
+  // Purple flash
+  const flash = document.createElement('div');
+  flash.style.cssText = 'position:fixed;inset:0;background:rgba(192,132,252,0.22);'
+    + 'z-index:998;pointer-events:none;transition:opacity 1.2s ease;';
+  document.body.appendChild(flash);
+  setTimeout(() => { flash.style.opacity='0'; setTimeout(()=>flash.remove(),1200); }, 700);
+  // Navigate to MV
+  setTimeout(() => renderMardukView(), 900);
+}
+
+function deactivateKudraMode() {
+  // Clear kudra flag
+  const p = getP();
+  delete p.kudra;
+  // Remove keys that were only granted by kudra (not legitimately collected)
+  const legit = {};
+  (p.visited || []).forEach(k => {
+    const [vx, vy] = k.split(',').map(Number);
+    const t = getTile(vx, vy);
+    if (t && t.key_id) legit[t.key_id] = true;
+  });
+  p.keys_collected = legit;
+  saveP(p);
+  const bar = document.getElementById('kudraMode');
+  if (bar) bar.classList.remove('on');
+  const kb = document.getElementById('keyBar');
+  if (kb) kb.style.opacity = '1';
+  updateKeyBar();
+  updateMapBtn();
+}
+
+function showSitePopup(title, body, buttons) {
+  const popup = document.getElementById('sitePopup');
+  document.getElementById('popupTitle').textContent = title;
+  document.getElementById('popupBody').innerHTML = body;
+  const btns = document.getElementById('popupBtns');
+  btns.innerHTML = '';
+  buttons.forEach(b => {
+    const btn = document.createElement('button');
+    btn.className = 'site-popup-btn ' + b.cls;
+    btn.textContent = b.label;
+    btn.addEventListener('click', b.fn);
+    btns.appendChild(btn);
+  });
+  if (popup) popup.style.display = 'flex';
+}
+function hideSitePopup() {
+  const popup = document.getElementById('sitePopup');
+  if (popup) popup.style.display = 'none';
+}
+
+// Kudra bar click → exit popup
+document.getElementById('kudraMode').addEventListener('click', () => {
+  showSitePopup(
+    'Exit Kudramarduk Mode?',
+    'Normal access will be restored. Keys you collected by physically reaching their tiles will be kept. Keys granted by Kudramarduk will be removed.',
+    [
+      { label:'Exit Mode', cls:'primary', fn: () => {
+          deactivateKudraMode();
+          hideSitePopup();
+        }
+      },
+      { label:'Stay', cls:'secondary', fn: hideSitePopup },
+    ]
+  );
+});
+
+// Close popup on backdrop click
+document.getElementById('sitePopup').addEventListener('click', (ev) => {
+  if (ev.target === ev.currentTarget) hideSitePopup();
+});
+
+/* ── KUDRAMARDUK typing trigger ─────────────────── */
 let secretBuf = '';
 document.addEventListener('keydown', (ev) => {
   if (ev.key.length !== 1) return;
   secretBuf = (secretBuf + ev.key.toUpperCase()).slice(-11);
   if (secretBuf.endsWith('KUDRAMARDUK')) {
-    unlockKudra();
-    unlockMV();
-    updateMapBtn();
-    // KUDRAMARDUK always bypasses the quiz lock — clear it
-    const p = getP();
-    delete p.lockedUntil;
-    delete p.attempts;
-    saveP(p);
-    const flash = document.createElement('div');
-    flash.style.cssText = 'position:fixed;inset:0;background:rgba(192,132,252,0.18);z-index:999;pointer-events:none;transition:opacity 1s ease;';
-    document.body.appendChild(flash);
-    setTimeout(() => { flash.style.opacity = '0'; }, 600);
-    setTimeout(() => { flash.remove(); goTo(0, 1); }, 1100);
+    activateKudraMode();
     secretBuf = '';
   }
 });
