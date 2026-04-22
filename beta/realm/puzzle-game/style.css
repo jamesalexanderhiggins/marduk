@@ -172,3 +172,21 @@ body.hide-ui #hud, body.hide-ui #help, body.hide-ui #controls { display: none; }
   .control-grid label { grid-template-columns: 88px 1fr 40px; gap: 8px; }
   .control-grid input[type="range"] { height: 42px; }
 }
+
+#audioPrompt {
+  position: absolute;
+  right: 16px;
+  top: 104px;
+  z-index: 9;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--warn);
+  opacity: 0.9;
+  pointer-events: none;
+}
+#audioPrompt.hidden { display: none; }
+@media (max-width: 900px) {
+  #audioPrompt { top: 166px; right: 14px; font-size: 10px; }
+}
