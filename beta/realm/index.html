@@ -450,19 +450,27 @@ body.kudra-active #stage{padding-top:110px;}
   12%{opacity:1;}88%{opacity:0.3;}
   100%{transform:translateY(var(--dy)) translateX(var(--dx));opacity:0;}}
 
-/* Content panel */
-.ef-panel{position:absolute;bottom:0;left:0;right:0;z-index:10;
-  padding:16px 20px 60px;
-  max-height:42%;overflow-y:auto;
-  background:linear-gradient(to top,rgba(4,0,16,0.97) 0%,rgba(4,0,16,0.82) 60%,transparent 100%);
+/* Content panel — positioned higher for legibility */
+.ef-panel{position:absolute;left:0;right:0;bottom:0;z-index:10;
+  padding:28px 24px 72px;
+  max-height:64%;overflow-y:auto;
+  background:linear-gradient(to top,rgba(4,0,16,0.97) 0%,rgba(4,0,16,0.92) 52%,rgba(4,0,16,0.55) 78%,transparent 100%);
   text-align:center;-webkit-overflow-scrolling:touch;}
 .ef-step{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.5em;
-  text-transform:uppercase;color:rgba(150,70,255,0.6);margin-bottom:5px;}
-.ef-title{font-family:'Cinzel Decorative',serif;font-size:clamp(15px,2.8vw,26px);
-  color:#c084fc;text-shadow:0 0 20px rgba(192,132,252,0.9);margin-bottom:8px;}
-.ef-lore{font-family:'EB Garamond',serif;font-size:clamp(13px,1.6vw,15px);
-  font-style:italic;color:rgba(210,185,255,0.72);line-height:1.7;
-  max-width:460px;margin:0 auto;}
+  text-transform:uppercase;color:rgba(150,70,255,0.6);margin-bottom:8px;}
+.ef-title{font-family:'Cinzel Decorative',serif;font-size:clamp(19px,3.6vw,34px);
+  color:#c084fc;text-shadow:0 0 24px rgba(192,132,252,0.95);margin-bottom:12px;}
+.ef-lore{font-family:'EB Garamond',serif;font-size:clamp(15px,2vw,18px);
+  font-style:italic;color:rgba(220,200,255,0.82);line-height:1.8;
+  max-width:500px;margin:0 auto;}
+
+/* Music button */
+#muteBtn{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--dim);background:transparent;
+  border:1px solid var(--border);padding:7px 12px;
+  cursor:pointer;transition:all 0.3s;flex-shrink:0;}
+#muteBtn:hover{color:var(--gold);border-color:var(--gold);}
+#muteBtn.muted{color:rgba(106,96,85,0.45);border-color:rgba(201,168,76,0.07);}
 
 /* ── Per-path animated scene ───────────────────────── */
 .pt-root{position:absolute;inset:0;overflow:hidden;background:#02010a;}
@@ -529,6 +537,7 @@ body.kudra-active #stage{padding-top:110px;}
 <div id="realmHeader">
   <a href="../index.html" class="exit-home" id="exitHome">↺  Homepage</a>
   <button id="mapBtn" title="Open the Marduk View">⬡ MAP</button>
+  <button id="muteBtn" title="Toggle music">♪ MUSIC</button>
   <button id="exitKBtn" title="Exit Kudramarduk Mode">✕ EXIT K MODE</button>
   <button id="resetBtn" title="Reset all progress">↺ RESET</button>
   <div class="key-bar" id="keyBar"></div>
@@ -1044,7 +1053,10 @@ function render(x, y) {
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v6.7';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v6.8';
+
+  // Music — zone-aware track selection
+  MusicEngine.playForTile(x, y, tile);
 
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
@@ -1121,7 +1133,11 @@ const PATH_A_SEQ = [[0,0],[0,-1],[-1,-1],[-1,-2],[-2,-2],[-2,-3],[-3,-3],[-3,-4]
   [-8,-8],[-8,-9],[-9,-9],[-9,-10],[-10,-10],[-10,-11],[-10,-12],[-10,-13]];
 
 // Steps where Emily's ghost appears (0-indexed, 24 steps total)
-const EMILY_GHOST_STEPS = new Set([2, 5, 9, 13, 17, 20]);
+// Stage 1 (0–5): no ghosts — forest edge, warm light
+// Stage 2 (6–11): sparse ghosts at the edge of vision
+// Stage 3 (12–17): frequent, closer — the dark wood
+// Stage 4 (18–23): every tile — the facility threshold
+const EMILY_GHOST_STEPS = new Set([7, 9, 12, 14, 16, 18, 19, 20, 21, 22, 23]);
 
 let emilyParallaxRaf = null;
 let emilyMouseHandler = null;
@@ -1501,29 +1517,40 @@ function spawnHexGhost(container, color, options={}) {
   setTimeout(()=>el.remove(), duration + 100);
 }
 
-// Emily path ghost system — frequency increases near the house
+// Emily path ghost system — four-stage escalation matching path design v1
 let emilyGhostInterval = null;
 function startEmilyGhosts(step, total) {
   clearInterval(emilyGhostInterval);
-  const progress   = step / (total - 1); // 0→1
-  const baseDelay  = Math.max(400, 3500 - progress * 3000); // ms between ghosts
-  const erratic    = progress > 0.65;    // last 35% = erratic
+  const progress = step / (total - 1); // 0→1
+
+  // Stage 1 (steps 0–5, progress <0.25): no ambient ghosts at all
+  if (progress < 0.25) return;
+
+  // Stage mapping
+  // Stage 2 (0.25–0.5): sparse, distant — ghost at edge of perception
+  // Stage 3 (0.5–0.76): frequent, visible — dark wood
+  // Stage 4 (0.76+): erratic, aggressive — the facility
+  const stage = progress < 0.5 ? 2 : progress < 0.76 ? 3 : 4;
+  const baseDelay = stage === 2 ? 3200 : stage === 3 ? 1300 : 380;
+  const erratic   = stage === 4;
 
   function scheduleNext() {
     const delay = erratic
-      ? baseDelay * (0.2 + Math.random()*0.9)  // chaotic near house
-      : baseDelay * (0.7 + Math.random()*0.6);
+      ? baseDelay * (0.15 + Math.random() * 0.85)
+      : baseDelay * (0.7  + Math.random() * 0.6);
     emilyGhostInterval = setTimeout(() => {
       const mist = document.getElementById('efMist');
       if (!mist) return;
       const hue = erratic
-        ? ['#b060ff','#60b0ff','#ff60b0','#8080ff'][Math.floor(Math.random()*4)]
-        : '#8844cc';
-      const count = erratic ? (1 + Math.floor(Math.random()*3)) : 1;
-      for (let i=0;i<count;i++) {
+        ? ['#b060ff','#60b0ff','#ff60b0','#8080ff','#ffffff'][Math.floor(Math.random()*5)]
+        : stage === 3 ? '#9955dd' : '#8844cc';
+      // Stage 4: can spawn up to 4 at once; stage 3: 1–2; stage 2: always 1
+      const count = erratic ? (1 + Math.floor(Math.random()*3))
+                  : stage === 3 ? (Math.random() > 0.6 ? 2 : 1) : 1;
+      for (let i = 0; i < count; i++) {
         spawnHexGhost(mist, hue, {
-          size: 20 + Math.random()*22,
-          duration: erratic ? 600+Math.random()*800 : 1000+Math.random()*800,
+          size:     stage === 4 ? 18 + Math.random()*28 : 16 + Math.random()*18,
+          duration: erratic ? 450 + Math.random()*700 : 900 + Math.random()*900,
         });
       }
       scheduleNext();
@@ -3884,6 +3911,177 @@ function renderHouseScene(s, x, y, tile, scene) {
 }
 
 
+/* ══════════════════════════════════════════════════
+ *  MUSIC ENGINE — zone-aware crossfading ambient score
+ *  Tracks live in realm/music/*.mp3
+ *  Autoplay unlocks on first user interaction.
+ *  Two Audio elements crossfade so there is no silence
+ *  between zone transitions.
+ * ═════════════════════════════════════════════════*/
+const MusicEngine = (() => {
+  const BASE = 'music/';
+  const TRACKS = {
+    emily_path_music_1:    BASE + 'emily_path_music_1.mp3',
+    emily_path_music_2:    BASE + 'emily_path_music_2.mp3',
+    eli_house_music:       BASE + 'eli_house_music.mp3',
+    eli_path_music:        BASE + 'eli_path_music.mp3',
+    house_threshold_music: BASE + 'house_threshold_music.mp3',
+    melchizedek_path_music:BASE + 'melchizedek_path_music.mp3',
+    low_stress_major:      BASE + 'low_stress_major.mp3',
+    low_stress_minor:      BASE + 'low_stress_minor.mp3',
+    quiz_stress_music:     BASE + 'quiz_stress_music.mp3',
+    high_stress_music:     BASE + 'high_stress_music.mp3',
+  };
+
+  const TARGET_VOL = 0.62;
+  const FADE_MS    = 2200; // crossfade duration
+
+  let currentKey  = null;
+  let muted       = (localStorage.getItem('mm_muted') === '1');
+  let started     = false;  // true after first user gesture
+
+  // Two audio elements — we ping-pong between them for crossfade
+  const elA = new Audio(); elA.loop = true; elA.volume = 0;
+  const elB = new Audio(); elB.loop = true; elB.volume = 0;
+  let activeEl   = elA;
+  let inactiveEl = elB;
+
+  function _fade(el, from, to, ms) {
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min((now - start) / ms, 1);
+      el.volume = from + (to - from) * t;
+      if (t < 1) requestAnimationFrame(tick);
+      else if (to === 0) { el.pause(); el.currentTime = 0; }
+    };
+    requestAnimationFrame(tick);
+  }
+
+  function _play(key) {
+    if (!started || !key || !TRACKS[key]) return;
+    if (key === currentKey) return;
+    currentKey = key;
+
+    const next = inactiveEl;
+    next.src = TRACKS[key];
+    next.load();
+    const targetVol = muted ? 0 : TARGET_VOL;
+
+    next.play().then(() => {
+      // Fade new track in, fade old track out simultaneously
+      _fade(next, 0, targetVol, FADE_MS);
+      _fade(activeEl, activeEl.volume, 0, FADE_MS);
+      [activeEl, inactiveEl] = [inactiveEl, activeEl];
+    }).catch(() => {});
+  }
+
+  // Determine which track to play based on tile position
+  function _getTrack(x, y, tile) {
+    if (!tile) return 'low_stress_major';
+
+    // Emily's path — two-phase score matching the design schematic
+    if (tile.on_path && tile.on_path.includes('A')) {
+      const step = (tile.path_step && tile.path_step['A'] != null)
+                   ? tile.path_step['A'] : 0;
+      // Stage 1–2 (steps 0–11): early forest, warm, mysterious
+      // Stage 3–4 (steps 12–23): dark wood through facility threshold
+      return step < 12 ? 'emily_path_music_1' : 'emily_path_music_2';
+    }
+
+    // Eve's house interior (House E — Crimson)
+    if (tile.house_id && (tile.house_id === 'E' || tile.house_id.toLowerCase().includes('eli') || tile.house_id.toLowerCase().includes('eve'))) {
+      return 'eli_house_music';
+    }
+    if (tile.type === 'locked_zone_interior' && tile.zone_color &&
+        (tile.zone_color === '#701818' || tile.zone_color === '#A83232')) {
+      return 'eli_house_music';
+    }
+
+    // Any house front door / zone threshold — momentary transition cue
+    if (tile.type === 'house_front_door' || tile.type === 'locked_zone_threshold') {
+      return 'house_threshold_music';
+    }
+
+    // Path E — Eve/Eli/Crimson
+    if (tile.on_path && tile.on_path.includes('E')) {
+      return 'eli_path_music';
+    }
+
+    // Path D — Jeremy/Melchizedek/Ice
+    if (tile.on_path && tile.on_path.includes('D')) {
+      return 'melchizedek_path_music';
+    }
+
+    // Quiz area
+    if (tile.type === 'quiz') {
+      return 'quiz_stress_music';
+    }
+
+    // Darker ambient paths
+    if (tile.on_path && tile.on_path.some(p => ['C','G','H','B'].includes(p))) {
+      return 'low_stress_minor';
+    }
+
+    // Home, Path F, Path M, general exploration
+    return 'low_stress_major';
+  }
+
+  // Public API
+  function playForTile(x, y, tile) {
+    _play(_getTrack(x, y, tile));
+  }
+
+  function start() {
+    if (started) return;
+    started = true;
+    // Start with whatever is current track (or default)
+    if (!currentKey) _play('low_stress_major');
+    else {
+      activeEl.volume = muted ? 0 : TARGET_VOL;
+      activeEl.play().catch(() => {});
+    }
+  }
+
+  function toggleMute() {
+    muted = !muted;
+    localStorage.setItem('mm_muted', muted ? '1' : '0');
+    activeEl.volume = muted ? 0 : TARGET_VOL;
+    const btn = document.getElementById('muteBtn');
+    if (btn) {
+      btn.textContent = muted ? '♪ MUTED' : '♪ MUSIC';
+      btn.classList.toggle('muted', muted);
+    }
+    return muted;
+  }
+
+  function isMuted() { return muted; }
+
+  // Wire up mute button once DOM is ready
+  function initBtn() {
+    const btn = document.getElementById('muteBtn');
+    if (!btn) return;
+    btn.textContent = muted ? '♪ MUTED' : '♪ MUSIC';
+    if (muted) btn.classList.add('muted');
+    btn.addEventListener('click', () => {
+      start();        // unlock autoplay on first click
+      toggleMute();
+    });
+  }
+
+  return { playForTile, start, toggleMute, isMuted, initBtn };
+})();
+
+// Unlock music on any first user interaction
+function _musicUnlockOnce() {
+  MusicEngine.start();
+  document.removeEventListener('touchstart', _musicUnlockOnce);
+  document.removeEventListener('click',      _musicUnlockOnce);
+  document.removeEventListener('keydown',    _musicUnlockOnce);
+}
+document.addEventListener('touchstart', _musicUnlockOnce, {passive:true});
+document.addEventListener('click',      _musicUnlockOnce);
+document.addEventListener('keydown',    _musicUnlockOnce);
+
 /* ── Boot ──────────────────────────────────────── */
 async function boot() {
   const res = await fetch('realm.json');
@@ -3920,6 +4118,7 @@ async function boot() {
     }
   }
   render(start.x, start.y);
+  MusicEngine.initBtn();
 }
 boot();
 </script>
