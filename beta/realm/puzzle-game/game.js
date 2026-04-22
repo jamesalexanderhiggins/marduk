@@ -28,7 +28,7 @@
   const rangeParam = params.get('range');
   const redirect = params.get('redirect') || '';
   const autoAdvance = params.get('auto') !== '0';
-  const VERSION = 'v13';
+  const VERSION = 'v14';
   const hue = Number(params.get('hue') || '195');
   if (versionMarker) versionMarker.textContent = VERSION;
 
@@ -99,8 +99,8 @@
   function levelBand(level) { return BANDS.find(b => level >= b.start && level <= b.end) || BANDS[0]; }
   function phase01(level) { return clamp((level - 1) / 99, 0, 1); }
   function assistanceForLevel(level) { return Math.pow(1 - phase01(level), 1.45) * 0.82; }
-  function dazzleForLevel(level) { return clamp(0.42 + phase01(level) * 2.65, 0.42, 3.2); }
-  function timerForLevel(level) { return level === 1 ? 68 : lerp(58, 20, phase01(level)); }
+  function dazzleForLevel(level) { return clamp(0.48 + phase01(level) * 3.8, 0.48, 4.9); }
+  function timerForLevel(level) { return (level === 1 ? 68 : lerp(58, 20, phase01(level))) + 20; }
   function rotationSpeedForLevel(level) { return lerp(0.0002, 0.00135, phase01(level)); }
   function nearFactor() { return state ? Math.pow(getCoherence(), 2.2) : 0; }
 
@@ -118,7 +118,7 @@
     comp.ratio.value = 8;
     comp.attack.value = 0.004;
     comp.release.value = 0.18;
-    masterGain.gain.value = 0.68;
+    masterGain.gain.value = 1.0;
     masterGain.connect(comp).connect(audioCtx.destination);
     return audioCtx;
   }
@@ -145,16 +145,28 @@
     humGain.connect(masterGain);
     const t0 = ctxA.currentTime;
     humGain.gain.setValueAtTime(0.0001, t0);
-    humGain.gain.exponentialRampToValueAtTime(0.035, t0 + 0.35);
+    humGain.gain.exponentialRampToValueAtTime(0.065, t0 + 0.35);
     carrier.start(t0); shimmer.start(t0); lfo.start(t0);
     humNodes = { carrier, shimmer, lfo, humGain };
   }
   function unlockAudio() {
     const ctxA = ensureAudio();
     if (!ctxA) return;
-    if (ctxA.state === 'suspended') ctxA.resume();
-    audioUnlocked = true;
-    startHum();
+    const arm = () => {
+      audioUnlocked = true;
+      startHum();
+      if (!window.__vectorMaskAudioArmed) {
+        window.__vectorMaskAudioArmed = true;
+        simpleTone(420, 0.08, 'square', 0.16, 110);
+        simpleTone(760, 0.11, 'triangle', 0.1, 160, 0.05);
+        noiseBurst(0.04, 0.018, 1400, 0.03);
+      }
+    };
+    if (ctxA.state === 'suspended') {
+      ctxA.resume().then(arm).catch(() => {});
+    } else {
+      arm();
+    }
   }
   function simpleTone(freq = 220, dur = 0.08, type = 'square', gain = 0.08, glide = 0, when = 0) {
     const ctxA = ensureAudio();
@@ -194,8 +206,8 @@
     const n = nearFactor();
     const amt = Math.abs(Number(value)) / 100;
     const base = 250 + amt * 420 + n * 200;
-    simpleTone(base, 0.07, 'square', 0.11, 120);
-    simpleTone(base * 1.98, 0.05, 'square', 0.05, -60, 0.012);
+    simpleTone(base, 0.08, 'square', 0.16, 130);
+    simpleTone(base * 1.98, 0.06, 'square', 0.09, -60, 0.012);
     if (n > 0.42) noiseBurst(0.045, 0.018 + n * 0.02, 1050);
   }
   function alignmentSound() {
@@ -209,15 +221,15 @@
     if (n > 0.72) noiseBurst(0.032, 0.016 + n * 0.018, 1450);
   }
   function laserSound() {
-    simpleTone(1320 + Math.random() * 380, 0.12, 'square', 0.12, -460);
-    simpleTone(760 + Math.random() * 240, 0.16, 'sawtooth', 0.07, -520, 0.016);
-    noiseBurst(0.07, 0.025, 1700);
+    simpleTone(1320 + Math.random() * 380, 0.14, 'square', 0.18, -460);
+    simpleTone(760 + Math.random() * 240, 0.18, 'sawtooth', 0.11, -520, 0.016);
+    noiseBurst(0.09, 0.04, 1700);
   }
   function solveSound() {
-    simpleTone(380, 0.08, 'square', 0.09, 120, 0);
-    simpleTone(560, 0.09, 'square', 0.08, 160, 0.05);
-    simpleTone(840, 0.12, 'triangle', 0.07, 220, 0.11);
-    simpleTone(1180, 0.18, 'sine', 0.06, 280, 0.16);
+    simpleTone(380, 0.08, 'square', 0.13, 120, 0);
+    simpleTone(560, 0.09, 'square', 0.12, 160, 0.05);
+    simpleTone(840, 0.12, 'triangle', 0.11, 220, 0.11);
+    simpleTone(1180, 0.18, 'sine', 0.1, 280, 0.16);
   }
   function updateHum() {
     if (!humNodes || !audioUnlocked || !state) return;
@@ -298,32 +310,33 @@
   }
 
 
-  function buildStarterFaceShape() { return buildFaceShape(1); }
+  
+  function buildStarterMaskShape() { return buildMaskShape(1); }
 
   function buildAlignmentLevel(level, base) {
     const seed = level * 9.127;
-    const span = level === 1 ? 2.25 : lerp(2.2, Math.PI * 1.08, phase01(level));
+    const span = level === 1 ? 2.15 : lerp(2.1, Math.PI * 1.12, phase01(level));
     const targetRx = (rand(seed + 3) * 2 - 1) * Math.PI;
     const targetRy = (rand(seed + 4) * 2 - 1) * Math.PI;
     const targetRz = (rand(seed + 5) * 2 - 1) * Math.PI;
     const startOffsetRx = (rand(seed + 31) > 0.5 ? 1 : -1) * span;
-    const startOffsetRy = (rand(seed + 41) > 0.5 ? 1 : -1) * (span * 0.9);
-    const startOffsetRz = (rand(seed + 51) > 0.5 ? 1 : -1) * (span * 0.74);
-    const targetDepth = (rand(seed + 7) * 2 - 1) * lerp(0.08, 0.8, phase01(level));
-    const depthSpan = level === 1 ? 0.9 : lerp(0.86, 1.1, phase01(level));
+    const startOffsetRy = (rand(seed + 41) > 0.5 ? 1 : -1) * (span * 0.88);
+    const startOffsetRz = (rand(seed + 51) > 0.5 ? 1 : -1) * (span * 0.7);
+    const targetDepth = (rand(seed + 7) * 2 - 1) * lerp(0.08, 0.82, phase01(level));
+    const depthSpan = level === 1 ? 0.74 : lerp(0.82, 1.08, phase01(level));
     const startDepth = targetDepth + (rand(seed + 61) > 0.5 ? 1 : -1) * depthSpan;
     const isStarter = level === 1;
     return {
       ...base,
       mode: 'ALIGNMENT',
       objective: isStarter
-        ? 'Rotate the face lattice until it settles into the ghost mask.'
-        : 'Rotate the live face lattice until it occupies the ghost mask exactly.',
-      help: 'Drag to rotate in space. Use the sliders for precise correction. Read the face by eye and settle it deliberately into the ghost frame.',
-      tolerance: isStarter ? 0.5 : clamp(1.02 - level * 0.0078, 0.07, 1.02),
-      depthTolerance: isStarter ? 0.42 : clamp(1.02 - level * 0.0072, 0.1, 1.02),
-      magnetRadius: isStarter ? 0.3 : lerp(0.74, 0.02, phase01(level)),
-      shape: isStarter ? buildStarterFaceShape() : buildFaceShape(level),
+        ? 'Rotate the live mask until the three-line sigil settles into the ghost mask.'
+        : 'Rotate the live mask until it occupies the ghost mask exactly.',
+      help: 'Drag to rotate in space. Use the sliders for precise correction. Read the theatrical mask by eye and seat it deliberately into the ghost frame.',
+      tolerance: isStarter ? 0.48 : clamp(0.96 - level * 0.0072, 0.07, 0.96),
+      depthTolerance: isStarter ? 0.4 : clamp(0.98 - level * 0.0068, 0.1, 0.98),
+      magnetRadius: isStarter ? 0.22 : lerp(0.55, 0.015, phase01(level)),
+      shape: isStarter ? buildStarterMaskShape() : buildMaskShape(level),
       rx: wrapAngle(targetRx + startOffsetRx),
       ry: wrapAngle(targetRy + startOffsetRy),
       rz: wrapAngle(targetRz + startOffsetRz),
@@ -333,90 +346,109 @@
       depth: clamp(startDepth, -1.15, 1.15),
       targetDepth,
       solvedHold: 0,
-      autoSpin: level > 18 ? 0.0005 + level * 0.00001 : 0,
+      autoSpin: level > 14 ? 0.0005 + level * 0.000011 : 0,
       worldSpin: rotationSpeedForLevel(level),
-      minSolveTime: isStarter ? 2600 : Math.max(800, 1500 - level * 6),
+      minSolveTime: isStarter ? 2600 : Math.max(900, 1600 - level * 5),
       tutorialVisibleBoost: isStarter ? 1 : 0,
     };
   }
 
-  function buildFaceShape(level) {
+  function buildMaskShape(level) {
     const pts = [];
-    const edges = [];
-    const rings = [
-      { y: -152, rx: 34, rz: 28, count: 8 },
-      { y: -120, rx: 58, rz: 46, count: 10 },
-      { y: -84, rx: 92, rz: 72, count: 14 },
-      { y: -36, rx: 118, rz: 88, count: 16 },
-      { y: 14, rx: 110, rz: 82, count: 16 },
-      { y: 64, rx: 94, rz: 76, count: 14 },
-      { y: 118, rx: 74, rz: 62, count: 12 },
-      { y: 164, rx: 42, rz: 38, count: 10 }
+    const allEdges = [];
+    const addPt = (x, y, z) => (pts.push({ x, y, z }), pts.length - 1);
+    const chain = (arr) => { for (let i = 0; i < arr.length - 1; i++) allEdges.push([arr[i], arr[i + 1]]); };
+    const loop = (arr) => { for (let i = 0; i < arr.length; i++) allEdges.push([arr[i], arr[(i + 1) % arr.length]]); };
+    const addArc = (cx, cy, rx, lift, zFront, steps, start = Math.PI, end = 0) => {
+      const arr = [];
+      for (let i = 0; i < steps; i++) {
+        const t = start + (end - start) * (i / (steps - 1));
+        const x = cx + Math.cos(t) * rx;
+        const y = cy + Math.sin(t) * lift;
+        const norm = Math.abs((x - cx) / rx);
+        const z = zFront * Math.pow(Math.max(0, 1 - norm), 1.25);
+        arr.push(addPt(x, y, z));
+      }
+      return arr;
+    };
+    const addLoopOval = (cx, cy, rx, ry, steps, zFront, yTilt = 0) => {
+      const arr = [];
+      for (let i = 0; i < steps; i++) {
+        const t = i / steps * Math.PI * 2;
+        const x = cx + Math.cos(t) * rx;
+        const y = cy + Math.sin(t) * ry + Math.sin(t * 2) * yTilt;
+        const norm = Math.abs((x - cx) / rx);
+        const z = zFront * Math.pow(Math.max(0, 1 - norm), 1.4);
+        arr.push(addPt(x, y, z));
+      }
+      return arr;
+    };
+
+    const top = addPt(0, -160, 20);
+    const brow = addPt(0, -92, 58);
+    const noseTop = addPt(0, -38, 92);
+    const philtrum = addPt(0, 42, 70);
+    const mouthCenter = addPt(0, 92, 56);
+    const chin = addPt(0, 164, 22);
+    chain([top, brow, noseTop, philtrum, mouthCenter, chin]);
+
+    const leftOutline = [
+      addPt(-34, -138, 14), addPt(-68, -118, 10), addPt(-96, -66, 18), addPt(-110, -8, 20),
+      addPt(-96, 56, 18), addPt(-72, 118, 10), addPt(-38, 154, 12)
     ];
-    const ringStarts = [];
-    rings.forEach((ring, idx) => {
-      const start = pts.length;
-      ringStarts.push(start);
-      for (let i = 0; i < ring.count; i++) {
-        const t = i / ring.count * Math.PI * 2;
-        const cheek = Math.sin(t) ** 2;
-        const chinPull = idx > 5 ? (idx - 5) * 2.6 : 0;
-        const browPush = idx < 3 ? (2 - idx) * 2 : 0;
-        pts.push({
-          x: Math.cos(t) * ring.rx * (0.94 + cheek * 0.08),
-          y: ring.y + Math.sin(t * 2) * (idx === 3 ? 2.5 : 0) - chinPull + browPush,
-          z: Math.sin(t) * ring.rz
-        });
-      }
-      for (let i = 0; i < ring.count; i++) edges.push([start + i, start + ((i + 1) % ring.count)]);
-      if (idx > 0) {
-        const prevStart = ringStarts[idx - 1], prevCount = rings[idx - 1].count;
-        for (let i = 0; i < ring.count; i++) {
-          const j = Math.floor(i / ring.count * prevCount) % prevCount;
-          edges.push([start + i, prevStart + j]);
-        }
-      }
-    });
+    const rightOutline = [
+      addPt(34, -138, 14), addPt(68, -118, 10), addPt(96, -66, 18), addPt(110, -8, 20),
+      addPt(96, 56, 18), addPt(72, 118, 10), addPt(38, 154, 12)
+    ];
+    chain([top, ...leftOutline, chin]);
+    chain([top, ...rightOutline, chin]);
 
-    function addLoop(cx, cy, cz, rx, ry, rz, count, phase = 0) {
-      const start = pts.length;
-      for (let i = 0; i < count; i++) {
-        const t = phase + i / count * Math.PI * 2;
-        pts.push({ x: cx + Math.cos(t) * rx, y: cy + Math.sin(t) * ry, z: cz + Math.sin(t) * rz });
-      }
-      for (let i = 0; i < count; i++) edges.push([start + i, start + ((i + 1) % count)]);
-      return start;
-    }
+    const forehead = addArc(0, -112, 72, 12, 38, 7);
+    chain(forehead);
 
-    const eyeL = addLoop(-38, -28, 58, 18, 10, 8, 12);
-    const eyeR = addLoop(38, -28, 58, 18, 10, 8, 12);
-    const browL = addLoop(-40, -46, 34, 24, 4, 5, 10, 0.2);
-    const browR = addLoop(40, -46, 34, 24, 4, 5, 10, -0.2);
-    const mouth = addLoop(0, 88, 46, 34, 12, 8, 16, 0);
-    const noseBridge = pts.length;
-    pts.push({ x: 0, y: -64, z: 24 }, { x: 0, y: -24, z: 56 }, { x: -10, y: 20, z: 74 }, { x: 10, y: 20, z: 74 }, { x: 0, y: 36, z: 58 });
-    edges.push([noseBridge, noseBridge+1],[noseBridge+1,noseBridge+2],[noseBridge+1,noseBridge+3],[noseBridge+2,noseBridge+4],[noseBridge+3,noseBridge+4]);
-    const jaw = [ringStarts[4]+8, ringStarts[5]+7, ringStarts[6]+6, ringStarts[7]+5, ringStarts[7]+6, ringStarts[6]+7, ringStarts[5]+8, ringStarts[4]+9];
-    for (let i = 0; i < jaw.length - 1; i++) edges.push([jaw[i], jaw[i+1]]);
-    // connect features into face
-    edges.push([eyeL+0, ringStarts[2]+6],[eyeL+6, ringStarts[3]+6],[eyeR+0, ringStarts[2]+1],[eyeR+6, ringStarts[3]+1]);
-    edges.push([browL+2, ringStarts[2]+7],[browR+7, ringStarts[2]+0],[mouth+0, ringStarts[5]+2],[mouth+8, ringStarts[5]+9]);
-    // silhouette markers
-    pts.push({ x: -82, y: -10, z: 6 }, { x: 82, y: -10, z: 6 }, { x: -64, y: 58, z: 10 }, { x: 64, y: 58, z: 10 });
-    const a = pts.length - 4;
-    edges.push([a, ringStarts[3]+4],[a+1, ringStarts[3]+12],[a+2, ringStarts[5]+5],[a+3, ringStarts[5]+9]);
+    const leftBrow = addArc(-40, -62, 28, 9, 48, 5);
+    const rightBrow = addArc(40, -62, 28, 9, 48, 5);
+    chain(leftBrow); chain(rightBrow);
 
-    if (level > 35) {
-      // extra facial scaffolding for later levels
-      const templeL = addLoop(-72, -12, 12, 10, 26, 6, 10);
-      const templeR = addLoop(72, -12, 12, 10, 26, 6, 10);
-      edges.push([templeL+2, browL+1],[templeR+7, browR+8]);
-    }
-    if (level > 70) {
-      const halo = addLoop(0, -18, -18, 142, 176, 24, 22);
-      for (let i = 0; i < 8; i++) edges.push([halo + i * 2, ringStarts[i % ringStarts.length]]);
-    }
-    return { pts, edges };
+    const leftEye = addLoopOval(-40, -26, 20, 10, 8, 66, 1.5);
+    const rightEye = addLoopOval(40, -26, 20, 10, 8, 66, 1.5);
+    loop(leftEye); loop(rightEye);
+
+    const noseLeft = [brow, addPt(-10, -12, 80), addPt(-18, 16, 88), addPt(-10, 34, 74)];
+    const noseRight = [brow, addPt(10, -12, 80), addPt(18, 16, 88), addPt(10, 34, 74)];
+    chain(noseLeft); chain(noseRight);
+    allEdges.push([noseLeft[1], noseRight[1]],[noseLeft[2], noseRight[2]],[noseLeft[3], noseRight[3]],[noseLeft[2], philtrum],[noseRight[2], philtrum]);
+
+    const mouthOuter = addLoopOval(0, 96, 40, 16, 12, 58, -2.5);
+    loop(mouthOuter);
+    const mouthInner = addLoopOval(0, 98, 20, 7, 8, 44, -1.2);
+    loop(mouthInner);
+
+    const cheekUpperL = addArc(-44, 26, 42, 12, 40, 5);
+    const cheekUpperR = addArc(44, 26, 42, 12, 40, 5);
+    const cheekLowerL = addArc(-38, 64, 34, 10, 28, 5);
+    const cheekLowerR = addArc(38, 64, 34, 10, 28, 5);
+    chain(cheekUpperL); chain(cheekUpperR); chain(cheekLowerL); chain(cheekLowerR);
+
+    const chinArc = addArc(0, 134, 48, 18, 26, 7);
+    chain(chinArc);
+
+    const leftTemple = addArc(-66, -18, 18, 44, 12, 4, -Math.PI/2, Math.PI/2);
+    const rightTemple = addArc(66, -18, 18, 44, 12, 4, Math.PI/2, 3*Math.PI/2);
+    chain(leftTemple); chain(rightTemple);
+
+    // connective surface scaffolding
+    allEdges.push(
+      [leftOutline[1], leftBrow[0]],[leftOutline[2], leftEye[6]],[leftOutline[3], cheekUpperL[2]],[leftOutline[4], cheekLowerL[2]],[leftOutline[5], mouthOuter[7]],
+      [rightOutline[1], rightBrow[rightBrow.length-1]],[rightOutline[2], rightEye[2]],[rightOutline[3], cheekUpperR[2]],[rightOutline[4], cheekLowerR[2]],[rightOutline[5], mouthOuter[1]],
+      [leftBrow[2], brow],[rightBrow[2], brow],[leftEye[2], noseLeft[1]],[rightEye[6], noseRight[1]],[noseLeft[3], mouthOuter[8]],[noseRight[3], mouthOuter[10]],
+      [cheekUpperL[4], mouthOuter[8]],[cheekUpperR[0], mouthOuter[10]],[cheekLowerL[4], chinArc[1]],[cheekLowerR[0], chinArc[5]],[forehead[0], leftOutline[0]],[forehead[6], rightOutline[0]]
+    );
+
+    // ensure exact progression from 3 to 103 lines
+    const maxLines = 103;
+    const lineCount = Math.min(maxLines, 3 + Math.floor((level - 1) * 100 / 99));
+    return { pts, edges: allEdges.slice(0, lineCount), lineCount, maxLines };
   }
 
   function rotatePoint(p, rx, ry, rz, depth) {
@@ -478,7 +510,7 @@
     bandLabel.textContent = state.band;
     modeLabel.textContent = state.mode;
     objectiveLabel.textContent = state.objective;
-    storyLabel.textContent = state.story;
+    storyLabel.textContent = `${state.story} ${state.shape && state.shape.lineCount ? `Mask density: ${state.shape.lineCount}/${state.shape.maxLines} lines.` : ''}`.trim();
     helpText.textContent = state.help;
     runLabel.textContent = `${queue[runIndex]} / ${queue[queue.length - 1]}`;
     timeLimit = timerForLevel(level);
@@ -502,8 +534,8 @@
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
     for (const b of bokeh) {
-      const x = clamp(b.x - px * (12 + dazzle * 9) * b.z, -b.r, innerWidth + b.r);
-      const y = clamp(b.y - py * (10 + dazzle * 7) * b.z, -b.r, innerHeight + b.r);
+      const x = clamp(b.x - px * (16 + dazzle * 12) * b.z, -b.r, innerWidth + b.r);
+      const y = clamp(b.y - py * (13 + dazzle * 10) * b.z, -b.r, innerHeight + b.r);
       const rr = b.r * (0.82 + dazzle * 0.14 + near * 0.06);
       const grad = ctx.createRadialGradient(x, y, 0, x, y, rr);
       grad.addColorStop(0, `hsla(${b.hue} 100% 80% / ${b.a * dazzle})`);
@@ -516,8 +548,8 @@
     for (const s of stars) {
       ctx.globalAlpha = s.a;
       const tw = Math.sin(time * 0.001 * s.z + s.x * 0.01) * 0.3 + 0.7;
-      const sx = clamp(s.x - px * (6 + dazzle * 6) * s.z, -3, innerWidth + 3);
-      const sy = clamp(s.y - py * (6 + dazzle * 6) * s.z, -3, innerHeight + 3);
+      const sx = clamp(s.x - px * (8 + dazzle * 9) * s.z, -3, innerWidth + 3);
+      const sy = clamp(s.y - py * (8 + dazzle * 9) * s.z, -3, innerHeight + 3);
       ctx.fillStyle = '#d8f7ff';
       ctx.beginPath(); ctx.arc(sx, sy, s.z * tw, 0, Math.PI * 2); ctx.fill();
     }
@@ -548,8 +580,8 @@
       const d = Math.hypot(dx, dy);
       const glow = clamp(1 - d / 150, 0, 1);
       const pulse = Math.sin(time * 0.0012 + h.drift) * 0.5 + 0.5;
-      const hx = clamp(h.x - px * (12 + dazzle * 10) * h.z, -h.size * 2, innerWidth + h.size * 2);
-      const hy = clamp(h.y - py * (9 + dazzle * 7) * h.z, -h.size * 2, innerHeight + h.size * 2);
+      const hx = clamp(h.x - px * (16 + dazzle * 14) * h.z, -h.size * 2, innerWidth + h.size * 2);
+      const hy = clamp(h.y - py * (12 + dazzle * 10) * h.z, -h.size * 2, innerHeight + h.size * 2);
       drawHex(hx, hy, h.size + glow * 5, glow, pulse);
     }
     ctx.restore();
@@ -573,10 +605,10 @@
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
     fighters.forEach((f, i) => {
-      f.x += f.vx * (0.45 + dazzle * 0.2);
+      f.x += f.vx * (0.5 + dazzle * 0.28);
       f.y += f.vy + Math.sin(time * 0.001 + f.drift) * 0.08;
       if (f.x > innerWidth + 40) { f.x = -40; f.y = innerHeight * (0.1 + Math.random() * 0.4); }
-      const sx = f.x - px * (18 + dazzle * 10); const sy = f.y - py * (12 + dazzle * 8);
+      const sx = f.x - px * (24 + dazzle * 16); const sy = f.y - py * (18 + dazzle * 12);
       ctx.strokeStyle = `hsla(${f.hue} 100% 72% / 0.42)`;
       ctx.lineWidth = 1.2;
       ctx.beginPath();
@@ -584,7 +616,7 @@
       ctx.lineTo(sx, sy);
       ctx.lineTo(sx - f.size, sy - f.size * 0.18);
       ctx.stroke();
-      if (Math.random() < 0.0012 + dazzle * 0.0018) {
+      if (Math.random() < 0.0015 + dazzle * 0.0026) {
         battleLasers.push({ x: sx, y: sy, vx: -6 - Math.random() * 7, vy: (Math.random() - 0.5) * 2.5, life: 1, hue: f.hue });
         laserSound();
       }
@@ -597,7 +629,7 @@
       ctx.beginPath(); ctx.moveTo(l.x, l.y); ctx.lineTo(l.x - l.vx * 4, l.y - l.vy * 4); ctx.stroke();
       if (l.life <= 0 || l.x < -80 || l.y < -80 || l.y > innerHeight + 80) battleLasers.splice(i, 1);
     }
-    if (Math.random() < 0.0009 + dazzle * 0.0012) {
+    if (Math.random() < 0.001 + dazzle * 0.0022) {
       const y = innerHeight * (0.16 + Math.random() * 0.52);
       battleLasers.push({ x: innerWidth + 120, y, vx: -16 - Math.random() * 14, vy: -1 + Math.random() * 2, life: 1.15, hue: (hue + 140) % 360 });
       laserSound();
