@@ -87,7 +87,7 @@
   function phase01(level) { return clamp((level - 1) / 99, 0, 1); }
   function assistanceForLevel(level) { return Math.pow(1 - phase01(level), 1.25); }
   function dazzleForLevel(level) { return clamp(0.35 + phase01(level) * 1.4, 0.35, 1.75); }
-  function timerForLevel(level) { return lerp(58, 20, phase01(level)); }
+  function timerForLevel(level) { return level === 1 ? 65 : lerp(58, 20, phase01(level)); }
   function rotationSpeedForLevel(level) { return lerp(0.00018, 0.00115, phase01(level)); }
   function nearFactor() { return state ? Math.pow(getCoherence(), 2.2) : 0; }
 
@@ -234,10 +234,53 @@
     return buildGateLevel(level, base);
   }
 
+  function buildStarterShape() {
+    const pts = [
+      { x: -120, y: 0, z: 0 },
+      { x: -40, y: -70, z: -40 },
+      { x: 55, y: -48, z: 38 },
+      { x: 118, y: 18, z: -24 },
+      { x: 34, y: 86, z: 42 },
+      { x: -62, y: 66, z: -36 },
+      { x: 0, y: 0, z: 96 },
+      { x: 0, y: 0, z: -96 },
+    ];
+    const edges = [
+      [0,1],[1,2],[2,3],[3,4],[4,5],[5,0],
+      [0,6],[1,6],[2,6],[3,6],[4,6],[5,6],
+      [0,7],[1,7],[2,7],[3,7],[4,7],[5,7]
+    ];
+    return { pts, edges };
+  }
+
   function buildAlignmentLevel(level, base) {
     const complexity = clamp(5 + Math.floor(level * 0.26), 5, 13);
     const layers = clamp(2 + Math.floor(level / 8), 2, 5);
     const seed = level * 9.127;
+    if (level === 1) {
+      return {
+        ...base,
+        mode: 'ALIGNMENT',
+        objective: 'Rotate the frame until the bright lattice settles exactly into the ghost shape.',
+        help: 'Drag anywhere on the puzzle to rotate it. Use the sliders for gentle correction. Level 1 has extra snap assistance.',
+        tolerance: 1.9,
+        depthTolerance: 1.9,
+        magnetRadius: 2.35,
+        shape: buildStarterShape(),
+        rx: -0.92,
+        ry: 0.84,
+        rz: -0.38,
+        targetRx: 0.18,
+        targetRy: -0.22,
+        targetRz: 0.12,
+        depth: 0.42,
+        targetDepth: 0,
+        solvedHold: 0,
+        autoSpin: 0,
+        worldSpin: 0.00008,
+        tutorialVisibleBoost: 1,
+      };
+    }
     return {
       ...base,
       mode: 'ALIGNMENT',
@@ -258,6 +301,7 @@
       solvedHold: 0,
       autoSpin: level > 22 ? 0.0011 + level * 0.000015 : 0,
       worldSpin: rotationSpeedForLevel(level),
+      tutorialVisibleBoost: 0,
     };
   }
   function buildCircuitLevel(level, base) {
@@ -561,13 +605,14 @@
       ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 1; ctx.stroke();
     }
     const coherence = getCoherence();
+    const visibleBoost = state.tutorialVisibleBoost ? 0.28 : 0;
     for (const seg of edges) {
       ctx.beginPath(); ctx.moveTo(seg.a.x, seg.a.y); ctx.lineTo(seg.b.x, seg.b.y);
-      ctx.strokeStyle = `rgba(134,242,255,${lerp(0.16, 0.46, coherence)})`; ctx.lineWidth = 4.4; ctx.stroke();
+      ctx.strokeStyle = `rgba(134,242,255,${lerp(0.16 + visibleBoost, 0.46 + visibleBoost * 0.5, coherence)})`; ctx.lineWidth = 4.4 + visibleBoost * 4; ctx.stroke();
       ctx.beginPath(); ctx.moveTo(seg.a.x, seg.a.y); ctx.lineTo(seg.b.x, seg.b.y);
       const localHue = (hue + time * 0.01 + seg.z * 0.04) % 360;
-      ctx.strokeStyle = `hsla(${localHue} 100% ${lerp(62, 84, coherence)}% / ${lerp(0.34, 0.98, coherence)})`;
-      ctx.lineWidth = 1.2 + seg.a.s * 1.8; ctx.stroke();
+      ctx.strokeStyle = `hsla(${localHue} 100% ${lerp(62, 84, coherence)}% / ${lerp(0.34 + visibleBoost, 0.98, coherence)})`;
+      ctx.lineWidth = 1.2 + seg.a.s * 1.8 + visibleBoost * 2.4; ctx.stroke();
     }
     if (coherence > 0.45) drawCoreBloom(innerWidth / 2, innerHeight / 2, 130 + coherence * 130, coherence);
     if (coherence > 0.62) {
