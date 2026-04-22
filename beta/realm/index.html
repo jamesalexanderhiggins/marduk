@@ -585,7 +585,7 @@ body.kudra-active #stage{padding-top:110px;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v6.6
+ *  MARDUK'S MAP — /realm/  grid SPA  v6.7
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -1044,7 +1044,7 @@ function render(x, y) {
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v6.6';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v6.7';
 
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
@@ -1984,7 +1984,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v6.6)
+ *  MARDUK VIEW — game-like map (v6.7)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -2145,62 +2145,84 @@ function setupMVCanvas() {
     const zoomStage = mvZoom < 0.75 ? 'far' : (mvZoom < 1.6 ? 'mid' : 'near');
     const now = performance.now();
 
-    // ── BACKGROUND: rotating honeycomb in space ──────────────────────────
-    mvBgRot += 0.000028;   // one full rotation every ~220 s
-    const BG_R  = 34;      // background hex radius (fixed, not zoom-dependent)
-    const BG_HW = Math.sqrt(3) * BG_R;
-    const BG_HH = BG_R * 1.5;
+    // ════════════════════════════════════════════════════════════════
+    //  BACKGROUND: rotating honeycomb floating in space
+    //  • Parallax: background moves at 25% of pan speed → appears distant
+    //  • Parallax zoom: bg scales at 60% of game zoom → depth illusion
+    //  • Fills entire screen always, hexes cover even void area
+    // ════════════════════════════════════════════════════════════════
+    mvBgRot += 0.000022;   // slow cosmic rotation
     const HOUSE_COLS_MV = ['#C9A84C','#4A7C59','#7B5EA7','#5B9AB8',
                             '#A83232','#A86A32','#2D8888','#5C2D82'];
+
+    // Parallax-scaled hex size: bg zooms less than game = depth
+    const bgZoom = Math.pow(mvZoom, 0.55);
+    const BG_R   = 28 * bgZoom;
+    const BG_HW  = Math.sqrt(3) * BG_R;
+    const BG_HH  = BG_R * 1.5;
+    // Parallax pan: bg moves at 25% of game pan offset
+    const bgOX = mvOffset.x * 0.25;
+    const bgOY = mvOffset.y * 0.25;
+
     ctx.save();
+    // Rotate around screen centre
     ctx.translate(W/2, H/2);
     ctx.rotate(mvBgRot);
     ctx.translate(-W/2, -H/2);
-    // Cover canvas + rotation margin
-    const bgMargin = Math.max(W, H) * 0.7;
-    const bgXmin = Math.floor((-W/2 - bgMargin) / BG_HW) - 1;
-    const bgXmax = Math.ceil( ( W/2 + bgMargin) / BG_HW) + 1;
-    const bgYmin = Math.floor((-H/2 - bgMargin) / BG_HH) - 1;
-    const bgYmax = Math.ceil( ( H/2 + bgMargin) / BG_HH) + 1;
-    for (let bq = bgXmin; bq <= bgXmax; bq++) {
-      for (let br = bgYmin; br <= bgYmax; br++) {
-        const bx = W/2 + bq * BG_HW + (br % 2 === 0 ? 0 : BG_HW * 0.5);
-        const by = H/2 + br * BG_HH;
-        const ang = Math.atan2(by - H/2, bx - W/2);
+
+    // Enough cells to cover canvas diagonal + rotation margin
+    const bgDiag = Math.hypot(W, H);
+    const bgSteps = Math.ceil(bgDiag / BG_HW) + 3;
+    const bgCX = W/2 + bgOX, bgCY = H/2 + bgOY;
+
+    for (let bq = -bgSteps; bq <= bgSteps; bq++) {
+      for (let br = -bgSteps; br <= bgSteps; br++) {
+        const bx = bgCX + bq * BG_HW + (br % 2 === 0 ? 0 : BG_HW * 0.5);
+        const by = bgCY - br * BG_HH;   // note: -br so y matches game orientation
+        // Only draw cells actually near the canvas
+        if (bx < -BG_R*2 || bx > W+BG_R*2 || by < -BG_R*2 || by > H+BG_R*2) continue;
+        const ang    = Math.atan2(by - bgCY, bx - bgCX);
         const sector = Math.floor(((ang + Math.PI) / (Math.PI*2)) * 8 + 0.5) % 8;
-        const col = HOUSE_COLS_MV[sector];
-        const dist = Math.hypot(bx - W/2, by - H/2) / (Math.max(W,H)*0.6);
-        const fade = Math.max(0, 1 - dist * 0.7);
-        // Fill
+        const col    = HOUSE_COLS_MV[sector];
+        const dist   = Math.hypot(bx - bgCX, by - bgCY) / (bgDiag * 0.55);
+        const fade   = Math.max(0.03, 0.14 - dist * 0.09);
         ctx.beginPath();
         for (let i = 0; i < 6; i++) {
           const a = Math.PI/3*i - Math.PI/2;
-          i===0 ? ctx.moveTo(bx+Math.cos(a)*BG_R, by+Math.sin(a)*BG_R)
-                : ctx.lineTo(bx+Math.cos(a)*BG_R, by+Math.sin(a)*BG_R);
+          i===0 ? ctx.moveTo(bx + Math.cos(a)*BG_R, by + Math.sin(a)*BG_R)
+                : ctx.lineTo(bx + Math.cos(a)*BG_R, by + Math.sin(a)*BG_R);
         }
         ctx.closePath();
-        ctx.fillStyle   = col + Math.round(fade * 12).toString(16).padStart(2,'0');
-        ctx.strokeStyle = col + Math.round(fade * 30).toString(16).padStart(2,'0');
-        ctx.lineWidth   = 0.6;
-        ctx.fill(); ctx.stroke();
+        ctx.fillStyle   = col + Math.round(fade * 255).toString(16).padStart(2,'0');
+        ctx.strokeStyle = col + Math.round(fade * 1.8 * 255).toString(16).padStart(2,'0');
+        ctx.lineWidth   = 0.8;
+        ctx.fill();
+        ctx.stroke();
       }
     }
     ctx.restore();
 
-    // ── INFINITE VOID: black hexes for all positions beyond ±GRID_EXTENT ─
-    // Calculate visible grid range from current pan/zoom
-    const voidMinX = Math.floor((-W/2 - mvOffset.x) / hexW) - 2;
-    const voidMaxX = Math.ceil( ( W/2 - mvOffset.x) / hexW) + 2;
-    const voidMinY = Math.floor((-H/2 - mvOffset.y) / hexH) - 2;
-    const voidMaxY = Math.ceil( ( H/2 - mvOffset.y) / hexH) + 2;
+    // ════════════════════════════════════════════════════════════════
+    //  INFINITE VOID GRID: black hexes covering ALL positions on screen
+    //  Both inside and outside ±GRID_EXTENT — game tiles overwrite inside
+    //  Uses gridToScreen so void cells align perfectly with game cells
+    // ════════════════════════════════════════════════════════════════
+    // Correct visible range: screen top = highest grid y, screen bottom = lowest
+    const vMinX = Math.floor((-W/2 - mvOffset.x) / hexW) - 2;
+    const vMaxX = Math.ceil( ( W/2 - mvOffset.x) / hexW) + 2;
+    const vMaxY = Math.ceil( (mvOffset.y + H/2)  / hexH) + 2;  // screen top → max grid y
+    const vMinY = Math.floor((mvOffset.y - H/2)  / hexH) - 2;  // screen bot → min grid y
     ctx.fillStyle   = 'rgba(0,0,0,1)';
-    ctx.strokeStyle = 'rgba(0,0,0,0)';
-    for (let vx = voidMinX; vx <= voidMaxX; vx++) {
-      for (let vy = voidMinY; vy <= voidMaxY; vy++) {
+    ctx.strokeStyle = 'rgba(20,14,36,0.55)';   // faint purple seam = grid pattern visible
+    ctx.lineWidth   = 0.5;
+    for (let vx = vMinX; vx <= vMaxX; vx++) {
+      for (let vy = vMinY; vy <= vMaxY; vy++) {
+        // Skip game tiles — they'll be drawn correctly by the tile loop below
         if (Math.abs(vx) <= GRID_EXTENT && Math.abs(vy) <= GRID_EXTENT) continue;
         const [vpx, vpy] = gridToScreen(vx, vy, m);
-        drawHex(ctx, vpx, vpy, r * 0.95);
+        drawHex(ctx, vpx, vpy, r);   // full radius — no gap
         ctx.fill();
+        ctx.stroke();
       }
     }
 
