@@ -549,7 +549,7 @@ body.kudra-active #stage{padding-top:110px;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v5.9
+ *  MARDUK'S MAP — /realm/  grid SPA  v6.0
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -802,13 +802,11 @@ function getDoors(x, y) {
       continue;
     }
 
-    /* Marduk View tile — only accessible from (0, +2) Spine after all 10 correct, or if already unlocked */
+    /* Marduk View tile — always walkable (player can pass through).
+     * OPENING the Marduk View interface still requires quiz completion.
+     * Removing the sealed arrow unblocks the route to the quiz area. */
     if (neighbour.type === 'marduk_view') {
-      if (isMVUnlocked() || (x === 0 && y === 2 && countCorrect() >= 10)) {
-        out[d] = {open: true};
-      } else {
-        out[d] = {sealed: true, reason: 'mv-locked'};
-      }
+      out[d] = {open: true};
       continue;
     }
     if (tile.type === 'marduk_view') { out[d] = {open: true}; continue; }
@@ -987,7 +985,7 @@ function render(x, y) {
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v5.9';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v6.0';
 
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
@@ -1591,7 +1589,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v5.9)
+ *  MARDUK VIEW — game-like map (v6.0)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -1801,11 +1799,24 @@ function setupMVCanvas() {
         const hasContent  = tile.type && tile.type !== 'empty';
         const isOnPath    = tile.on_path && tile.on_path.length > 0;
         const houseHex    = tile.house_color || null;
-        const pathHex     = isOnPath && tile.path_colors
-          ? tile.path_colors[tile.on_path[0]] : null;
-        // Pre-quiz: only visited tiles get colour/shape; others are dark
-        const preQuiz     = !isMVUnlocked() && !isKudraUnlocked();
-        const showFull    = !preQuiz || isVisited || isHome || isMV;
+        // Distinct path colours — never match house colours
+        const PATH_DISPLAY_COLORS = {
+          A:'#8B6914',B:'#1E5C3A',C:'#4A2878',D:'#1A4D6E',
+          E:'#7A2020',F:'#7A4A20',G:'#1A5C5C',H:'#3C1A7A',M:'#7A6520'
+        };
+        const _ppid   = isOnPath ? tile.on_path.find(p => PATH_DISPLAY_COLORS[p]) : null;
+        const pathHex = _ppid ? PATH_DISPLAY_COLORS[_ppid] : null;
+        // Pure path tile = on a path but NOT a house tile
+        const isPurePath = isOnPath && !isHouse;
+        // Visibility rules:
+        //   pre-quiz    → only visited tiles lit (map dark, slowly revealed)
+        //   post-quiz   → everything lit EXCEPT unvisited pure path tiles
+        //   kudramarduk → everything lit including unvisited paths
+        const preQuiz  = !isMVUnlocked() && !isKudraUnlocked();
+        const postQuiz = isMVUnlocked() && !isKudraUnlocked();
+        const showFull = isKudraUnlocked()
+          || isVisited || isHome || isMV
+          || (postQuiz && !isPurePath);
         const isSelected  = selKey === `${x},${y}`;
 
         // Base styling
@@ -1815,8 +1826,8 @@ function setupMVCanvas() {
         let rimColor = null;
 
         if (!showFull) {
-          // Unvisited pre-quiz: dark, featureless
-          fill = 'rgba(8,6,16,0.92)'; stroke = 'rgba(60,50,80,0.25)'; lineW = 0.6;
+          // Unvisited / unrevealed: dark, featureless
+          fill = 'rgba(8,6,16,0.92)'; stroke = 'rgba(60,50,80,0.2)'; lineW = 0.5;
         } else if (isHome)  { fill = 'rgba(232,201,110,0.55)'; stroke = '#e8c96e'; lineW = 2.8; rimColor = 'rgba(232,201,110,0.8)'; }
         else if (isMV)      { fill = 'rgba(232,201,110,0.32)'; stroke = '#c9a84c'; lineW = 2.2; rimColor = 'rgba(232,201,110,0.55)'; }
         else if (isFrontDoor && houseHex) {
@@ -1827,10 +1838,10 @@ function setupMVCanvas() {
           // Interior house tile — tinted in house colour
           fill = houseHex + '28'; stroke = houseHex + '88'; lineW = 1.4;
         }
-        else if (isOnPath && pathHex && !isHouse) {
-          // Path tile — coloured thread
-          fill = pathHex + '1E'; stroke = pathHex + 'CC'; lineW = 1.8;
-          if (tile.on_path.length > 1) { rimColor = pathHex + '66'; } // shared tile
+        else if (isPurePath && pathHex) {
+          // Path tile — distinct dim colour, clearly different from houses
+          fill = pathHex + '28'; stroke = pathHex + 'BB'; lineW = 1.6;
+          if (isVisited) { fill = pathHex + '45'; stroke = pathHex + 'EE'; lineW = 2.0; }
         }
         else if (isCorrectQ){ fill = 'rgba(232,201,110,0.24)'; stroke = '#e8c96e'; lineW = 1.8; rimColor = 'rgba(232,201,110,0.4)'; }
         else if (isQuiz)    { fill = 'rgba(126,184,212,0.14)'; stroke = 'rgba(126,184,212,0.42)'; lineW = 1.4; }
@@ -1861,14 +1872,14 @@ function setupMVCanvas() {
 
         // Radial inner gradient fill for a "shine"
         drawHex(ctx, px, py, r * 0.94);
-        if (hasContent || isHome || isMV) {
+        if (showFull && (hasContent || isHome || isMV)) {
           const g = ctx.createRadialGradient(px - r * 0.25, py - r * 0.3, 1, px, py, r * 0.95);
           const fillBase = fill;
           g.addColorStop(0, fillBase.replace(/[\d.]+\)$/, (a) => Math.min(parseFloat(a) + 0.18, 1) + ')'));
           g.addColorStop(1, fillBase);
           ctx.fillStyle = g;
         } else {
-          ctx.fillStyle = fill;
+          ctx.fillStyle = fill; // dark for !showFull tiles, normal otherwise
         }
         ctx.fill();
         ctx.strokeStyle = stroke;
@@ -1940,7 +1951,10 @@ function setupMVCanvas() {
           if (cvHasContent && !tile.key_id) { // skip shape if key already drawn there
             const shapeR = r*0.42;
             let shapeColor = stroke !== 'rgba(13,17,25,0.75)' ? stroke : 'rgba(201,168,76,0.7)';
-            if (tile.on_path && tile.path_colors) shapeColor = tile.path_colors[tile.on_path[0]] || shapeColor;
+            if (tile.on_path) {
+              const _sp = tile.on_path.find(p => PATH_DISPLAY_COLORS[p]);
+              if (_sp) shapeColor = PATH_DISPLAY_COLORS[_sp];
+            }
             drawCoordShape(ctx, x, y, px, py-r*0.08, shapeR, shapeColor, 0.55+0.25*Math.sin(now*0.0008+(x*7+y*11)*0.4));
           }
         }

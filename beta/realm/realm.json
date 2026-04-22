@@ -31,12 +31,12 @@
         "G": 0
       },
       "path_colors": {
-        "A": "#C9A84C",
-        "B": "#4A7C59",
-        "C": "#7B5EA7",
-        "E": "#A83232",
-        "F": "#A86A32",
-        "G": "#2D8888"
+        "A": "#A07030",
+        "B": "#2E5C38",
+        "C": "#503B80",
+        "E": "#701818",
+        "F": "#6E4418",
+        "G": "#145858"
       }
     },
     "0,1": {
@@ -44,7 +44,8 @@
       "name": "The Marduk View",
       "emoji": "✦",
       "era": "The Reward · All Things Seen",
-      "coord": "THE MARDUK VIEW · ALL ROOMS"
+      "coord": "THE MARDUK VIEW · ALL ROOMS",
+      "always_walkable": true
     },
     "0,5": {
       "type": "threshold",
@@ -115,7 +116,7 @@
         "E": 1
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       }
     },
     "1,0": {
@@ -131,7 +132,7 @@
         "F": 1
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "1,-1": {
@@ -147,7 +148,7 @@
         "G": 1
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       }
     },
     "0,-1": {
@@ -164,7 +165,7 @@
         "A": 1
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-1,-1": {
@@ -181,7 +182,7 @@
         "A": 2
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-1,0": {
@@ -197,7 +198,7 @@
         "B": 1
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       }
     },
     "-1,1": {
@@ -214,7 +215,7 @@
         "C": 1
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       }
     },
     "2,1": {
@@ -230,7 +231,7 @@
         "E": 2
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       }
     },
     "2,0": {
@@ -246,7 +247,7 @@
         "F": 2
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "2,-1": {
@@ -269,7 +270,7 @@
         "G": 2
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       }
     },
     "1,-2": {
@@ -300,7 +301,7 @@
         "A": 3
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-2,-2": {
@@ -317,7 +318,7 @@
         "A": 4
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-2,-1": {
@@ -340,7 +341,7 @@
         "B": 2
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       }
     },
     "-2,1": {
@@ -356,7 +357,7 @@
         "C": 2
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       }
     },
     "-3,3": {
@@ -379,7 +380,7 @@
         "C": 3
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       }
     },
     "3,2": {
@@ -395,7 +396,7 @@
         "D": 0
       },
       "path_colors": {
-        "D": "#5B9AB8"
+        "D": "#2A6880"
       }
     },
     "3,3": {
@@ -411,7 +412,7 @@
         "D": 1
       },
       "path_colors": {
-        "D": "#5B9AB8"
+        "D": "#2A6880"
       }
     },
     "-3,1": {
@@ -434,7 +435,7 @@
         "B": 3
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       }
     },
     "-3,-1": {
@@ -465,7 +466,7 @@
         "A": 6
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "3,1": {
@@ -481,7 +482,7 @@
         "E": 3
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       }
     },
     "3,0": {
@@ -504,7 +505,7 @@
         "F": 3
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "3,-2": {
@@ -527,7 +528,7 @@
         "G": 3
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       }
     },
     "-2,-3": {
@@ -544,7 +545,7 @@
         "A": 5
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-1,-3": {
@@ -599,10 +600,11 @@
         "A": 23
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       },
-      "key_id": "A",
-      "key_note": "Default placement — reassign via Room Card"
+      "keys_required": [
+        "A"
+      ]
     },
     "-12,-13": {
       "type": "house_interior",
@@ -857,7 +859,9 @@
       },
       "house_letter": "A",
       "house_color": "#C9A84C",
-      "house_sector": "SW"
+      "house_sector": "SW",
+      "key_id": "H",
+      "key_note": "Key H found inside House A"
     },
     "-8,-15": {
       "type": "house_interior",
@@ -894,156 +898,108 @@
       "house_sector": "SW"
     },
     "-12,-16": {
-      "type": "house_interior",
-      "name": "The Ivory Elephant",
-      "emoji": "🐘",
-      "era": "House of Emily · Maisie’s Carving",
-      "lore": "<p>Made of elephant tusk. Carved by someone whose hands had known an animal that died before Maisie was born.</p><p>On its face, the broken spears where the tusks used to be. <em>What happened to this elephant’s tusks?</em></p><p>The carving was taken, and Maisie with it.</p>",
-      "house_id": "a",
+      "type": "empty",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
       },
-      "house_letter": "A",
-      "house_color": "#C9A84C",
-      "house_sector": "SW",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 69
+        "M": 85
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-11,-16": {
-      "type": "house_interior",
-      "name": "The Blue-Lit Vision",
-      "emoji": "🔷",
-      "era": "House of Emily · LAX Remembered",
-      "lore": "<p>Hands of brilliant white-blue light. A silver cube. A gold coin with a picture of a bear. Cyrillic script.</p><p>Marcus had dreamed this. Marcus had dreamed this exactly.</p>",
-      "house_id": "a",
+      "type": "empty",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
       },
-      "house_letter": "A",
-      "house_color": "#C9A84C",
-      "house_sector": "SW",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 68
+        "M": 86
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-10,-16": {
-      "type": "house_interior",
-      "name": "Emily in the Water",
-      "emoji": "✨",
-      "era": "House of Emily · Undiminished",
-      "lore": "<p>The sparkle of her sharp blue eyes, the bottomless black of their centres. The breeze. The gesture. The green dress.</p><p>As the world fell into murky grey, she stood luminescent, in full clarity: <em>unextinguished; undiminished</em>.</p>",
-      "house_id": "a",
+      "type": "empty",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
       },
-      "house_letter": "A",
-      "house_color": "#C9A84C",
-      "house_sector": "SW",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 67
+        "M": 87
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-9,-16": {
-      "type": "house_interior",
-      "name": "The Promise to Maisie",
-      "emoji": "🙏",
-      "era": "House of Emily · At the Cave’s Mouth",
-      "lore": "<p>Jake kneels at the entrance of the cave. He makes the oath a father makes when there is nothing else left to give.</p><p>Some oaths outlive the people who make them.</p>",
-      "house_id": "a",
+      "type": "empty",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
       },
-      "house_letter": "A",
-      "house_color": "#C9A84C",
-      "house_sector": "SW",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 66
+        "M": 88
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-8,-16": {
-      "type": "house_interior",
-      "name": "The Confession",
-      "emoji": "🕊️",
-      "era": "House of Emily · What Marcus Realised",
-      "lore": "<p>In Eli’s apartment, alone, Marcus reads the truth of the Daedalus philosophy. Jupiter’s Landing. The resource-based utopia. The placation of the craven with whatsoever they desire.</p><p><em>Eli is a fucking techno-communist.</em></p>",
-      "house_id": "a",
+      "type": "empty",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
       },
-      "house_letter": "A",
-      "house_color": "#C9A84C",
-      "house_sector": "SW",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 65
+        "M": 89
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-7,-16": {
-      "type": "house_interior",
-      "name": "The Word Carried",
-      "emoji": "🔥",
-      "era": "House of Emily · Climax",
-      "lore": "<p>Delacroix’s last words, recorded a month before his own disappearance, played from a laptop Marcus did not know he had kept.</p><p><em>Carry the flame. Carry the fire. Keep it alive.</em></p><p>The words are no longer spoken only to Marcus. They are spoken to you.</p>",
-      "house_id": "a",
+      "type": "empty",
       "palette": {
         "primary": "#2E4A3A",
         "accent": "#C9A34A",
         "moonlight": "#C8CBD0",
         "bg": "rgba(30,50,40,0.22)"
       },
-      "house_letter": "A",
-      "house_color": "#C9A84C",
-      "house_sector": "SW",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 64
+        "M": 90
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -1059,7 +1015,7 @@
         "A": 7
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-4,-4": {
@@ -1072,7 +1028,7 @@
         "A": 8
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-4,-5": {
@@ -1085,7 +1041,7 @@
         "A": 9
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-5,-5": {
@@ -1098,7 +1054,7 @@
         "A": 10
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-5,-6": {
@@ -1111,7 +1067,7 @@
         "A": 11
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-6,-6": {
@@ -1124,7 +1080,7 @@
         "A": 12
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-6,-7": {
@@ -1137,7 +1093,7 @@
         "A": 13
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-7,-7": {
@@ -1150,7 +1106,7 @@
         "A": 14
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-7,-8": {
@@ -1163,7 +1119,7 @@
         "A": 15
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-8,-8": {
@@ -1176,7 +1132,7 @@
         "A": 16
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-8,-9": {
@@ -1189,7 +1145,7 @@
         "A": 17
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-9,-9": {
@@ -1202,7 +1158,7 @@
         "A": 18
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-9,-10": {
@@ -1215,7 +1171,7 @@
         "A": 19
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-10,-10": {
@@ -1228,7 +1184,7 @@
         "A": 20
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-10,-11": {
@@ -1241,7 +1197,7 @@
         "A": 21
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-10,-12": {
@@ -1254,124 +1210,76 @@
         "A": 22
       },
       "path_colors": {
-        "A": "#C9A84C"
+        "A": "#A07030"
       }
     },
     "-16,-3": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "b",
-      "house_letter": "B",
-      "house_color": "#4A7C59",
-      "house_sector": "W",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 86
+        "M": 68
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-16,-2": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "b",
-      "house_letter": "B",
-      "house_color": "#4A7C59",
-      "house_sector": "W",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 87
+        "M": 67
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-16,-1": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "b",
-      "house_letter": "B",
-      "house_color": "#4A7C59",
-      "house_sector": "W",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 88
+        "M": 66
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-16,0": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "b",
-      "house_letter": "B",
-      "house_color": "#4A7C59",
-      "house_sector": "W",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 89
+        "M": 65
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-16,1": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "b",
-      "house_letter": "B",
-      "house_color": "#4A7C59",
-      "house_sector": "W",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 90
+        "M": 64
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-16,2": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "b",
-      "house_letter": "B",
-      "house_color": "#4A7C59",
-      "house_sector": "W",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 91
+        "M": 63
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -1559,10 +1467,11 @@
         "B": 13
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       },
-      "key_id": "B",
-      "key_note": "Default placement — reassign via Room Card"
+      "keys_required": [
+        "B"
+      ]
     },
     "-13,1": {
       "type": "house_interior",
@@ -1587,80 +1496,48 @@
       "house_sector": "W"
     },
     "-16,12": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "c",
-      "house_letter": "C",
-      "house_color": "#7B5EA7",
-      "house_sector": "NW",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 101
+        "M": 53
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-16,13": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "c",
-      "house_letter": "C",
-      "house_color": "#7B5EA7",
-      "house_sector": "NW",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 102
+        "M": 52
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-16,14": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "c",
-      "house_letter": "C",
-      "house_color": "#7B5EA7",
-      "house_sector": "NW",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 103
+        "M": 51
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "-16,15": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "c",
-      "house_letter": "C",
-      "house_color": "#7B5EA7",
-      "house_sector": "NW",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 104
+        "M": 50
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -1730,7 +1607,9 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "key_id": "B",
+      "key_note": "Key B found inside House C"
     },
     "-14,14": {
       "type": "house_interior",
@@ -1771,10 +1650,11 @@
         "C": 13
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       },
-      "key_id": "C",
-      "key_note": "Default placement — reassign via Room Card"
+      "keys_required": [
+        "C"
+      ]
     },
     "-13,13": {
       "type": "house_interior",
@@ -1843,20 +1723,12 @@
       "house_sector": "N"
     },
     "-4,16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "d",
-      "house_letter": "D",
-      "house_color": "#5B9AB8",
-      "house_sector": "N",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 117
+        "M": 37
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -1896,20 +1768,12 @@
       "house_sector": "N"
     },
     "-3,16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "d",
-      "house_letter": "D",
-      "house_color": "#5B9AB8",
-      "house_sector": "N",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 118
+        "M": 36
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -1949,20 +1813,12 @@
       "house_sector": "N"
     },
     "-2,16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "d",
-      "house_letter": "D",
-      "house_color": "#5B9AB8",
-      "house_sector": "N",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 119
+        "M": 35
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -2002,20 +1858,12 @@
       "house_sector": "N"
     },
     "-1,16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "d",
-      "house_letter": "D",
-      "house_color": "#5B9AB8",
-      "house_sector": "N",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 120
+        "M": 34
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -2055,20 +1903,12 @@
       "house_sector": "N"
     },
     "0,16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "d",
-      "house_letter": "D",
-      "house_color": "#5B9AB8",
-      "house_sector": "N",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 121
+        "M": 33
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -2091,10 +1931,11 @@
         "D": 11
       },
       "path_colors": {
-        "D": "#5B9AB8"
+        "D": "#2A6880"
       },
-      "key_id": "D",
-      "key_note": "Default placement — reassign via Room Card"
+      "keys_required": [
+        "D"
+      ]
     },
     "1,14": {
       "type": "house_interior",
@@ -2119,20 +1960,12 @@
       "house_sector": "N"
     },
     "1,16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "d",
-      "house_letter": "D",
-      "house_color": "#5B9AB8",
-      "house_sector": "N",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 122
+        "M": 32
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -2172,20 +2005,12 @@
       "house_sector": "N"
     },
     "2,16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "d",
-      "house_letter": "D",
-      "house_color": "#5B9AB8",
-      "house_sector": "N",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 123
+        "M": 31
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -2225,20 +2050,12 @@
       "house_sector": "N"
     },
     "3,16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "d",
-      "house_letter": "D",
-      "house_color": "#5B9AB8",
-      "house_sector": "N",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 124
+        "M": 30
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -2264,7 +2081,9 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "key_id": "C",
+      "key_note": "Key C found inside House D"
     },
     "4,15": {
       "type": "house_interior",
@@ -2278,20 +2097,12 @@
       "house_sector": "N"
     },
     "4,16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "d",
-      "house_letter": "D",
-      "house_color": "#5B9AB8",
-      "house_sector": "N",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 125
+        "M": 29
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -2314,21 +2125,18 @@
         "E": 13
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       },
-      "key_id": "E",
-      "key_note": "Default placement — reassign via Room Card"
+      "keys_required": [
+        "E"
+      ]
     },
     "12,12": {
-      "type": "house_interior",
+      "type": "transit",
       "name": null,
       "emoji": null,
       "era": null,
       "lore": null,
-      "house_id": "e",
-      "house_letter": "E",
-      "house_color": "#A83232",
-      "house_sector": "NE",
       "on_path": [
         "M"
       ],
@@ -2384,15 +2192,11 @@
       "house_sector": "NE"
     },
     "13,12": {
-      "type": "house_interior",
+      "type": "transit",
       "name": null,
       "emoji": null,
       "era": null,
       "lore": null,
-      "house_id": "e",
-      "house_letter": "E",
-      "house_color": "#A83232",
-      "house_sector": "NE",
       "on_path": [
         "M"
       ],
@@ -2448,15 +2252,11 @@
       "house_sector": "NE"
     },
     "14,12": {
-      "type": "house_interior",
+      "type": "transit",
       "name": null,
       "emoji": null,
       "era": null,
       "lore": null,
-      "house_id": "e",
-      "house_letter": "E",
-      "house_color": "#A83232",
-      "house_sector": "NE",
       "on_path": [
         "M"
       ],
@@ -2476,7 +2276,9 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "key_id": "G",
+      "key_note": "Key G found inside House E"
     },
     "14,14": {
       "type": "house_interior",
@@ -2512,15 +2314,11 @@
       "house_sector": "NE"
     },
     "15,12": {
-      "type": "house_interior",
+      "type": "transit",
       "name": null,
       "emoji": null,
       "era": null,
       "lore": null,
-      "house_id": "e",
-      "house_letter": "E",
-      "house_color": "#A83232",
-      "house_sector": "NE",
       "on_path": [
         "M"
       ],
@@ -2565,35 +2363,13 @@
       "house_sector": "NE"
     },
     "16,11": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "e",
-      "house_letter": "E",
-      "house_color": "#A83232",
-      "house_sector": "NE",
-      "on_path": [
-        "M"
-      ],
-      "path_step": {
-        "M": 14
-      },
-      "path_colors": {
-        "M": "#D4AF37"
-      }
+      "type": "empty",
+      "on_path": [],
+      "path_step": {},
+      "path_colors": {}
     },
     "16,12": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "e",
-      "house_letter": "E",
-      "house_color": "#A83232",
-      "house_sector": "NE",
+      "type": "empty",
       "on_path": [
         "M"
       ],
@@ -2605,37 +2381,40 @@
       }
     },
     "16,13": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "e",
-      "house_letter": "E",
-      "house_color": "#A83232",
-      "house_sector": "NE"
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 14
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "16,14": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "e",
-      "house_letter": "E",
-      "house_color": "#A83232",
-      "house_sector": "NE"
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 15
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "16,15": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "e",
-      "house_letter": "E",
-      "house_color": "#A83232",
-      "house_sector": "NE"
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 16
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "13,1": {
       "type": "house_front_door",
@@ -2654,10 +2433,9 @@
         "F": 14
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       },
-      "key_id": "F",
-      "key_note": "Default placement — reassign via Room Card"
+      "keys_required": []
     },
     "13,2": {
       "type": "house_interior",
@@ -2712,7 +2490,9 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "key_id": "D",
+      "key_note": "Key D found inside House F"
     },
     "14,3": {
       "type": "house_interior",
@@ -2781,100 +2561,60 @@
       "house_sector": "E"
     },
     "16,1": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "f",
-      "house_letter": "F",
-      "house_color": "#A86A32",
-      "house_sector": "E",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 24
+        "M": 130
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "16,2": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "f",
-      "house_letter": "F",
-      "house_color": "#A86A32",
-      "house_sector": "E",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 23
+        "M": 131
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "16,3": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "f",
-      "house_letter": "F",
-      "house_color": "#A86A32",
-      "house_sector": "E",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 22
+        "M": 132
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "16,4": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "f",
-      "house_letter": "F",
-      "house_color": "#A86A32",
-      "house_sector": "E",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 21
+        "M": 133
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "9,-16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "g",
-      "house_letter": "G",
-      "house_color": "#2D8888",
-      "house_sector": "SE",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 48
+        "M": 106
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -2914,20 +2654,12 @@
       "house_sector": "SE"
     },
     "10,-16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "g",
-      "house_letter": "G",
-      "house_color": "#2D8888",
-      "house_sector": "SE",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 47
+        "M": 107
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -2967,20 +2699,12 @@
       "house_sector": "SE"
     },
     "11,-16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "g",
-      "house_letter": "G",
-      "house_color": "#2D8888",
-      "house_sector": "SE",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 46
+        "M": 108
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -3006,7 +2730,9 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "key_id": "A",
+      "key_note": "Key A found inside House G"
     },
     "11,-13": {
       "type": "house_front_door",
@@ -3025,26 +2751,19 @@
         "G": 13
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       },
-      "key_id": "G",
-      "key_note": "Default placement — reassign via Room Card"
+      "keys_required": [
+        "G"
+      ]
     },
     "12,-16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "g",
-      "house_letter": "G",
-      "house_color": "#2D8888",
-      "house_sector": "SE",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 45
+        "M": 109
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -3084,20 +2803,12 @@
       "house_sector": "SE"
     },
     "13,-16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "g",
-      "house_letter": "G",
-      "house_color": "#2D8888",
-      "house_sector": "SE",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 44
+        "M": 110
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -3137,20 +2848,12 @@
       "house_sector": "SE"
     },
     "14,-16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "g",
-      "house_letter": "G",
-      "house_color": "#2D8888",
-      "house_sector": "SE",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 43
+        "M": 111
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -3190,20 +2893,12 @@
       "house_sector": "SE"
     },
     "-2,-16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "h",
-      "house_letter": "H",
-      "house_color": "#5C2D82",
-      "house_sector": "S",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 59
+        "M": 95
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -3243,20 +2938,12 @@
       "house_sector": "S"
     },
     "-1,-16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "h",
-      "house_letter": "H",
-      "house_color": "#5C2D82",
-      "house_sector": "S",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 58
+        "M": 96
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -3296,20 +2983,12 @@
       "house_sector": "S"
     },
     "0,-16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "h",
-      "house_letter": "H",
-      "house_color": "#5C2D82",
-      "house_sector": "S",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 57
+        "M": 97
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -3354,26 +3033,19 @@
         "H": 6
       },
       "path_colors": {
-        "H": "#5C2D82"
+        "H": "#3A1258"
       },
-      "key_id": "H",
-      "key_note": "Default placement — reassign via Room Card"
+      "keys_required": [
+        "H"
+      ]
     },
     "1,-16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "h",
-      "house_letter": "H",
-      "house_color": "#5C2D82",
-      "house_sector": "S",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 56
+        "M": 98
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -3413,20 +3085,12 @@
       "house_sector": "S"
     },
     "2,-16": {
-      "type": "house_interior",
-      "name": null,
-      "emoji": null,
-      "era": null,
-      "lore": null,
-      "house_id": "h",
-      "house_letter": "H",
-      "house_color": "#5C2D82",
-      "house_sector": "S",
+      "type": "empty",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 55
+        "M": 99
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -3474,7 +3138,7 @@
         "B": 4
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       }
     },
     "-5,1": {
@@ -3486,7 +3150,7 @@
         "B": 5
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       }
     },
     "-6,1": {
@@ -3498,7 +3162,7 @@
         "B": 6
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       }
     },
     "-7,1": {
@@ -3510,7 +3174,7 @@
         "B": 7
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       }
     },
     "-8,1": {
@@ -3522,7 +3186,7 @@
         "B": 8
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       }
     },
     "-9,1": {
@@ -3534,7 +3198,7 @@
         "B": 9
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       }
     },
     "-10,1": {
@@ -3546,7 +3210,7 @@
         "B": 10
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       }
     },
     "-11,1": {
@@ -3558,7 +3222,7 @@
         "B": 11
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       }
     },
     "-12,1": {
@@ -3570,7 +3234,7 @@
         "B": 12
       },
       "path_colors": {
-        "B": "#4A7C59"
+        "B": "#2E5C38"
       }
     },
     "-4,3": {
@@ -3582,7 +3246,7 @@
         "C": 4
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       }
     },
     "-5,4": {
@@ -3594,7 +3258,7 @@
         "C": 5
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       }
     },
     "-6,5": {
@@ -3606,7 +3270,7 @@
         "C": 6
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       }
     },
     "-7,6": {
@@ -3618,7 +3282,7 @@
         "C": 7
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       }
     },
     "-8,7": {
@@ -3630,7 +3294,7 @@
         "C": 8
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       }
     },
     "-9,8": {
@@ -3642,7 +3306,7 @@
         "C": 9
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       }
     },
     "-10,9": {
@@ -3654,7 +3318,7 @@
         "C": 10
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       }
     },
     "-11,10": {
@@ -3666,7 +3330,7 @@
         "C": 11
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       }
     },
     "-12,11": {
@@ -3678,7 +3342,7 @@
         "C": 12
       },
       "path_colors": {
-        "C": "#7B5EA7"
+        "C": "#503B80"
       }
     },
     "3,4": {
@@ -3690,7 +3354,7 @@
         "D": 2
       },
       "path_colors": {
-        "D": "#5B9AB8"
+        "D": "#2A6880"
       }
     },
     "3,5": {
@@ -3702,7 +3366,7 @@
         "D": 3
       },
       "path_colors": {
-        "D": "#5B9AB8"
+        "D": "#2A6880"
       }
     },
     "3,6": {
@@ -3714,7 +3378,7 @@
         "D": 4
       },
       "path_colors": {
-        "D": "#5B9AB8"
+        "D": "#2A6880"
       }
     },
     "3,7": {
@@ -3726,7 +3390,7 @@
         "D": 5
       },
       "path_colors": {
-        "D": "#5B9AB8"
+        "D": "#2A6880"
       }
     },
     "3,8": {
@@ -3738,7 +3402,7 @@
         "D": 6
       },
       "path_colors": {
-        "D": "#5B9AB8"
+        "D": "#2A6880"
       }
     },
     "3,9": {
@@ -3750,7 +3414,7 @@
         "D": 7
       },
       "path_colors": {
-        "D": "#5B9AB8"
+        "D": "#2A6880"
       }
     },
     "2,10": {
@@ -3762,7 +3426,7 @@
         "D": 8
       },
       "path_colors": {
-        "D": "#5B9AB8"
+        "D": "#2A6880"
       }
     },
     "1,11": {
@@ -3774,7 +3438,7 @@
         "D": 9
       },
       "path_colors": {
-        "D": "#5B9AB8"
+        "D": "#2A6880"
       }
     },
     "1,12": {
@@ -3786,7 +3450,7 @@
         "D": 10
       },
       "path_colors": {
-        "D": "#5B9AB8"
+        "D": "#2A6880"
       }
     },
     "4,2": {
@@ -3798,7 +3462,7 @@
         "E": 4
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       }
     },
     "5,3": {
@@ -3810,7 +3474,7 @@
         "E": 5
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       }
     },
     "6,4": {
@@ -3822,7 +3486,7 @@
         "E": 6
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       }
     },
     "7,5": {
@@ -3834,7 +3498,7 @@
         "E": 7
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       }
     },
     "8,6": {
@@ -3846,7 +3510,7 @@
         "E": 8
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       }
     },
     "9,7": {
@@ -3858,7 +3522,7 @@
         "E": 9
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       }
     },
     "10,8": {
@@ -3870,7 +3534,7 @@
         "E": 10
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       }
     },
     "11,9": {
@@ -3882,7 +3546,7 @@
         "E": 11
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       }
     },
     "12,10": {
@@ -3894,7 +3558,7 @@
         "E": 12
       },
       "path_colors": {
-        "E": "#A83232"
+        "E": "#701818"
       }
     },
     "4,-1": {
@@ -3906,7 +3570,7 @@
         "F": 4
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "5,-1": {
@@ -3918,7 +3582,7 @@
         "F": 5
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "6,-1": {
@@ -3930,7 +3594,7 @@
         "F": 6
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "7,-1": {
@@ -3942,7 +3606,7 @@
         "F": 7
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "8,-1": {
@@ -3954,7 +3618,7 @@
         "F": 8
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "9,0": {
@@ -3966,7 +3630,7 @@
         "F": 9
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "10,0": {
@@ -3978,7 +3642,7 @@
         "F": 10
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "11,0": {
@@ -3990,7 +3654,7 @@
         "F": 11
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "12,0": {
@@ -4002,7 +3666,7 @@
         "F": 12
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "13,0": {
@@ -4014,7 +3678,7 @@
         "F": 13
       },
       "path_colors": {
-        "F": "#A86A32"
+        "F": "#6E4418"
       }
     },
     "4,-4": {
@@ -4026,7 +3690,7 @@
         "G": 4
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       }
     },
     "5,-5": {
@@ -4038,7 +3702,7 @@
         "G": 5
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       }
     },
     "6,-6": {
@@ -4050,7 +3714,7 @@
         "G": 6
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       }
     },
     "7,-7": {
@@ -4062,7 +3726,7 @@
         "G": 7
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       }
     },
     "8,-8": {
@@ -4074,7 +3738,7 @@
         "G": 8
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       }
     },
     "9,-9": {
@@ -4086,7 +3750,7 @@
         "G": 9
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       }
     },
     "10,-10": {
@@ -4098,7 +3762,7 @@
         "G": 10
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       }
     },
     "11,-11": {
@@ -4110,7 +3774,7 @@
         "G": 11
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       }
     },
     "11,-12": {
@@ -4122,7 +3786,7 @@
         "G": 12
       },
       "path_colors": {
-        "G": "#2D8888"
+        "G": "#145858"
       }
     },
     "0,-7": {
@@ -4134,7 +3798,7 @@
         "H": 0
       },
       "path_colors": {
-        "H": "#5C2D82"
+        "H": "#3A1258"
       }
     },
     "0,-8": {
@@ -4146,7 +3810,7 @@
         "H": 1
       },
       "path_colors": {
-        "H": "#5C2D82"
+        "H": "#3A1258"
       }
     },
     "0,-9": {
@@ -4158,7 +3822,7 @@
         "H": 2
       },
       "path_colors": {
-        "H": "#5C2D82"
+        "H": "#3A1258"
       }
     },
     "0,-10": {
@@ -4170,7 +3834,7 @@
         "H": 3
       },
       "path_colors": {
-        "H": "#5C2D82"
+        "H": "#3A1258"
       }
     },
     "0,-11": {
@@ -4182,7 +3846,7 @@
         "H": 4
       },
       "path_colors": {
-        "H": "#5C2D82"
+        "H": "#3A1258"
       }
     },
     "0,-12": {
@@ -4194,7 +3858,7 @@
         "H": 5
       },
       "path_colors": {
-        "H": "#5C2D82"
+        "H": "#3A1258"
       }
     },
     "-8,6": {
@@ -4999,7 +4663,7 @@
         "M"
       ],
       "path_step": {
-        "M": 15
+        "M": 139
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5011,7 +4675,7 @@
         "M"
       ],
       "path_step": {
-        "M": 16
+        "M": 138
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5023,7 +4687,7 @@
         "M"
       ],
       "path_step": {
-        "M": 17
+        "M": 137
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5035,7 +4699,7 @@
         "M"
       ],
       "path_step": {
-        "M": 18
+        "M": 136
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5047,7 +4711,7 @@
         "M"
       ],
       "path_step": {
-        "M": 19
+        "M": 135
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5059,7 +4723,7 @@
         "M"
       ],
       "path_step": {
-        "M": 20
+        "M": 134
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5071,7 +4735,7 @@
         "M"
       ],
       "path_step": {
-        "M": 25
+        "M": 129
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5083,7 +4747,7 @@
         "M"
       ],
       "path_step": {
-        "M": 26
+        "M": 128
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5095,7 +4759,7 @@
         "M"
       ],
       "path_step": {
-        "M": 27
+        "M": 127
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5107,7 +4771,7 @@
         "M"
       ],
       "path_step": {
-        "M": 28
+        "M": 126
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5119,7 +4783,7 @@
         "M"
       ],
       "path_step": {
-        "M": 29
+        "M": 125
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5131,7 +4795,7 @@
         "M"
       ],
       "path_step": {
-        "M": 30
+        "M": 124
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5143,7 +4807,7 @@
         "M"
       ],
       "path_step": {
-        "M": 31
+        "M": 123
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5155,7 +4819,7 @@
         "M"
       ],
       "path_step": {
-        "M": 32
+        "M": 122
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5167,7 +4831,7 @@
         "M"
       ],
       "path_step": {
-        "M": 33
+        "M": 121
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5179,7 +4843,7 @@
         "M"
       ],
       "path_step": {
-        "M": 34
+        "M": 120
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5191,7 +4855,7 @@
         "M"
       ],
       "path_step": {
-        "M": 35
+        "M": 119
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5203,7 +4867,7 @@
         "M"
       ],
       "path_step": {
-        "M": 36
+        "M": 118
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5215,7 +4879,7 @@
         "M"
       ],
       "path_step": {
-        "M": 37
+        "M": 117
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5227,7 +4891,7 @@
         "M"
       ],
       "path_step": {
-        "M": 38
+        "M": 116
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5239,7 +4903,7 @@
         "M"
       ],
       "path_step": {
-        "M": 39
+        "M": 115
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5251,7 +4915,7 @@
         "M"
       ],
       "path_step": {
-        "M": 40
+        "M": 114
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5263,7 +4927,7 @@
         "M"
       ],
       "path_step": {
-        "M": 41
+        "M": 113
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5275,7 +4939,7 @@
         "M"
       ],
       "path_step": {
-        "M": 42
+        "M": 112
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5287,7 +4951,7 @@
         "M"
       ],
       "path_step": {
-        "M": 49
+        "M": 105
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5299,7 +4963,7 @@
         "M"
       ],
       "path_step": {
-        "M": 50
+        "M": 104
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5311,7 +4975,7 @@
         "M"
       ],
       "path_step": {
-        "M": 51
+        "M": 103
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5323,7 +4987,7 @@
         "M"
       ],
       "path_step": {
-        "M": 52
+        "M": 102
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5335,7 +4999,7 @@
         "M"
       ],
       "path_step": {
-        "M": 53
+        "M": 101
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5347,7 +5011,7 @@
         "M"
       ],
       "path_step": {
-        "M": 54
+        "M": 100
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5359,7 +5023,7 @@
         "M"
       ],
       "path_step": {
-        "M": 60
+        "M": 94
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5371,7 +5035,7 @@
         "M"
       ],
       "path_step": {
-        "M": 61
+        "M": 93
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5383,7 +5047,7 @@
         "M"
       ],
       "path_step": {
-        "M": 62
+        "M": 92
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5395,7 +5059,7 @@
         "M"
       ],
       "path_step": {
-        "M": 63
+        "M": 91
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5407,7 +5071,7 @@
         "M"
       ],
       "path_step": {
-        "M": 70
+        "M": 84
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5419,7 +5083,7 @@
         "M"
       ],
       "path_step": {
-        "M": 71
+        "M": 83
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5431,7 +5095,7 @@
         "M"
       ],
       "path_step": {
-        "M": 72
+        "M": 82
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5443,7 +5107,7 @@
         "M"
       ],
       "path_step": {
-        "M": 73
+        "M": 81
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5455,7 +5119,7 @@
         "M"
       ],
       "path_step": {
-        "M": 74
+        "M": 80
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5467,7 +5131,7 @@
         "M"
       ],
       "path_step": {
-        "M": 75
+        "M": 79
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5479,7 +5143,7 @@
         "M"
       ],
       "path_step": {
-        "M": 76
+        "M": 78
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5503,7 +5167,7 @@
         "M"
       ],
       "path_step": {
-        "M": 78
+        "M": 76
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5515,7 +5179,7 @@
         "M"
       ],
       "path_step": {
-        "M": 79
+        "M": 75
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5527,7 +5191,7 @@
         "M"
       ],
       "path_step": {
-        "M": 80
+        "M": 74
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5539,7 +5203,7 @@
         "M"
       ],
       "path_step": {
-        "M": 81
+        "M": 73
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5551,7 +5215,7 @@
         "M"
       ],
       "path_step": {
-        "M": 82
+        "M": 72
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5563,7 +5227,7 @@
         "M"
       ],
       "path_step": {
-        "M": 83
+        "M": 71
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5575,7 +5239,7 @@
         "M"
       ],
       "path_step": {
-        "M": 84
+        "M": 70
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5587,7 +5251,7 @@
         "M"
       ],
       "path_step": {
-        "M": 85
+        "M": 69
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5599,7 +5263,7 @@
         "M"
       ],
       "path_step": {
-        "M": 92
+        "M": 62
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5611,7 +5275,7 @@
         "M"
       ],
       "path_step": {
-        "M": 93
+        "M": 61
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5623,7 +5287,7 @@
         "M"
       ],
       "path_step": {
-        "M": 94
+        "M": 60
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5635,7 +5299,7 @@
         "M"
       ],
       "path_step": {
-        "M": 95
+        "M": 59
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5647,7 +5311,7 @@
         "M"
       ],
       "path_step": {
-        "M": 96
+        "M": 58
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5659,7 +5323,7 @@
         "M"
       ],
       "path_step": {
-        "M": 97
+        "M": 57
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5671,7 +5335,7 @@
         "M"
       ],
       "path_step": {
-        "M": 98
+        "M": 56
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5683,7 +5347,7 @@
         "M"
       ],
       "path_step": {
-        "M": 99
+        "M": 55
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5695,7 +5359,7 @@
         "M"
       ],
       "path_step": {
-        "M": 100
+        "M": 54
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5707,7 +5371,7 @@
         "M"
       ],
       "path_step": {
-        "M": 105
+        "M": 49
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5719,7 +5383,7 @@
         "M"
       ],
       "path_step": {
-        "M": 106
+        "M": 48
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5731,7 +5395,7 @@
         "M"
       ],
       "path_step": {
-        "M": 107
+        "M": 47
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5743,7 +5407,7 @@
         "M"
       ],
       "path_step": {
-        "M": 108
+        "M": 46
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5755,7 +5419,7 @@
         "M"
       ],
       "path_step": {
-        "M": 109
+        "M": 45
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5767,7 +5431,7 @@
         "M"
       ],
       "path_step": {
-        "M": 110
+        "M": 44
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5779,7 +5443,7 @@
         "M"
       ],
       "path_step": {
-        "M": 111
+        "M": 43
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5791,7 +5455,7 @@
         "M"
       ],
       "path_step": {
-        "M": 112
+        "M": 42
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5803,7 +5467,7 @@
         "M"
       ],
       "path_step": {
-        "M": 113
+        "M": 41
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5815,7 +5479,7 @@
         "M"
       ],
       "path_step": {
-        "M": 114
+        "M": 40
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5827,7 +5491,7 @@
         "M"
       ],
       "path_step": {
-        "M": 115
+        "M": 39
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5839,7 +5503,7 @@
         "M"
       ],
       "path_step": {
-        "M": 116
+        "M": 38
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5851,7 +5515,7 @@
         "M"
       ],
       "path_step": {
-        "M": 126
+        "M": 28
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5863,7 +5527,7 @@
         "M"
       ],
       "path_step": {
-        "M": 127
+        "M": 27
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5875,7 +5539,7 @@
         "M"
       ],
       "path_step": {
-        "M": 128
+        "M": 26
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5887,7 +5551,7 @@
         "M"
       ],
       "path_step": {
-        "M": 129
+        "M": 25
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5899,7 +5563,7 @@
         "M"
       ],
       "path_step": {
-        "M": 130
+        "M": 24
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5911,7 +5575,7 @@
         "M"
       ],
       "path_step": {
-        "M": 131
+        "M": 23
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5923,7 +5587,7 @@
         "M"
       ],
       "path_step": {
-        "M": 132
+        "M": 22
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5935,7 +5599,7 @@
         "M"
       ],
       "path_step": {
-        "M": 133
+        "M": 21
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -5947,19 +5611,63 @@
         "M"
       ],
       "path_step": {
-        "M": 134
+        "M": 20
       },
       "path_colors": {
         "M": "#D4AF37"
       }
     },
     "14,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 19
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-14,-5": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59",
+      "key_id": "E",
+      "key_note": "Key E found inside House B"
+    },
+    "16,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 17
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "15,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 18
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "15,10": {
       "type": "special",
       "on_path": [
         "M"
       ],
       "path_step": {
-        "M": 135
+        "M": 140
       },
       "path_colors": {
         "M": "#D4AF37"
@@ -6872,363 +6580,147 @@
       ],
       [
         16,
-        11
-      ],
-      [
-        16,
-        10
-      ],
-      [
-        16,
-        9
-      ],
-      [
-        16,
-        8
-      ],
-      [
-        16,
-        7
-      ],
-      [
-        16,
-        6
-      ],
-      [
-        16,
-        5
-      ],
-      [
-        16,
-        4
-      ],
-      [
-        16,
-        3
-      ],
-      [
-        16,
-        2
-      ],
-      [
-        16,
-        1
-      ],
-      [
-        16,
-        0
-      ],
-      [
-        16,
-        -1
-      ],
-      [
-        16,
-        -2
-      ],
-      [
-        16,
-        -3
-      ],
-      [
-        16,
-        -4
-      ],
-      [
-        16,
-        -5
-      ],
-      [
-        16,
-        -6
-      ],
-      [
-        16,
-        -7
-      ],
-      [
-        16,
-        -8
-      ],
-      [
-        16,
-        -9
-      ],
-      [
-        16,
-        -10
-      ],
-      [
-        16,
-        -11
-      ],
-      [
-        16,
-        -12
-      ],
-      [
-        16,
-        -13
-      ],
-      [
-        16,
-        -14
-      ],
-      [
-        16,
-        -15
-      ],
-      [
-        16,
-        -16
-      ],
-      [
-        15,
-        -16
-      ],
-      [
-        14,
-        -16
-      ],
-      [
-        13,
-        -16
-      ],
-      [
-        12,
-        -16
-      ],
-      [
-        11,
-        -16
-      ],
-      [
-        10,
-        -16
-      ],
-      [
-        9,
-        -16
-      ],
-      [
-        8,
-        -16
-      ],
-      [
-        7,
-        -16
-      ],
-      [
-        6,
-        -16
-      ],
-      [
-        5,
-        -16
-      ],
-      [
-        4,
-        -16
-      ],
-      [
-        3,
-        -16
-      ],
-      [
-        2,
-        -16
-      ],
-      [
-        1,
-        -16
-      ],
-      [
-        0,
-        -16
-      ],
-      [
-        -1,
-        -16
-      ],
-      [
-        -2,
-        -16
-      ],
-      [
-        -3,
-        -16
-      ],
-      [
-        -4,
-        -16
-      ],
-      [
-        -5,
-        -16
-      ],
-      [
-        -6,
-        -16
-      ],
-      [
-        -7,
-        -16
-      ],
-      [
-        -8,
-        -16
-      ],
-      [
-        -9,
-        -16
-      ],
-      [
-        -10,
-        -16
-      ],
-      [
-        -11,
-        -16
-      ],
-      [
-        -12,
-        -16
-      ],
-      [
-        -13,
-        -16
-      ],
-      [
-        -14,
-        -16
-      ],
-      [
-        -15,
-        -16
-      ],
-      [
-        -16,
-        -16
-      ],
-      [
-        -16,
-        -15
-      ],
-      [
-        -16,
-        -14
-      ],
-      [
-        -16,
-        -13
-      ],
-      [
-        -16,
-        -12
-      ],
-      [
-        -16,
-        -11
-      ],
-      [
-        -16,
-        -10
-      ],
-      [
-        -16,
-        -9
-      ],
-      [
-        -16,
-        -8
-      ],
-      [
-        -16,
-        -7
-      ],
-      [
-        -16,
-        -6
-      ],
-      [
-        -16,
-        -5
-      ],
-      [
-        -16,
-        -4
-      ],
-      [
-        -16,
-        -3
-      ],
-      [
-        -16,
-        -2
-      ],
-      [
-        -16,
-        -1
-      ],
-      [
-        -16,
-        0
-      ],
-      [
-        -16,
-        1
-      ],
-      [
-        -16,
-        2
-      ],
-      [
-        -16,
-        3
-      ],
-      [
-        -16,
-        4
-      ],
-      [
-        -16,
-        5
-      ],
-      [
-        -16,
-        6
-      ],
-      [
-        -16,
-        7
-      ],
-      [
-        -16,
-        8
-      ],
-      [
-        -16,
-        9
-      ],
-      [
-        -16,
-        10
-      ],
-      [
-        -16,
-        11
-      ],
-      [
-        -16,
-        12
-      ],
-      [
-        -16,
         13
       ],
       [
-        -16,
+        16,
         14
+      ],
+      [
+        16,
+        15
+      ],
+      [
+        16,
+        16
+      ],
+      [
+        15,
+        16
+      ],
+      [
+        14,
+        16
+      ],
+      [
+        13,
+        16
+      ],
+      [
+        12,
+        16
+      ],
+      [
+        11,
+        16
+      ],
+      [
+        10,
+        16
+      ],
+      [
+        9,
+        16
+      ],
+      [
+        8,
+        16
+      ],
+      [
+        7,
+        16
+      ],
+      [
+        6,
+        16
+      ],
+      [
+        5,
+        16
+      ],
+      [
+        4,
+        16
+      ],
+      [
+        3,
+        16
+      ],
+      [
+        2,
+        16
+      ],
+      [
+        1,
+        16
+      ],
+      [
+        0,
+        16
+      ],
+      [
+        -1,
+        16
+      ],
+      [
+        -2,
+        16
+      ],
+      [
+        -3,
+        16
+      ],
+      [
+        -4,
+        16
+      ],
+      [
+        -5,
+        16
+      ],
+      [
+        -6,
+        16
+      ],
+      [
+        -7,
+        16
+      ],
+      [
+        -8,
+        16
+      ],
+      [
+        -9,
+        16
+      ],
+      [
+        -10,
+        16
+      ],
+      [
+        -11,
+        16
+      ],
+      [
+        -12,
+        16
+      ],
+      [
+        -13,
+        16
+      ],
+      [
+        -14,
+        16
+      ],
+      [
+        -15,
+        16
+      ],
+      [
+        -16,
+        16
       ],
       [
         -16,
@@ -7236,127 +6728,363 @@
       ],
       [
         -16,
-        16
+        14
+      ],
+      [
+        -16,
+        13
+      ],
+      [
+        -16,
+        12
+      ],
+      [
+        -16,
+        11
+      ],
+      [
+        -16,
+        10
+      ],
+      [
+        -16,
+        9
+      ],
+      [
+        -16,
+        8
+      ],
+      [
+        -16,
+        7
+      ],
+      [
+        -16,
+        6
+      ],
+      [
+        -16,
+        5
+      ],
+      [
+        -16,
+        4
+      ],
+      [
+        -16,
+        3
+      ],
+      [
+        -16,
+        2
+      ],
+      [
+        -16,
+        1
+      ],
+      [
+        -16,
+        0
+      ],
+      [
+        -16,
+        -1
+      ],
+      [
+        -16,
+        -2
+      ],
+      [
+        -16,
+        -3
+      ],
+      [
+        -16,
+        -4
+      ],
+      [
+        -16,
+        -5
+      ],
+      [
+        -16,
+        -6
+      ],
+      [
+        -16,
+        -7
+      ],
+      [
+        -16,
+        -8
+      ],
+      [
+        -16,
+        -9
+      ],
+      [
+        -16,
+        -10
+      ],
+      [
+        -16,
+        -11
+      ],
+      [
+        -16,
+        -12
+      ],
+      [
+        -16,
+        -13
+      ],
+      [
+        -16,
+        -14
+      ],
+      [
+        -16,
+        -15
+      ],
+      [
+        -16,
+        -16
       ],
       [
         -15,
-        16
+        -16
       ],
       [
         -14,
-        16
+        -16
       ],
       [
         -13,
-        16
+        -16
       ],
       [
         -12,
-        16
+        -16
       ],
       [
         -11,
-        16
+        -16
       ],
       [
         -10,
-        16
+        -16
       ],
       [
         -9,
-        16
+        -16
       ],
       [
         -8,
-        16
+        -16
       ],
       [
         -7,
-        16
+        -16
       ],
       [
         -6,
-        16
+        -16
       ],
       [
         -5,
-        16
+        -16
       ],
       [
         -4,
-        16
+        -16
       ],
       [
         -3,
-        16
+        -16
       ],
       [
         -2,
-        16
+        -16
       ],
       [
         -1,
-        16
+        -16
       ],
       [
         0,
-        16
+        -16
       ],
       [
         1,
-        16
+        -16
       ],
       [
         2,
-        16
+        -16
       ],
       [
         3,
-        16
+        -16
       ],
       [
         4,
-        16
+        -16
       ],
       [
         5,
-        16
+        -16
       ],
       [
         6,
-        16
+        -16
       ],
       [
         7,
-        16
+        -16
       ],
       [
         8,
-        16
+        -16
       ],
       [
         9,
-        16
+        -16
       ],
       [
         10,
-        16
+        -16
       ],
       [
         11,
-        16
+        -16
       ],
       [
         12,
-        16
+        -16
       ],
       [
         13,
-        16
+        -16
       ],
       [
         14,
-        16
+        -16
+      ],
+      [
+        15,
+        -16
+      ],
+      [
+        16,
+        -16
+      ],
+      [
+        16,
+        -15
+      ],
+      [
+        16,
+        -14
+      ],
+      [
+        16,
+        -13
+      ],
+      [
+        16,
+        -12
+      ],
+      [
+        16,
+        -11
+      ],
+      [
+        16,
+        -10
+      ],
+      [
+        16,
+        -9
+      ],
+      [
+        16,
+        -8
+      ],
+      [
+        16,
+        -7
+      ],
+      [
+        16,
+        -6
+      ],
+      [
+        16,
+        -5
+      ],
+      [
+        16,
+        -4
+      ],
+      [
+        16,
+        -3
+      ],
+      [
+        16,
+        -2
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        16,
+        0
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        16,
+        2
+      ],
+      [
+        16,
+        3
+      ],
+      [
+        16,
+        4
+      ],
+      [
+        16,
+        5
+      ],
+      [
+        16,
+        6
+      ],
+      [
+        16,
+        7
+      ],
+      [
+        16,
+        8
+      ],
+      [
+        16,
+        9
+      ],
+      [
+        16,
+        10
+      ],
+      [
+        15,
+        10
       ]
     ]
   },
@@ -7401,7 +7129,7 @@
           -7
         ],
         "y": [
-          -16,
+          -15,
           -13
         ]
       },
@@ -7416,11 +7144,11 @@
       ],
       "block": {
         "x": [
-          -16,
+          -15,
           -13
         ],
         "y": [
-          -3,
+          -13,
           2
         ]
       },
@@ -7435,7 +7163,7 @@
       ],
       "block": {
         "x": [
-          -16,
+          -15,
           -13
         ],
         "y": [
@@ -7443,7 +7171,9 @@
           15
         ]
       },
-      "hidden": false
+      "hidden": false,
+      "map_only_entry": true,
+      "note": "Path entry requires map travel (post-quiz). Step-1 is diagonal from (0,0) — walk is impossible from home."
     },
     "D": {
       "color": "#5B9AB8",
@@ -7455,11 +7185,11 @@
       "block": {
         "x": [
           -4,
-          4
+          13
         ],
         "y": [
           13,
-          16
+          15
         ]
       },
       "hidden": false
@@ -7474,14 +7204,16 @@
       "block": {
         "x": [
           12,
-          16
+          15
         ],
         "y": [
           11,
           15
         ]
       },
-      "hidden": false
+      "hidden": false,
+      "map_only_entry": true,
+      "note": "Path entry requires map travel (post-quiz). Step-1 is diagonal from (0,0) — walk is impossible from home."
     },
     "F": {
       "color": "#A86A32",
@@ -7493,7 +7225,7 @@
       "block": {
         "x": [
           13,
-          16
+          15
         ],
         "y": [
           1,
@@ -7515,11 +7247,13 @@
           14
         ],
         "y": [
-          -16,
+          -15,
           -13
         ]
       },
-      "hidden": false
+      "hidden": false,
+      "map_only_entry": true,
+      "note": "Path entry requires map travel (post-quiz). Step-1 is diagonal from (0,0) — walk is impossible from home."
     },
     "H": {
       "color": "#5C2D82",
@@ -7534,7 +7268,7 @@
           2
         ],
         "y": [
-          -16,
+          -15,
           -13
         ]
       },
