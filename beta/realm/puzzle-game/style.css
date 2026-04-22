@@ -11,7 +11,6 @@
   --glass: rgba(9, 18, 38, 0.58);
   --glass-border: rgba(134, 242, 255, 0.2);
 }
-
 * { box-sizing: border-box; }
 html, body {
   margin: 0;
@@ -35,8 +34,8 @@ body::after {
 }
 body::before {
   background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
   background-size: 34px 34px;
   mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
   opacity: 0.55;
@@ -44,27 +43,14 @@ body::before {
 body::after {
   background: radial-gradient(circle at center, transparent 50%, rgba(0,0,0,0.28) 100%);
 }
-
-#app {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-#gameCanvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-  touch-action: none;
-}
-
+#app { position: relative; width: 100%; height: 100%; }
+#gameCanvas { width: 100%; height: 100%; display: block; touch-action: none; }
 .glass {
   background: linear-gradient(180deg, rgba(12, 24, 46, 0.76), var(--glass));
   border: 1px solid var(--glass-border);
   box-shadow: 0 16px 54px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.04);
   backdrop-filter: blur(14px);
 }
-
 #hud {
   position: absolute;
   top: 16px;
@@ -76,134 +62,49 @@ body::after {
   padding: 14px 16px;
   border-radius: 20px;
 }
-
 .hud-col.left { min-width: 0; }
-.hud-col.right {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-.eyebrow,
-.metric-label {
-  font-size: 11px;
-  letter-spacing: 0.28em;
-  color: var(--muted);
-}
-.title-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: baseline;
-  margin-top: 5px;
-}
-#levelLabel {
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-}
-#bandLabel,
-#modeLabel {
-  font-size: 12px;
-  letter-spacing: 0.24em;
-  color: var(--line);
-}
-#objectiveLabel {
-  margin-top: 7px;
-  font-size: 15px;
-}
-#storyLabel {
-  margin-top: 4px;
-  font-size: 13px;
-  color: var(--muted);
-}
-.metric {
-  min-width: 190px;
-}
-.metric.secondary {
-  min-width: 110px;
-}
-.meter {
-  margin-top: 6px;
-  height: 10px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.08);
-  overflow: hidden;
-}
-#coherenceBar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--line2), var(--line), var(--accent));
-  box-shadow: 0 0 18px rgba(134,242,255,0.45);
-}
-#runLabel {
-  margin-top: 6px;
-  font-size: 15px;
-  letter-spacing: 0.1em;
-}
-
+.hud-col.right { display: flex; align-items: center; gap: 18px; }
+.eyebrow,.metric-label,.controls-title { font-size: 11px; letter-spacing: 0.28em; color: var(--muted); }
+.title-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; margin-top: 5px; }
+#levelLabel { font-size: 26px; font-weight: 800; letter-spacing: 0.1em; }
+#bandLabel,#modeLabel { font-size: 12px; letter-spacing: 0.24em; color: var(--line); }
+#objectiveLabel { margin-top: 7px; font-size: 15px; }
+#storyLabel { margin-top: 4px; font-size: 13px; color: var(--muted); }
+.metric { min-width: 190px; }
+.metric.secondary { min-width: 110px; }
+.meter { margin-top: 6px; height: 10px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; }
+#coherenceBar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--line2), var(--line), var(--accent)); box-shadow: 0 0 18px rgba(134,242,255,0.45); }
+#runLabel { margin-top: 6px; font-size: 15px; letter-spacing: 0.1em; }
 #help {
-  position: absolute;
-  left: 16px;
-  bottom: 16px;
-  max-width: min(680px, calc(100vw - 32px));
-  padding: 12px 14px;
-  border-radius: 16px;
-  color: var(--muted);
-  font-size: 13px;
+  position: absolute; left: 16px; bottom: 16px; max-width: min(560px, calc(100vw - 32px));
+  padding: 12px 14px; border-radius: 16px; color: var(--muted); font-size: 13px;
 }
-
+#controls {
+  position: absolute; right: 16px; bottom: 16px; width: min(360px, calc(100vw - 32px));
+  padding: 12px 14px 14px; border-radius: 18px;
+}
+.control-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
+.control-grid label { display: grid; grid-template-columns: 90px 1fr; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
+.control-grid input[type="range"] { width: 100%; accent-color: #8df7ff; }
 #overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(2,6,14,0.6);
-  display: grid;
-  place-items: center;
+  position: absolute; inset: 0; background: rgba(2,6,14,0.6); display: grid; place-items: center;
 }
 #overlay.hidden { display: none; }
-.overlay-panel {
-  width: min(500px, calc(100vw - 40px));
-  padding: 24px;
-  border-radius: 24px;
-  text-align: center;
-}
-.overlay-panel h1 {
-  margin: 8px 0 10px;
-  font-size: 34px;
-}
-.overlay-panel p {
-  color: var(--muted);
-  line-height: 1.55;
-  margin-bottom: 18px;
-}
+.overlay-panel { width: min(500px, calc(100vw - 40px)); padding: 24px; border-radius: 24px; text-align: center; }
+.overlay-panel h1 { margin: 8px 0 10px; font-size: 34px; }
+.overlay-panel p { color: var(--muted); line-height: 1.55; margin-bottom: 18px; }
 button {
   border: 1px solid rgba(134,242,255,0.36);
   background: linear-gradient(180deg, rgba(17, 40, 76, 0.9), rgba(11, 25, 49, 0.9));
-  color: var(--text);
-  padding: 12px 18px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 14px;
-  letter-spacing: 0.12em;
+  color: var(--text); padding: 12px 18px; border-radius: 12px; cursor: pointer; font-size: 14px; letter-spacing: 0.12em;
 }
 button:hover { filter: brightness(1.08); }
-
-body.hide-ui #hud,
-body.hide-ui #help {
-  display: none;
-}
-
+body.hide-ui #hud, body.hide-ui #help, body.hide-ui #controls { display: none; }
 @media (max-width: 900px) {
-  #hud {
-    flex-direction: column;
-  }
-  .hud-col.right {
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-  .metric,
-  .metric.secondary {
-    min-width: 0;
-    flex: 1;
-  }
+  #hud { flex-direction: column; }
+  .hud-col.right { justify-content: space-between; flex-wrap: wrap; }
+  .metric,.metric.secondary { min-width: 0; flex: 1; }
   #levelLabel { font-size: 21px; }
+  #help { bottom: 166px; max-width: calc(100vw - 32px); }
+  #controls { left: 16px; right: 16px; width: auto; }
 }

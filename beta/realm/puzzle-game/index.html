@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vector Gate Journey v4</title>
+  <title>Vector Gate Journey v5</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -34,7 +34,17 @@
     </div>
 
     <div id="help" class="glass">
-      <div id="helpText">Drag to rotate. Wheel changes depth. A / D rotate on the Z axis.</div>
+      <div id="helpText">Drag to rotate. Use the on-screen sliders for precise control.</div>
+    </div>
+
+    <div id="controls" class="glass">
+      <div class="controls-title">PRECISION CONTROLS</div>
+      <div class="control-grid">
+        <label><span>TILT</span><input id="sliderX" type="range" min="-100" max="100" value="0" /></label>
+        <label><span>SWIVEL</span><input id="sliderY" type="range" min="-100" max="100" value="0" /></label>
+        <label><span>ROLL / RING</span><input id="sliderZ" type="range" min="-100" max="100" value="0" /></label>
+        <label><span>DEPTH</span><input id="sliderDepth" type="range" min="-100" max="100" value="0" /></label>
+      </div>
     </div>
 
     <div id="overlay" class="hidden">
