@@ -14,6 +14,7 @@
   const overlayText = document.getElementById('overlayText');
   const overlayButton = document.getElementById('overlayButton');
   const versionMarker = document.getElementById('versionMarker');
+  const soundButton = document.getElementById('soundButton');
   const sliderX = document.getElementById('sliderX');
   const sliderY = document.getElementById('sliderY');
   const sliderZ = document.getElementById('sliderZ');
@@ -28,7 +29,7 @@
   const rangeParam = params.get('range');
   const redirect = params.get('redirect') || '';
   const autoAdvance = params.get('auto') !== '0';
-  const VERSION = 'v14';
+  const VERSION = 'v15';
   const hue = Number(params.get('hue') || '195');
   if (versionMarker) versionMarker.textContent = VERSION;
 
@@ -118,7 +119,7 @@
     comp.ratio.value = 8;
     comp.attack.value = 0.004;
     comp.release.value = 0.18;
-    masterGain.gain.value = 1.0;
+    masterGain.gain.value = 1.7;
     masterGain.connect(comp).connect(audioCtx.destination);
     return audioCtx;
   }
@@ -145,30 +146,38 @@
     humGain.connect(masterGain);
     const t0 = ctxA.currentTime;
     humGain.gain.setValueAtTime(0.0001, t0);
-    humGain.gain.exponentialRampToValueAtTime(0.065, t0 + 0.35);
+    humGain.gain.exponentialRampToValueAtTime(0.095, t0 + 0.3);
     carrier.start(t0); shimmer.start(t0); lfo.start(t0);
     humNodes = { carrier, shimmer, lfo, humGain };
+  }
+  function updateSoundButton() {
+    if (!soundButton) return;
+    const on = !!audioUnlocked;
+    soundButton.textContent = on ? 'SOUND ON' : 'SOUND OFF';
+    soundButton.classList.toggle('is-on', on);
   }
   function unlockAudio() {
     const ctxA = ensureAudio();
     if (!ctxA) return;
     const arm = () => {
       audioUnlocked = true;
+      updateSoundButton();
       startHum();
       if (!window.__vectorMaskAudioArmed) {
         window.__vectorMaskAudioArmed = true;
-        simpleTone(420, 0.08, 'square', 0.16, 110);
-        simpleTone(760, 0.11, 'triangle', 0.1, 160, 0.05);
-        noiseBurst(0.04, 0.018, 1400, 0.03);
+        simpleTone(420, 0.11, 'square', 0.24, 110);
+        simpleTone(760, 0.14, 'triangle', 0.18, 160, 0.05);
+        noiseBurst(0.06, 0.04, 1400, 0.03);
       }
     };
+    updateSoundButton();
     if (ctxA.state === 'suspended') {
       ctxA.resume().then(arm).catch(() => {});
     } else {
       arm();
     }
   }
-  function simpleTone(freq = 220, dur = 0.08, type = 'square', gain = 0.08, glide = 0, when = 0) {
+  function simpleTone(freq = 220, dur = 0.08, type = 'square', gain = 0.12, glide = 0, when = 0) {
     const ctxA = ensureAudio();
     if (!ctxA || !audioUnlocked) return;
     const t0 = ctxA.currentTime + when;
@@ -206,8 +215,8 @@
     const n = nearFactor();
     const amt = Math.abs(Number(value)) / 100;
     const base = 250 + amt * 420 + n * 200;
-    simpleTone(base, 0.08, 'square', 0.16, 130);
-    simpleTone(base * 1.98, 0.06, 'square', 0.09, -60, 0.012);
+    simpleTone(base, 0.10, 'square', 0.22, 130);
+    simpleTone(base * 1.98, 0.08, 'square', 0.14, -60, 0.012);
     if (n > 0.42) noiseBurst(0.045, 0.018 + n * 0.02, 1050);
   }
   function alignmentSound() {
@@ -221,9 +230,9 @@
     if (n > 0.72) noiseBurst(0.032, 0.016 + n * 0.018, 1450);
   }
   function laserSound() {
-    simpleTone(1320 + Math.random() * 380, 0.14, 'square', 0.18, -460);
-    simpleTone(760 + Math.random() * 240, 0.18, 'sawtooth', 0.11, -520, 0.016);
-    noiseBurst(0.09, 0.04, 1700);
+    simpleTone(1040 + Math.random() * 280, 0.18, 'square', 0.25, -460);
+    simpleTone(620 + Math.random() * 180, 0.22, 'sawtooth', 0.17, -520, 0.016);
+    noiseBurst(0.11, 0.06, 1700);
   }
   function solveSound() {
     simpleTone(380, 0.08, 'square', 0.13, 120, 0);
@@ -333,9 +342,9 @@
         ? 'Rotate the live mask until the three-line sigil settles into the ghost mask.'
         : 'Rotate the live mask until it occupies the ghost mask exactly.',
       help: 'Drag to rotate in space. Use the sliders for precise correction. Read the theatrical mask by eye and seat it deliberately into the ghost frame.',
-      tolerance: isStarter ? 0.48 : clamp(0.96 - level * 0.0072, 0.07, 0.96),
-      depthTolerance: isStarter ? 0.4 : clamp(0.98 - level * 0.0068, 0.1, 0.98),
-      magnetRadius: isStarter ? 0.22 : lerp(0.55, 0.015, phase01(level)),
+      tolerance: isStarter ? 0.48 : clamp(0.98 - level * 0.0070, 0.11, 0.98),
+      depthTolerance: isStarter ? 0.42 : clamp(1.02 - level * 0.0066, 0.16, 1.02),
+      magnetRadius: isStarter ? 0.24 : lerp(0.56, 0.03, phase01(level)),
       shape: isStarter ? buildStarterMaskShape() : buildMaskShape(level),
       rx: wrapAngle(targetRx + startOffsetRx),
       ry: wrapAngle(targetRy + startOffsetRy),
@@ -353,102 +362,147 @@
     };
   }
 
+
   function buildMaskShape(level) {
     const pts = [];
-    const allEdges = [];
+    const edges = [];
     const addPt = (x, y, z) => (pts.push({ x, y, z }), pts.length - 1);
-    const chain = (arr) => { for (let i = 0; i < arr.length - 1; i++) allEdges.push([arr[i], arr[i + 1]]); };
-    const loop = (arr) => { for (let i = 0; i < arr.length; i++) allEdges.push([arr[i], arr[(i + 1) % arr.length]]); };
-    const addArc = (cx, cy, rx, lift, zFront, steps, start = Math.PI, end = 0) => {
+    const addEdge = (a, b) => edges.push([a, b]);
+    const chain = (arr) => { for (let i = 0; i < arr.length - 1; i++) addEdge(arr[i], arr[i + 1]); };
+    const loop = (arr) => { for (let i = 0; i < arr.length; i++) addEdge(arr[i], arr[(i + 1) % arr.length]); };
+    const connectPairs = (a, b) => { const n = Math.min(a.length, b.length); for (let i = 0; i < n; i++) addEdge(a[i], b[i]); };
+    const arc = (cx, cy, rx, ry, zf, steps, start = Math.PI, end = 0, zCurve = 1.35) => {
       const arr = [];
       for (let i = 0; i < steps; i++) {
         const t = start + (end - start) * (i / (steps - 1));
         const x = cx + Math.cos(t) * rx;
-        const y = cy + Math.sin(t) * lift;
-        const norm = Math.abs((x - cx) / rx);
-        const z = zFront * Math.pow(Math.max(0, 1 - norm), 1.25);
+        const y = cy + Math.sin(t) * ry;
+        const nx = Math.abs((x - cx) / Math.max(1, rx));
+        const ny = Math.abs((y - cy) / Math.max(1, ry));
+        const fall = Math.max(0, 1 - (nx * 0.85 + ny * 0.15));
+        const z = zf * Math.pow(fall, zCurve);
         arr.push(addPt(x, y, z));
       }
       return arr;
     };
-    const addLoopOval = (cx, cy, rx, ry, steps, zFront, yTilt = 0) => {
+    const oval = (cx, cy, rx, ry, zf, steps, wobble = 0, zCurve = 1.45) => {
       const arr = [];
       for (let i = 0; i < steps; i++) {
         const t = i / steps * Math.PI * 2;
         const x = cx + Math.cos(t) * rx;
-        const y = cy + Math.sin(t) * ry + Math.sin(t * 2) * yTilt;
-        const norm = Math.abs((x - cx) / rx);
-        const z = zFront * Math.pow(Math.max(0, 1 - norm), 1.4);
+        const y = cy + Math.sin(t) * ry + Math.sin(t * 2) * wobble;
+        const nx = Math.abs((x - cx) / Math.max(1, rx));
+        const ny = Math.abs((y - cy) / Math.max(1, ry));
+        const fall = Math.max(0, 1 - (nx * 0.82 + ny * 0.18));
+        const z = zf * Math.pow(fall, zCurve);
         arr.push(addPt(x, y, z));
       }
       return arr;
     };
 
-    const top = addPt(0, -160, 20);
-    const brow = addPt(0, -92, 58);
-    const noseTop = addPt(0, -38, 92);
-    const philtrum = addPt(0, 42, 70);
-    const mouthCenter = addPt(0, 92, 56);
-    const chin = addPt(0, 164, 22);
-    chain([top, brow, noseTop, philtrum, mouthCenter, chin]);
+    // Reference-inspired theatrical mask: broad forehead, soft cheeks, calm mouth, narrow chin.
+    const topMid = addPt(0, -178, 22);
+    const foreheadMid = addPt(0, -118, 58);
+    const bridge = addPt(0, -54, 102);
+    const noseTip = addPt(0, 8, 126);
+    const philtrum = addPt(0, 52, 92);
+    const upperLipMid = addPt(0, 92, 74);
+    const lowerLipMid = addPt(0, 112, 66);
+    const chinTip = addPt(0, 176, 34);
+    const centerSpine = [topMid, foreheadMid, bridge, noseTip, philtrum, upperLipMid, lowerLipMid, chinTip];
+    chain(centerSpine);
 
-    const leftOutline = [
-      addPt(-34, -138, 14), addPt(-68, -118, 10), addPt(-96, -66, 18), addPt(-110, -8, 20),
-      addPt(-96, 56, 18), addPt(-72, 118, 10), addPt(-38, 154, 12)
+    const leftContour = [
+      addPt(-52, -174, 16), addPt(-96, -164, 10), addPt(-128, -138, 10), addPt(-144, -88, 16),
+      addPt(-146, -22, 20), addPt(-134, 44, 18), addPt(-110, 104, 12), addPt(-74, 150, 12), addPt(-34, 174, 18)
     ];
-    const rightOutline = [
-      addPt(34, -138, 14), addPt(68, -118, 10), addPt(96, -66, 18), addPt(110, -8, 20),
-      addPt(96, 56, 18), addPt(72, 118, 10), addPt(38, 154, 12)
+    const rightContour = [
+      addPt(52, -174, 16), addPt(96, -164, 10), addPt(128, -138, 10), addPt(144, -88, 16),
+      addPt(146, -22, 20), addPt(134, 44, 18), addPt(110, 104, 12), addPt(74, 150, 12), addPt(34, 174, 18)
     ];
-    chain([top, ...leftOutline, chin]);
-    chain([top, ...rightOutline, chin]);
+    chain([topMid, ...leftContour, chinTip]);
+    chain([topMid, ...rightContour, chinTip]);
 
-    const forehead = addArc(0, -112, 72, 12, 38, 7);
-    chain(forehead);
+    const foreheadOuter = arc(0, -154, 106, 28, 22, 11, Math.PI * 0.98, Math.PI * 0.02, 1.15);
+    const foreheadInner = arc(0, -126, 82, 18, 46, 9, Math.PI * 0.98, Math.PI * 0.02, 1.2);
+    chain(foreheadOuter); chain(foreheadInner); connectPairs(foreheadOuter, foreheadInner);
 
-    const leftBrow = addArc(-40, -62, 28, 9, 48, 5);
-    const rightBrow = addArc(40, -62, 28, 9, 48, 5);
-    chain(leftBrow); chain(rightBrow);
-
-    const leftEye = addLoopOval(-40, -26, 20, 10, 8, 66, 1.5);
-    const rightEye = addLoopOval(40, -26, 20, 10, 8, 66, 1.5);
-    loop(leftEye); loop(rightEye);
-
-    const noseLeft = [brow, addPt(-10, -12, 80), addPt(-18, 16, 88), addPt(-10, 34, 74)];
-    const noseRight = [brow, addPt(10, -12, 80), addPt(18, 16, 88), addPt(10, 34, 74)];
-    chain(noseLeft); chain(noseRight);
-    allEdges.push([noseLeft[1], noseRight[1]],[noseLeft[2], noseRight[2]],[noseLeft[3], noseRight[3]],[noseLeft[2], philtrum],[noseRight[2], philtrum]);
-
-    const mouthOuter = addLoopOval(0, 96, 40, 16, 12, 58, -2.5);
-    loop(mouthOuter);
-    const mouthInner = addLoopOval(0, 98, 20, 7, 8, 44, -1.2);
-    loop(mouthInner);
-
-    const cheekUpperL = addArc(-44, 26, 42, 12, 40, 5);
-    const cheekUpperR = addArc(44, 26, 42, 12, 40, 5);
-    const cheekLowerL = addArc(-38, 64, 34, 10, 28, 5);
-    const cheekLowerR = addArc(38, 64, 34, 10, 28, 5);
-    chain(cheekUpperL); chain(cheekUpperR); chain(cheekLowerL); chain(cheekLowerR);
-
-    const chinArc = addArc(0, 134, 48, 18, 26, 7);
-    chain(chinArc);
-
-    const leftTemple = addArc(-66, -18, 18, 44, 12, 4, -Math.PI/2, Math.PI/2);
-    const rightTemple = addArc(66, -18, 18, 44, 12, 4, Math.PI/2, 3*Math.PI/2);
+    const leftTemple = arc(-114, -56, 28, 92, 18, 8, -Math.PI / 2, Math.PI / 2, 1.05);
+    const rightTemple = arc(114, -56, 28, 92, 18, 8, Math.PI / 2, Math.PI * 1.5, 1.05);
     chain(leftTemple); chain(rightTemple);
 
-    // connective surface scaffolding
-    allEdges.push(
-      [leftOutline[1], leftBrow[0]],[leftOutline[2], leftEye[6]],[leftOutline[3], cheekUpperL[2]],[leftOutline[4], cheekLowerL[2]],[leftOutline[5], mouthOuter[7]],
-      [rightOutline[1], rightBrow[rightBrow.length-1]],[rightOutline[2], rightEye[2]],[rightOutline[3], cheekUpperR[2]],[rightOutline[4], cheekLowerR[2]],[rightOutline[5], mouthOuter[1]],
-      [leftBrow[2], brow],[rightBrow[2], brow],[leftEye[2], noseLeft[1]],[rightEye[6], noseRight[1]],[noseLeft[3], mouthOuter[8]],[noseRight[3], mouthOuter[10]],
-      [cheekUpperL[4], mouthOuter[8]],[cheekUpperR[0], mouthOuter[10]],[cheekLowerL[4], chinArc[1]],[cheekLowerR[0], chinArc[5]],[forehead[0], leftOutline[0]],[forehead[6], rightOutline[0]]
-    );
+    const leftBrow = arc(-46, -68, 34, 10, 72, 7, Math.PI * 0.97, Math.PI * 0.08, 1.3);
+    const rightBrow = arc(46, -68, 34, 10, 72, 7, Math.PI * 0.92, Math.PI * 0.03, 1.3);
+    chain(leftBrow); chain(rightBrow);
 
-    // ensure exact progression from 3 to 103 lines
-    const maxLines = 103;
-    const lineCount = Math.min(maxLines, 3 + Math.floor((level - 1) * 100 / 99));
-    return { pts, edges: allEdges.slice(0, lineCount), lineCount, maxLines };
+    const leftEyeOuter = oval(-46, -28, 28, 14, 88, 14, 0.8, 1.55);
+    const rightEyeOuter = oval(46, -28, 28, 14, 88, 14, 0.8, 1.55);
+    const leftEyeInner = oval(-46, -28, 16, 8, 70, 10, 0.4, 1.45);
+    const rightEyeInner = oval(46, -28, 16, 8, 70, 10, 0.4, 1.45);
+    loop(leftEyeOuter); loop(rightEyeOuter); loop(leftEyeInner); loop(rightEyeInner);
+    connectPairs(leftEyeOuter, leftEyeInner); connectPairs(rightEyeOuter, rightEyeInner);
+
+    const noseRidgeL = [foreheadMid, addPt(-9, -44, 98), addPt(-16, -6, 112), addPt(-20, 30, 110)];
+    const noseRidgeR = [foreheadMid, addPt(9, -44, 98), addPt(16, -6, 112), addPt(20, 30, 110)];
+    chain(noseRidgeL); chain(noseRidgeR);
+    const noseBridgeCrossL = addPt(-13, -18, 108);
+    const noseBridgeCrossR = addPt(13, -18, 108);
+    addEdge(noseBridgeCrossL, noseBridgeCrossR);
+    const nostrilArc = arc(0, 18, 28, 15, 106, 9, Math.PI * 0.96, Math.PI * 0.04, 1.45);
+    const nostrilInner = arc(0, 22, 18, 7, 92, 7, Math.PI * 0.92, Math.PI * 0.08, 1.3);
+    chain(nostrilArc); chain(nostrilInner);
+    addEdge(noseRidgeL[2], noseBridgeCrossL); addEdge(noseRidgeR[2], noseBridgeCrossR);
+    connectPairs(nostrilArc.slice(1, 8), nostrilInner);
+
+    const leftCheekUpper = arc(-64, 8, 60, 34, 58, 9, Math.PI * 1.02, Math.PI * 0.1, 1.2);
+    const rightCheekUpper = arc(64, 8, 60, 34, 58, 9, Math.PI * 0.9, -Math.PI * 0.02, 1.2);
+    const leftCheekLower = arc(-54, 66, 54, 30, 42, 8, Math.PI * 1.02, Math.PI * 0.12, 1.16);
+    const rightCheekLower = arc(54, 66, 54, 30, 42, 8, Math.PI * 0.88, -Math.PI * 0.02, 1.16);
+    chain(leftCheekUpper); chain(rightCheekUpper); chain(leftCheekLower); chain(rightCheekLower);
+
+    const upperLip = oval(0, 98, 46, 13, 74, 16, -1.8, 1.55);
+    const lowerLip = oval(0, 116, 40, 16, 62, 16, 1.2, 1.45);
+    const mouthInner = oval(0, 107, 22, 6.5, 48, 12, 0, 1.35);
+    loop(upperLip); loop(lowerLip); loop(mouthInner);
+    connectPairs(upperLip.slice(0, 8), mouthInner.slice(0, 8));
+    connectPairs(lowerLip.slice(4, 12), mouthInner.slice(4, 12));
+
+    const jawInnerL = arc(-42, 136, 34, 30, 36, 7, Math.PI * 1.0, Math.PI * 0.1, 1.14);
+    const jawInnerR = arc(42, 136, 34, 30, 36, 7, Math.PI * 0.9, 0, 1.14);
+    const chinArc = arc(0, 158, 56, 18, 34, 9, Math.PI * 0.98, Math.PI * 0.02, 1.16);
+    chain(jawInnerL); chain(jawInnerR); chain(chinArc);
+
+    const scaffolds = [
+      [leftContour[1], foreheadOuter[1]],[leftContour[2], leftTemple[2]],[leftContour[3], leftBrow[0]],[leftContour[4], leftEyeOuter[8]],[leftContour[5], leftCheekUpper[5]],[leftContour[6], leftCheekLower[5]],[leftContour[7], jawInnerL[4]],
+      [rightContour[1], foreheadOuter[9]],[rightContour[2], rightTemple[5]],[rightContour[3], rightBrow[6]],[rightContour[4], rightEyeOuter[3]],[rightContour[5], rightCheekUpper[3]],[rightContour[6], rightCheekLower[3]],[rightContour[7], jawInnerR[2]],
+      [foreheadInner[1], leftBrow[1]],[foreheadInner[7], rightBrow[5]],[leftBrow[3], bridge],[rightBrow[3], bridge],
+      [leftEyeOuter[2], noseRidgeL[1]],[leftEyeOuter[11], noseRidgeL[2]],[rightEyeOuter[5], noseRidgeR[1]],[rightEyeOuter[8], noseRidgeR[2]],
+      [noseRidgeL[3], nostrilArc[2]],[noseRidgeR[3], nostrilArc[6]],[nostrilArc[2], philtrum],[nostrilArc[6], philtrum],[philtrum, upperLipMid],
+      [leftCheekUpper[7], upperLip[9]],[rightCheekUpper[1], upperLip[15]],[leftCheekLower[6], lowerLip[10]],[rightCheekLower[0], lowerLip[14]],
+      [upperLip[8], mouthInner[2]],[upperLip[12], mouthInner[8]],[lowerLip[4], mouthInner[4]],[lowerLip[12], mouthInner[10]],
+      [lowerLipMid, chinArc[4]],[jawInnerL[5], chinArc[2]],[jawInnerR[1], chinArc[6]],[leftContour[8], chinArc[1]],[rightContour[8], chinArc[7]]
+    ];
+    scaffolds.forEach(([a, b]) => addEdge(a, b));
+
+    const ordered = [];
+    const pushRange = (start, end) => { for (let i = start; i < end; i++) ordered.push(edges[i]); };
+    ordered.push(edges[0], edges[1], edges[2]);    // 3-line opening sigil
+    pushRange(8, 26);   // contour
+    pushRange(3, 8);    // central spine
+    pushRange(26, 46);  // forehead bands
+    pushRange(46, 62);  // temples
+    pushRange(62, 76);  // brows
+    pushRange(76, 124); // eyes
+    pushRange(124, 155); // nose
+    pushRange(155, 189); // cheeks
+    pushRange(189, 237); // lips and mouth
+    pushRange(237, 260); // jaw and chin
+    pushRange(260, edges.length); // surface links
+
+    const maxLines = ordered.length;
+    const progress = Math.max(0, (level - 1) / 99);
+    const lineCount = Math.min(maxLines, 3 + Math.floor(Math.pow(progress, 1.08) * (maxLines - 3)));
+    return { pts, edges: ordered.slice(0, lineCount), lineCount, maxLines };
   }
 
   function rotatePoint(p, rx, ry, rz, depth) {
@@ -976,13 +1030,15 @@
     sliderSound(e.target.value); if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.depth = clamp(Number(e.target.value) / 100 * 1.2, -1.2, 1.2); syncSliders(); });
 
   overlayButton.addEventListener('click', continueFlow);
+  if (soundButton) soundButton.addEventListener('click', unlockAudio);
 
-  ['touchstart','touchmove','mousedown','pointerdown'].forEach(evt => {
+  ['touchstart','touchmove','touchend','mousedown','pointerdown'].forEach(evt => {
     document.getElementById('controls').addEventListener(evt, e => { unlockAudio(); e.stopPropagation(); }, { passive: false });
     window.addEventListener(evt, unlockAudio, { passive: true });
   });
   window.addEventListener('resize', resize);
   resize();
+  updateSoundButton();
 
   canvas.addEventListener('mousedown', e => onPointerDown(e.clientX, e.clientY));
   window.addEventListener('mousemove', e => onPointerMove(e.clientX, e.clientY));
