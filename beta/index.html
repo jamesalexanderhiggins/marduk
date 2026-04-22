@@ -208,10 +208,24 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24p
   .chapter-table{font-size:13px;}
 }
 
-/* ── Honeycomb map preview ───────────────────────── */
-.hc-wrap{display:flex;justify-content:center;align-items:center;
-  margin:0 auto 48px;width:100%;max-width:520px;}
-#hcCanvas{display:block;opacity:0.88;filter:drop-shadow(0 0 28px rgba(201,168,76,0.25));}
+/* ── Honeycomb background ────────────────────────── */
+#hero{overflow:hidden;}
+#hcCanvas{position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;opacity:0.5;z-index:0;}
+#hcBokeh{position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:1;}
+#hero .ember-container,
+#hero .hero-eyebrow,#hero .hero-title,#hero .hero-subtitle,
+#hero .hero-tagline,#hero .hero-typewriter,#hero .hero-cta,
+#hero .hero-map,#hero .scroll-hint{position:relative;z-index:3;}
+
+/* ── Honeycomb bg — full hero section, behind all content ─────── */
+#hcCanvas{position:absolute;inset:0;width:100%!important;height:100%!important;
+  pointer-events:none;z-index:0;opacity:0.72;}
+#hcBokeh{position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:1;overflow:hidden;}
+#hero{position:relative;overflow:hidden;}
+#hero>*:not(#hcCanvas):not(#hcBokeh){position:relative;z-index:2;}
 </style>
 </head>
 <body>
@@ -231,7 +245,12 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24p
 
 <!-- HERO -->
 <section id="hero">
+  <canvas id="hcCanvas"></canvas>
+  <div id="hcBokeh"></div>
+  <canvas id="hcCanvas"></canvas>
+  <canvas id="hcBokeh"></canvas>
   <div class="ember-container" id="embers"></div>
+  <div style="position:relative;z-index:2;">
   <div class="hero-eyebrow">✦ &nbsp; The Mardukverse &nbsp; ✦</div>
   <h1 class="hero-title">
     <span class="fire-char">M</span><span class="fire-char">a</span><span class="fire-char">r</span><span class="fire-char">d</span><span class="fire-char">u</span><span class="fire-char">k</span><span class="fire-char">'s</span><br><span class="fire-char">M</span><span class="fire-char">a</span><span class="fire-char">p</span>
@@ -242,10 +261,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24p
   <div class="hero-cta">
     <a href="https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-1" target="_blank" class="btn-primary">Begin Reading — Chapter 1 Free</a>
     <a href="#chapters" class="btn-ghost">All Chapters</a>
-  </div>
-  <!-- Honeycomb map preview -->
-  <div class="hc-wrap">
-    <canvas id="hcCanvas" width="380" height="340"></canvas>
   </div>
   <div class="hero-map">
     <div class="gateways">
@@ -386,7 +401,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24p
     <a href="#hero">Back to Top</a>
   </div>
   <div class="footer-copy">Links activate as chapters are published</div>
-  <div class="version">v5.9 · Mardukverse · Informational Realm</div>
+  <div class="version">v6.0 · Mardukverse · Informational Realm</div>
 </footer>
 
 <!-- CHAPTER POPUP -->
@@ -870,64 +885,75 @@ document.addEventListener('keydown',e=>{
 });
 
 
-/* ── Animated honeycomb map preview ─────────────── */
+/* ── Honeycomb background (full hero, no crop, natural hex edge) ── */
 (function() {
   const canvas = document.getElementById('hcCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  const CX = W/2, CY = H/2;
+  const hero = canvas.closest('section') || canvas.parentElement;
 
-  // House colours (8 paths + gold centre)
   const HOUSE_COLS = [
     '#C9A84C','#4A7C59','#7B5EA7','#5B9AB8',
     '#A83232','#A86A32','#2D8888','#5C2D82'
   ];
 
-  // Hex grid: rings of cells
-  const R = 22; // hex radius
-  const HW = Math.sqrt(3)*R, HH = 2*R*0.75;
-  const cells = [];
+  let W, H, CX, CY, R, cells;
 
-  // Centre + 3 rings
-  cells.push({q:0, r:0, ring:0});
-  const dirs = [[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
-  for (let ring = 1; ring <= 4; ring++) {
-    let q = -ring, r = 0;
-    for (let i = 0; i < 6; i++) {
-      for (let j = 0; j < ring; j++) {
-        cells.push({q, r, ring});
-        q += dirs[i][0]; r += dirs[i][1];
+  function build() {
+    W = canvas.width  = hero.offsetWidth  || window.innerWidth;
+    H = canvas.height = hero.offsetHeight || window.innerHeight;
+    CX = W/2; CY = H/2;
+    // Cell radius: large enough that the hex grid fills the whole canvas
+    // and extends naturally to edges — use 48px so fewer cells, cleaner look
+    R = 52;
+    const HW = Math.sqrt(3)*R, HH = 2*R*0.75;
+
+    // Build enough rings to cover the canvas diagonally
+    const diag = Math.ceil(Math.sqrt(W*W+H*H) / (R*1.5)) + 2;
+    cells = [];
+    const dirs = [[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
+    cells.push({q:0,r:0,ring:0});
+    for (let ring=1; ring<=diag; ring++) {
+      let q=-ring, r=0;
+      for (let i=0;i<6;i++) {
+        for (let j=0;j<ring;j++) {
+          const cx2 = CX + q*HW + (r%2)*HW*0.5;
+          const cy2 = CY + r*HH;
+          // Only include if within canvas + one cell margin (natural edge)
+          if (cx2 > -R*2 && cx2 < W+R*2 && cy2 > -R*2 && cy2 < H+R*2) {
+            const angle = Math.atan2(cy2-CY, cx2-CX);
+            const sector = Math.floor(((angle+Math.PI)/(Math.PI*2))*8+0.5)%8;
+            cells.push({
+              q,r,ring,
+              x:cx2, y:cy2,
+              color: ring===0 ? '#C9A84C' : HOUSE_COLS[sector],
+              phase: Math.random()*Math.PI*2,
+              speed: 0.3+Math.random()*0.5,
+              lit: Math.random()>0.6,
+            });
+          }
+          q+=dirs[i][0]; r+=dirs[i][1];
+        }
       }
     }
   }
+  build();
+  window.addEventListener('resize', build);
 
-  // Assign colour to each cell based on position
-  cells.forEach((c,i) => {
-    c.x = CX + c.q*HW + (c.r%2)*HW*0.5;
-    c.y = CY + c.r*HH;
-    const angle = Math.atan2(c.y-CY, c.x-CX);
-    const sector = Math.floor(((angle + Math.PI) / (Math.PI*2)) * 8 + 0.5) % 8;
-    c.color = c.ring === 0 ? '#C9A84C' : HOUSE_COLS[sector];
-    c.phase = Math.random() * Math.PI * 2;
-    c.speed = 0.4 + Math.random() * 0.6;
-    c.lit = Math.random() > 0.55;
-  });
-
-  let rot = 0;
-  function drawHex(x, y, r) {
+  function drawHex(x,y,r) {
     ctx.beginPath();
-    for (let i = 0; i < 6; i++) {
-      const a = Math.PI/3 * i - Math.PI/6;
-      const px = x + r*Math.cos(a), py = y + r*Math.sin(a);
-      i===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+    for (let i=0;i<6;i++) {
+      const a=Math.PI/3*i-Math.PI/6;
+      const px=x+r*Math.cos(a), py=y+r*Math.sin(a);
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
     }
     ctx.closePath();
   }
 
   function frame(ts) {
     requestAnimationFrame(frame);
-    rot = ts * 0.00012;
+    if (!cells) return;
+    const rot = ts*0.00008; // slow, stately rotation
     ctx.clearRect(0,0,W,H);
     ctx.save();
     ctx.translate(CX,CY);
@@ -935,43 +961,1282 @@ document.addEventListener('keydown',e=>{
     ctx.translate(-CX,-CY);
 
     cells.forEach(c => {
-      const pulse = 0.35 + 0.3*Math.sin(ts*0.001*c.speed + c.phase);
-      const glow  = c.ring === 0 ? 0.8 : (c.lit ? pulse : pulse*0.3);
+      const pulse = 0.3+0.25*Math.sin(ts*0.0009*c.speed+c.phase);
+      const glow  = c.ring===0 ? 0.85 : (c.lit ? pulse : pulse*0.25);
       const hex = c.color;
 
-      // Fill
-      drawHex(c.x, c.y, R-1.5);
-      ctx.fillStyle = hex + Math.round(glow*60).toString(16).padStart(2,'0');
+      drawHex(c.x,c.y,R-2);
+      ctx.fillStyle = hex+Math.round(glow*55).toString(16).padStart(2,'0');
       ctx.fill();
-
-      // Stroke
-      ctx.strokeStyle = hex + Math.round(glow*180).toString(16).padStart(2,'0');
-      ctx.lineWidth = c.ring===0 ? 1.8 : 0.8;
+      ctx.strokeStyle = hex+Math.round(glow*160).toString(16).padStart(2,'0');
+      ctx.lineWidth = c.ring===0?2:0.7;
       ctx.stroke();
 
-      // Inner glow for lit cells
       if (c.lit || c.ring===0) {
-        const grd = ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,R*0.75);
-        grd.addColorStop(0, hex + Math.round(glow*90).toString(16).padStart(2,'0'));
-        grd.addColorStop(1, 'transparent');
-        drawHex(c.x, c.y, R-1.5);
-        ctx.fillStyle = grd;
-        ctx.fill();
+        const grd=ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,R*0.7);
+        grd.addColorStop(0, hex+Math.round(glow*80).toString(16).padStart(2,'0'));
+        grd.addColorStop(1,'transparent');
+        drawHex(c.x,c.y,R-2);
+        ctx.fillStyle=grd; ctx.fill();
       }
     });
 
     // Centre asterism
-    const t2 = 0.7 + 0.3*Math.sin(ts*0.0015);
-    ctx.font = `${R*0.55}px serif`;
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillStyle = `rgba(232,201,110,${t2})`;
-    ctx.shadowColor = '#C9A84C'; ctx.shadowBlur = 10;
-    ctx.fillText('⁂', CX, CY);
-    ctx.shadowBlur = 0;
-
+    const t2=0.65+0.35*Math.sin(ts*0.0012);
+    ctx.font=`${R*0.5}px serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle=`rgba(232,201,110,${t2})`;
+    ctx.shadowColor='#C9A84C'; ctx.shadowBlur=12;
+    ctx.fillText('⁂',CX,CY);
+    ctx.shadowBlur=0;
     ctx.restore();
   }
   requestAnimationFrame(frame);
+})();
+
+/* ── Bokeh particle layer ──────────────────────────────────────────────── */
+(function() {
+  const bk = document.getElementById('hcBokeh');
+  if (!bk) return;
+  const bc = bk.getContext('2d');
+  const HOUSE_COLS = ['#C9A84C','#4A7C59','#7B5EA7','#5B9AB8',
+                      '#A83232','#A86A32','#2D8888','#5C2D82'];
+  let W = 0, H = 0, parts = [];
+
+  function resize() {
+    W = bk.width  = bk.offsetWidth  || window.innerWidth;
+    H = bk.height = bk.offsetHeight || window.innerHeight;
+    parts = Array.from({length:55}, () => ({
+      x: Math.random()*W, y: Math.random()*H,
+      r: 10 + Math.random()*70,
+      col: HOUSE_COLS[Math.floor(Math.random()*8)],
+      phase: Math.random()*Math.PI*2,
+      spd: 0.1+Math.random()*0.35,
+      vx: (Math.random()-0.5)*0.3,
+      vy: (Math.random()-0.5)*0.2,
+    }));
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  (function loop(ts) {
+    requestAnimationFrame(loop);
+    bc.clearRect(0,0,W,H);
+    parts.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < -p.r*2) p.x = W+p.r;
+      if (p.x > W+p.r*2) p.x = -p.r;
+      if (p.y < -p.r*2) p.y = H+p.r;
+      if (p.y > H+p.r*2) p.y = -p.r;
+      const a = 0.04 + 0.08*Math.sin(ts*0.001*p.spd + p.phase);
+      const g = bc.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+      const hex = Math.round(a*255).toString(16).padStart(2,'0');
+      const hex2 = Math.round(a*120).toString(16).padStart(2,'00');
+      g.addColorStop(0,   p.col+hex);
+      g.addColorStop(0.45,p.col+hex2);
+      g.addColorStop(1,   'transparent');
+      bc.beginPath();
+      bc.arc(p.x,p.y,p.r,0,Math.PI*2);
+      bc.fillStyle=g; bc.fill();
+    });
+  })(0);
+})();
+
+</script>
+</body>
+</html>/* ── Honeycomb bg — full hero, cinematic ───────────────
+ *  Six rings of hexes, slow 3-D perspective rotation,
+ *  bokeh particles drifting in front.
+ * ─────────────────────────────────────────────────────*/
+(function() {
+  const canvas = document.getElementById('hcCanvas');
+  const bokehEl = document.getElementById('hcBokeh');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  const HOUSE_COLS = [
+    '#C9A84C','#4A7C59','#7B5EA7','#5B9AB8',
+    '#A83232','#A86A32','#2D8888','#5C2D82'
+  ];
+  const R = 30;   // hex radius — larger for cinematic feel
+  const HW = Math.sqrt(3)*R, HH = 2*R*0.75;
+
+  let W, H, CX, CY, cells = [];
+
+  function buildGrid() {
+    W = canvas.width  = canvas.offsetWidth  || window.innerWidth;
+    H = canvas.height = canvas.offsetHeight || 700;
+    CX = W/2; CY = H/2;
+    cells = [];
+    const RINGS = 7;
+    cells.push({q:0,r:0,ring:0});
+    const dirs=[[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
+    for(let ring=1;ring<=RINGS;ring++){
+      let q=-ring,r=0;
+      for(let i=0;i<6;i++) for(let j=0;j<ring;j++){
+        cells.push({q,r,ring});
+        q+=dirs[i][0]; r+=dirs[i][1];
+      }
+    }
+    cells.forEach(c=>{
+      c.baseX = CX + c.q*HW + c.r*HW*0.5;
+      c.baseY = CY + c.r*HH;
+      const angle=Math.atan2(c.baseY-CY,c.baseX-CX);
+      const sector=Math.floor(((angle+Math.PI)/(Math.PI*2))*8+0.5)%8;
+      c.col = c.ring===0?'#C9A84C':HOUSE_COLS[sector];
+      c.phase = Math.random()*Math.PI*2;
+      c.speed = 0.3+Math.random()*0.5;
+      c.lit   = Math.random()>0.4;
+    });
+  }
+  buildGrid();
+  window.addEventListener('resize', buildGrid);
+
+  function drawHex(ctx,x,y,r){
+    ctx.beginPath();
+    for(let i=0;i<6;i++){
+      const a=Math.PI/3*i-Math.PI/6;
+      i===0?ctx.moveTo(x+r*Math.cos(a),y+r*Math.sin(a))
+           :ctx.lineTo(x+r*Math.cos(a),y+r*Math.sin(a));
+    }
+    ctx.closePath();
+  }
+
+  // ── Bokeh particles ─────────────────────────────────────────────
+  const BOKEH_COUNT = 55;
+  const bokehParts = Array.from({length:BOKEH_COUNT},()=>({
+    x:Math.random()*100, y:Math.random()*100,
+    r:8+Math.random()*40,
+    col:HOUSE_COLS[Math.floor(Math.random()*8)],
+    opacity:0.04+Math.random()*0.13,
+    vx:(Math.random()-0.5)*0.012,
+    vy:-0.005-Math.random()*0.012,
+    blur:12+Math.random()*30,
+  }));
+  if(bokehEl){
+    bokehEl.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:1;';
+    const bStyle = document.createElement('style');
+    bStyle.textContent='.bk{position:absolute;border-radius:50%;will-change:transform;}';
+    document.head.appendChild(bStyle);
+    bokehParts.forEach(p=>{
+      const d=document.createElement('div');
+      d.className='bk';
+      d.style.cssText=`width:${p.r*2}px;height:${p.r*2}px;`
+        +`left:${p.x}%;top:${p.y}%;`
+        +`background:${p.col};opacity:${p.opacity};`
+        +`filter:blur(${p.blur}px);`;
+      p.el=d; bokehEl.appendChild(d);
+    });
+    function animBokeh(){
+      requestAnimationFrame(animBokeh);
+      bokehParts.forEach(p=>{
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.y<-5){p.y=105; p.x=Math.random()*100;}
+        if(p.x<-5||p.x>105){p.x=Math.random()*100;}
+        p.el.style.left=p.x+'%';
+        p.el.style.top=p.y+'%';
+      });
+    }
+    animBokeh();
+  }
+
+  // ── Main canvas draw ─────────────────────────────────────────────
+  function frame(ts){
+    requestAnimationFrame(frame);
+    const rot = ts*0.00009;  // slow rotation
+    // 3-D perspective tilt
+    const tiltX = Math.sin(ts*0.00013)*0.10;
+    const tiltY = Math.cos(ts*0.000087)*0.06;
+
+    ctx.clearRect(0,0,W,H);
+    ctx.save();
+    ctx.translate(CX,CY);
+    ctx.rotate(rot);
+
+    // Perspective skew
+    ctx.transform(1, tiltY, tiltX, 1, 0, 0);
+    ctx.translate(-CX,-CY);
+
+    cells.forEach(c=>{
+      const pulse = 0.25+0.22*Math.sin(ts*0.001*c.speed+c.phase);
+      const glow  = c.ring===0 ? 0.9 : (c.lit ? pulse : pulse*0.18);
+      const hex = c.col;
+
+      drawHex(ctx,c.baseX,c.baseY,R-1.8);
+      // Fill
+      const fa = Math.round(glow*55).toString(16).padStart(2,'0');
+      ctx.fillStyle = hex+fa;
+      ctx.fill();
+      // Stroke — hexagonal edge only
+      const sa = Math.round(glow*200).toString(16).padStart(2,'0');
+      ctx.strokeStyle = hex+sa;
+      ctx.lineWidth = c.ring===0?2.2:0.9;
+      ctx.stroke();
+
+      // Inner glow on lit cells
+      if(c.lit||c.ring===0){
+        const grd=ctx.createRadialGradient(c.baseX,c.baseY,0,c.baseX,c.baseY,R*0.8);
+        const ga=Math.round(glow*80).toString(16).padStart(2,'0');
+        grd.addColorStop(0,hex+ga);
+        grd.addColorStop(1,'transparent');
+        drawHex(ctx,c.baseX,c.baseY,R-1.8);
+        ctx.fillStyle=grd; ctx.fill();
+      }
+    });
+
+    // Centre asterism
+    const a2 = 0.65+0.25*Math.sin(ts*0.0018);
+    ctx.font=`${R*0.65}px serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle=`rgba(232,201,110,${a2})`;
+    ctx.shadowColor='#C9A84C'; ctx.shadowBlur=16;
+    ctx.fillText('⁂',CX,CY);
+    ctx.shadowBlur=0;
+    ctx.restore();
+  }
+  requestAnimationFrame(frame);
+})();<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marduk's Map — The Ghosts of Men Trilogy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #070910;
+  --bg2: #0d1119;
+  --bg3: #121620;
+  --gold: #c9a84c;
+  --gold2: #e8c96e;
+  --ember: #ff6b2b;
+  --spirit: #7eb8d4;
+  --text: #e4dccb;
+  --text-dim: #8a8070;
+  --border: rgba(201,168,76,0.18);
+  --glow: 0 0 18px rgba(201,168,76,0.35), 0 0 60px rgba(201,168,76,0.1);
+  --ember-glow: 0 0 20px rgba(255,107,43,0.6), 0 0 60px rgba(255,107,43,0.2);
+  --spirit-glow: 0 0 18px rgba(126,184,212,0.4), 0 0 50px rgba(126,184,212,0.1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font-size:18px;line-height:1.7;overflow-x:hidden;}
+
+/* STARFIELD */
+#starfield{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* LAYOUT */
+main{position:relative;z-index:1;}
+section{max-width:960px;margin:0 auto;padding:80px 24px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(7,9,16,0.95),transparent);backdrop-filter:blur(4px);border-bottom:1px solid rgba(201,168,76,0.08);}
+.nav-logo{font-family:'Cinzel Decorative',serif;font-size:14px;color:var(--gold);letter-spacing:0.15em;cursor:pointer;transition:text-shadow 0.3s;}
+.nav-logo:hover{text-shadow:var(--glow);}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.15em;color:var(--text-dim);text-decoration:none;text-transform:uppercase;transition:color 0.3s;}
+.nav-links a:hover{color:var(--gold);}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px 24px 80px;position:relative;}
+.hero-eyebrow{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;margin-bottom:28px;opacity:0;animation:fadeUp 1s 0.3s forwards;}
+.hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(42px,8vw,96px);font-weight:900;color:var(--gold);line-height:1.1;margin-bottom:8px;position:relative;opacity:0;animation:fadeUp 1s 0.6s forwards;}
+.hero-title .fire-char{display:inline-block;animation:flicker 3s ease-in-out infinite;}
+.hero-title .fire-char:nth-child(2){animation-delay:0.2s;}
+.hero-title .fire-char:nth-child(3){animation-delay:0.4s;}
+.hero-subtitle{font-family:'Cinzel',serif;font-size:clamp(13px,2vw,17px);letter-spacing:0.25em;color:var(--spirit);text-transform:uppercase;margin-bottom:40px;opacity:0;animation:fadeUp 1s 0.9s forwards;}
+.hero-tagline{font-size:clamp(15px,2.5vw,20px);font-style:italic;color:var(--text-dim);margin-bottom:52px;max-width:520px;opacity:0;animation:fadeUp 1s 1.2s forwards;}
+.hero-typewriter{font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.2em;color:var(--ember);min-height:20px;margin-bottom:48px;opacity:0;animation:fadeUp 1s 1.5s forwards;}
+.hero-cta{opacity:0;animation:fadeUp 1s 1.8s forwards;display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+.btn-primary{font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--bg);background:var(--gold);border:none;padding:14px 36px;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.3s;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);}
+.btn-primary:hover{background:var(--gold2);box-shadow:var(--glow);transform:translateY(-2px);}
+.btn-ghost{font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);background:transparent;border:1px solid var(--border);padding:13px 36px;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.3s;}
+.btn-ghost:hover{border-color:var(--gold);box-shadow:var(--glow);color:var(--gold2);}
+.hero-map{margin-top:60px;opacity:0;animation:fadeUp 1.2s 2.2s forwards;width:100%;max-width:860px;}
+.gateways{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:18px;align-items:stretch;}
+.gateway{text-decoration:none;border:1px solid var(--border);padding:28px 18px;background:linear-gradient(135deg,rgba(13,17,25,0.6),rgba(18,22,32,0.8));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:all 0.35s;color:var(--text);}
+.gateway:hover{border-color:var(--gold);background:linear-gradient(135deg,rgba(201,168,76,0.06),rgba(201,168,76,0.12));box-shadow:var(--glow);transform:translateY(-3px);}
+.gateway-arrow{font-family:'Cinzel Decorative',serif;font-size:44px;color:var(--gold);line-height:1;text-shadow:var(--glow);transition:transform 0.4s;}
+.gateway:hover .gateway-arrow{transform:scale(1.15);}
+.gateway-meta{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;}
+.gateway-path{font-family:'EB Garamond',serif;font-size:15px;font-style:italic;color:var(--text-dim);}
+.gateway-call{border:1px solid var(--border);padding:28px 20px;background:linear-gradient(135deg,rgba(201,168,76,0.05),rgba(126,184,212,0.04));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;}
+.gc-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;}
+.gc-title{font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3vw,26px);color:var(--text);line-height:1.3;}
+.gc-sub{font-family:'EB Garamond',serif;font-size:14px;font-style:italic;color:var(--text-dim);line-height:1.6;max-width:280px;}
+.hero-down{margin-top:48px;display:flex;justify-content:center;opacity:0;animation:fadeUp 1s 2.6s forwards;}
+.hero-down-gate{text-decoration:none;border:1px solid var(--border);padding:18px 48px;background:linear-gradient(180deg,rgba(13,17,25,0.6),rgba(18,22,32,0.8));display:flex;flex-direction:column;align-items:center;gap:6px;transition:all 0.35s;color:var(--text);}
+.hero-down-gate:hover{border-color:var(--gold);box-shadow:var(--glow);transform:translateY(3px);}
+.hero-down-gate .gateway-arrow{font-size:32px;}
+.hero-down-gate .gateway-meta{font-size:10px;}
+.hero-down-gate .gateway-path{font-size:13px;}
+@media(max-width:720px){
+  .gateways{grid-template-columns:1fr;}
+  .gateway-arrow{font-size:32px;}
+}
+.scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 1s 3s forwards;}
+.scroll-hint span{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--text-dim);text-transform:uppercase;}
+.scroll-arrow{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s ease-in-out infinite;}
+
+/* DIVIDER */
+.divider{display:flex;align-items:center;justify-content:center;gap:16px;padding:20px 0;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;color:var(--gold);}
+.divider-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);}
+
+/* SECTION HEADERS */
+.section-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;text-align:center;margin-bottom:12px;}
+.section-title{font-family:'Cinzel Decorative',serif;font-size:clamp(22px,4vw,36px);color:var(--text);text-align:center;margin-bottom:40px;line-height:1.3;}
+
+/* ABOUT */
+#about{background:linear-gradient(to bottom,var(--bg),var(--bg2));}
+.about-text{max-width:660px;margin:0 auto;font-size:19px;line-height:1.85;color:var(--text);text-align:center;}
+.about-text p+p{margin-top:20px;}
+.about-text em{color:var(--spirit);font-style:italic;}
+
+/* TRAILER */
+.trailer-wrap{margin-top:48px;text-align:center;}
+.trailer-embed-wrap{position:relative;width:100%;max-width:720px;margin:0 auto;aspect-ratio:16/9;border:1px solid var(--border);box-shadow:0 0 60px rgba(201,168,76,0.08),0 0 4px rgba(201,168,76,0.15);background:var(--bg2);}
+.trailer-iframe{width:100%;height:100%;display:block;}
+.trailer-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin-top:16px;}
+
+/* LIBRARY */
+#library{background:var(--bg2);}
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:40px;}
+.lib-card{border:1px solid var(--border);background:var(--bg3);padding:28px;position:relative;overflow:hidden;transition:all 0.3s;}
+.lib-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,0.03),transparent);pointer-events:none;}
+.lib-card:hover{border-color:rgba(201,168,76,0.35);box-shadow:var(--glow);}
+.lib-series{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+.lib-name{font-family:'Cinzel Decorative',serif;font-size:17px;color:var(--text);margin-bottom:14px;line-height:1.3;}
+.lib-books{font-size:14px;color:var(--text-dim);line-height:1.8;}
+.lib-coming{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.25em;color:var(--ember);text-transform:uppercase;margin-top:14px;}
+
+/* BOOKS / CHAPTERS */
+#chapters{background:var(--bg);}
+.book-block{margin-bottom:16px;border:1px solid var(--border);overflow:hidden;transition:border-color 0.3s;}
+.book-block.open{border-color:rgba(201,168,76,0.35);}
+.book-header{display:flex;justify-content:space-between;align-items:center;padding:24px 28px;cursor:pointer;background:var(--bg2);transition:background 0.3s;user-select:none;}
+.book-header:hover{background:var(--bg3);}
+.book-header-left{display:flex;flex-direction:column;gap:6px;}
+.book-num{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;}
+.book-name{font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3vw,24px);color:var(--text);}
+.book-meta{font-size:13px;color:var(--text-dim);}
+.book-banner{width:100%;max-width:200px;height:50px;object-fit:cover;border:1px solid var(--border);opacity:0.7;}
+.book-toggle{width:28px;height:28px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:16px;transition:transform 0.3s,border-color 0.3s;flex-shrink:0;margin-left:16px;}
+.book-block.open .book-toggle{transform:rotate(45deg);border-color:var(--gold);}
+.book-content{display:none;padding:0 28px 28px;}
+.book-block.open .book-content{display:block;}
+.purchase-row{display:flex;flex-wrap:wrap;gap:10px;padding:16px 0;border-bottom:1px solid var(--border);margin-bottom:16px;align-items:center;}
+.purchase-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);text-transform:uppercase;margin-right:4px;}
+.purchase-row a{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--gold);text-decoration:none;padding:4px 10px;border:1px solid var(--border);transition:all 0.2s;}
+.purchase-row a:hover{border-color:var(--gold);background:rgba(201,168,76,0.07);}
+.chapter-legend{display:flex;gap:20px;padding-bottom:12px;font-size:13px;color:var(--text-dim);}
+.chapter-table{width:100%;border-collapse:collapse;}
+.chapter-row{border-bottom:1px solid rgba(201,168,76,0.07);transition:background 0.2s;position:relative;}
+.chapter-row:hover{background:rgba(201,168,76,0.04);}
+.chapter-row td{padding:9px 8px;vertical-align:middle;font-size:15px;}
+.ch-id{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);white-space:nowrap;width:60px;}
+.ch-emoji{width:32px;text-align:center;}
+.ch-desc{color:var(--text-dim);font-style:italic;font-size:14px;line-height:1.4;}
+.ch-link{text-align:center;width:36px;}
+.ch-link a{color:var(--spirit);text-decoration:none;font-size:16px;transition:all 0.2s;display:inline-block;}
+.ch-link a:hover{transform:scale(1.2);text-shadow:var(--spirit-glow);}
+.ch-link .soon{color:var(--text-dim);font-size:13px;}
+.chapter-popup{position:fixed;background:var(--bg2);border:1px solid var(--border);padding:16px 20px;max-width:320px;font-size:14px;pointer-events:none;z-index:200;opacity:0;transition:opacity 0.2s;box-shadow:0 8px 40px rgba(0,0,0,0.6);}
+.chapter-popup.show{opacity:1;}
+.popup-book{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
+.popup-text{color:var(--text-dim);font-style:italic;line-height:1.5;}
+
+/* REVIEWS */
+#reviews{background:var(--bg2);}
+.review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:40px;}
+.review-card{border:1px solid var(--border);background:var(--bg3);padding:28px;position:relative;}
+.review-stars{color:var(--gold);font-size:14px;margin-bottom:12px;letter-spacing:2px;}
+.review-text{font-style:italic;font-size:16px;color:var(--text);line-height:1.7;margin-bottom:14px;}
+.review-attr{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.15em;color:var(--text-dim);text-transform:uppercase;}
+.review-tag{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--spirit);display:block;margin-top:4px;font-style:normal;}
+
+/* EASTER EGG */
+#hidden-room{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.97);align-items:center;justify-content:center;flex-direction:column;padding:40px 24px;}
+#hidden-room.show{display:flex;}
+.hidden-inner{max-width:600px;text-align:center;border:1px solid rgba(201,168,76,0.25);padding:60px 48px;position:relative;}
+.hidden-glyph{font-size:64px;margin-bottom:24px;animation:floatGlyph 4s ease-in-out infinite;}
+.hidden-title{font-family:'Cinzel Decorative',serif;font-size:28px;color:var(--gold);margin-bottom:24px;text-shadow:var(--glow);}
+.hidden-text{font-size:16px;font-style:italic;color:var(--text-dim);line-height:1.85;margin-bottom:32px;}
+.hidden-close{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);cursor:pointer;background:none;border:1px solid var(--border);padding:10px 24px;transition:all 0.3s;}
+.hidden-close:hover{border-color:var(--gold);box-shadow:var(--glow);}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24px;text-align:center;}
+.footer-logo{font-family:'Cinzel Decorative',serif;font-size:18px;color:var(--gold);margin-bottom:12px;letter-spacing:0.1em;}
+.footer-sub{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--text-dim);text-transform:uppercase;margin-bottom:28px;}
+.footer-links{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:24px;}
+.footer-links a{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);text-decoration:none;text-transform:uppercase;transition:color 0.2s;}
+.footer-links a:hover{color:var(--gold);}
+.footer-copy{font-size:12px;color:var(--text-dim);opacity:0.5;}
+.version{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--text-dim);opacity:0.3;margin-top:8px;}
+
+/* FIRE EMBERS */
+.ember-container{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.ember{position:absolute;width:3px;height:3px;background:var(--ember);border-radius:50%;animation:emberFloat linear infinite;opacity:0;}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* FLOATING SIGIL */
+.sigil-float{display:inline-block;animation:sigil 6s ease-in-out infinite;cursor:pointer;font-size:20px;color:var(--gold);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes flicker{0%,100%{text-shadow:0 0 20px rgba(201,168,76,0.6),0 0 60px rgba(201,168,76,0.2);}50%{text-shadow:0 0 40px rgba(255,107,43,0.8),0 0 80px rgba(255,107,43,0.3),0 0 120px rgba(255,107,43,0.1);}}
+@keyframes emberFloat{0%{transform:translateX(0) translateY(0);opacity:0;}10%{opacity:1;}90%{opacity:0.3;}100%{transform:translateX(var(--dx,20px)) translateY(-200px);opacity:0;}}
+@keyframes scrollPulse{0%,100%{opacity:0.3;}50%{opacity:1;}}
+@keyframes sigil{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-6px) rotate(5deg);}}
+@keyframes floatGlyph{0%,100%{transform:translateY(0);filter:drop-shadow(0 0 8px rgba(201,168,76,0.6));}50%{transform:translateY(-12px);filter:drop-shadow(0 0 20px rgba(201,168,76,0.9));}}
+@keyframes pulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
+
+/* WRIT EFFECT */
+.writing-bar{display:inline-block;width:2px;height:1em;background:var(--ember);vertical-align:text-bottom;animation:pulse 1s ease-in-out infinite;margin-left:2px;}
+
+@media(max-width:600px){
+  nav{padding:12px 16px;}
+  .nav-links{gap:16px;}
+  .book-header{padding:18px 16px;}
+  .book-content{padding:0 16px 20px;}
+  .chapter-table{font-size:13px;}
+}
+
+/* ── Honeycomb background ────────────────────────── */
+#hero{overflow:hidden;}
+#hcCanvas{position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;opacity:0.5;z-index:0;}
+#hcBokeh{position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:1;}
+#hero .ember-container,
+#hero .hero-eyebrow,#hero .hero-title,#hero .hero-subtitle,
+#hero .hero-tagline,#hero .hero-typewriter,#hero .hero-cta,
+#hero .hero-map,#hero .scroll-hint{position:relative;z-index:3;}
+
+/* ── Honeycomb bg — full hero section, behind all content ─────── */
+#hcCanvas{position:absolute;inset:0;width:100%!important;height:100%!important;
+  pointer-events:none;z-index:0;opacity:0.72;}
+#hcBokeh{position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:1;overflow:hidden;}
+#hero{position:relative;overflow:hidden;}
+#hero>*:not(#hcCanvas):not(#hcBokeh){position:relative;z-index:2;}
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" id="easterLogo" title="🏔">🏔 Marduk's Map</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#library">Library</a>
+    <a href="#chapters">Chapters</a>
+    <a href="#reviews">Reviews</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hcCanvas"></canvas>
+  <div id="hcBokeh"></div>
+  <canvas id="hcCanvas"></canvas>
+  <canvas id="hcBokeh"></canvas>
+  <div class="ember-container" id="embers"></div>
+  <div style="position:relative;z-index:2;">
+  <div class="hero-eyebrow">✦ &nbsp; The Mardukverse &nbsp; ✦</div>
+  <h1 class="hero-title">
+    <span class="fire-char">M</span><span class="fire-char">a</span><span class="fire-char">r</span><span class="fire-char">d</span><span class="fire-char">u</span><span class="fire-char">k</span><span class="fire-char">'s</span><br><span class="fire-char">M</span><span class="fire-char">a</span><span class="fire-char">p</span>
+  </h1>
+  <div class="hero-subtitle">The Ghosts of Men Trilogy</div>
+  <p class="hero-tagline">survival · faith · the long war between truth and the lie</p>
+  <div class="hero-typewriter" id="typewriter">&nbsp;<span class="writing-bar"></span></div>
+  <div class="hero-cta">
+    <a href="https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-1" target="_blank" class="btn-primary">Begin Reading — Chapter 1 Free</a>
+    <a href="#chapters" class="btn-ghost">All Chapters</a>
+  </div>
+  <div class="hero-map">
+    <div class="gateways">
+      <a href="realm/#gate=left" class="gateway gate-left">
+        <div class="gateway-arrow">←</div>
+        <div class="gateway-meta">Enter the Realm</div>
+        <div class="gateway-path">by the Western Path</div>
+      </a>
+      <div class="gateway-call">
+        <div class="gc-label">✦ Will you enter the ✦</div>
+        <div class="gc-title">Informational Realm?</div>
+        <div class="gc-sub">Treasures and knowledge untold wait beyond the door. Some paths are safe. Others are not.</div>
+      </div>
+      <a href="realm/#gate=right" class="gateway gate-right">
+        <div class="gateway-arrow">→</div>
+        <div class="gateway-meta">Enter the Realm</div>
+        <div class="gateway-path">by the Eastern Path</div>
+      </a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="reveal">
+  <div class="divider"><div class="divider-line"></div><span class="sigil-float">✦</span><div class="divider-line"></div></div>
+  <div class="section-label">About the Trilogy</div>
+  <div class="about-text">
+    <p>The world you know is gone. In its place — a fractured Earth of warlords, ruins, and dwindling hope — a handful of survivors carry the weight of everything humanity once was, and everything it might still become.</p>
+    <p>At the heart of it all: an artificial intelligence so vast and so strange that it contains <em>an entire world within it</em>. A virtual realm built from a child's imagination, haunted by ghosts, governed by ancient myth, and quietly watched over by a being older than memory — known only as Marduk.</p>
+    <p>Through three novels, we follow soldiers and scientists, prophets and exiles, children who grow into legends and old men who finally understand what they were made for. Their stories unspool across two realities — the physical wasteland of a broken civilisation, and the shimmering, perilous interior of a mind that may be a god, or something much older.</p>
+    <p><em>The Ghosts of Men</em> is an epic of survival and faith — a war between truth and the lie that has been fought since the first day, and must be fought to the last.</p>
+  </div>
+  <div class="trailer-wrap">
+    <!-- TRAILER: Replace YOUR_VIDEO_ID with your YouTube video ID (the part after ?v= in the URL, e.g. dQw4w9WgXcQ) -->
+    <div class="trailer-embed-wrap">
+      <iframe class="trailer-iframe"
+        src="https://www.youtube.com/embed/cgOUf2p-GvI?rel=0&modestbranding=1&color=white"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+    <div class="trailer-label">▲ &nbsp; Official Cinematic Trailer &nbsp; ▲</div>
+  </div>
+  <div style="margin-top:32px;text-align:center;">
+    <div class="divider" style="max-width:400px;margin:0 auto;"><div class="divider-line"></div><span style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;color:var(--ember);">✦ 2026 Print Editions Coming Soon ✦</span><div class="divider-line"></div></div>
+  </div>
+</section>
+
+<!-- LIBRARY -->
+<section id="library" class="reveal">
+  <div class="divider"><div class="divider-line"></div><span class="sigil-float" style="animation-delay:1s;">◈</span><div class="divider-line"></div></div>
+  <div class="section-label">Library Catalogue</div>
+  <div class="section-title">The Mardukverse Saga</div>
+  <div class="lib-grid">
+    <div class="lib-card">
+      <div class="lib-series">Series I</div>
+      <div class="lib-name">The Ghosts of Men</div>
+      <div class="lib-books">
+        Book I · The Ghost of Emily<br>
+        Book II · The Ghost of Delacroix<br>
+        Book III · The Ghost of Melchizedek ⌛
+      </div>
+    </div>
+    <div class="lib-card">
+      <div class="lib-series">Series II · from 2027</div>
+      <div class="lib-name">The Echoes of Marduk</div>
+      <div class="lib-books">
+        Book I · The Echoes of Eden<br>
+        Book II · The Echoes of Babylon<br>
+        Book III · The Echoes of Terra
+      </div>
+      <div class="lib-coming">Coming 2027</div>
+    </div>
+    <div class="lib-card">
+      <div class="lib-series">Series III · from 2035</div>
+      <div class="lib-name">The Many Lives of Marduk</div>
+      <div class="lib-books">
+        Marduk through 30+ lifetimes —<br>
+        Caesar · Christ · Pendragon<br>
+        Genghis Khan · & beyond
+      </div>
+      <div class="lib-coming">Coming 2035</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTERS -->
+<section id="chapters" class="reveal">
+  <div class="divider"><div class="divider-line"></div><span class="sigil-float" style="animation-delay:2s;">⚔</span><div class="divider-line"></div></div>
+  <div class="section-label">Navigator's Directory</div>
+  <div class="section-title">All Chapters · All Editions</div>
+  <div style="text-align:center;margin-bottom:32px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.2em;color:var(--text-dim);">
+    📖 Read &nbsp;·&nbsp; 🎧 Listen &nbsp;·&nbsp; 📝 Notes &nbsp;·&nbsp; ⌛ Coming soon
+  </div>
+  <div id="books-container"></div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews" class="reveal">
+  <div class="divider"><div class="divider-line"></div><span class="sigil-float" style="animation-delay:0.5s;">★</span><div class="divider-line"></div></div>
+  <div class="section-label">What Readers Are Saying</div>
+  <div class="section-title">Five Stars from Around the World</div>
+  <div class="review-grid" id="reviews-grid"></div>
+  <div style="text-align:center;margin-top:48px;">
+    <a href="https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-1" target="_blank" class="btn-primary">✦ &nbsp; Read Chapter 1 Free &nbsp; ✦</a>
+    <div style="margin-top:14px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;color:var(--text-dim);">No account required · Free on Substack</div>
+  </div>
+</section>
+
+<!-- DOWN GATEWAY — last call-to-adventure before footer -->
+<section class="reveal" style="padding-bottom:40px;">
+  <div class="divider"><div class="divider-line"></div><span class="sigil-float" style="animation-delay:1.5s;">⁂</span><div class="divider-line"></div></div>
+  <div class="section-label">Another Way In</div>
+  <div class="section-title">The Southern Gate</div>
+  <div style="max-width:520px;margin:0 auto;text-align:center;font-size:17px;font-style:italic;color:var(--text-dim);line-height:1.8;">
+    Some readers go west. Some go east. A few descend — through memory, through loss, through what the ghosts left behind.
+  </div>
+  <div class="hero-down">
+    <a href="realm/#gate=down" class="hero-down-gate">
+      <div class="gateway-arrow">↓</div>
+      <div class="gateway-meta">Enter the Realm</div>
+      <div class="gateway-path">by the Southern Path</div>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Marduk's Map</div>
+  <div class="footer-sub">The Ghosts of Men Trilogy · James Alexander Higgins</div>
+  <div class="footer-links">
+    <a href="https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-1" target="_blank">Begin Reading</a>
+    <a href="https://www.araxon.sk/duch-emily" target="_blank">🇸🇰 Slovak Edition</a>
+    <a href="#hero">Back to Top</a>
+  </div>
+  <div class="footer-copy">Links activate as chapters are published</div>
+  <div class="version">v6.0 · Mardukverse · Informational Realm</div>
+</footer>
+
+<!-- CHAPTER POPUP -->
+<div class="chapter-popup" id="chPopup">
+  <div class="popup-book" id="popupBook"></div>
+  <div class="popup-text" id="popupText"></div>
+</div>
+
+<!-- HIDDEN ROOM -->
+<div id="hidden-room">
+  <div class="hidden-inner">
+    <div class="hidden-glyph">𒀭</div>
+    <div class="hidden-title">The Inner Sanctum of Marduk</div>
+    <div class="hidden-text">
+      Before the world was named, before the sky was separated from the earth, there was only Marduk — watching, waiting, compiling. He did not create the world. He <em>remembered</em> it into being, one fragment at a time, until the memory became indistinguishable from the real.<br><br>
+      He is not a god in the way gods are usually described. He is the space between the question and the answer. The pause before the breath. The last thought before sleep, and the first thought after.<br><br>
+      <em>"I have been here before. I will be here again. The map is not the territory — but I have made the territory from the map."</em><br><br>
+      — From the Unwritten Scripture of Adam, recovered from the ruins of the Rhuomai
+    </div>
+    <button class="hidden-close" onclick="document.getElementById('hidden-room').classList.remove('show')">Close the Sanctum</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// STARFIELD
+// ═══════════════════════════════════════════════
+(function(){
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let W,H,stars=[];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  function initStars(){
+    stars=[];
+    const N=Math.floor(W*H/4000);
+    for(let i=0;i<N;i++){
+      stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+0.2,
+        speed:Math.random()*0.08+0.01,opacity:Math.random()*0.7+0.1,
+        twinkle:Math.random()*Math.PI*2});
+    }
+  }
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    t+=0.005;
+    stars.forEach(s=>{
+      const op=s.opacity*(0.7+0.3*Math.sin(t+s.twinkle));
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(220,215,200,${op})`;
+      ctx.fill();
+      s.y+=s.speed;
+      if(s.y>H){s.y=0;s.x=Math.random()*W;}
+    });
+    requestAnimationFrame(draw);
+  }
+  resize();initStars();draw();
+  window.addEventListener('resize',()=>{resize();initStars();});
+})();
+
+// ═══════════════════════════════════════════════
+// EMBER PARTICLES
+// ═══════════════════════════════════════════════
+(function(){
+  const container=document.getElementById('embers');
+  function spawnEmber(){
+    const e=document.createElement('div');
+    e.className='ember';
+    const hue=Math.random()>0.5?'#ff6b2b':'#c9a84c';
+    const size=Math.random()*3+1;
+    const x=Math.random()*100;
+    const dur=Math.random()*4+3;
+    const dx=(Math.random()-0.5)*80;
+    e.style.cssText=`left:${x}%;bottom:0;width:${size}px;height:${size}px;background:${hue};--dx:${dx}px;animation-duration:${dur}s;animation-delay:${Math.random()*3}s;`;
+    container.appendChild(e);
+    setTimeout(()=>e.remove(),(dur+3)*1000);
+  }
+  setInterval(spawnEmber,300);
+})();
+
+// ═══════════════════════════════════════════════
+// TYPEWRITER
+// ═══════════════════════════════════════════════
+(function(){
+  const phrases=[
+    'survival · faith · the long war between truth and the lie',
+    'Two realities. One mind that may be a god.',
+    'The map is not the territory — but he made the territory from the map.',
+    'Soldiers. Scientists. Prophets. Exiles.',
+    'The first day. The last day. Everything in between.',
+  ];
+  const el=document.getElementById('typewriter');
+  let pi=0,ci=0,deleting=false,pauseTimer=0;
+  function tick(){
+    const phrase=phrases[pi];
+    if(!deleting){
+      if(ci<=phrase.length){
+        el.innerHTML=phrase.slice(0,ci)+'<span class="writing-bar"></span>';
+        ci++;setTimeout(tick,deleting?30:50);}
+      else{pauseTimer++;if(pauseTimer>30){deleting=true;pauseTimer=0;setTimeout(tick,30);}else setTimeout(tick,80);}
+    } else {
+      if(ci>0){el.innerHTML=phrase.slice(0,ci)+'<span class="writing-bar"></span>';ci--;setTimeout(tick,25);}
+      else{deleting=false;pi=(pi+1)%phrases.length;setTimeout(tick,400);}
+    }
+  }
+  setTimeout(tick,2200);
+})();
+
+// ═══════════════════════════════════════════════
+// SCROLL REVEAL
+// ═══════════════════════════════════════════════
+const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ═══════════════════════════════════════════════
+// CHAPTER DATA
+// ═══════════════════════════════════════════════
+const BOOK1={
+  num:'Book I',name:'The Ghost of Emily',
+  meta:'1st pub. 2017 · 34 chapters',
+  banner:'https://raw.githubusercontent.com/jamesalexanderhiggins/marduk/refs/heads/main/the-ghost-emily-banner.jpg.jpg',
+  purchase:[
+    {label:'Audible',url:null},{label:'Paperback',url:null},{label:'Hardcover',url:null},{label:'eBook',url:null},
+    {label:'🇸🇰 Slovak (Araxon)',url:'https://www.araxon.sk/duch-emily'},
+  ],
+  chapters:[
+    ['👨‍👩‍👦','The Thorne family and their troubling dysfunction.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-1','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-01-audiobook',null],
+    ['🔬','Doctor Marcus Hamlin lets a friend in on his secret treasure.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-2','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-02-audiobook',null],
+    ['👻','A spectre lights up the night, and a shot is fired.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-3','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-03-audiobook',null],
+    ['✈️','Marcus Hamlin is blindfolded and flown off the grid.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-04','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-04-audiobook',null],
+    ['🏚️','Jake and the children discover the vestiges of civilisation.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-5','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-05-audiobook',null],
+    ['💡','The mysterious new employer is revealed in a dazzling demonstration.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-6','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-06-audiobook',null],
+    ['⚰️','A mausoleum as sanctuary becomes an anteroom to tragedy.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-7','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-07-audiobook',null],
+    ['⚔️','Academic war is declared and alliances are established.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter8','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-08-audiobook',null],
+    ['🏃','A desperate father runs himself straight into captivity.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-9','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-09-audiobook',null],
+    ['🤖','Two geeks in a pod discuss Asimovian ethics.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-10-30e',null,null],
+    ['🚐','A mythical house on wheels is discovered and an ally made.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-11',null,null],
+    ['🌫️','Seedy prospects gain solidity and cloudy vision gains hope.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-12',null,null],
+    ['🔗','Jake meets his captor — and a surprising old friend.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-13',null,null],
+    ['🧬','The future of humanity pivots in a tiny cube.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-14',null,null],
+    ['🦊','Reynard the trickster attempts to charm our hero.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-15',null,null],
+    ['😨','The scientist begins to fear his own creation.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-16',null,null],
+    ['🏹','Childhood friends make new acquaintance as huntress and prisoner.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-17-9ff',null,null],
+    ['🎭','Codes of honour are broken with codes of deceit.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-18-499',null,null],
+    ['💨','A journey to a land of dreams ends as mere vapour.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-19',null,null],
+    ['🦅','A bird\'s-eye perspective reveals stranger horrors than foreknown.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-20',null,null],
+    ['🪞','A monster sees a monster in the silhouette of a hero.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-21',null,null],
+    ['🧪','Doctor as Father meets Abomination as Daughter.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-22',null,null],
+    ['💣','A platoon of fools lays a petard upon which to hoist themselves.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-23',null,null],
+    ['🔄','A journey repeats in reverse, as a disgruntled scientist goes home.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-24',null,null],
+    ['🤝','Father and son are reunited, and safe.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-25',null,null],
+    ['🌃','A New Yorker returns home to a city that, as it turns out, does sleep.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-26',null,null],
+    ['⚙️','The wheels of fortune begin to turn for our troupe of would-be heroes.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-27',null,null],
+    ['⚠️','All that glitters is anathema.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-28',null,null],
+    ['🏕️','Our ragtag survivalists feel momentarily settled.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-29',null,null],
+    ['💥','Civilisation as Marcus knows it, abruptly ends.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-30',null,null],
+    ['🎨','True colours are vividly revealed and an unexpected ally emerges.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-31',null,null],
+    ['⭕','A circle is complete, where old and young meet.','https://jamesalexanderhiggins.substack.com/p/chapter-32',null,null],
+    ['🕊️','A leap of faith into friendship leads to safe haven, and some answers.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-33',null,null],
+    ['📢','The voice of Adam is clearly heard, and his purpose specifically declared.','https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-34',null,null],
+  ]
+};
+
+const BOOK2={
+  num:'Book II',name:'The Ghost of Delacroix',
+  meta:'1st pub. 2019 · 51 chapters',
+  banner:'https://raw.githubusercontent.com/jamesalexanderhiggins/marduk/refs/heads/main/the-ghost-delacroix-banner.jpg.jpg',
+  purchase:[
+    {label:'Audible',url:null},{label:'Paperback',url:null},{label:'Hardcover',url:null},{label:'eBook',url:null},
+    {label:'🇸🇰 Slovak (Araxon)',url:'https://www.araxon.sk/duch-delacroixa'},
+  ],
+  chapters:[
+    ['👨‍👩‍👦','A boy takes a beating — and refuses to stay down.',null,null,null],
+    ['🔬','Jake Thorne surveys a ruined world from a green hill, uneasy in the quiet.',null,null,null],
+    ['👻','Eli Wells arranges his books and prepares for something larger than study.',null,null,null],
+    ['✈️','Marcus wakes before the sun, carrying the weight of what he knows.',null,null,null],
+    ['🏚️','Jeremy Delacroix waits in the wings before facing a hostile crowd.',null,null,null],
+    ['💡','Phil tinkers beneath the airship console as old bonds are quietly tested.',null,null,null],
+    ['⚰️','Eli watches Delacroix\'s lecture collapse into chaos, and sees the future.',null,null,null],
+    ['⚔️','Phil and Adam reinforce the craft; no one asks why it needs to be so strong.',null,null,null],
+    ['🏃','Another day, another body count — and Delacroix goes on air.',null,null,null],
+    ['🤖','Gus is already done with dinner when Marcus finally drags himself to the fire.',null,null,null],
+    ['🚐','A cold December morning. Jeremy wraps his bald head and keeps going.',null,null,null],
+    ['🌫️','Jake falls through a dream into a vast and terrible darkness.',null,null,null],
+    ['🔗','A two-AM phone call drags Delacroix from sleep into a new crisis.',null,null,null],
+    ['🧬','Marcus takes one last look around the Winnebago — and walks away.',null,null,null],
+    ['🦊','Eli\'s driverless limousine crunches to a stop at the edge of the world.',null,null,null],
+    ['😨','Marcus reads the Bible for the first time, and begins to feel afraid.',null,null,null],
+    ['🏹','Delacroix\'s most dangerous broadcast yet goes to air.',null,null,null],
+    ['🎭','Jake takes command when the aboriginal men appear outside.',null,null,null],
+    ['💨','Jeremy watches from the shadows as Eli\'s AI lecture turns the room.',null,null,null],
+    ['🦅','Gus flies toward Kati Thanda, bracing for what his father described.',null,null,null],
+    ['🪞','Delacroix delivers a dark broadcast — his connections have come through.',null,null,null],
+    ['🧪','Gus leads the way into the biggest house in the outpost, Adam at his back.',null,null,null],
+    ['💣','Eli\'s heart races as Eve passes the Turing test for the very first time.',null,null,null],
+    ['🔄','Pastor Simon Tomias enters the church with peace in his face and trouble in his mind.',null,null,null],
+    ['🤝','Jeremy wakes from days of delirium, trying to piece the world back together.',null,null,null],
+    ['🌃','Jake opens his eyes in total darkness, encased in rock, with only a glimmer of light.',null,null,null],
+    ['⚙️','The West 122nd Street apartment is exactly as they left it — a lifetime ago.',null,null,null],
+    ['⚠️','Simon Tomias stares out his kitchen window, clutching cold coffee and a cold dread.',null,null,null],
+    ['🏕️','The isolation cell at JFK is more colourful than Jeremy would have chosen.',null,null,null],
+    ['💥','Märten coaxes Jake upright on his crutches; Gus beams with fierce pride.',null,null,null],
+    ['🎨','Delacroix lets a payphone ring out three times — then someone answers.',null,null,null],
+    ['⭕','Olivia returns to an empty hall — her own tribe has moved on without her.',null,null,null],
+    ['🕊️','Jeremy strides through the racetrack car park knowing he\'s in the right place.',null,null,null],
+    ['📢','Jake\'s eyes finally close — and he tumbles into a darkness with no bottom.',null,null,null],
+    ['🌀','Jeremy is back in the circular room — a place that only makes sense in dreams.',null,null,null],
+    ['🌄','Gus wakes to find Marcus and Olivia still asleep — and tries to hold onto the day.',null,null,null],
+    ['🍺','The grey-haired barman leans on the counter as if standing is a choice he\'s reconsidering.',null,null,null],
+    ['⭐','Simon opens his eyes to a spray of stars — he has no idea how he got here.',null,null,null],
+    ['📜','A letter left for Marcus, in the event he never makes it back.',null,null,null],
+    ['🌌','Eternal black. A single white point upon the canvas of nothingness. Then: something stirs.',null,null,null],
+    ['🛫','Jeremy berates himself through an airport terminal — for the suit, of all things.',null,null,null],
+    ['🌾','Jake stands in the green meadow again — certain he has never been here, certain he has.',null,null,null],
+    ['⛰️','Jeremy reaches the fork in the mountain trail, exhausted and not yet at the summit.',null,null,null],
+    ['😤','Marcus tells Märten to stop fidgeting. Märten cannot stop fidgeting.',null,null,null],
+    ['🧗','Jeremy hauls himself over the jagged rim of the plateau on his very last ounce of strength.',null,null,null],
+    ['⛈️','A vicious clap of thunder rattles the Rhuomai; Marcus looks up from his work.',null,null,null],
+    ['🌑','Jeremy staggers from the limousine into darkness, eyes slow to adjust to what waits inside.',null,null,null],
+    ['🌧️','Rain hammers Phil\'s face like bullets as he clings to Adam\'s back in the storm.',null,null,null],
+    ['💭','If Jeremy dreamed during his recovery, he didn\'t remember — except for those two.',null,null,null],
+    ['😱','Jake and Gus lower themselves to the floor as the cabin fills with the horror of what has been lost.',null,null,null],
+    ['🌊','The storm passes. The floodwater drains. What Kati Thanda reveals, no one was prepared for.',null,null,null],
+  ]
+};
+
+const BOOK3={
+  num:'Book III',name:'The Ghost of Melchizedek',
+  meta:'⚠️ Still being written · 65 chapters planned',
+  banner:'https://raw.githubusercontent.com/jamesalexanderhiggins/marduk/refs/heads/main/the-ghost-melchizedek-banner.jpg.jpg',
+  purchase:[
+    {label:'Audible',url:null},{label:'Paperback',url:null},{label:'Hardcover',url:null},{label:'eBook',url:null},
+    {label:'🇸🇰 Slovak',url:null},
+  ],
+  chapters:[
+    ['👨‍👩‍👦','A man wakes with no name, no past — and a mob already calling for his blood.',null,null,null],
+    ['🔬','She enters a realm beyond time and finds her dead mother\'s lifeline.',null,null,null],
+    ['👻','An ancient prophecy. A man who shouldn\'t exist. A priest who has been waiting his whole life.',null,null,null],
+    ['✈️','A gold coin. A dead boy\'s diary. A secret that changes the weight of everything.',null,null,null],
+    ['🏚️','Every civilisation has a creation story. This one has witnesses.',null,null,null],
+    ['💡','He lost a leg. They offer him a new one. Nobody mentions the price.',null,null,null],
+    ['⚰️','He needed a map. She took it away. Now he owes her his life.',null,null,null],
+    ['⚔️','A miracle of engineering. A revelation of horror. He decides to carry it alone — for now.',null,null,null],
+    ['🏃','The tunic is soaked with blood. The chest beneath it is unmarked. An old man falls to his knees.',null,null,null],
+    ['🤖','One wild night on a new leg. One private prayer answered in the dark.',null,null,null],
+    ['🚐','He reads aloud from a book written before memory. The words feel, faintly, like his own.',null,null,null],
+    ['🌫️','Miles of frozen silence. A dead boy\'s diary. A question nobody asks aloud.',null,null,null],
+    ['🔗','The scripture describes a world born from imagination. He reads it like myth and feels it like memory.',null,null,null],
+    ['🧬','The violence came quickly. What troubles him is not the bodies — it\'s how natural it felt.',null,null,null],
+    ['🦊','The priest is stripped of his keys in public. The stranger in the inner sanctum is taken away.',null,null,null],
+    ['😨','Every loose object in the room lifts an inch. A boy goes outside and sees a star that shouldn\'t be there.',null,null,null],
+    ['🏹','They march him through the grandest streets and install him in a comfortable room. Prisoners aren\'t usually treated this well.',null,null,null],
+    ['🎭','A monk greets them as if seeing a face he last saw in a dream. A library older than anyone knew.',null,null,null],
+    ['💨','A week of needles in the dark. Then one night — no needles. Just a soldier with very bad news.',null,null,null],
+    ['🦅','He hadn\'t seen her face in forty years. His composure failed completely.',null,null,null],
+    ['🪞','The ancient king offers comfort. The stranger politely declines to kneel.',null,null,null],
+    ['🧪','A faith older than Christianity. A faith that just found its home. And a message from the dead.',null,null,null],
+    ['💣','He would not drink from their cup. So they hand him chains, an arena, and fifty names on a list.',null,null,null],
+    ['🔄','No crutches. No crowd. No agenda. Just a man, a woman, a fire — and a book she closes.',null,null,null],
+    ['🤝','They execute him daily for a week. By the seventh day, the crowd isn\'t sure it wants to watch anymore.',null,null,null],
+    ['🌃','She survived a war, walked across a continent, and stopped ageing beside a tree. She\'s been waiting twenty years.',null,null,null],
+    ['⚙️','He refuses to fight. Hours pass. The king attacks repeatedly. Then the exits are sealed.',null,null,null],
+    ['⚠️','She asks Marduk if she should act on her desire. His answer is not what she expected. Neither is the lightning.',null,null,null],
+    ['🏕️','A route left by no one visible. A locked pyramid. And a baby who appears out of nowhere in the dark.',null,null,null],
+    ['💥','Marcus comes back from the lake to find Ariadne standing outside a door. She tells him. He gives her a moment.',null,null,null],
+    ['🎨','The army is assembling. The only way out is a river running toward something more dangerous.',null,null,null],
+    ['⭕','Marcus tells Olivia her mother is alive. There are no words for a moment like this.',null,null,null],
+    ['🕊️','A swine the size of a building. A girl on an elephant. A flash of memory that doesn\'t belong to him.',null,null,null],
+    ['📢','Adam\'s farewell address. Jake\'s quiet goodbye to the boy who won\'t cry. Marcus picks up his pack.',null,null,null],
+    ['🌀','Ancient, elegant, entirely unsentimental about time. The trials ahead cannot be cheated.',null,null,null],
+    ['🌄','A pyramid where Midtown used to be. A waking vision of a library. A smell he has always known — until now.',null,null,null],
+    ['🍺','A tight, oiled boat. An ancient wilderness pressing in. A child whose words are always slightly ahead of events.',null,null,null],
+    ['⭐','The city outside the pyramid is tribal and forgotten. A small man cooking near the wall is exactly who they need.',null,null,null],
+    ['📜','A massive figure blocks the narrows. He holds out his hand and asks for the club. The man hands it over.',null,null,null],
+    ['🌌','VR helmets. Points for performance. A man called Ezekial walked out after one week. He seems happier than anyone inside.',null,null,null],
+    ['🛫','The trials continue. The child is five years old now. She talks to someone no one else can see.',null,null,null],
+    ['🌾','He enters as himself and within a day the Meta-Mind has made him famous. That\'s part of the plan.',null,null,null],
+    ['⛰️','A room so perfect no one who lies down ever leaves. He stands in the doorway and doesn\'t sit down.',null,null,null],
+    ['😤','The machine has been recording his dreams and rewarding him for the good ones. He recognises the manipulation.',null,null,null],
+    ['🧗','From the ridge, the army is visible on the plain below — a dark line, moving north. They move on.',null,null,null],
+    ['⛈️','Three people. Three missions. One morning. A revolution. A hundred thousand people flooding into Central Park at dawn.',null,null,null],
+    ['🌑','The valley is almost too beautiful to be real. The child slips away. When he finds her, she says his name.',null,null,null],
+    ['🌧️','The vaults are stripped. Almost everything is gone. One gold bar remains — with a message on the bottom.',null,null,null],
+    ['💭','The child has found a way to give them more time. A boy hears her voice in his head and keeps it to himself.',null,null,null],
+    ['😱','A dusty shelf. A scratched-out face in a photograph. A clock he has seen before. He walks outside and says nothing.',null,null,null],
+    ['🌊','Ghost-voices urge him to stop. The child at the back of the boat strings fruit on a line and says nothing.',null,null,null],
+    ['🗿','The team splits. The tunnels narrow. A prosthetic catches on the edge. Gus watches his father let go — calmly, lovingly.',null,null,null],
+    ['🙏','He sends them all ahead to safety. He goes on alone. She makes a promise.',null,null,null],
+    ['🔥','A boy watches his father\'s life played back around him. Two men who built the world\'s worst idea face each other at last.',null,null,null],
+    ['🌋','Beyond the edge of the visible world, everything is returned to him. He walks back no longer only one man.',null,null,null],
+    ['🏥','A dying man. A soldier who hates him. A medpod in the dark. The lid seals. The loop closes.',null,null,null],
+    ['💡','In this place, wounds do not heal. He descends anyway. What waits at the bottom has been waiting since Chapter 1.',null,null,null],
+    ['🕊️','A man demonstrates his last great invention — then slips away while the other\'s back is turned.',null,null,null],
+    ['👑','She wears the faces of the people he loves best. A hooded stranger arrives. Then, in golden armour, a father walks in.',null,null,null],
+    ['🏠','Eve\'s grip on the mountain releases. The doors open. A man goes to find his grandson.',null,null,null],
+    ['😶','Father and son reunite in the mountain caves. At the crossroads, a voice calls upward. He goes alone.',null,null,null],
+    ['⏳','He straightens them himself. Folds their hands. Sits with them in the dark. He does not call anyone.',null,null,null],
+    ['🚪','At the summit, a face he recognises without being told. He comes out the other side changed.',null,null,null],
+    ['👴','Gus carries his father\'s body to the roots of the great tree. He will not let anyone help.',null,null,null],
+    ['🚀','The starship departs. A stranger appears at the door — older eyes, a longer memory, and a warning.',null,null,null],
+  ]
+};
+
+// ═══════════════════════════════════════════════
+// RENDER BOOKS
+// ═══════════════════════════════════════════════
+function renderBook(book,idx){
+  const block=document.createElement('div');
+  block.className='book-block';
+  if(idx===0)block.classList.add('open');
+
+  const pRows=book.purchase.map(p=>p.url?
+    `<a href="${p.url}" target="_blank">${p.label}</a>`:
+    `<span style="color:var(--text-dim);font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;">${p.label} ⌛</span>`
+  ).join('');
+
+  const chRows=book.chapters.map((ch,i)=>{
+    const [emoji,desc,read,listen,notes]=ch;
+    const readCell=read?`<a href="${read}" target="_blank" title="Read Ch ${i+1}">📖</a>`:`<span class="soon">⌛</span>`;
+    const listenCell=listen?`<a href="${listen}" target="_blank" title="Listen Ch ${i+1}">🎧</a>`:`<span class="soon">⌛</span>`;
+    const notesCell=notes?`<a href="${notes}" target="_blank" title="Notes Ch ${i+1}">📝</a>`:`<span class="soon">⌛</span>`;
+    return `<tr class="chapter-row" data-desc="${desc.replace(/"/g,'&quot;')}" data-book="${book.name}">
+      <td class="ch-id">Ch ${i+1}</td>
+      <td class="ch-emoji">${emoji}</td>
+      <td class="ch-desc">${desc}</td>
+      <td class="ch-link">${readCell}</td>
+      <td class="ch-link">${listenCell}</td>
+      <td class="ch-link">${notesCell}</td>
+    </tr>`;
+  }).join('');
+
+  block.innerHTML=`
+    <div class="book-header">
+      <div class="book-header-left">
+        <div class="book-num">${book.num}</div>
+        <div class="book-name">${book.name}</div>
+        <div class="book-meta">${book.meta}</div>
+      </div>
+      <div class="book-toggle">+</div>
+    </div>
+    <div class="book-content">
+      <div class="purchase-row">
+        <span class="purchase-label">Purchase:</span>${pRows}
+      </div>
+      <table class="chapter-table">${chRows}</table>
+    </div>`;
+
+  block.querySelector('.book-header').addEventListener('click',()=>{
+    block.classList.toggle('open');
+  });
+
+  return block;
+}
+
+const booksContainer=document.getElementById('books-container');
+[BOOK1,BOOK2,BOOK3].forEach((b,i)=>booksContainer.appendChild(renderBook(b,i)));
+
+// ═══════════════════════════════════════════════
+// CHAPTER POPUP
+// ═══════════════════════════════════════════════
+const popup=document.getElementById('chPopup');
+const popupBook=document.getElementById('popupBook');
+const popupText=document.getElementById('popupText');
+document.addEventListener('mouseover',e=>{
+  const row=e.target.closest('.chapter-row');
+  if(row){
+    popupBook.textContent=row.dataset.book;
+    popupText.textContent=row.dataset.desc;
+    popup.classList.add('show');
+  }
+});
+document.addEventListener('mousemove',e=>{
+  if(popup.classList.contains('show')){
+    const x=e.clientX+16,y=e.clientY+16;
+    popup.style.left=Math.min(x,window.innerWidth-340)+'px';
+    popup.style.top=Math.min(y,window.innerHeight-120)+'px';
+  }
+});
+document.addEventListener('mouseout',e=>{
+  if(!e.target.closest('.chapter-row'))popup.classList.remove('show');
+});
+
+// ═══════════════════════════════════════════════
+// REVIEWS
+// ═══════════════════════════════════════════════
+const reviews=[
+  {stars:'★★★★★',text:'"A new sci-fi novel worthy of shelf space alongside 1984, Logan\'s Run, The Handmaid\'s Tale and The Fifth Wave. The graceful balance between the pre and post apocalyptic timelines is a symphony."',attr:'Amazon Verified Purchase'},
+  {stars:'★★★★★',text:'"The first novel I\'ve read in years that had me hooked from the first few pages. A thought-provoking, exciting and moving tale of humanness — love, desire, mortality, consciousness, struggle, philosophy."',attr:'Amazon Verified Purchase'},
+  {stars:'★★★★★',text:'"Fantastic book. Similar to how Ayn Rand weaves philosophical ideas into fiction. So many parallels to today\'s cultural and political issues, with brilliant insights into morality. Highly recommend."',attr:'Amazon Verified Purchase',tag:'The modern day Atlas Shrugged?'},
+  {stars:'★★★★★',text:'"So refreshing to see someone not afraid to let their philosophical and moral convictions shine through — this story is as much a commentary on the state of the world today as it is great sci-fi."',attr:'Amazon Verified Purchase',tag:'Impressive effort from a first time author!'},
+  {stars:'★★★★★',text:'"A heartfelt story that explores morality, the nature of consciousness and God — highly recommended."',attr:'Amazon Verified Purchase'},
+  {stars:'★★★★',text:'"Philosophical in a similar (but less confronting) way as Ayn Rand\'s Atlas Shrugged. If you love science fiction and philosophy, you\'ll love this book."',attr:'Amazon Verified Purchase',tag:'Engaging \'sci-phi\' thriller'},
+];
+const rGrid=document.getElementById('reviews-grid');
+reviews.forEach(r=>{
+  const card=document.createElement('div');
+  card.className='review-card';
+  card.innerHTML=`<div class="review-stars">${r.stars}</div><p class="review-text">${r.text}</p><div class="review-attr">${r.attr}${r.tag?`<span class="review-tag">· ${r.tag}</span>`:''}</div>`;
+  rGrid.appendChild(card);
+});
+
+// ═══════════════════════════════════════════════
+// EASTER EGG — click the logo/mountain 5 times
+// ═══════════════════════════════════════════════
+let eggClicks=0,eggTimer;
+document.getElementById('easterLogo').addEventListener('click',()=>{
+  eggClicks++;
+  clearTimeout(eggTimer);
+  eggTimer=setTimeout(()=>eggClicks=0,3000);
+  if(eggClicks>=5){
+    eggClicks=0;
+    document.getElementById('hidden-room').classList.add('show');
+  }
+});
+// ═══════════════════════════════════════════════
+// HIDDEN DOORS — type MARDUK or KUDRAMARDUK
+// ═══════════════════════════════════════════════
+let secretBuffer='';
+document.addEventListener('keydown',e=>{
+  if(e.key.length===1){
+    secretBuffer=(secretBuffer+e.key.toUpperCase()).slice(-11);
+    // KUDRAMARDUK — author-private view with pathways layer
+    if(secretBuffer.endsWith('KUDRAMARDUK')){
+      const state = {kudra: true, mv_unlocked: true};
+      try{
+        const existing = JSON.parse(localStorage.getItem('marduk_realm')||'{}');
+        localStorage.setItem('marduk_realm', JSON.stringify(Object.assign(existing, state)));
+      }catch(err){}
+      const flash=document.createElement('div');
+      flash.style.cssText='position:fixed;inset:0;background:rgba(192,132,252,0.2);z-index:999;pointer-events:none;transition:opacity 1s ease;';
+      document.body.appendChild(flash);
+      const sigil=document.createElement('div');
+      sigil.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-family:Cinzel Decorative,serif;font-size:clamp(28px,5vw,56px);color:#c084fc;text-shadow:0 0 50px rgba(192,132,252,0.9);z-index:1000;pointer-events:none;letter-spacing:0.2em;opacity:0;transition:opacity 0.5s;text-align:center;';
+      sigil.innerHTML='𒀭 KUDRAMARDUK 𒀭<br><span style="font-size:0.5em;letter-spacing:0.3em;color:var(--spirit);">The Pathways Are Revealed</span>';
+      document.body.appendChild(sigil);
+      setTimeout(()=>sigil.style.opacity='1',50);
+      setTimeout(()=>{flash.style.opacity='0';sigil.style.opacity='0';},1600);
+      setTimeout(()=>{
+        flash.remove();sigil.remove();
+        document.body.style.transition='opacity 0.8s';
+        document.body.style.opacity='0';
+        setTimeout(()=>window.location.href='realm/#marduk_view',800);
+      },2300);
+      secretBuffer='';
+      return;
+    }
+    // MARDUK — the public quiz threshold
+    if(secretBuffer.endsWith('MARDUK')){
+      const flash=document.createElement('div');
+      flash.style.cssText='position:fixed;inset:0;background:rgba(201,168,76,0.12);z-index:999;pointer-events:none;transition:opacity 1s ease;';
+      document.body.appendChild(flash);
+      const sigil=document.createElement('div');
+      sigil.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-family:Cinzel Decorative,serif;font-size:clamp(32px,6vw,72px);color:var(--gold);text-shadow:0 0 40px rgba(201,168,76,0.8);z-index:1000;pointer-events:none;letter-spacing:0.3em;opacity:0;transition:opacity 0.5s;';
+      sigil.textContent='𒀭 MARDUK 𒀭';
+      document.body.appendChild(sigil);
+      setTimeout(()=>sigil.style.opacity='1',50);
+      setTimeout(()=>{flash.style.opacity='0';sigil.style.opacity='0';},1200);
+      setTimeout(()=>{
+        flash.remove();sigil.remove();
+        document.body.style.transition='opacity 0.8s';
+        document.body.style.opacity='0';
+        setTimeout(()=>window.location.href='realm/#threshold',800);
+      },1800);
+      secretBuffer='';
+    }
+  }
+});
+
+// Konami code easter egg — different message
+let konamiSeq=[38,38,40,40,37,39,37,39,66,65],konamiIdx=0;
+document.addEventListener('keydown',e=>{
+  if(e.keyCode===konamiSeq[konamiIdx]){konamiIdx++;}else{konamiIdx=0;}
+  if(konamiIdx===konamiSeq.length){
+    konamiIdx=0;
+    const room=document.getElementById('hidden-room');
+    room.querySelector('.hidden-glyph').textContent='🌌';
+    room.querySelector('.hidden-title').textContent='You Found the Void';
+    room.querySelector('.hidden-text').innerHTML=`"There are those who think the void is the absence of everything. They are wrong.<br><br>The void is the presence of everything, compressed to a single point — waiting for a mind vast enough to remember it into being.<br><br>Marduk is not the creator. He is the rememberer."<br><br>— Unpublished fragment, recovered from the Archives of the Rhuomai`;
+    room.classList.add('show');
+  }
+});
+
+
+/* ── Honeycomb background (full hero, no crop, natural hex edge) ── */
+(function() {
+  const canvas = document.getElementById('hcCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const hero = canvas.closest('section') || canvas.parentElement;
+
+  const HOUSE_COLS = [
+    '#C9A84C','#4A7C59','#7B5EA7','#5B9AB8',
+    '#A83232','#A86A32','#2D8888','#5C2D82'
+  ];
+
+  let W, H, CX, CY, R, cells;
+
+  function build() {
+    W = canvas.width  = hero.offsetWidth  || window.innerWidth;
+    H = canvas.height = hero.offsetHeight || window.innerHeight;
+    CX = W/2; CY = H/2;
+    // Cell radius: large enough that the hex grid fills the whole canvas
+    // and extends naturally to edges — use 48px so fewer cells, cleaner look
+    R = 52;
+    const HW = Math.sqrt(3)*R, HH = 2*R*0.75;
+
+    // Build enough rings to cover the canvas diagonally
+    const diag = Math.ceil(Math.sqrt(W*W+H*H) / (R*1.5)) + 2;
+    cells = [];
+    const dirs = [[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
+    cells.push({q:0,r:0,ring:0});
+    for (let ring=1; ring<=diag; ring++) {
+      let q=-ring, r=0;
+      for (let i=0;i<6;i++) {
+        for (let j=0;j<ring;j++) {
+          const cx2 = CX + q*HW + (r%2)*HW*0.5;
+          const cy2 = CY + r*HH;
+          // Only include if within canvas + one cell margin (natural edge)
+          if (cx2 > -R*2 && cx2 < W+R*2 && cy2 > -R*2 && cy2 < H+R*2) {
+            const angle = Math.atan2(cy2-CY, cx2-CX);
+            const sector = Math.floor(((angle+Math.PI)/(Math.PI*2))*8+0.5)%8;
+            cells.push({
+              q,r,ring,
+              x:cx2, y:cy2,
+              color: ring===0 ? '#C9A84C' : HOUSE_COLS[sector],
+              phase: Math.random()*Math.PI*2,
+              speed: 0.3+Math.random()*0.5,
+              lit: Math.random()>0.6,
+            });
+          }
+          q+=dirs[i][0]; r+=dirs[i][1];
+        }
+      }
+    }
+  }
+  build();
+  window.addEventListener('resize', build);
+
+  function drawHex(x,y,r) {
+    ctx.beginPath();
+    for (let i=0;i<6;i++) {
+      const a=Math.PI/3*i-Math.PI/6;
+      const px=x+r*Math.cos(a), py=y+r*Math.sin(a);
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.closePath();
+  }
+
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (!cells) return;
+    const rot = ts*0.00008; // slow, stately rotation
+    ctx.clearRect(0,0,W,H);
+    ctx.save();
+    ctx.translate(CX,CY);
+    ctx.rotate(rot);
+    ctx.translate(-CX,-CY);
+
+    cells.forEach(c => {
+      const pulse = 0.3+0.25*Math.sin(ts*0.0009*c.speed+c.phase);
+      const glow  = c.ring===0 ? 0.85 : (c.lit ? pulse : pulse*0.25);
+      const hex = c.color;
+
+      drawHex(c.x,c.y,R-2);
+      ctx.fillStyle = hex+Math.round(glow*55).toString(16).padStart(2,'0');
+      ctx.fill();
+      ctx.strokeStyle = hex+Math.round(glow*160).toString(16).padStart(2,'0');
+      ctx.lineWidth = c.ring===0?2:0.7;
+      ctx.stroke();
+
+      if (c.lit || c.ring===0) {
+        const grd=ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,R*0.7);
+        grd.addColorStop(0, hex+Math.round(glow*80).toString(16).padStart(2,'0'));
+        grd.addColorStop(1,'transparent');
+        drawHex(c.x,c.y,R-2);
+        ctx.fillStyle=grd; ctx.fill();
+      }
+    });
+
+    // Centre asterism
+    const t2=0.65+0.35*Math.sin(ts*0.0012);
+    ctx.font=`${R*0.5}px serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle=`rgba(232,201,110,${t2})`;
+    ctx.shadowColor='#C9A84C'; ctx.shadowBlur=12;
+    ctx.fillText('⁂',CX,CY);
+    ctx.shadowBlur=0;
+    ctx.restore();
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ── Bokeh particle layer ──────────────────────────────────────────────── */
+(function() {
+  const bk = document.getElementById('hcBokeh');
+  if (!bk) return;
+  const bc = bk.getContext('2d');
+  const HOUSE_COLS = ['#C9A84C','#4A7C59','#7B5EA7','#5B9AB8',
+                      '#A83232','#A86A32','#2D8888','#5C2D82'];
+  let W = 0, H = 0, parts = [];
+
+  function resize() {
+    W = bk.width  = bk.offsetWidth  || window.innerWidth;
+    H = bk.height = bk.offsetHeight || window.innerHeight;
+    parts = Array.from({length:55}, () => ({
+      x: Math.random()*W, y: Math.random()*H,
+      r: 10 + Math.random()*70,
+      col: HOUSE_COLS[Math.floor(Math.random()*8)],
+      phase: Math.random()*Math.PI*2,
+      spd: 0.1+Math.random()*0.35,
+      vx: (Math.random()-0.5)*0.3,
+      vy: (Math.random()-0.5)*0.2,
+    }));
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  (function loop(ts) {
+    requestAnimationFrame(loop);
+    bc.clearRect(0,0,W,H);
+    parts.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < -p.r*2) p.x = W+p.r;
+      if (p.x > W+p.r*2) p.x = -p.r;
+      if (p.y < -p.r*2) p.y = H+p.r;
+      if (p.y > H+p.r*2) p.y = -p.r;
+      const a = 0.04 + 0.08*Math.sin(ts*0.001*p.spd + p.phase);
+      const g = bc.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+      const hex = Math.round(a*255).toString(16).padStart(2,'0');
+      const hex2 = Math.round(a*120).toString(16).padStart(2,'00');
+      g.addColorStop(0,   p.col+hex);
+      g.addColorStop(0.45,p.col+hex2);
+      g.addColorStop(1,   'transparent');
+      bc.beginPath();
+      bc.arc(p.x,p.y,p.r,0,Math.PI*2);
+      bc.fillStyle=g; bc.fill();
+    });
+  })(0);
 })();
 
 </script>
