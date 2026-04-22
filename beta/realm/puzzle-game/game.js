@@ -54,10 +54,10 @@
   let levelFailed = false;
 
   const BANDS = [
-    { start: 1, end: 25, band: 'ASCENT', mode: 'ALIGNMENT', story: 'The machine wakes and waits for calibration.' },
-    { start: 26, end: 50, band: 'WEAVE', mode: 'CIRCUIT', story: 'You enter the nerve-rings that carry its thought.' },
-    { start: 51, end: 75, band: 'CHORUS', mode: 'CONSTELLATION', story: 'The chamber demands pattern, memory, and restraint.' },
-    { start: 76, end: 100, band: 'THRESHOLD', mode: 'GATE', story: 'Only a complete mind can open the final architecture.' },
+    { start: 1, end: 25, band: 'ASCENT', mode: 'ALIGNMENT', story: 'The chamber opens with clean geometric forms and slow orbital drift.' },
+    { start: 26, end: 50, band: 'DRIFT', mode: 'ALIGNMENT', story: 'More axes, more depth, more motion. The lattice begins to fight back.' },
+    { start: 51, end: 75, band: 'CONVERGENCE', mode: 'ALIGNMENT', story: 'Dense crystalline frames and stronger world motion demand true spatial reasoning.' },
+    { start: 76, end: 100, band: 'EVENT HORIZON', mode: 'ALIGNMENT', story: 'The final architectures spin through battle-lit space at full intensity.' },
   ];
 
   function parseQueue() {
@@ -85,8 +85,8 @@
   }
   function levelBand(level) { return BANDS.find(b => level >= b.start && level <= b.end) || BANDS[0]; }
   function phase01(level) { return clamp((level - 1) / 99, 0, 1); }
-  function assistanceForLevel(level) { return Math.pow(1 - phase01(level), 1.25); }
-  function dazzleForLevel(level) { return clamp(0.35 + phase01(level) * 1.4, 0.35, 1.75); }
+  function assistanceForLevel(level) { return Math.pow(1 - phase01(level), 1.45) * 0.82; }
+  function dazzleForLevel(level) { return clamp(0.42 + phase01(level) * 1.85, 0.42, 2.27); }
   function timerForLevel(level) { return level === 1 ? 65 : lerp(58, 20, phase01(level)); }
   function rotationSpeedForLevel(level) { return lerp(0.00018, 0.00115, phase01(level)); }
   function nearFactor() { return state ? Math.pow(getCoherence(), 2.2) : 0; }
@@ -211,7 +211,7 @@
 
   function spawnParticles(level) {
     particles = [];
-    const count = 56 + Math.floor(level * 1.6);
+    const count = 66 + Math.floor(level * 2.25);
     for (let i = 0; i < count; i++) {
       particles.push({
         x: Math.random() * innerWidth,
@@ -227,12 +227,8 @@
 
   function buildLevel(level) {
     const band = levelBand(level);
-    const mode = band.mode || (level <= 25 ? 'ALIGNMENT' : level <= 50 ? 'CIRCUIT' : level <= 75 ? 'CONSTELLATION' : 'GATE');
     const base = { level, band: band.band, story: band.story, assist: assistanceForLevel(level), dazzle: dazzleForLevel(level) };
-    if (mode === 'ALIGNMENT') return buildAlignmentLevel(level, base);
-    if (mode === 'CIRCUIT') return buildCircuitLevel(level, base);
-    if (mode === 'CONSTELLATION') return buildConstellationLevel(level, base);
-    return buildGateLevel(level, base);
+    return buildAlignmentLevel(level, base);
   }
 
   function buildStarterShape() {
@@ -255,52 +251,62 @@
   }
 
   function buildAlignmentLevel(level, base) {
-    const complexity = clamp(5 + Math.floor(level * 0.26), 5, 13);
-    const layers = clamp(2 + Math.floor(level / 8), 2, 5);
+    const complexity = clamp(5 + Math.floor(level * 0.28), 5, 15);
+    const layers = clamp(2 + Math.floor(level / 7), 2, 6);
     const seed = level * 9.127;
+    const span = level === 1 ? 1.15 : lerp(1.75, Math.PI * 1.02, phase01(level));
+    const targetRx = (rand(seed + 3) * 2 - 1) * Math.PI;
+    const targetRy = (rand(seed + 4) * 2 - 1) * Math.PI;
+    const targetRz = (rand(seed + 5) * 2 - 1) * Math.PI;
+    const startOffsetRx = (rand(seed + 31) > 0.5 ? 1 : -1) * span;
+    const startOffsetRy = (rand(seed + 41) > 0.5 ? 1 : -1) * (span * 0.92);
+    const startOffsetRz = (rand(seed + 51) > 0.5 ? 1 : -1) * (span * 0.78);
+    const depthSpan = level === 1 ? 0.55 : lerp(0.72, 1.05, phase01(level));
+    const targetDepth = (rand(seed + 7) * 2 - 1) * lerp(0.1, 0.82, phase01(level));
+    const startDepth = targetDepth + (rand(seed + 61) > 0.5 ? 1 : -1) * depthSpan;
     if (level === 1) {
       return {
         ...base,
         mode: 'ALIGNMENT',
-        objective: 'Rotate the frame until the bright lattice settles exactly into the ghost shape.',
-        help: 'Drag anywhere on the puzzle to rotate it. Use the sliders for gentle correction. Level 1 has extra snap assistance.',
-        tolerance: 1.9,
-        depthTolerance: 1.9,
-        magnetRadius: 2.35,
+        objective: 'Rotate the bright frame until it settles perfectly into the ghost geometry.',
+        help: 'Drag the puzzle to turn it in space. Use the sliders for careful correction. Judge by the sparks, tremor, and lock-in feeling.',
+        tolerance: 1.58,
+        depthTolerance: 1.35,
+        magnetRadius: 1.25,
         shape: buildStarterShape(),
-        rx: -0.92,
-        ry: 0.84,
-        rz: -0.38,
-        targetRx: 0.18,
-        targetRy: -0.22,
-        targetRz: 0.12,
-        depth: 0.42,
-        targetDepth: 0,
+        rx: targetRx + startOffsetRx,
+        ry: targetRy + startOffsetRy,
+        rz: targetRz + startOffsetRz,
+        targetRx,
+        targetRy,
+        targetRz,
+        depth: clamp(startDepth, -1.1, 1.1),
+        targetDepth,
         solvedHold: 0,
         autoSpin: 0,
-        worldSpin: 0.00008,
+        worldSpin: 0.00007,
         tutorialVisibleBoost: 1,
       };
     }
     return {
       ...base,
       mode: 'ALIGNMENT',
-      objective: 'Drag to rotate the frame until it locks into the ghost orientation.',
-      help: 'Drag to rotate. Use the on-screen sliders for precise control. Early levels gently snap into place.',
-      tolerance: clamp(1.42 - level * 0.0108, 0.12, 1.42),
-      depthTolerance: clamp(1.52 - level * 0.0125, 0.18, 1.52),
-      magnetRadius: lerp(1.8, 0.08, phase01(level)),
+      objective: 'Rotate the frame until the live lattice occupies the ghost shape exactly.',
+      help: 'Drag to rotate in space. Use the sliders only for fine control. The correct orientation starts deliberately far away.',
+      tolerance: clamp(1.18 - level * 0.0086, 0.075, 1.18),
+      depthTolerance: clamp(1.16 - level * 0.0078, 0.11, 1.16),
+      magnetRadius: lerp(0.92, 0.02, phase01(level)),
       shape: buildAlignmentShape(complexity, layers, level),
-      rx: rand(seed) * Math.PI * 2,
-      ry: rand(seed + 1) * Math.PI * 2,
-      rz: rand(seed + 2) * Math.PI * 2,
-      targetRx: rand(seed + 3) * Math.PI * 2,
-      targetRy: rand(seed + 4) * Math.PI * 2,
-      targetRz: rand(seed + 5) * Math.PI * 2,
-      depth: rand(seed + 6) * 1.8 - 0.9,
-      targetDepth: (rand(seed + 7) * 2 - 1) * (level > 12 ? 0.8 : 0.22),
+      rx: targetRx + startOffsetRx,
+      ry: targetRy + startOffsetRy,
+      rz: targetRz + startOffsetRz,
+      targetRx,
+      targetRy,
+      targetRz,
+      depth: clamp(startDepth, -1.15, 1.15),
+      targetDepth,
       solvedHold: 0,
-      autoSpin: level > 22 ? 0.0011 + level * 0.000015 : 0,
+      autoSpin: level > 18 ? 0.00065 + level * 0.000012 : 0,
       worldSpin: rotationSpeedForLevel(level),
       tutorialVisibleBoost: 0,
     };
@@ -534,7 +540,7 @@
       ctx.lineTo(sx, sy);
       ctx.lineTo(sx - f.size, sy - f.size * 0.18);
       ctx.stroke();
-      if (Math.random() < 0.0009 + dazzle * 0.0008) {
+      if (Math.random() < 0.0011 + dazzle * 0.0011) {
         battleLasers.push({ x: sx, y: sy, vx: -6 - Math.random() * 7, vy: (Math.random() - 0.5) * 2.5, life: 1, hue: f.hue });
         laserSound();
       }
@@ -547,7 +553,7 @@
       ctx.beginPath(); ctx.moveTo(l.x, l.y); ctx.lineTo(l.x - l.vx * 4, l.y - l.vy * 4); ctx.stroke();
       if (l.life <= 0 || l.x < -80 || l.y < -80 || l.y > innerHeight + 80) battleLasers.splice(i, 1);
     }
-    if (Math.random() < 0.00055 + dazzle * 0.00045) {
+    if (Math.random() < 0.00075 + dazzle * 0.00065) {
       const y = innerHeight * (0.16 + Math.random() * 0.52);
       battleLasers.push({ x: innerWidth + 120, y, vx: -16 - Math.random() * 14, vy: -1 + Math.random() * 2, life: 1.15, hue: (hue + 140) % 360 });
       laserSound();
@@ -742,7 +748,7 @@
     if (assist <= 0.001) return;
     if (state.mode === 'ALIGNMENT') {
       const magnet = state.magnetRadius;
-      const pull = 0.06 + assist * 0.17;
+      const pull = 0.028 + assist * 0.10;
       if (angleDiff(state.rx, state.targetRx) < magnet) state.rx = lerp(state.rx, state.targetRx, pull);
       if (angleDiff(state.ry, state.targetRy) < magnet) state.ry = lerp(state.ry, state.targetRy, pull);
       if (angleDiff(state.rz, state.targetRz) < magnet) state.rz = lerp(state.rz, state.targetRz, pull * 0.9);
@@ -780,7 +786,7 @@
       simpleTone(310, 0.12, 'triangle', 0.018, 80);
     }
     const targetReached = (() => {
-      if (state.mode === 'ALIGNMENT') return coherence > 0.982;
+      if (state.mode === 'ALIGNMENT') return coherence > 0.992;
       if (state.mode === 'CIRCUIT') return coherence > 0.991;
       if (state.mode === 'CONSTELLATION') return coherence === 1;
       return state.phase >= 2 && getGateRingCoherence() > 0.995 && getGateNodeCoherence() === 1;
@@ -850,7 +856,7 @@
     pointer.x = x; pointer.y = y;
     if (!pointer.down || inputLocked || !state) return;
     const dx = x - pointer.lastX, dy = y - pointer.lastY;
-    if (state.mode === 'ALIGNMENT') { state.ry += dx * 0.0065; state.rx += dy * 0.0065; }
+    if (state.mode === 'ALIGNMENT') { state.ry += dx * 0.0052; state.rx += dy * 0.0052; }
     else if (state.mode === 'CIRCUIT') rotateSelectedRing(dx * 0.01);
     else if (state.mode === 'GATE' && state.phase === 1) rotateSelectedRing(dx * 0.01);
     pointer.lastX = x; pointer.lastY = y;
