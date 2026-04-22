@@ -908,7 +908,16 @@
       },
       "house_letter": "A",
       "house_color": "#C9A84C",
-      "house_sector": "SW"
+      "house_sector": "SW",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 69
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-11,-16": {
       "type": "house_interior",
@@ -925,7 +934,16 @@
       },
       "house_letter": "A",
       "house_color": "#C9A84C",
-      "house_sector": "SW"
+      "house_sector": "SW",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 68
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-10,-16": {
       "type": "house_interior",
@@ -942,7 +960,16 @@
       },
       "house_letter": "A",
       "house_color": "#C9A84C",
-      "house_sector": "SW"
+      "house_sector": "SW",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 67
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-9,-16": {
       "type": "house_interior",
@@ -959,7 +986,16 @@
       },
       "house_letter": "A",
       "house_color": "#C9A84C",
-      "house_sector": "SW"
+      "house_sector": "SW",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 66
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-8,-16": {
       "type": "house_interior",
@@ -976,7 +1012,16 @@
       },
       "house_letter": "A",
       "house_color": "#C9A84C",
-      "house_sector": "SW"
+      "house_sector": "SW",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 65
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-7,-16": {
       "type": "house_interior",
@@ -993,7 +1038,16 @@
       },
       "house_letter": "A",
       "house_color": "#C9A84C",
-      "house_sector": "SW"
+      "house_sector": "SW",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 64
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-3,-4": {
       "type": "empty",
@@ -1212,7 +1266,16 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 86
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-16,-2": {
       "type": "house_interior",
@@ -1223,7 +1286,16 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 87
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-16,-1": {
       "type": "house_interior",
@@ -1234,7 +1306,16 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 88
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-16,0": {
       "type": "house_interior",
@@ -1245,7 +1326,16 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 89
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-16,1": {
       "type": "house_interior",
@@ -1256,7 +1346,16 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 90
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-16,2": {
       "type": "house_interior",
@@ -1267,7 +1366,16 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 91
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-15,-3": {
       "type": "house_interior",
@@ -1487,7 +1595,16 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 101
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-16,13": {
       "type": "house_interior",
@@ -1498,7 +1615,16 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 102
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-16,14": {
       "type": "house_interior",
@@ -1509,7 +1635,16 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 103
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-16,15": {
       "type": "house_interior",
@@ -1520,7 +1655,16 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 104
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-15,12": {
       "type": "house_interior",
@@ -1707,7 +1851,16 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 117
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-3,13": {
       "type": "house_interior",
@@ -1751,7 +1904,16 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 118
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-2,13": {
       "type": "house_interior",
@@ -1795,7 +1957,16 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 119
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-1,13": {
       "type": "house_interior",
@@ -1839,7 +2010,16 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 120
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "0,13": {
       "type": "house_interior",
@@ -1883,7 +2063,16 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 121
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "1,13": {
       "type": "house_front_door",
@@ -1938,7 +2127,16 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 122
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "2,13": {
       "type": "house_interior",
@@ -1982,7 +2180,16 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 123
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "3,13": {
       "type": "house_interior",
@@ -2026,7 +2233,16 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 124
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "4,13": {
       "type": "house_interior",
@@ -2070,7 +2286,16 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 125
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "12,11": {
       "type": "house_front_door",
@@ -2103,7 +2328,16 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 9
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "12,13": {
       "type": "house_interior",
@@ -2158,7 +2392,16 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 10
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "13,13": {
       "type": "house_interior",
@@ -2213,7 +2456,16 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 11
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "14,13": {
       "type": "house_interior",
@@ -2268,7 +2520,16 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 12
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "15,13": {
       "type": "house_interior",
@@ -2312,7 +2573,16 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 14
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "16,12": {
       "type": "house_interior",
@@ -2323,7 +2593,16 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 13
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "16,13": {
       "type": "house_interior",
@@ -2510,7 +2789,16 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 24
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "16,2": {
       "type": "house_interior",
@@ -2521,7 +2809,16 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 23
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "16,3": {
       "type": "house_interior",
@@ -2532,7 +2829,16 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 22
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "16,4": {
       "type": "house_interior",
@@ -2543,7 +2849,16 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 21
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "9,-16": {
       "type": "house_interior",
@@ -2554,7 +2869,16 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 48
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "9,-15": {
       "type": "house_interior",
@@ -2598,7 +2922,16 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 47
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "10,-15": {
       "type": "house_interior",
@@ -2642,7 +2975,16 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 46
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "11,-15": {
       "type": "house_interior",
@@ -2697,7 +3039,16 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 45
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "12,-15": {
       "type": "house_interior",
@@ -2741,7 +3092,16 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 44
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "13,-15": {
       "type": "house_interior",
@@ -2785,7 +3145,16 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 43
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "14,-15": {
       "type": "house_interior",
@@ -2829,7 +3198,16 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 59
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-2,-15": {
       "type": "house_interior",
@@ -2873,7 +3251,16 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 58
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "-1,-15": {
       "type": "house_interior",
@@ -2917,7 +3304,16 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 57
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "0,-15": {
       "type": "house_interior",
@@ -2972,7 +3368,16 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 56
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "1,-15": {
       "type": "house_interior",
@@ -3016,7 +3421,16 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 55
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "2,-15": {
       "type": "house_interior",
@@ -3885,7 +4299,16 @@
       "zone_color": "#7755BB",
       "name": null,
       "lore": null,
-      "emoji": null
+      "emoji": null,
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 0
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
     },
     "6,7": {
       "type": "locked_zone_interior",
@@ -4473,6 +4896,1080 @@
       "name": null,
       "lore": null,
       "emoji": null
+    },
+    "5,11": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 1
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "5,12": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 2
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "6,12": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 3
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "7,12": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 4
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "8,12": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 5
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "9,12": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 6
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "10,12": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 7
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "11,12": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 8
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,10": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 15
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,9": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 16
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,8": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 17
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,7": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 18
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,6": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 19
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,5": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 20
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,0": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 25
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-1": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 26
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-2": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 27
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-3": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 28
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-4": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 29
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-5": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 30
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-6": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 31
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-7": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 32
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-8": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 33
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-9": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 34
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-10": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 35
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-11": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 36
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-12": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 37
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-13": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 38
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-14": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 39
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-15": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 40
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "16,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 41
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "15,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 42
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "8,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 49
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "7,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 50
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "6,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 51
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "5,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 52
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "4,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 53
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "3,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 54
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-3,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 60
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-4,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 61
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-5,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 62
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-6,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 63
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-13,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 70
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-14,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 71
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-15,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 72
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 73
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-15": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 74
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-14": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 75
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-13": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 76
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-12": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 77
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-11": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 78
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-10": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 79
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-9": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 80
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-8": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 81
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-7": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 82
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-6": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 83
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-5": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 84
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,-4": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 85
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,3": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 92
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,4": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 93
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,5": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 94
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,6": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 95
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,7": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 96
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,8": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 97
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,9": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 98
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,10": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 99
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,11": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 100
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-16,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 105
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-15,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 106
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-14,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 107
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-13,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 108
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-12,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 109
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-11,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 110
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-10,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 111
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-9,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 112
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-8,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 113
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-7,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 114
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-6,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 115
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "-5,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 116
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "5,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 126
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "6,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 127
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "7,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 128
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "8,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 129
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "9,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 130
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "10,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 131
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "11,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 132
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "12,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 133
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "13,16": {
+      "type": "empty",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 134
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      }
+    },
+    "14,16": {
+      "type": "special",
+      "on_path": [
+        "M"
+      ],
+      "path_step": {
+        "M": 135
+      },
+      "path_colors": {
+        "M": "#D4AF37"
+      },
+      "name": "The Eye of Hermes",
+      "emoji": "👁",
+      "era": "The Outer Circuit · The Wormhole",
+      "lore": null,
+      "marduk_eye": true,
+      "dead_end": true
     }
   },
   "questions": {
@@ -5315,6 +6812,552 @@
         0,
         -13
       ]
+    ],
+    "M": [
+      [
+        5,
+        10
+      ],
+      [
+        5,
+        11
+      ],
+      [
+        5,
+        12
+      ],
+      [
+        6,
+        12
+      ],
+      [
+        7,
+        12
+      ],
+      [
+        8,
+        12
+      ],
+      [
+        9,
+        12
+      ],
+      [
+        10,
+        12
+      ],
+      [
+        11,
+        12
+      ],
+      [
+        12,
+        12
+      ],
+      [
+        13,
+        12
+      ],
+      [
+        14,
+        12
+      ],
+      [
+        15,
+        12
+      ],
+      [
+        16,
+        12
+      ],
+      [
+        16,
+        11
+      ],
+      [
+        16,
+        10
+      ],
+      [
+        16,
+        9
+      ],
+      [
+        16,
+        8
+      ],
+      [
+        16,
+        7
+      ],
+      [
+        16,
+        6
+      ],
+      [
+        16,
+        5
+      ],
+      [
+        16,
+        4
+      ],
+      [
+        16,
+        3
+      ],
+      [
+        16,
+        2
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        16,
+        0
+      ],
+      [
+        16,
+        -1
+      ],
+      [
+        16,
+        -2
+      ],
+      [
+        16,
+        -3
+      ],
+      [
+        16,
+        -4
+      ],
+      [
+        16,
+        -5
+      ],
+      [
+        16,
+        -6
+      ],
+      [
+        16,
+        -7
+      ],
+      [
+        16,
+        -8
+      ],
+      [
+        16,
+        -9
+      ],
+      [
+        16,
+        -10
+      ],
+      [
+        16,
+        -11
+      ],
+      [
+        16,
+        -12
+      ],
+      [
+        16,
+        -13
+      ],
+      [
+        16,
+        -14
+      ],
+      [
+        16,
+        -15
+      ],
+      [
+        16,
+        -16
+      ],
+      [
+        15,
+        -16
+      ],
+      [
+        14,
+        -16
+      ],
+      [
+        13,
+        -16
+      ],
+      [
+        12,
+        -16
+      ],
+      [
+        11,
+        -16
+      ],
+      [
+        10,
+        -16
+      ],
+      [
+        9,
+        -16
+      ],
+      [
+        8,
+        -16
+      ],
+      [
+        7,
+        -16
+      ],
+      [
+        6,
+        -16
+      ],
+      [
+        5,
+        -16
+      ],
+      [
+        4,
+        -16
+      ],
+      [
+        3,
+        -16
+      ],
+      [
+        2,
+        -16
+      ],
+      [
+        1,
+        -16
+      ],
+      [
+        0,
+        -16
+      ],
+      [
+        -1,
+        -16
+      ],
+      [
+        -2,
+        -16
+      ],
+      [
+        -3,
+        -16
+      ],
+      [
+        -4,
+        -16
+      ],
+      [
+        -5,
+        -16
+      ],
+      [
+        -6,
+        -16
+      ],
+      [
+        -7,
+        -16
+      ],
+      [
+        -8,
+        -16
+      ],
+      [
+        -9,
+        -16
+      ],
+      [
+        -10,
+        -16
+      ],
+      [
+        -11,
+        -16
+      ],
+      [
+        -12,
+        -16
+      ],
+      [
+        -13,
+        -16
+      ],
+      [
+        -14,
+        -16
+      ],
+      [
+        -15,
+        -16
+      ],
+      [
+        -16,
+        -16
+      ],
+      [
+        -16,
+        -15
+      ],
+      [
+        -16,
+        -14
+      ],
+      [
+        -16,
+        -13
+      ],
+      [
+        -16,
+        -12
+      ],
+      [
+        -16,
+        -11
+      ],
+      [
+        -16,
+        -10
+      ],
+      [
+        -16,
+        -9
+      ],
+      [
+        -16,
+        -8
+      ],
+      [
+        -16,
+        -7
+      ],
+      [
+        -16,
+        -6
+      ],
+      [
+        -16,
+        -5
+      ],
+      [
+        -16,
+        -4
+      ],
+      [
+        -16,
+        -3
+      ],
+      [
+        -16,
+        -2
+      ],
+      [
+        -16,
+        -1
+      ],
+      [
+        -16,
+        0
+      ],
+      [
+        -16,
+        1
+      ],
+      [
+        -16,
+        2
+      ],
+      [
+        -16,
+        3
+      ],
+      [
+        -16,
+        4
+      ],
+      [
+        -16,
+        5
+      ],
+      [
+        -16,
+        6
+      ],
+      [
+        -16,
+        7
+      ],
+      [
+        -16,
+        8
+      ],
+      [
+        -16,
+        9
+      ],
+      [
+        -16,
+        10
+      ],
+      [
+        -16,
+        11
+      ],
+      [
+        -16,
+        12
+      ],
+      [
+        -16,
+        13
+      ],
+      [
+        -16,
+        14
+      ],
+      [
+        -16,
+        15
+      ],
+      [
+        -16,
+        16
+      ],
+      [
+        -15,
+        16
+      ],
+      [
+        -14,
+        16
+      ],
+      [
+        -13,
+        16
+      ],
+      [
+        -12,
+        16
+      ],
+      [
+        -11,
+        16
+      ],
+      [
+        -10,
+        16
+      ],
+      [
+        -9,
+        16
+      ],
+      [
+        -8,
+        16
+      ],
+      [
+        -7,
+        16
+      ],
+      [
+        -6,
+        16
+      ],
+      [
+        -5,
+        16
+      ],
+      [
+        -4,
+        16
+      ],
+      [
+        -3,
+        16
+      ],
+      [
+        -2,
+        16
+      ],
+      [
+        -1,
+        16
+      ],
+      [
+        0,
+        16
+      ],
+      [
+        1,
+        16
+      ],
+      [
+        2,
+        16
+      ],
+      [
+        3,
+        16
+      ],
+      [
+        4,
+        16
+      ],
+      [
+        5,
+        16
+      ],
+      [
+        6,
+        16
+      ],
+      [
+        7,
+        16
+      ],
+      [
+        8,
+        16
+      ],
+      [
+        9,
+        16
+      ],
+      [
+        10,
+        16
+      ],
+      [
+        11,
+        16
+      ],
+      [
+        12,
+        16
+      ],
+      [
+        13,
+        16
+      ],
+      [
+        14,
+        16
+      ]
     ]
   },
   "houses": {
@@ -5496,6 +7539,26 @@
         ]
       },
       "hidden": true
+    },
+    "M": {
+      "color": "#D4AF37",
+      "sector": "OUTER",
+      "front_door": [
+        5,
+        10
+      ],
+      "block": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      },
+      "hidden": false,
+      "marduk_path": true
     }
   },
   "key_defs": {
