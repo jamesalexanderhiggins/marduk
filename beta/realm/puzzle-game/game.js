@@ -227,10 +227,11 @@
 
   function buildLevel(level) {
     const band = levelBand(level);
+    const mode = band.mode || (level <= 25 ? 'ALIGNMENT' : level <= 50 ? 'CIRCUIT' : level <= 75 ? 'CONSTELLATION' : 'GATE');
     const base = { level, band: band.band, story: band.story, assist: assistanceForLevel(level), dazzle: dazzleForLevel(level) };
-    if (band.mode === 'ALIGNMENT') return buildAlignmentLevel(level, base);
-    if (band.mode === 'CIRCUIT') return buildCircuitLevel(level, base);
-    if (band.mode === 'CONSTELLATION') return buildConstellationLevel(level, base);
+    if (mode === 'ALIGNMENT') return buildAlignmentLevel(level, base);
+    if (mode === 'CIRCUIT') return buildCircuitLevel(level, base);
+    if (mode === 'CONSTELLATION') return buildConstellationLevel(level, base);
     return buildGateLevel(level, base);
   }
 
