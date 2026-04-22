@@ -207,6 +207,11 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24p
   .book-content{padding:0 16px 20px;}
   .chapter-table{font-size:13px;}
 }
+
+/* ── Honeycomb map preview ───────────────────────── */
+.hc-wrap{display:flex;justify-content:center;align-items:center;
+  margin:0 auto 48px;width:100%;max-width:520px;}
+#hcCanvas{display:block;opacity:0.88;filter:drop-shadow(0 0 28px rgba(201,168,76,0.25));}
 </style>
 </head>
 <body>
@@ -237,6 +242,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24p
   <div class="hero-cta">
     <a href="https://jamesalexanderhiggins.substack.com/p/the-ghost-of-emily-chapter-1" target="_blank" class="btn-primary">Begin Reading — Chapter 1 Free</a>
     <a href="#chapters" class="btn-ghost">All Chapters</a>
+  </div>
+  <!-- Honeycomb map preview -->
+  <div class="hc-wrap">
+    <canvas id="hcCanvas" width="380" height="340"></canvas>
   </div>
   <div class="hero-map">
     <div class="gateways">
@@ -377,7 +386,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24p
     <a href="#hero">Back to Top</a>
   </div>
   <div class="footer-copy">Links activate as chapters are published</div>
-  <div class="version">v5.6 · Mardukverse · Informational Realm</div>
+  <div class="version">v5.9 · Mardukverse · Informational Realm</div>
 </footer>
 
 <!-- CHAPTER POPUP -->
@@ -859,6 +868,112 @@ document.addEventListener('keydown',e=>{
     room.classList.add('show');
   }
 });
+
+
+/* ── Animated honeycomb map preview ─────────────── */
+(function() {
+  const canvas = document.getElementById('hcCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const CX = W/2, CY = H/2;
+
+  // House colours (8 paths + gold centre)
+  const HOUSE_COLS = [
+    '#C9A84C','#4A7C59','#7B5EA7','#5B9AB8',
+    '#A83232','#A86A32','#2D8888','#5C2D82'
+  ];
+
+  // Hex grid: rings of cells
+  const R = 22; // hex radius
+  const HW = Math.sqrt(3)*R, HH = 2*R*0.75;
+  const cells = [];
+
+  // Centre + 3 rings
+  cells.push({q:0, r:0, ring:0});
+  const dirs = [[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
+  for (let ring = 1; ring <= 4; ring++) {
+    let q = -ring, r = 0;
+    for (let i = 0; i < 6; i++) {
+      for (let j = 0; j < ring; j++) {
+        cells.push({q, r, ring});
+        q += dirs[i][0]; r += dirs[i][1];
+      }
+    }
+  }
+
+  // Assign colour to each cell based on position
+  cells.forEach((c,i) => {
+    c.x = CX + c.q*HW + (c.r%2)*HW*0.5;
+    c.y = CY + c.r*HH;
+    const angle = Math.atan2(c.y-CY, c.x-CX);
+    const sector = Math.floor(((angle + Math.PI) / (Math.PI*2)) * 8 + 0.5) % 8;
+    c.color = c.ring === 0 ? '#C9A84C' : HOUSE_COLS[sector];
+    c.phase = Math.random() * Math.PI * 2;
+    c.speed = 0.4 + Math.random() * 0.6;
+    c.lit = Math.random() > 0.55;
+  });
+
+  let rot = 0;
+  function drawHex(x, y, r) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const a = Math.PI/3 * i - Math.PI/6;
+      const px = x + r*Math.cos(a), py = y + r*Math.sin(a);
+      i===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+    }
+    ctx.closePath();
+  }
+
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    rot = ts * 0.00012;
+    ctx.clearRect(0,0,W,H);
+    ctx.save();
+    ctx.translate(CX,CY);
+    ctx.rotate(rot);
+    ctx.translate(-CX,-CY);
+
+    cells.forEach(c => {
+      const pulse = 0.35 + 0.3*Math.sin(ts*0.001*c.speed + c.phase);
+      const glow  = c.ring === 0 ? 0.8 : (c.lit ? pulse : pulse*0.3);
+      const hex = c.color;
+
+      // Fill
+      drawHex(c.x, c.y, R-1.5);
+      ctx.fillStyle = hex + Math.round(glow*60).toString(16).padStart(2,'0');
+      ctx.fill();
+
+      // Stroke
+      ctx.strokeStyle = hex + Math.round(glow*180).toString(16).padStart(2,'0');
+      ctx.lineWidth = c.ring===0 ? 1.8 : 0.8;
+      ctx.stroke();
+
+      // Inner glow for lit cells
+      if (c.lit || c.ring===0) {
+        const grd = ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,R*0.75);
+        grd.addColorStop(0, hex + Math.round(glow*90).toString(16).padStart(2,'0'));
+        grd.addColorStop(1, 'transparent');
+        drawHex(c.x, c.y, R-1.5);
+        ctx.fillStyle = grd;
+        ctx.fill();
+      }
+    });
+
+    // Centre asterism
+    const t2 = 0.7 + 0.3*Math.sin(ts*0.0015);
+    ctx.font = `${R*0.55}px serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = `rgba(232,201,110,${t2})`;
+    ctx.shadowColor = '#C9A84C'; ctx.shadowBlur = 10;
+    ctx.fillText('⁂', CX, CY);
+    ctx.shadowBlur = 0;
+
+    ctx.restore();
+  }
+  requestAnimationFrame(frame);
+})();
+
 </script>
 </body>
 </html>
