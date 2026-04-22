@@ -139,7 +139,7 @@ button:hover { filter: brightness(1.08); }
   z-index: 9;
   font-size: 11px;
   letter-spacing: 0.28em;
-  color: rgba(238,249,255,0.58);
+  color: rgba(238,249,255,0.78);
   text-transform: uppercase;
   text-shadow: 0 0 10px rgba(134,242,255,0.18);
   pointer-events: none;
