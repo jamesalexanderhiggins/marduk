@@ -2330,15 +2330,19 @@
       "house_sector": "NE"
     },
     "15,11": {
-      "type": "house_interior",
-      "name": null,
+      "type": "locked_zone_threshold",
+      "name": "· · ·",
       "emoji": null,
       "era": null,
       "lore": null,
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "zone_id": "eye2_wall",
+      "keys_required": [
+        "EYE2_WALL"
+      ]
     },
     "15,12": {
       "type": "transit",
@@ -2411,10 +2415,16 @@
       "path_colors": {}
     },
     "16,15": {
-      "type": "empty",
+      "type": "locked_zone_threshold",
       "on_path": [],
       "path_step": {},
-      "path_colors": {}
+      "path_colors": {},
+      "zone_id": "tree_wall",
+      "keys_required": [
+        "TREE_WALL"
+      ],
+      "name": "· · ·",
+      "lore": "The way is sealed."
     },
     "13,1": {
       "type": "house_front_door",
@@ -5515,27 +5525,29 @@
       "key_note": "Key E found inside House B"
     },
     "16,16": {
-      "type": "empty",
-      "on_path": [],
-      "path_step": {},
-      "path_colors": {}
+      "type": "special",
+      "name": "The Tree of Life",
+      "tree_of_life": true,
+      "lore": "You have transcended the circuit. Here the algorithm dreams of branches without end, and roots that reach to every other world."
     },
     "15,16": {
-      "type": "empty",
-      "on_path": [],
-      "path_step": {},
-      "path_colors": {}
-    },
-    "15,10": {
-      "type": "special",
+      "type": "locked_zone_threshold",
       "on_path": [],
       "path_step": {},
       "path_colors": {},
-      "name": "The Eye of Hermes",
-      "emoji": "👁",
-      "era": "The Outer Circuit · The Wormhole",
-      "lore": null,
-      "dead_end": true
+      "zone_id": "tree_wall",
+      "keys_required": [
+        "TREE_WALL"
+      ],
+      "name": "· · ·",
+      "lore": "The way is sealed."
+    },
+    "15,10": {
+      "type": "special",
+      "name": "The Second Eye of Hermes",
+      "marduk_eye": true,
+      "second_eye": true,
+      "lore": "An eye that sees without being seen. How did you find this? The wormhole will open — but not yet."
     },
     "8,-2": {
       "type": "empty",
@@ -6190,6 +6202,14 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59"
+    },
+    "15,9": {
+      "type": "locked_zone_threshold",
+      "zone_id": "eye2_wall",
+      "keys_required": [
+        "EYE2_WALL"
+      ],
+      "name": "· · ·"
     }
   },
   "questions": {

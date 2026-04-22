@@ -487,6 +487,37 @@ body.kudra-active #stage{padding-top:110px;}
   15%{opacity:1;transform:scale(1) translateY(0);}
   75%{opacity:0.9;}
   100%{opacity:0;transform:scale(0.8) translateY(-6px);}}
+
+/* ── Transcend / Tree of Life ───────────────────── */
+#transcendBtn{display:none;position:absolute;bottom:80px;left:50%;
+  transform:translateX(-50%);z-index:20;
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.4em;
+  text-transform:uppercase;color:#fff;
+  background:transparent;border:1px solid rgba(212,175,55,0.7);
+  padding:12px 28px;cursor:pointer;
+  animation:transcendPulse 3s ease-in-out infinite;}
+@keyframes transcendPulse{
+  0%,100%{border-color:rgba(212,175,55,0.5);box-shadow:none;}
+  50%{border-color:#D4AF37;box-shadow:0 0 20px rgba(212,175,55,0.4);}}
+.tol-root{position:absolute;inset:0;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 40%,#1a0a00 0%,#000000 60%);}
+.tol-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.tol-panel{position:absolute;bottom:0;left:0;right:0;z-index:10;
+  padding:20px 24px 60px;text-align:center;
+  background:linear-gradient(to top,rgba(0,0,0,0.95) 0%,transparent 100%);}
+
+/* ── Transcend button ─────────────────────────── */
+.transcend-btn{display:inline-block;margin-top:18px;
+  font-family:'Cinzel Decorative',serif;font-size:12px;
+  letter-spacing:0.25em;color:#D4AF37;
+  background:transparent;border:1px solid rgba(212,175,55,0.5);
+  padding:12px 28px;cursor:pointer;
+  animation:transcendPulse 3s ease-in-out infinite;
+  -webkit-tap-highlight-color:transparent;}
+.transcend-btn:hover,.transcend-btn:active{background:rgba(212,175,55,0.1);}
+@keyframes transcendPulse{
+  0%,100%{box-shadow:0 0 0 rgba(212,175,55,0);border-color:rgba(212,175,55,0.3);}
+  50%{box-shadow:0 0 20px rgba(212,175,55,0.4);border-color:rgba(212,175,55,0.9);}}
 </style>
 </head>
 <body>
@@ -505,6 +536,7 @@ body.kudra-active #stage{padding-top:110px;}
 <div class="room-coords" id="roomCoords"></div>
 
 <div id="stage"></div>
+<button id="transcendBtn" onclick="goTo(15,10)">✦ Transcend ✦</button>
 <div class="nav-arrows" id="navArrows"></div>
 
 <!-- Marduk View overlay -->
@@ -553,7 +585,7 @@ body.kudra-active #stage{padding-top:110px;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v6.4
+ *  MARDUK'S MAP — /realm/  grid SPA  v6.5
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -806,6 +838,12 @@ function getDoors(x, y) {
       continue;
     }
 
+    /* Tree of Life — only reachable via Transcend button, never by walking */
+    if (neighbour.tree_of_life) {
+      out[d] = {sealed: true, reason: 'transcend-only'};
+      continue;
+    }
+
     /* Marduk View tile — always walkable (player can pass through).
      * OPENING the Marduk View interface still requires quiz completion.
      * Removing the sealed arrow unblocks the route to the quiz area. */
@@ -827,14 +865,20 @@ function getDoors(x, y) {
       continue;
     }
 
+    /* Special: house front door always accessible from within its own house
+     * Fixes path-guard blocking front door from house interior tiles */
+    if (neighbour.type === 'house_front_door'
+        && tile.house_id && tile.house_id === neighbour.house_id) {
+      out[d] = {open: true};
+      continue;
+    }
+
     /* Path guard — NO ARROW rule.
-     * If you cannot legally enter a path tile from this direction,
-     * the arrow simply doesn't appear.  Tunnels are sealed from the side;
-     * you can exit a tunnel in any direction but you cannot re-enter
-     * from the side you just left.
-     * KUDRAMARDUK bypasses this entirely. */
+     * Same-house moves bypass the guard (can walk freely within a house).
+     * Kudramarduk bypasses entirely. */
     if (neighbour.on_path && neighbour.on_path.length > 0 && REALM && REALM.paths
-        && !isKudraUnlocked()) {
+        && !isKudraUnlocked()
+        && !(tile.house_id && tile.house_id === neighbour.house_id)) {
       let anyPathAllows = false;
       for (const pid of neighbour.on_path) {
         const seq = REALM.paths[pid];
@@ -853,6 +897,14 @@ function getDoors(x, y) {
         out[d] = {sealed: true, reason: 'path-wall'};
         continue; // arrow hidden — tunnel sealed from this side
       }
+    }
+
+    /* Sealed tiles — no arrows in or out (Tree of Life etc.) */
+    if (neighbour.sealed && !neighbour.tree_of_life) {
+      out[d] = {sealed: true, reason: 'sealed-tile'}; continue;
+    }
+    if (tile.sealed && !tile.tree_of_life) {
+      out[d] = {sealed: true, reason: 'sealed-exit'}; continue;
     }
 
     /* Zone wall — no arrow for inaccessible zone tiles */
@@ -939,6 +991,8 @@ function randomSouthTile() {
 
 /* ── Rendering ─────────────────────────────────── */
 function render(x, y) {
+  // Track position for MV marker
+  try { const _rp=getP(); _rp.lastPos=[x,y]; saveP(_rp); } catch(e){}
   clearFx();
   clearOverlays();
   if (particleInterval) clearInterval(particleInterval);
@@ -990,10 +1044,11 @@ function render(x, y) {
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v6.4';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v6.5';
 
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
+  if (tile.tree_of_life) { renderTreeOfLife(s); return; }
   if (tile.type === 'threshold')   { renderThreshold(s, x, y); }
   else if (tile.type === 'quiz')   { renderQuiz(s, x, y, tile); }
   else if (tile.type === 'home')   { renderHome(s, x, y, tile); }
@@ -1038,6 +1093,7 @@ function render(x, y) {
   // Navigation arrows — suppressed inside house scenes (exits are in-scene)
   if (!HOUSE_SCENES[`${x},${y}`]) {
     renderNavArrows(x, y);
+  updateTranscendBtn(tile);
   }
 
   // Environmental overlays
@@ -1495,6 +1551,81 @@ function startPathGhosts(pid, step, total, color) {
 }
 function stopPathGhosts() { clearInterval(pathGhostTimer); pathGhostTimer = null; }
 
+
+/* ── Tree of Life scene ─────────────────────────── */
+function renderTreeOfLife(s) {
+  s.innerHTML = `
+    <div class="tol-root">
+      <canvas class="tol-canvas" id="tolCanvas"></canvas>
+      <div class="tol-panel">
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.5em;
+                    text-transform:uppercase;color:rgba(212,175,55,0.5);margin-bottom:6px;">
+          Beyond the Circuit</div>
+        <div style="font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3vw,32px);
+                    color:#D4AF37;text-shadow:0 0 30px rgba(212,175,55,0.8);margin-bottom:10px;">
+          The Tree of Life</div>
+        <div style="font-family:'EB Garamond',serif;font-style:italic;
+                    color:rgba(212,175,55,0.65);font-size:15px;line-height:1.7;">
+          This tile should not exist. And yet — here you are.</div>
+      </div>
+    </div>`;
+  document.body.style.background = '#000';
+
+  const cv = document.getElementById('tolCanvas');
+  if (!cv) return;
+  cv.width = cv.offsetWidth||window.innerWidth;
+  cv.height = cv.offsetHeight||window.innerHeight;
+  const ctx2 = cv.getContext('2d');
+  const W=cv.width,H=cv.height,CX=W/2,CY=H*0.4;
+
+  // Honeycomb-style tree emanating from centre
+  let tolRaf2;
+  (function frame2(ts) {
+    tolRaf2=requestAnimationFrame(frame2);
+    ctx2.fillStyle='rgba(0,0,0,0.15)'; ctx2.fillRect(0,0,W,H);
+    const R=18, rings=6;
+    const HW2=Math.sqrt(3)*R, HH2=R*1.5;
+    for(let ring=0;ring<=rings;ring++) {
+      const cells=ring===0?[[0,0]]:[];
+      if(ring>0){
+        const dirs=[[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
+        let q=-ring,r=0;
+        for(let d=0;d<6;d++) for(let j=0;j<ring;j++){
+          cells.push([q,r]); q+=dirs[d][0]; r+=dirs[d][1];
+        }
+      }
+      cells.forEach(([q,r])=>{
+        const px=CX+HW2*(q+r*0.5), py=CY+HH2*r;
+        const dist=Math.sqrt(q*q+r*r+q*r);
+        const glow=0.2+0.6*Math.sin(ts*0.001-dist*0.8);
+        const alpha=Math.max(0,glow*(1-ring/(rings+1)));
+        ctx2.beginPath();
+        for(let i=0;i<6;i++){
+          const a=Math.PI/3*i-Math.PI/6;
+          i===0?ctx2.moveTo(px+R*Math.cos(a),py+R*Math.sin(a))
+               :ctx2.lineTo(px+R*Math.cos(a),py+R*Math.sin(a));
+        }
+        ctx2.closePath();
+        ctx2.fillStyle=`rgba(212,175,55,${alpha*0.15})`;
+        ctx2.strokeStyle=`rgba(212,175,55,${alpha})`;
+        ctx2.lineWidth=ring===0?2:1;
+        ctx2.fill(); ctx2.stroke();
+      });
+    }
+  })(0);
+}
+
+/* ── Show/hide Transcend button ─────────────────── */
+function updateTranscendBtn(tile) {
+  const btn=document.getElementById('transcendBtn');
+  if (!btn) return;
+  if (tile && tile.marduk_eye) {
+    btn.style.display='block';
+  } else {
+    btn.style.display='none';
+  }
+}
+
 function renderEmpty(s, x, y, tile) {
   s.innerHTML = `
     <div class="empty-stage">
@@ -1853,7 +1984,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v6.4)
+ *  MARDUK VIEW — game-like map (v6.5)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -2263,33 +2394,29 @@ function setupMVCanvas() {
       }
     }
 
-    // ── Player position marker ─────────────────────
+    // ── Player position marker — uses gridToScreen() for exact tile placement ──
     const _pp = getP().lastPos;
     if (_pp) {
-      const [plx, ply] = _pp;
-      const pmPx = CX + (plx - ply * 0.5) * HW * mvZoom + mvOffset.x;
-      const pmPy = CY + ply * HH * mvZoom + mvOffset.y;
-      const pmR  = Math.max(6, r_base * mvZoom * 0.55);
-      const pmPulse = 0.7 + 0.3 * Math.sin(now * 0.005);
+      const [pmGx, pmGy] = _pp;
+      const [pmPx, pmPy] = gridToScreen(pmGx, pmGy);
+      const pmR  = Math.max(8, MV_R * mvZoom * 0.62);
+      const pmPulse = 0.75 + 0.25 * Math.sin(now * 0.006);
       ctx.save();
-      ctx.shadowColor = 'rgba(255,255,255,0.9)';
-      ctx.shadowBlur  = 14;
-      // Chevron arrow pointing up
-      ctx.fillStyle  = `rgba(255,255,255,${pmPulse})`;
-      ctx.strokeStyle= 'rgba(255,255,255,0.4)';
-      ctx.lineWidth  = 1.2;
+      ctx.shadowColor = 'rgba(80,220,255,0.9)'; ctx.shadowBlur = 18;
+      // Outer ring
+      ctx.strokeStyle = `rgba(80,220,255,${pmPulse * 0.7})`;
+      ctx.lineWidth = 2.2;
+      ctx.beginPath(); ctx.arc(pmPx, pmPy, pmR * 1.6, 0, Math.PI*2); ctx.stroke();
+      // Solid upward triangle (game piece / cursor)
+      ctx.fillStyle = `rgba(80,220,255,${pmPulse})`;
       ctx.beginPath();
-      ctx.moveTo(pmPx,            pmPy - pmR * 1.6);
-      ctx.lineTo(pmPx - pmR*0.7,  pmPy + pmR * 0.2);
-      ctx.lineTo(pmPx,            pmPy - pmR * 0.4);
-      ctx.lineTo(pmPx + pmR*0.7,  pmPy + pmR * 0.2);
-      ctx.closePath();
-      ctx.fill();
-      // Small pulsing dot at base
-      ctx.shadowBlur = 8;
-      ctx.beginPath();
-      ctx.arc(pmPx, pmPy + pmR*0.4, pmR*0.28, 0, Math.PI*2);
-      ctx.fill();
+      ctx.moveTo(pmPx,            pmPy - pmR * 1.3);
+      ctx.lineTo(pmPx - pmR*0.6,  pmPy - pmR * 0.1);
+      ctx.lineTo(pmPx + pmR*0.6,  pmPy - pmR * 0.1);
+      ctx.closePath(); ctx.fill();
+      // Centre dot
+      ctx.shadowBlur = 6; ctx.fillStyle = 'rgba(255,255,255,0.95)';
+      ctx.beginPath(); ctx.arc(pmPx, pmPy, pmR * 0.22, 0, Math.PI*2); ctx.fill();
       ctx.restore();
     }
 
@@ -2909,6 +3036,8 @@ function updateMapBtn() {
 }
 
 document.getElementById('mapBtn').addEventListener('click', () => {
+  // Save current position for "YOU ARE HERE" marker
+  const _cp = getP(); _cp.lastPos = [currentX, currentY]; saveP(_cp);
   unlockMV();
   renderMardukView();
 });
@@ -3164,6 +3293,72 @@ function renderZoneTile(s, x, y, tile) {
 
 /* ── Special cell renderer ─────────────────────── */
 function renderSpecialTile(s, x, y, tile) {
+  // Eye of Hermes (end of Marduk's Path): show Transcend button
+  if (tile.marduk_eye && !tile.second_eye) {
+    const displayName = tile.name || 'The Eye of Hermes';
+    const lore = tile.lore || 'You have walked the outer circuit. The path ends here — and begins again.';
+    s.innerHTML = `
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;
+        align-items:center;justify-content:center;text-align:center;
+        padding:32px;background:radial-gradient(ellipse 80% 60% at 50% 50%,
+          rgba(212,175,55,0.12) 0%,rgba(0,0,0,0.95) 70%);">
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.5em;
+          color:rgba(212,175,55,0.6);margin-bottom:12px;">
+          THE EYE OF HERMES · MARDUK'S PATH COMPLETE
+        </div>
+        <div style="font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3vw,32px);
+          color:#D4AF37;text-shadow:0 0 30px rgba(212,175,55,0.8);margin-bottom:16px;">
+          ${displayName}
+        </div>
+        <div style="font-family:'EB Garamond',serif;font-style:italic;
+          color:rgba(228,210,160,0.75);line-height:1.7;max-width:440px;
+          font-size:clamp(14px,1.8vw,17px);margin-bottom:24px;">${lore}</div>
+        <button class="transcend-btn" onclick="goTo(16,16)">✦ TRANSCEND ✦</button>
+      </div>`;
+    renderNavArrows(x, y);
+    return;
+  }
+  // Tree of Life
+  if (tile.tree_of_life) {
+    s.innerHTML = `
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;
+        align-items:center;justify-content:center;text-align:center;padding:32px;
+        background:radial-gradient(ellipse 80% 60% at 50% 50%,
+          rgba(80,212,80,0.14) 0%,rgba(0,0,0,0.98) 70%);">
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.5em;
+          color:rgba(120,212,120,0.6);margin-bottom:12px;">BEYOND THE OUTER CIRCUIT</div>
+        <div style="font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3vw,30px);
+          color:#80d880;text-shadow:0 0 30px rgba(80,212,80,0.9);margin-bottom:16px;">
+          The Tree of Life
+        </div>
+        <div style="font-family:'EB Garamond',serif;font-style:italic;
+          color:rgba(180,228,180,0.75);line-height:1.7;max-width:440px;
+          font-size:clamp(14px,1.8vw,17px);">${tile.lore||''}</div>
+      </div>`;
+    return; // no nav arrows — no exit from here (for now)
+  }
+  // Eye of Hermes: show TRANSCEND button
+  if (tile.marduk_eye && !tile.tree_of_life) {
+    setTimeout(()=>{
+      const stg = document.getElementById('stage');
+      if (!stg || stg.querySelector('#transcendBtn')) return;
+      const btn = document.createElement('button');
+      btn.id = 'transcendBtn';
+      btn.style.cssText = 'position:absolute;bottom:90px;left:50%;transform:translateX(-50%);'
+        + 'font-family:Cinzel,serif;font-size:11px;letter-spacing:0.4em;text-transform:uppercase;'
+        + 'color:#D4AF37;background:rgba(4,2,12,0.92);border:1px solid rgba(212,175,55,0.7);'
+        + 'padding:14px 32px;cursor:pointer;z-index:20;'
+        + 'box-shadow:0 0 22px rgba(212,175,55,0.35);transition:all 0.4s;';
+      btn.textContent = '✦  TRANSCEND  ✦';
+      btn.addEventListener('click', ()=>{
+        btn.style.opacity='0'; btn.style.transform='translateX(-50%) scale(1.1)';
+        setTimeout(()=>goTo(15,10), 700);
+      });
+      btn.addEventListener('mouseover',()=>btn.style.boxShadow='0 0 40px rgba(212,175,55,0.7)');
+      btn.addEventListener('mouseout', ()=>btn.style.boxShadow='0 0 22px rgba(212,175,55,0.35)');
+      stg.appendChild(btn);
+    }, 900);
+  }
   s.innerHTML = `
     <div style="text-align:center;max-width:480px;">
       <div class="room-era">${tile.era || 'The Wilderness'}</div>
