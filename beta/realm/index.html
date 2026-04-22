@@ -2212,16 +2212,15 @@ function setupMVCanvas() {
     const vMaxX = Math.ceil( ( W/2 - mvOffset.x) / hexW) + 2;
     const vMaxY = Math.ceil( (mvOffset.y + H/2)  / hexH) + 2;  // screen top → max grid y
     const vMinY = Math.floor((mvOffset.y - H/2)  / hexH) - 2;  // screen bot → min grid y
-    ctx.fillStyle   = 'rgba(0,0,0,1)';
-    ctx.strokeStyle = 'rgba(20,14,36,0.55)';   // faint purple seam = grid pattern visible
-    ctx.lineWidth   = 0.5;
+    // Void hexes: stroke only — background honeycomb shows through as colour
+    ctx.fillStyle   = 'rgba(0,0,0,0)';          // transparent: rainbow bleeds through
+    ctx.strokeStyle = 'rgba(30,18,50,0.45)';    // faint seam defines the grid
+    ctx.lineWidth   = 0.6;
     for (let vx = vMinX; vx <= vMaxX; vx++) {
       for (let vy = vMinY; vy <= vMaxY; vy++) {
-        // Skip game tiles — they'll be drawn correctly by the tile loop below
         if (Math.abs(vx) <= GRID_EXTENT && Math.abs(vy) <= GRID_EXTENT) continue;
         const [vpx, vpy] = gridToScreen(vx, vy, m);
-        drawHex(ctx, vpx, vpy, r);   // full radius — no gap
-        ctx.fill();
+        drawHex(ctx, vpx, vpy, r);
         ctx.stroke();
       }
     }
