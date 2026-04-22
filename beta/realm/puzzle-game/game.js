@@ -7,8 +7,8 @@
   const objectiveLabel = document.getElementById('objectiveLabel');
   const storyLabel = document.getElementById('storyLabel');
   const helpText = document.getElementById('helpText');
-  const coherenceBar = document.getElementById('coherenceBar');
-  const runLabel = document.getElementById('runLabel');
+    const runLabel = document.getElementById('runLabel');
+  const timerLabel = document.getElementById('timerLabel');
   const overlay = document.getElementById('overlay');
   const overlayTitle = document.getElementById('overlayTitle');
   const overlayText = document.getElementById('overlayText');
@@ -38,12 +38,20 @@
   let stars = [];
   let bokeh = [];
   let hexField = [];
+  let battleLasers = [];
+  let fighters = [];
+  let audioCtx = null;
+  let audioUnlocked = false;
+  let lastAudioAt = 0;
   let queue = parseQueue();
   let runIndex = 0;
   let state = null;
   let solved = false;
   let inputLocked = false;
   let activeRing = 0;
+  let levelStartTime = 0;
+  let timeLimit = 60;
+  let levelFailed = false;
 
   const BANDS = [
     { start: 1, end: 25, band: 'ASCENT', mode: 'ALIGNMENT', story: 'The machine wakes and waits for calibration.' },
@@ -78,7 +86,81 @@
   function levelBand(level) { return BANDS.find(b => level >= b.start && level <= b.end) || BANDS[0]; }
   function phase01(level) { return clamp((level - 1) / 99, 0, 1); }
   function assistanceForLevel(level) { return Math.pow(1 - phase01(level), 1.25); }
-  function dazzleForLevel(level) { return clamp(0.3 + phase01(level) * 1.2, 0.3, 1.5); }
+  function dazzleForLevel(level) { return clamp(0.35 + phase01(level) * 1.4, 0.35, 1.75); }
+  function timerForLevel(level) { return lerp(58, 20, phase01(level)); }
+  function rotationSpeedForLevel(level) { return lerp(0.00018, 0.00115, phase01(level)); }
+  function nearFactor() { return state ? Math.pow(getCoherence(), 2.2) : 0; }
+
+
+  function ensureAudio() {
+    if (audioCtx) return audioCtx;
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return null;
+    audioCtx = new Ctx();
+    return audioCtx;
+  }
+  function unlockAudio() {
+    const ctxA = ensureAudio();
+    if (!ctxA) return;
+    if (ctxA.state === 'suspended') ctxA.resume();
+    audioUnlocked = true;
+  }
+  function simpleTone(freq = 220, dur = 0.08, type = 'sine', gain = 0.03, glide = 0, when = 0) {
+    const ctxA = ensureAudio();
+    if (!ctxA || !audioUnlocked) return;
+    const t0 = ctxA.currentTime + when;
+    const osc = ctxA.createOscillator();
+    const g = ctxA.createGain();
+    const f = Math.max(40, freq);
+    osc.type = type;
+    osc.frequency.setValueAtTime(f, t0);
+    if (glide) osc.frequency.exponentialRampToValueAtTime(Math.max(40, f + glide), t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(g).connect(ctxA.destination);
+    osc.start(t0); osc.stop(t0 + dur + 0.02);
+  }
+  function noiseBurst(dur = 0.06, gain = 0.018, hp = 700, when = 0) {
+    const ctxA = ensureAudio();
+    if (!ctxA || !audioUnlocked) return;
+    const sr = ctxA.sampleRate;
+    const buffer = ctxA.createBuffer(1, Math.max(1, Math.floor(sr * dur)), sr);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+    const src = ctxA.createBufferSource(); src.buffer = buffer;
+    const filter = ctxA.createBiquadFilter(); filter.type = 'highpass'; filter.frequency.value = hp;
+    const g = ctxA.createGain();
+    const t0 = ctxA.currentTime + when;
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    src.connect(filter).connect(g).connect(ctxA.destination);
+    src.start(t0); src.stop(t0 + dur + 0.02);
+  }
+  function sliderSound(value) {
+    const f = 180 + Math.abs(value) * 2.4 + nearFactor() * 260;
+    simpleTone(f, 0.06, 'sawtooth', 0.018 + nearFactor() * 0.01, 45);
+    if (nearFactor() > 0.55) noiseBurst(0.035, 0.008 + nearFactor() * 0.01, 1200);
+  }
+  function alignmentSound() {
+    const n = nearFactor();
+    if (n < 0.45) return;
+    const now = performance.now();
+    if (now - lastAudioAt < 90) return;
+    lastAudioAt = now;
+    simpleTone(240 + n * 240, 0.08, 'triangle', 0.008 + n * 0.012, 18);
+    if (n > 0.72) noiseBurst(0.03, 0.004 + n * 0.008, 1400);
+  }
+  function laserSound() {
+    simpleTone(780 + Math.random() * 500, 0.18, 'sawtooth', 0.01, -500);
+    noiseBurst(0.08, 0.007, 1800);
+  }
+  function solveSound() {
+    simpleTone(280, 0.12, 'triangle', 0.03, 120, 0);
+    simpleTone(420, 0.16, 'triangle', 0.025, 180, 0.05);
+    simpleTone(620, 0.22, 'sine', 0.022, 240, 0.11);
+  }
 
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -90,6 +172,7 @@
     makeStars();
     makeBokeh();
     makeHexField();
+    makeFighters();
   }
 
   function makeStars() {
@@ -114,6 +197,16 @@
         hexField.push({ x: x + (odd ? step * 0.5 : 0), y, size: step * (0.25 + Math.random() * 0.18), drift: Math.random() * 2 * Math.PI, z: 0.2 + Math.random() * 0.8 });
       }
     }
+  }
+
+  function makeFighters() {
+    fighters = [];
+    const count = Math.max(5, Math.floor(innerWidth / 340));
+    for (let i = 0; i < count; i++) fighters.push({
+      x: Math.random() * innerWidth, y: innerHeight * (0.12 + Math.random() * 0.36),
+      vx: 0.16 + Math.random() * 0.48, vy: (Math.random() - 0.5) * 0.05,
+      size: 8 + Math.random() * 10, hue: (hue + 20 + Math.random() * 90) % 360, drift: Math.random() * Math.PI * 2
+    });
   }
 
   function spawnParticles(level) {
@@ -150,9 +243,9 @@
       mode: 'ALIGNMENT',
       objective: 'Drag to rotate the frame until it locks into the ghost orientation.',
       help: 'Drag to rotate. Use the on-screen sliders for precise control. Early levels gently snap into place.',
-      tolerance: clamp(0.98 - level * 0.0078, 0.1, 0.98),
-      depthTolerance: clamp(1.2 - level * 0.0105, 0.16, 1.2),
-      magnetRadius: lerp(1.22, 0.09, phase01(level)),
+      tolerance: clamp(1.42 - level * 0.0108, 0.12, 1.42),
+      depthTolerance: clamp(1.52 - level * 0.0125, 0.18, 1.52),
+      magnetRadius: lerp(1.8, 0.08, phase01(level)),
       shape: buildAlignmentShape(complexity, layers, level),
       rx: rand(seed) * Math.PI * 2,
       ry: rand(seed + 1) * Math.PI * 2,
@@ -163,7 +256,8 @@
       depth: rand(seed + 6) * 1.8 - 0.9,
       targetDepth: (rand(seed + 7) * 2 - 1) * (level > 12 ? 0.8 : 0.22),
       solvedHold: 0,
-      autoSpin: level > 15 ? 0.0015 + level * 0.00002 : 0,
+      autoSpin: level > 22 ? 0.0011 + level * 0.000015 : 0,
+      worldSpin: rotationSpeedForLevel(level),
     };
   }
   function buildCircuitLevel(level, base) {
@@ -182,6 +276,7 @@
       solvedHold: 0,
       snap: Math.PI / 12,
       pulse: 0.8 + (level - 26) * 0.03,
+      worldSpin: rotationSpeedForLevel(level),
     };
   }
   function buildConstellationLevel(level, base) {
@@ -197,7 +292,7 @@
       if (level > 62 && rand(seed + i * 1.73) < 0.08) locked[i] = true;
     }
     if (!target.some(Boolean)) target[Math.floor(total / 2)] = true;
-    return { ...base, mode: 'CONSTELLATION', objective: 'Rebuild the luminous pattern shown at left by toggling the main grid.', help: 'Tap nodes to toggle them. Locked nodes cannot change. Match the target pattern exactly.', cols, rows, target, player: new Array(total).fill(false), locked, solvedHold: 0 };
+    return { ...base, mode: 'CONSTELLATION', objective: 'Rebuild the luminous pattern shown at left by toggling the main grid.', help: 'Tap nodes to toggle them. Locked nodes cannot change. Match the target pattern exactly.', cols, rows, target, player: new Array(total).fill(false), locked, solvedHold: 0, worldSpin: rotationSpeedForLevel(level) };
   }
   function buildGateLevel(level, base) {
     const seed = level * 19.917;
@@ -208,7 +303,7 @@
     const nodeTarget = [];
     for (let i = 0; i < nodes; i++) nodeTarget.push(rand(seed + i * 2.1) > 0.42);
     if (!nodeTarget.some(Boolean)) nodeTarget[0] = true;
-    return { ...base, mode: 'GATE', objective: 'First align the outer gate, then ignite the correct inner nodes.', help: 'Phase 1: rotate rings. Phase 2: tap the core nodes. Precision sliders still work.', phase: 1, rings, nodes, nodeTarget, nodePlayer: new Array(nodes).fill(false), solvedHold: 0, snap: Math.PI / 12 };
+    return { ...base, mode: 'GATE', objective: 'First align the outer gate, then ignite the correct inner nodes.', help: 'Phase 1: rotate rings. Phase 2: tap the core nodes. Precision sliders still work.', phase: 1, rings, nodes, nodeTarget, nodePlayer: new Array(nodes).fill(false), solvedHold: 0, snap: Math.PI / 12, worldSpin: rotationSpeedForLevel(level) };
   }
 
   function buildAlignmentShape(complexity, layers, level) {
@@ -244,6 +339,11 @@
     const scale = cam / (cam + p.z + 260);
     return { x: innerWidth / 2 + p.x * scale, y: innerHeight / 2 + p.y * scale, s: scale, z: p.z };
   }
+  function rotate2dAround(x, y, cx, cy, angle) {
+    const dx = x - cx, dy = y - cy;
+    const c = Math.cos(angle), s = Math.sin(angle);
+    return { x: cx + dx * c - dy * s, y: cy + dx * s + dy * c };
+  }
 
   function setSliderValue(el, out, val) {
     const v = clamp(Math.round(val), -100, 100);
@@ -270,6 +370,8 @@
     }
   }
 
+  function worldAngle(time) { return state ? time * state.worldSpin : 0; }
+
   function startRunLevel() {
     const level = queue[runIndex];
     state = buildLevel(level);
@@ -284,7 +386,11 @@
     storyLabel.textContent = state.story;
     helpText.textContent = state.help;
     runLabel.textContent = `${queue[runIndex]} / ${queue[queue.length - 1]}`;
-    coherenceBar.style.width = '0%';
+    timeLimit = timerForLevel(level);
+    levelStartTime = performance.now();
+    levelFailed = false;
+    timerLabel.textContent = `${timeLimit.toFixed(1)}s`;
+    timerLabel.classList.remove('urgent');
     spawnParticles(level);
     syncSliders();
   }
@@ -294,35 +400,34 @@
     ctx.clearRect(0, 0, innerWidth, innerHeight);
     const level = state ? state.level : 1;
     const dazzle = dazzleForLevel(level);
-    const px = (pointer.x / innerWidth - 0.5);
-    const py = (pointer.y / innerHeight - 0.5);
+    const px = clamp((pointer.x / innerWidth - 0.5), -0.5, 0.5);
+    const py = clamp((pointer.y / innerHeight - 0.5), -0.5, 0.5);
+    const near = nearFactor();
 
-    // bokeh layer
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
     for (const b of bokeh) {
-      const x = b.x - px * 22 * b.z;
-      const y = b.y - py * 18 * b.z;
-      const grad = ctx.createRadialGradient(x, y, 0, x, y, b.r * (0.75 + dazzle * 0.12));
-      grad.addColorStop(0, `hsla(${b.hue} 100% 80% / ${b.a * dazzle * 0.9})`);
+      const x = clamp(b.x - px * 10 * b.z, -b.r, innerWidth + b.r);
+      const y = clamp(b.y - py * 8 * b.z, -b.r, innerHeight + b.r);
+      const rr = b.r * (0.82 + dazzle * 0.14 + near * 0.06);
+      const grad = ctx.createRadialGradient(x, y, 0, x, y, rr);
+      grad.addColorStop(0, `hsla(${b.hue} 100% 80% / ${b.a * dazzle})`);
       grad.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = grad;
-      ctx.beginPath(); ctx.arc(x, y, b.r, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x, y, rr, 0, Math.PI * 2); ctx.fill();
     }
     ctx.restore();
 
-    // stars
     for (const s of stars) {
       ctx.globalAlpha = s.a;
-      ctx.fillStyle = '#d8f7ff';
       const tw = Math.sin(time * 0.001 * s.z + s.x * 0.01) * 0.3 + 0.7;
-      ctx.beginPath();
-      ctx.arc(s.x - px * 10 * s.z, s.y - py * 10 * s.z, s.z * tw, 0, Math.PI * 2);
-      ctx.fill();
+      const sx = clamp(s.x - px * 5 * s.z, -3, innerWidth + 3);
+      const sy = clamp(s.y - py * 5 * s.z, -3, innerHeight + 3);
+      ctx.fillStyle = '#d8f7ff';
+      ctx.beginPath(); ctx.arc(sx, sy, s.z * tw, 0, Math.PI * 2); ctx.fill();
     }
     ctx.globalAlpha = 1;
 
-    // interactive particles / sparkles
     for (const p of particles) {
       const d = dist(p.x, p.y, pointer.x, pointer.y);
       const repel = clamp(1 - d / 180, 0, 1);
@@ -341,20 +446,21 @@
     }
     ctx.globalAlpha = 1;
 
-    // honeycomb field
     ctx.save();
-    ctx.globalAlpha = 0.16 + dazzle * 0.04;
+    ctx.globalAlpha = 0.15 + dazzle * 0.05 + near * 0.05;
     for (const h of hexField) {
       const dx = pointer.x - h.x, dy = pointer.y - h.y;
       const d = Math.hypot(dx, dy);
       const glow = clamp(1 - d / 150, 0, 1);
       const pulse = Math.sin(time * 0.0012 + h.drift) * 0.5 + 0.5;
-      drawHex(h.x - px * 14 * h.z, h.y - py * 12 * h.z, h.size + glow * 5, glow, pulse);
+      const hx = clamp(h.x - px * 8 * h.z, -h.size * 2, innerWidth + h.size * 2);
+      const hy = clamp(h.y - py * 6 * h.z, -h.size * 2, innerHeight + h.size * 2);
+      drawHex(hx, hy, h.size + glow * 5, glow, pulse);
     }
     ctx.restore();
 
     ctx.save();
-    ctx.globalAlpha = 0.12 + dazzle * 0.02;
+    ctx.globalAlpha = 0.12 + dazzle * 0.03;
     const cx = innerWidth / 2;
     const cy = innerHeight / 2 + 40;
     for (let i = 0; i < 10; i++) {
@@ -365,6 +471,41 @@
       ctx.strokeStyle = i % 2 === 0 ? 'rgba(134,242,255,0.22)' : 'rgba(143,133,255,0.16)';
       ctx.lineWidth = 1;
       ctx.stroke();
+    }
+    ctx.restore();
+
+    // distant vector battle
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    fighters.forEach((f, i) => {
+      f.x += f.vx * (0.4 + dazzle * 0.1);
+      f.y += f.vy + Math.sin(time * 0.001 + f.drift) * 0.08;
+      if (f.x > innerWidth + 40) { f.x = -40; f.y = innerHeight * (0.1 + Math.random() * 0.4); }
+      const sx = f.x - px * 16; const sy = f.y - py * 10;
+      ctx.strokeStyle = `hsla(${f.hue} 100% 72% / 0.42)`;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(sx - f.size, sy + f.size * 0.18);
+      ctx.lineTo(sx, sy);
+      ctx.lineTo(sx - f.size, sy - f.size * 0.18);
+      ctx.stroke();
+      if (Math.random() < 0.0009 + dazzle * 0.0008) {
+        battleLasers.push({ x: sx, y: sy, vx: -6 - Math.random() * 7, vy: (Math.random() - 0.5) * 2.5, life: 1, hue: f.hue });
+        laserSound();
+      }
+    });
+    for (let i = battleLasers.length - 1; i >= 0; i--) {
+      const l = battleLasers[i];
+      l.x += l.vx; l.y += l.vy; l.life -= 0.025;
+      ctx.strokeStyle = `hsla(${l.hue} 100% 72% / ${Math.max(0, l.life * 0.6)})`;
+      ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.moveTo(l.x, l.y); ctx.lineTo(l.x - l.vx * 4, l.y - l.vy * 4); ctx.stroke();
+      if (l.life <= 0 || l.x < -80 || l.y < -80 || l.y > innerHeight + 80) battleLasers.splice(i, 1);
+    }
+    if (Math.random() < 0.00055 + dazzle * 0.00045) {
+      const y = innerHeight * (0.16 + Math.random() * 0.52);
+      battleLasers.push({ x: innerWidth + 120, y, vx: -16 - Math.random() * 14, vy: -1 + Math.random() * 2, life: 1.15, hue: (hue + 140) % 360 });
+      laserSound();
     }
     ctx.restore();
   }
@@ -396,8 +537,20 @@
   }
 
   function drawAlignment(time) {
-    const alignGhost = state.shape.pts.map(p => project3d(rotatePoint(p, state.targetRx, state.targetRy, state.targetRz, state.targetDepth)));
-    const current = state.shape.pts.map(p => project3d(rotatePoint(p, state.rx, state.ry, state.rz, state.depth)));
+    const wa = worldAngle(time);
+    const jitter = nearFactor() > 0.68 ? (nearFactor() - 0.68) * 10 : 0;
+    const tremX = jitter ? Math.sin(time * 0.06) * jitter : 0;
+    const tremY = jitter ? Math.cos(time * 0.052) * jitter : 0;
+    const alignGhost = state.shape.pts.map(p => {
+      const q = rotatePoint(p, state.targetRx + wa * 0.2, state.targetRy + wa, state.targetRz + wa * 0.5, state.targetDepth);
+      q.x += tremX * 0.35; q.y += tremY * 0.35;
+      return project3d(q);
+    });
+    const current = state.shape.pts.map(p => {
+      const q = rotatePoint(p, state.rx + wa * 0.2, state.ry + wa, state.rz + wa * 0.5, state.depth);
+      q.x += tremX; q.y += tremY;
+      return project3d(q);
+    });
     const edges = state.shape.edges.map(([a, b]) => ({ a: current[a], b: current[b], z: (current[a].z + current[b].z) / 2 }));
     edges.sort((m, n) => m.z - n.z);
     ctx.save();
@@ -410,19 +563,35 @@
     const coherence = getCoherence();
     for (const seg of edges) {
       ctx.beginPath(); ctx.moveTo(seg.a.x, seg.a.y); ctx.lineTo(seg.b.x, seg.b.y);
-      ctx.strokeStyle = `rgba(134,242,255,${lerp(0.16, 0.42, coherence)})`; ctx.lineWidth = 4.4; ctx.stroke();
+      ctx.strokeStyle = `rgba(134,242,255,${lerp(0.16, 0.46, coherence)})`; ctx.lineWidth = 4.4; ctx.stroke();
       ctx.beginPath(); ctx.moveTo(seg.a.x, seg.a.y); ctx.lineTo(seg.b.x, seg.b.y);
       const localHue = (hue + time * 0.01 + seg.z * 0.04) % 360;
-      ctx.strokeStyle = `hsla(${localHue} 100% ${lerp(62, 82, coherence)}% / ${lerp(0.34, 0.94, coherence)})`;
+      ctx.strokeStyle = `hsla(${localHue} 100% ${lerp(62, 84, coherence)}% / ${lerp(0.34, 0.98, coherence)})`;
       ctx.lineWidth = 1.2 + seg.a.s * 1.8; ctx.stroke();
     }
-    if (coherence > 0.6) drawCoreBloom(innerWidth / 2, innerHeight / 2, 130 + coherence * 120, coherence);
+    if (coherence > 0.45) drawCoreBloom(innerWidth / 2, innerHeight / 2, 130 + coherence * 130, coherence);
+    if (coherence > 0.62) {
+      ctx.globalCompositeOperation = 'screen';
+      const sparks = Math.floor((coherence - 0.62) * 42);
+      for (let i = 0; i < sparks; i++) {
+        const pt = current[(i * 7 + Math.floor(time * 0.02)) % current.length];
+        const ang = (i / Math.max(1, sparks)) * Math.PI * 2 + time * 0.01;
+        const len = 6 + coherence * 18;
+        ctx.strokeStyle = `rgba(152,255,205,${0.18 + coherence * 0.4})`;
+        ctx.lineWidth = 1.1;
+        ctx.beginPath();
+        ctx.moveTo(pt.x, pt.y);
+        ctx.lineTo(pt.x + Math.cos(ang) * len, pt.y + Math.sin(ang) * len);
+        ctx.stroke();
+      }
+    }
     ctx.restore();
   }
 
   function drawCircuit(time) {
-    const cx = innerWidth / 2, cy = innerHeight / 2, coherence = getCoherence();
-    ctx.save(); ctx.lineCap = 'round';
+    const cx = innerWidth / 2, cy = innerHeight / 2, coherence = getCoherence(), wa = worldAngle(time);
+    const trem = coherence > 0.72 ? (coherence - 0.72) * 8 : 0;
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(wa); ctx.translate(-cx + Math.sin(time * 0.05) * trem, -cy + Math.cos(time * 0.05) * trem); ctx.lineCap = 'round';
     state.rings.forEach((ring, index) => {
       const selected = index === activeRing; const rad = ring.radius; const segAngle = (Math.PI * 2) / ring.segments;
       ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2); ctx.strokeStyle = selected ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.06)'; ctx.lineWidth = selected ? 14 : 10; ctx.stroke();
@@ -467,6 +636,7 @@
   }
   function drawConstellation(time) {
     const cols = state.cols, rows = state.rows, cell = Math.min(58, innerHeight / (rows + 3), innerWidth / (cols + 7));
+    const wa = worldAngle(time) * 0.65, coherence = getCoherence(), trem = coherence > 0.82 ? (coherence - 0.82) * 7 : 0;
     const leftX = innerWidth * 0.26, mainX = innerWidth * 0.64, baseY = innerHeight * 0.5;
     drawGridPanel(leftX, baseY, cols, rows, cell, state.target, null, time, true);
     drawGridPanel(mainX, baseY, cols, rows, cell, state.player, state.locked, time, false);
@@ -475,7 +645,8 @@
   }
   function drawGate(time) {
     const cx = innerWidth / 2, cy = innerHeight / 2, coherence = getCoherence(), ringCoherence = getGateRingCoherence();
-    ctx.save();
+    const wa = worldAngle(time) * 0.9, trem = coherence > 0.74 ? (coherence - 0.74) * 9 : 0;
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(wa); ctx.translate(-cx + Math.sin(time * 0.05) * trem, -cy + Math.cos(time * 0.05) * trem);
     state.rings.forEach((ring, index) => {
       const selected = index === activeRing && state.phase === 1;
       ctx.beginPath(); ctx.arc(cx, cy, ring.radius, 0, Math.PI * 2); ctx.strokeStyle = selected ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.06)'; ctx.lineWidth = selected ? 13 : 10; ctx.stroke();
@@ -525,7 +696,7 @@
     if (assist <= 0.001) return;
     if (state.mode === 'ALIGNMENT') {
       const magnet = state.magnetRadius;
-      const pull = 0.05 + assist * 0.12;
+      const pull = 0.06 + assist * 0.17;
       if (angleDiff(state.rx, state.targetRx) < magnet) state.rx = lerp(state.rx, state.targetRx, pull);
       if (angleDiff(state.ry, state.targetRy) < magnet) state.ry = lerp(state.ry, state.targetRy, pull);
       if (angleDiff(state.rz, state.targetRz) < magnet) state.rz = lerp(state.rz, state.targetRz, pull * 0.9);
@@ -533,28 +704,45 @@
     } else if (state.mode === 'CIRCUIT' || (state.mode === 'GATE' && state.phase === 1)) {
       for (const ring of state.rings) {
         const diff = angleDiff(ring.angle, ring.target);
-        if (diff < state.snap * (0.95 + assist * 2.2)) ring.angle = lerp(ring.angle, ring.target, 0.12 + assist * 0.12);
+        if (diff < state.snap * (1.12 + assist * 2.7)) ring.angle = lerp(ring.angle, ring.target, 0.14 + assist * 0.16);
       }
     }
   }
 
   function checkSolved() {
     const coherence = getCoherence();
-    coherenceBar.style.width = `${Math.round(coherence * 100)}%`;
+    alignmentSound();
+    const elapsed = (performance.now() - levelStartTime) / 1000;
+    const remaining = Math.max(0, timeLimit - elapsed);
+    timerLabel.textContent = `${remaining.toFixed(1)}s`;
+    timerLabel.classList.toggle('urgent', remaining < Math.min(10, timeLimit * 0.25));
+    if (!solved && !levelFailed && remaining <= 0) {
+      levelFailed = true;
+      inputLocked = true;
+      overlayTitle.textContent = 'Time collapse';
+      overlayText.textContent = 'The chamber slipped out of phase. Try the level again.';
+      overlayButton.textContent = 'Retry';
+      overlay.classList.remove('hidden');
+      noiseBurst(0.18, 0.018, 900);
+      simpleTone(180, 0.26, 'sawtooth', 0.02, -80);
+      return;
+    }
     if (state.mode === 'GATE' && state.phase === 1 && getGateRingCoherence() > 0.995) {
       state.phase = 2;
       objectiveLabel.textContent = 'Now ignite the correct inner nodes and complete the gate.';
       helpText.textContent = 'Phase 2: tap the core nodes. Match the target pulse count and pattern.';
+      simpleTone(310, 0.12, 'triangle', 0.018, 80);
     }
     const targetReached = (() => {
-      if (state.mode === 'ALIGNMENT') return coherence > 0.985;
-      if (state.mode === 'CIRCUIT') return coherence > 0.992;
+      if (state.mode === 'ALIGNMENT') return coherence > 0.982;
+      if (state.mode === 'CIRCUIT') return coherence > 0.991;
       if (state.mode === 'CONSTELLATION') return coherence === 1;
       return state.phase >= 2 && getGateRingCoherence() > 0.995 && getGateNodeCoherence() === 1;
     })();
     if (targetReached) state.solvedHold += 1; else state.solvedHold = Math.max(0, state.solvedHold - 1);
     if (!solved && state.solvedHold > (autoAdvance ? 10 : 18)) {
       solved = true; inputLocked = true;
+      solveSound();
       const final = runIndex === queue.length - 1;
       overlayTitle.textContent = final ? 'Journey complete' : `Level ${queue[runIndex]} cleared`;
       overlayText.textContent = final ? (redirect ? 'The exit link is armed. Continue to leave the chamber.' : 'This embedded run is complete.') : `Prepare for level ${queue[runIndex + 1]}.`;
@@ -564,6 +752,7 @@
   }
 
   function continueFlow() {
+    if (levelFailed) { startRunLevel(); return; }
     if (!solved) return;
     const final = runIndex === queue.length - 1;
     if (final) { if (redirect) location.href = redirect; return; }
@@ -601,6 +790,7 @@
   }
 
   function onPointerDown(x, y) {
+    unlockAudio();
     pointer.down = true; pointer.x = pointer.lastX = x; pointer.y = pointer.lastY = y; pointer.dragGlow = 1;
     if (inputLocked || !state) return;
     if (state.mode === 'CIRCUIT') activeRing = nearestRingIndex(x, y);
@@ -627,26 +817,34 @@
     pointer.dragGlow *= 0.96;
     if (state) {
       if (state.mode === 'ALIGNMENT' && !pointer.down && !inputLocked) state.ry += state.autoSpin;
-      magneticAssist();
+      if (!levelFailed && !solved) magneticAssist();
       if (state.mode === 'ALIGNMENT') drawAlignment(time);
       else if (state.mode === 'CIRCUIT') drawCircuit(time);
       else if (state.mode === 'CONSTELLATION') drawConstellation(time);
       else drawGate(time);
-      checkSolved();
+      if (!overlay.classList.contains('hidden') || (!levelFailed && !solved)) checkSolved();
     }
     requestAnimationFrame(animate);
   }
 
   function sliderNudge(value, scale) { return Number(value) / 100 * scale; }
-  sliderX.addEventListener('input', e => { if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.rx = state.targetRx + sliderNudge(e.target.value, Math.PI); syncSliders(); });
-  sliderY.addEventListener('input', e => { if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.ry = state.targetRy + sliderNudge(e.target.value, Math.PI); syncSliders(); });
+  sliderX.addEventListener('input', e => {
+    unlockAudio();
+    sliderSound(e.target.value); if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.rx = state.targetRx + sliderNudge(e.target.value, Math.PI); syncSliders(); });
+  sliderY.addEventListener('input', e => {
+    unlockAudio();
+    sliderSound(e.target.value); if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.ry = state.targetRy + sliderNudge(e.target.value, Math.PI); syncSliders(); });
   sliderZ.addEventListener('input', e => {
+    unlockAudio();
+    sliderSound(e.target.value);
     if (!state || inputLocked) return;
     if (state.mode === 'ALIGNMENT') state.rz = state.targetRz + sliderNudge(e.target.value, Math.PI);
     else if (state.mode === 'CIRCUIT' || (state.mode === 'GATE' && state.phase === 1)) state.rings[activeRing].angle = state.rings[activeRing].target + sliderNudge(e.target.value, Math.PI);
     syncSliders();
   });
-  sliderDepth.addEventListener('input', e => { if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.depth = state.targetDepth + sliderNudge(e.target.value, 1.8); syncSliders(); });
+  sliderDepth.addEventListener('input', e => {
+    unlockAudio();
+    sliderSound(e.target.value); if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.depth = state.targetDepth + sliderNudge(e.target.value, 1.8); syncSliders(); });
 
   overlayButton.addEventListener('click', continueFlow);
 
@@ -663,6 +861,7 @@
   window.addEventListener('touchmove', e => { const t = e.touches[0]; if (t) onPointerMove(t.clientX, t.clientY); }, { passive: true });
   window.addEventListener('touchend', onPointerUp, { passive: true });
   canvas.addEventListener('wheel', e => {
+    unlockAudio();
     if (!state || inputLocked) return;
     if (state.mode === 'ALIGNMENT') state.depth = clamp(state.depth + e.deltaY * -0.0013, -1.2, 1.2);
     else if (state.mode === 'CIRCUIT') rotateSelectedRing(e.deltaY * -0.005);

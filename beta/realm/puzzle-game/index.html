@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vector Gate Journey v5</title>
+  <title>Vector Gate Journey v7</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -22,9 +22,9 @@
         <div id="storyLabel">The machine wakes and waits for calibration.</div>
       </div>
       <div class="hud-col right">
-        <div class="metric">
-          <div class="metric-label">COHERENCE</div>
-          <div class="meter"><div id="coherenceBar"></div></div>
+        <div class="metric timer">
+          <div class="metric-label">TIME LEFT</div>
+          <div id="timerLabel">60.0s</div>
         </div>
         <div class="metric secondary">
           <div class="metric-label">RUN</div>
@@ -45,7 +45,7 @@
         <label><strong>ROLL / RING</strong><input id="sliderZ" type="range" min="-100" max="100" value="0" /><span class="control-value" id="valueZ">0</span></label>
         <label><strong>DEPTH</strong><input id="sliderDepth" type="range" min="-100" max="100" value="0" /><span class="control-value" id="valueDepth">0</span></label>
       </div>
-      <div class="controls-hint">Touch and drag the bright handles for fine adjustment. Early levels pull the geometry into place for you.</div>
+      <div class="controls-hint">Touch or drag the bright handles for fine adjustment. No meter now: judge by tremor, crackle, sparks, and the way the gate starts to sing when it nears alignment.</div>
     </div>
 
     <div id="overlay" class="hidden">
