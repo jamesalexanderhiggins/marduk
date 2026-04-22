@@ -131,8 +131,22 @@ button {
   color: var(--text); padding: 12px 18px; border-radius: 12px; cursor: pointer; font-size: 14px; letter-spacing: 0.12em;
 }
 button:hover { filter: brightness(1.08); }
+
+#versionMarker {
+  position: absolute;
+  right: 18px;
+  bottom: 10px;
+  z-index: 9;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: rgba(238,249,255,0.58);
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(134,242,255,0.18);
+  pointer-events: none;
+}
 body.hide-ui #hud, body.hide-ui #help, body.hide-ui #controls { display: none; }
 @media (max-width: 900px) {
+  #versionMarker { right: 14px; bottom: 8px; font-size: 10px; }
   #hud { flex-direction: column; }
   .hud-col.right { justify-content: space-between; flex-wrap: wrap; }
   .metric,.metric.secondary { min-width: 0; flex: 1; }

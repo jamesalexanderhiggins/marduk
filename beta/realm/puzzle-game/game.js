@@ -13,6 +13,8 @@
   const overlayTitle = document.getElementById('overlayTitle');
   const overlayText = document.getElementById('overlayText');
   const overlayButton = document.getElementById('overlayButton');
+  const versionMarker = document.getElementById('versionMarker');
+  if (versionMarker) versionMarker.textContent = VERSION;
   const sliderX = document.getElementById('sliderX');
   const sliderY = document.getElementById('sliderY');
   const sliderZ = document.getElementById('sliderZ');
@@ -27,6 +29,7 @@
   const rangeParam = params.get('range');
   const redirect = params.get('redirect') || '';
   const autoAdvance = params.get('auto') !== '0';
+  const VERSION = 'v11';
   const hue = Number(params.get('hue') || '195');
 
   document.documentElement.style.setProperty('--line', `hsl(${hue} 100% 76%)`);
@@ -87,7 +90,7 @@
   function phase01(level) { return clamp((level - 1) / 99, 0, 1); }
   function assistanceForLevel(level) { return Math.pow(1 - phase01(level), 1.45) * 0.82; }
   function dazzleForLevel(level) { return clamp(0.42 + phase01(level) * 1.85, 0.42, 2.27); }
-  function timerForLevel(level) { return level === 1 ? 65 : lerp(58, 20, phase01(level)); }
+  function timerForLevel(level) { return level === 1 ? 68 : lerp(58, 20, phase01(level)); }
   function rotationSpeedForLevel(level) { return lerp(0.00018, 0.00115, phase01(level)); }
   function nearFactor() { return state ? Math.pow(getCoherence(), 2.2) : 0; }
 
@@ -139,27 +142,32 @@
     src.start(t0); src.stop(t0 + dur + 0.02);
   }
   function sliderSound(value) {
-    const f = 180 + Math.abs(value) * 2.4 + nearFactor() * 260;
-    simpleTone(f, 0.06, 'sawtooth', 0.018 + nearFactor() * 0.01, 45);
-    if (nearFactor() > 0.55) noiseBurst(0.035, 0.008 + nearFactor() * 0.01, 1200);
+    const n = nearFactor();
+    const amt = Math.abs(Number(value)) / 100;
+    const base = 220 + amt * 320 + n * 180;
+    simpleTone(base, 0.055, 'square', 0.03 + n * 0.01, 70);
+    simpleTone(base * 1.5, 0.04, 'triangle', 0.012 + n * 0.006, -20, 0.012);
+    if (n > 0.55) noiseBurst(0.04, 0.012 + n * 0.01, 1050);
   }
   function alignmentSound() {
     const n = nearFactor();
-    if (n < 0.45) return;
+    if (n < 0.42) return;
     const now = performance.now();
-    if (now - lastAudioAt < 90) return;
+    if (now - lastAudioAt < 72) return;
     lastAudioAt = now;
-    simpleTone(240 + n * 240, 0.08, 'triangle', 0.008 + n * 0.012, 18);
-    if (n > 0.72) noiseBurst(0.03, 0.004 + n * 0.008, 1400);
+    simpleTone(250 + n * 220, 0.05, 'square', 0.01 + n * 0.018, 24);
+    if (n > 0.7) noiseBurst(0.028, 0.004 + n * 0.009, 1350);
   }
   function laserSound() {
-    simpleTone(780 + Math.random() * 500, 0.18, 'sawtooth', 0.01, -500);
-    noiseBurst(0.08, 0.007, 1800);
+    simpleTone(980 + Math.random() * 260, 0.09, 'square', 0.03, -280);
+    simpleTone(620 + Math.random() * 180, 0.14, 'sawtooth', 0.02, -360, 0.018);
+    noiseBurst(0.06, 0.012, 1600);
   }
   function solveSound() {
-    simpleTone(280, 0.12, 'triangle', 0.03, 120, 0);
-    simpleTone(420, 0.16, 'triangle', 0.025, 180, 0.05);
-    simpleTone(620, 0.22, 'sine', 0.022, 240, 0.11);
+    simpleTone(320, 0.08, 'square', 0.035, 120, 0);
+    simpleTone(480, 0.09, 'square', 0.03, 160, 0.05);
+    simpleTone(720, 0.11, 'triangle', 0.028, 220, 0.11);
+    simpleTone(980, 0.16, 'sine', 0.02, 260, 0.16);
   }
 
   function resize() {
@@ -254,14 +262,14 @@
     const complexity = clamp(5 + Math.floor(level * 0.28), 5, 15);
     const layers = clamp(2 + Math.floor(level / 7), 2, 6);
     const seed = level * 9.127;
-    const span = level === 1 ? 1.15 : lerp(1.75, Math.PI * 1.02, phase01(level));
+    const span = level === 1 ? 1.92 : lerp(1.75, Math.PI * 1.02, phase01(level));
     const targetRx = (rand(seed + 3) * 2 - 1) * Math.PI;
     const targetRy = (rand(seed + 4) * 2 - 1) * Math.PI;
     const targetRz = (rand(seed + 5) * 2 - 1) * Math.PI;
     const startOffsetRx = (rand(seed + 31) > 0.5 ? 1 : -1) * span;
     const startOffsetRy = (rand(seed + 41) > 0.5 ? 1 : -1) * (span * 0.92);
     const startOffsetRz = (rand(seed + 51) > 0.5 ? 1 : -1) * (span * 0.78);
-    const depthSpan = level === 1 ? 0.55 : lerp(0.72, 1.05, phase01(level));
+    const depthSpan = level === 1 ? 0.82 : lerp(0.72, 1.05, phase01(level));
     const targetDepth = (rand(seed + 7) * 2 - 1) * lerp(0.1, 0.82, phase01(level));
     const startDepth = targetDepth + (rand(seed + 61) > 0.5 ? 1 : -1) * depthSpan;
     if (level === 1) {
@@ -269,10 +277,10 @@
         ...base,
         mode: 'ALIGNMENT',
         objective: 'Rotate the bright frame until it settles perfectly into the ghost geometry.',
-        help: 'Drag the puzzle to turn it in space. Use the sliders for careful correction. Judge by the sparks, tremor, and lock-in feeling.',
-        tolerance: 1.58,
-        depthTolerance: 1.35,
-        magnetRadius: 1.25,
+        help: 'Drag the puzzle to turn it in space. Use the sliders for careful correction and read the gate by eye: sparks, tremor, glow, and the final lock-in feel.',
+        tolerance: 0.54,
+        depthTolerance: 0.48,
+        magnetRadius: 0.36,
         shape: buildStarterShape(),
         rx: targetRx + startOffsetRx,
         ry: targetRy + startOffsetRy,
@@ -285,6 +293,7 @@
         solvedHold: 0,
         autoSpin: 0,
         worldSpin: 0.00007,
+        minSolveTime: 2600,
         tutorialVisibleBoost: 1,
       };
     }
@@ -292,7 +301,7 @@
       ...base,
       mode: 'ALIGNMENT',
       objective: 'Rotate the frame until the live lattice occupies the ghost shape exactly.',
-      help: 'Drag to rotate in space. Use the sliders only for fine control. The correct orientation starts deliberately far away.',
+      help: 'Drag to rotate in space. Use the sliders for fine correction only. Read the gate by eye and settle it deliberately into the ghost frame.',
       tolerance: clamp(1.18 - level * 0.0086, 0.075, 1.18),
       depthTolerance: clamp(1.16 - level * 0.0078, 0.11, 1.16),
       magnetRadius: lerp(0.92, 0.02, phase01(level)),
@@ -308,6 +317,7 @@
       solvedHold: 0,
       autoSpin: level > 18 ? 0.00065 + level * 0.000012 : 0,
       worldSpin: rotationSpeedForLevel(level),
+      minSolveTime: Math.max(800, 1500 - level * 6),
       tutorialVisibleBoost: 0,
     };
   }
@@ -785,7 +795,7 @@
       helpText.textContent = 'Phase 2: tap the core nodes. Match the target pulse count and pattern.';
       simpleTone(310, 0.12, 'triangle', 0.018, 80);
     }
-    const targetReached = (() => {
+    const targetReached = elapsed >= (state.minSolveTime || 0) / 1000 && (() => {
       if (state.mode === 'ALIGNMENT') return coherence > 0.992;
       if (state.mode === 'CIRCUIT') return coherence > 0.991;
       if (state.mode === 'CONSTELLATION') return coherence === 1;
@@ -901,7 +911,8 @@
   overlayButton.addEventListener('click', continueFlow);
 
   ['touchstart','touchmove','mousedown','pointerdown'].forEach(evt => {
-    document.getElementById('controls').addEventListener(evt, e => e.stopPropagation(), { passive: false });
+    document.getElementById('controls').addEventListener(evt, e => { unlockAudio(); e.stopPropagation(); }, { passive: false });
+    window.addEventListener(evt, unlockAudio, { passive: true });
   });
   window.addEventListener('resize', resize);
   resize();
@@ -909,7 +920,7 @@
   canvas.addEventListener('mousedown', e => onPointerDown(e.clientX, e.clientY));
   window.addEventListener('mousemove', e => onPointerMove(e.clientX, e.clientY));
   window.addEventListener('mouseup', onPointerUp);
-  canvas.addEventListener('touchstart', e => { const t = e.touches[0]; if (t) onPointerDown(t.clientX, t.clientY); }, { passive: true });
+  canvas.addEventListener('touchstart', e => { const t = e.touches[0]; if (t) onPointerDown(t.clientX, t.clientY); }, { passive: false });
   window.addEventListener('touchmove', e => { const t = e.touches[0]; if (t) onPointerMove(t.clientX, t.clientY); }, { passive: true });
   window.addEventListener('touchend', onPointerUp, { passive: true });
   canvas.addEventListener('wheel', e => {
