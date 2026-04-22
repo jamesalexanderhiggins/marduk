@@ -399,6 +399,80 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
   0%,100%{filter:blur(2px) drop-shadow(0 0 0px currentColor);opacity:0.18;}
   50%{filter:blur(1px) drop-shadow(0 0 20px currentColor) drop-shadow(0 0 50px currentColor);opacity:0.35;}}
 @keyframes objFlash{0%,88%,100%{opacity:0.14;}90%,96%{opacity:0.45;}}
+
+/* ── Emily forest path scene — three-layer parallax ─ */
+.ef-root{position:absolute;inset:0;overflow:hidden;background:#060010;}
+
+/* Layer 1: Background forest (deepest, least parallax) */
+.ef-bg{position:absolute;inset:-10%;width:120%;height:120%;
+  background-image:url('../images/emily-forest-bg.jpg');
+  background-size:cover;background-position:center 30%;
+  will-change:transform;}
+
+/* Layer 2: Midground tree trunks — multiply blend makes white transparent */
+.ef-mid{position:absolute;bottom:-5%;left:-10%;width:120%;height:auto;
+  min-height:55%;object-fit:cover;object-position:bottom;
+  mix-blend-mode:multiply;
+  pointer-events:none;will-change:transform;}
+
+/* Layer 3: Emily ghost — screen blend makes black transparent */
+.ef-ghost-wrap{position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-40%);
+  width:min(60vw,320px);pointer-events:none;
+  will-change:transform,opacity;}
+.ef-ghost-wrap img{width:100%;height:auto;
+  mix-blend-mode:screen;
+  filter:drop-shadow(0 0 22px rgba(120,80,255,0.8)) drop-shadow(0 0 55px rgba(80,40,200,0.5));}
+
+/* Ghost animations */
+@keyframes efGhostFloat{
+  0%,100%{transform:translate(-50%,-40%) translateY(0);}
+  50%{transform:translate(-50%,-40%) translateY(-14px);}}
+@keyframes efGhostFlash{
+  0%,75%,100%{opacity:var(--ghost-base,0.6);}
+  78%{opacity:1;}
+  80%{opacity:0.35;}
+  82%{opacity:0.95;}
+  84%{opacity:var(--ghost-base,0.6);}}
+@keyframes efGhostFade{
+  0%{opacity:0;transform:translate(-50%,-42%) scale(0.94);}
+  100%{opacity:var(--ghost-base,0.6);transform:translate(-50%,-40%) scale(1);}}
+
+/* Atmospheric overlays */
+.ef-vign{position:absolute;inset:0;pointer-events:none;z-index:5;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 5%,rgba(70,15,130,0.45) 0%,transparent 60%),
+    linear-gradient(to bottom,rgba(0,0,0,0.65) 0%,transparent 35%,transparent 60%,rgba(4,0,14,0.75) 100%);}
+.ef-glow{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);
+  width:60%;padding-top:60%;border-radius:50%;z-index:4;pointer-events:none;
+  background:radial-gradient(ellipse,rgba(100,40,220,0.2) 0%,transparent 65%);
+  animation:efGlowBreath 5s ease-in-out infinite;}
+@keyframes efGlowBreath{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.6;}
+  50%{transform:translate(-50%,-50%) scale(1.22);opacity:1;}}
+
+/* Mist particles */
+.ef-mist{position:absolute;inset:0;pointer-events:none;z-index:6;}
+.ef-particle{position:absolute;border-radius:50%;
+  background:radial-gradient(circle,rgba(140,60,240,0.55),transparent 70%);
+  animation:efFloat linear infinite;}
+@keyframes efFloat{
+  0%{transform:translateY(0) translateX(0);opacity:0;}
+  12%{opacity:1;}88%{opacity:0.3;}
+  100%{transform:translateY(var(--dy)) translateX(var(--dx));opacity:0;}}
+
+/* Content panel */
+.ef-panel{position:absolute;bottom:0;left:0;right:0;z-index:10;
+  padding:28px 24px 44px;
+  background:linear-gradient(to top,rgba(4,0,16,0.95) 0%,rgba(4,0,16,0.75) 50%,transparent 100%);
+  text-align:center;}
+.ef-step{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.5em;
+  text-transform:uppercase;color:rgba(150,70,255,0.6);margin-bottom:5px;}
+.ef-title{font-family:'Cinzel Decorative',serif;font-size:clamp(15px,2.8vw,26px);
+  color:#c084fc;text-shadow:0 0 20px rgba(192,132,252,0.9);margin-bottom:8px;}
+.ef-lore{font-family:'EB Garamond',serif;font-size:clamp(13px,1.7vw,16px);
+  font-style:italic;color:rgba(210,185,255,0.72);line-height:1.7;
+  max-width:460px;margin:0 auto;}
 </style>
 </head>
 <body>
@@ -863,6 +937,7 @@ function render(x, y) {
   const prevStage = document.getElementById('stage');
   if (prevStage && prevStage._hsCleanup) { prevStage._hsCleanup(); prevStage._hsCleanup = null; }
   detachTileParallax();
+  detachEmilyParallax();
 
   // Lock only applies to the quiz corridor: threshold → quiz tiles → spine.
   // marduk_view is excluded — KUDRAMARDUK routes there directly and must bypass.
@@ -925,7 +1000,11 @@ function render(x, y) {
     }
   }
   else if (tile.on_path && tile.on_path.length > 0) {
-    if (tile.theme) {
+    if (tile.on_path.includes('A') && !tile.on_path.some(p => p !== 'A')) {
+      // Path A (Emily) — immersive forest scene
+      detachTileParallax();
+      renderEmilyPath(s, x, y, tile);
+    } else if (tile.theme) {
       detachTileParallax();
       renderTile(s, x, y, tile);  // themed path tile
     } else if (!tile.name) {
@@ -956,6 +1035,181 @@ function render(x, y) {
     if (q.tier === 3) addOverlay('grid-ov');
     if (q.fx === 'matrix') addOverlay('scan-ov');
   }
+}
+
+
+/* ══════════════════════════════════════════════════
+ *  EMILY'S PATH — three-layer immersive scene
+ *  Layer 1: Background forest (bg, least parallax)
+ *  Layer 2: Midground tree trunks (multiply blend, mid parallax)
+ *  Layer 3: Emily ghost (screen blend, float + flash, some tiles)
+ *  Parallax: mouse on desktop, gyro on iPad
+ * ═════════════════════════════════════════════════*/
+
+const PATH_A_SEQ = [[0,0],[0,-1],[-1,-1],[-1,-2],[-2,-2],[-2,-3],[-3,-3],[-3,-4],
+  [-4,-4],[-4,-5],[-5,-5],[-5,-6],[-6,-6],[-6,-7],[-7,-7],[-7,-8],
+  [-8,-8],[-8,-9],[-9,-9],[-9,-10],[-10,-10],[-10,-11],[-10,-12],[-10,-13]];
+
+// Steps where Emily's ghost appears (0-indexed, 24 steps total)
+const EMILY_GHOST_STEPS = new Set([2, 5, 9, 13, 17, 20]);
+
+let emilyParallaxRaf = null;
+let emilyMouseHandler = null;
+let emilyGyroHandler  = null;
+let emilyTarget  = {x:0, y:0};
+let emilyCurrent = {x:0, y:0};
+
+function detachEmilyParallax() {
+  if (emilyParallaxRaf)  { cancelAnimationFrame(emilyParallaxRaf); emilyParallaxRaf = null; }
+  if (emilyMouseHandler) { document.removeEventListener('mousemove', emilyMouseHandler); emilyMouseHandler = null; }
+  if (emilyGyroHandler)  { window.removeEventListener('deviceorientation', emilyGyroHandler); emilyGyroHandler = null; }
+}
+
+function renderEmilyPath(s, x, y, tile) {
+  detachEmilyParallax();
+  if (particleInterval) clearInterval(particleInterval);
+  document.getElementById('particles').innerHTML = '';
+
+  const step     = (tile.path_step && tile.path_step['A'] != null) ? tile.path_step['A'] : 0;
+  const total    = PATH_A_SEQ.length; // 24
+  const progress = step / (total - 1);
+  const showGhost = EMILY_GHOST_STEPS.has(step);
+
+  // Background pan: drift left+down as you go deeper
+  const bgPanX = -(progress * 6);
+  const bgPanY = -(progress * 4);
+
+  const stepLabel = step === 0          ? 'Entering the Forest'
+                  : step === total - 1  ? 'House of Emily · At the Threshold'
+                  : `The Forest Path · Step ${step + 1} of ${total}`;
+  const tileTitle = tile.name  || '';
+  const tileLore  = tile.lore  || '';
+  const tileHint  = tile.hint  || '';
+
+  // Ghost animation params — vary per appearance to feel organic
+  const ghostBase  = 0.55 + Math.sin(step) * 0.1;
+  const ghostDelay = (step % 3) * 0.8;
+
+  s.innerHTML = `
+    <div class="ef-root" id="efRoot">
+
+      <!-- Layer 1: Background forest (parallax via JS) -->
+      <div class="ef-bg" id="efBg"
+           style="transform:translate(${bgPanX}%,${bgPanY}%);"></div>
+
+      <!-- Layer 2: Midground tree trunks (multiply = white transparent) -->
+      <img class="ef-mid" id="efMid"
+           src="../images/emily-forest-mid.png"
+           alt="" draggable="false">
+
+      <!-- Layer 3: Emily ghost (screen blend = dark transparent) -->
+      ${showGhost ? `
+      <div class="ef-ghost-wrap" id="efGhost"
+           style="--ghost-base:${ghostBase};
+                  opacity:0;
+                  animation:
+                    efGhostFade 1.8s ${ghostDelay}s ease both,
+                    efGhostFloat ${4.5 + step % 3 * 0.7}s ${ghostDelay + 1.8}s ease-in-out infinite,
+                    efGhostFlash ${7 + step % 4}s ${ghostDelay + 3}s ease-in-out infinite;">
+        <img src="../images/emily-ghost.png" alt="Emily" draggable="false">
+      </div>` : ''}
+
+      <!-- Glow / vignette -->
+      <div class="ef-glow"></div>
+      <div class="ef-vign"></div>
+
+      <!-- Mist particles -->
+      <div class="ef-mist" id="efMist"></div>
+
+      <!-- Content panel -->
+      <div class="ef-panel">
+        <div class="ef-step">${stepLabel}</div>
+        ${tileTitle ? `<div class="ef-title">${tileTitle}</div>` : ''}
+        ${tileLore  ? `<div class="ef-lore">${tileLore}</div>`   : ''}
+        ${tileHint  ? `<div class="ef-lore" style="margin-top:6px;font-size:0.88em;opacity:0.6;">· ${tileHint} ·</div>` : ''}
+      </div>
+    </div>`;
+
+  document.body.style.background = '#050010';
+
+  // Sparse purple starfield — canopy light
+  initStars({count: 28, color: '130,60,210', speed: 0.003});
+
+  // Mist particles
+  const mist = document.getElementById('efMist');
+  if (mist) {
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'ef-particle';
+      const sz = 35 + Math.random() * 110;
+      p.style.cssText = [
+        `width:${sz}px`, `height:${sz}px`,
+        `left:${Math.random()*110-5}%`,
+        `top:${55 + Math.random()*50}%`,
+        `--dy:${-(55 + Math.random()*75)}px`,
+        `--dx:${(Math.random()-0.5)*45}px`,
+        `animation-duration:${9 + Math.random()*13}s`,
+        `animation-delay:-${Math.random()*15}s`,
+      ].join(';');
+      mist.appendChild(p);
+    }
+  }
+
+  // Parallax
+  attachEmilyParallax(bgPanX, bgPanY);
+}
+
+function attachEmilyParallax(basePanX, basePanY) {
+  const MAX_BG  = 3.2;   // % bg travel per unit tilt
+  const MAX_MID = 6.8;   // midground moves more (closer)
+  const MAX_GHOST = 4.5; // ghost: mid-depth parallax
+
+  function apply() {
+    const bg    = document.getElementById('efBg');
+    const mid   = document.getElementById('efMid');
+    const ghost = document.getElementById('efGhost');
+    if (!bg) { detachEmilyParallax(); return; }
+    const tx = emilyCurrent.x, ty = emilyCurrent.y;
+    bg.style.transform    = `translate(${basePanX + tx*MAX_BG}%, ${basePanY + ty*MAX_BG}%)`;
+    if (mid)   mid.style.transform   = `translate(${tx*MAX_MID}%, ${ty*MAX_MID*0.5}%)`;
+    if (ghost) {
+      // Keep ghost's CSS animation transform; add translate via margin
+      ghost.style.marginLeft = `${tx * MAX_GHOST * 8}px`;
+      ghost.style.marginTop  = `${ty * MAX_GHOST * 5}px`;
+    }
+  }
+
+  emilyMouseHandler = ev => {
+    emilyTarget.x = (ev.clientX / window.innerWidth  - 0.5) * 2;
+    emilyTarget.y = (ev.clientY / window.innerHeight - 0.5) * 2;
+  };
+  document.addEventListener('mousemove', emilyMouseHandler);
+
+  const setupGyro = () => {
+    emilyGyroHandler = ev => {
+      emilyTarget.x = Math.max(-1, Math.min(1,  (ev.gamma||0) / 22));
+      emilyTarget.y = Math.max(-1, Math.min(1, -(ev.beta ||0) / 35));
+    };
+    window.addEventListener('deviceorientation', emilyGyroHandler);
+  };
+  if (typeof DeviceOrientationEvent !== 'undefined') {
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      document.addEventListener('touchstart', () => {
+        DeviceOrientationEvent.requestPermission()
+          .then(s => { if (s === 'granted') setupGyro(); });
+      }, {once: true});
+    } else {
+      setupGyro();
+    }
+  }
+
+  function loop() {
+    emilyParallaxRaf = requestAnimationFrame(loop);
+    emilyCurrent.x += (emilyTarget.x - emilyCurrent.x) * 0.05;
+    emilyCurrent.y += (emilyTarget.y - emilyCurrent.y) * 0.05;
+    apply();
+  }
+  loop();
 }
 
 function renderEmpty(s, x, y, tile) {
@@ -1153,6 +1407,7 @@ function advanceFromQuiz(qid) {
   } else {
     // All ten done — unlock and funnel into the Spine
     unlockMV();
+    updateMapBtn();
     goTo(0, 2);
   }
 }
@@ -2127,7 +2382,8 @@ document.addEventListener('keydown', (ev) => {
 function updateMapBtn() {
   const btn = document.getElementById('mapBtn');
   if (!btn) return;
-  btn.classList.toggle('show', isKudraUnlocked());
+  // Show MAP when Marduk View is unlocked (quiz completed OR kudramarduk)
+  btn.classList.toggle('show', isMVUnlocked() || isKudraUnlocked());
 }
 
 document.getElementById('mapBtn').addEventListener('click', () => {
