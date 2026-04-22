@@ -549,7 +549,7 @@ body.kudra-active #stage{padding-top:110px;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v6.0
+ *  MARDUK'S MAP — /realm/  grid SPA  v6.1
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -985,7 +985,7 @@ function render(x, y) {
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v6.0';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v6.1';
 
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
@@ -1589,7 +1589,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v6.0)
+ *  MARDUK VIEW — game-like map (v6.1)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -1806,43 +1806,61 @@ function setupMVCanvas() {
         };
         const _ppid   = isOnPath ? tile.on_path.find(p => PATH_DISPLAY_COLORS[p]) : null;
         const pathHex = _ppid ? PATH_DISPLAY_COLORS[_ppid] : null;
-        // Pure path tile = on a path but NOT a house tile
-        const isPurePath = isOnPath && !isHouse;
-        // Visibility rules:
-        //   pre-quiz    → only visited tiles lit (map dark, slowly revealed)
-        //   post-quiz   → everything lit EXCEPT unvisited pure path tiles
-        //   kudramarduk → everything lit including unvisited paths
+        // Path tile: any tile on a path (except home/MV). Paths prioritise over houses.
+        const isPurePath = isOnPath && tile.type !== 'home' && tile.type !== 'marduk_view';
+        // Empty transit tile — no name, no content, no house, no path, no zone
+        const isEmptyTransit = tile.type === 'empty' && !tile.name && !tile.lore
+          && !isHouse && !tile.zone_id && !isOnPath;
+
+        // ── Three-state visibility ──────────────────────────────────────
+        // preQuiz  : ONLY tiles the user has walked to show any colour.
+        //            Everything else is pure black — invisible edge, no grid implied.
+        // postQuiz : House/zone/special tiles reveal colour (even unvisited).
+        //            Visited tiles of ANY type also remain lit.
+        //            Empty transit + ALL path tiles stay pure black.
+        // kudra    : Everything shows including path colours.
         const preQuiz  = !isMVUnlocked() && !isKudraUnlocked();
-        const postQuiz = isMVUnlocked() && !isKudraUnlocked();
-        const showFull = isKudraUnlocked()
-          || isVisited || isHome || isMV
-          || (postQuiz && !isPurePath);
+        const postQuiz = isMVUnlocked()  && !isKudraUnlocked();
+        const kudra    = isKudraUnlocked();
+
+        // Tiles that post-quiz reveals even if not visited
+        const isContentReveal = (isHouse || isFrontDoor)
+          && !isPurePath; // house tiles that aren't also path tiles
+
+        const showFull = kudra                                    // K: everything
+          || isVisited                                           // always: what you walked
+          || (postQuiz && isContentReveal);                      // post-quiz: houses only
+
         const isSelected  = selKey === `${x},${y}`;
 
-        // Base styling
-        let fill = 'rgba(10,14,22,0.55)';
-        let stroke = 'rgba(201,168,76,0.08)';
-        let lineW = 1;
+        // ── Base: everything starts as pure black ──────────────────────
+        let fill   = 'rgba(4,2,12,0.98)';
+        let stroke = 'rgba(18,14,30,0.18)';
+        let lineW  = 0.4;
         let rimColor = null;
 
         if (!showFull) {
-          // Unvisited / unrevealed: dark, featureless
-          fill = 'rgba(8,6,16,0.92)'; stroke = 'rgba(60,50,80,0.2)'; lineW = 0.5;
+          // Pure black — no stroke, no hex outline. Indistinguishable from paths.
+          fill = 'rgba(0,0,0,1)'; stroke = 'rgba(0,0,0,0)'; lineW = 0;
         } else if (isHome)  { fill = 'rgba(232,201,110,0.55)'; stroke = '#e8c96e'; lineW = 2.8; rimColor = 'rgba(232,201,110,0.8)'; }
         else if (isMV)      { fill = 'rgba(232,201,110,0.32)'; stroke = '#c9a84c'; lineW = 2.2; rimColor = 'rgba(232,201,110,0.55)'; }
+        // ── PATHS: only in kudra; otherwise black (even if visited) ────
+        else if (isPurePath && kudra && pathHex) {
+          fill = pathHex + '35'; stroke = pathHex + 'EE'; lineW = 2.2;
+          rimColor = pathHex + '99';
+        }
+        else if (isPurePath && isVisited && !kudra) {
+          // Visited path — shows you went there, but no path colour revealed
+          fill = 'rgba(40,32,58,0.80)'; stroke = 'rgba(90,70,120,0.30)'; lineW = 0.5;
+        }
+        // ── HOUSES ──────────────────────────────────────────────────────
         else if (isFrontDoor && houseHex) {
-          // Front door glows with its house colour
           fill = houseHex + '44'; stroke = houseHex; lineW = 2.8; rimColor = houseHex + 'AA';
         }
         else if (isHouse && houseHex) {
-          // Interior house tile — tinted in house colour
           fill = houseHex + '28'; stroke = houseHex + '88'; lineW = 1.4;
         }
-        else if (isPurePath && pathHex) {
-          // Path tile — distinct dim colour, clearly different from houses
-          fill = pathHex + '28'; stroke = pathHex + 'BB'; lineW = 1.6;
-          if (isVisited) { fill = pathHex + '45'; stroke = pathHex + 'EE'; lineW = 2.0; }
-        }
+        // ── QUIZ / ZONE / SPECIAL ────────────────────────────────────────
         else if (isCorrectQ){ fill = 'rgba(232,201,110,0.24)'; stroke = '#e8c96e'; lineW = 1.8; rimColor = 'rgba(232,201,110,0.4)'; }
         else if (isQuiz)    { fill = 'rgba(126,184,212,0.14)'; stroke = 'rgba(126,184,212,0.42)'; lineW = 1.4; }
         else if (tile.zone_id) {
@@ -1859,7 +1877,6 @@ function setupMVCanvas() {
           }
         }
         else if (tile.marduk_eye) {
-          // Eye of Hermes — golden-white, strongly pulsing
           const eyePulse = 0.5 + 0.5*Math.sin(now*0.004);
           fill = `rgba(255,240,180,${0.12+eyePulse*0.18})`; stroke = '#D4AF37'; lineW = 2.5;
           rimColor = `rgba(212,175,55,${0.6+eyePulse*0.4})`;
@@ -1867,8 +1884,12 @@ function setupMVCanvas() {
         else if (tile.type === 'special') {
           fill = 'rgba(180,180,200,0.12)'; stroke = 'rgba(200,200,220,0.5)'; lineW = 1.6; rimColor = 'rgba(200,200,220,0.4)';
         }
-        else if (isVisited) { fill = 'rgba(201,168,76,0.11)'; stroke = 'rgba(126,184,212,0.3)'; lineW = 1.1; }
-        else if (hasContent){ fill = 'rgba(13,17,25,0.75)';   stroke = 'rgba(201,168,76,0.22)'; lineW = 1; }
+        else if (isVisited) {
+          // Visited empty/content tile (no house, no path): faint gold trace
+          fill = 'rgba(201,168,76,0.10)'; stroke = 'rgba(201,168,76,0.25)'; lineW = 0.8;
+        }
+        // All other cases (unvisited empty/content in kudra): very dark, grid just faintly visible
+        // (falls through to base fill set above)
 
         // Radial inner gradient fill for a "shine"
         drawHex(ctx, px, py, r * 0.94);
@@ -2159,17 +2180,34 @@ function setupMVCanvas() {
       && mvSelected.x === tile.x && mvSelected.y === tile.y;
 
     if (!alreadySelected) {
-      // FIRST TAP — check visibility
-      const p2 = getP();
+      // FIRST TAP — determine if tile is interactable
+      const p2   = getP();
       const vis2 = new Set(p2.visited||[]);
-      const preQ2 = !isMVUnlocked() && !isKudraUnlocked();
-      const tileVisible = !preQ2 || vis2.has(`${tile.x},${tile.y}`)
-                          || tile.x===0&&tile.y===0 || tile.info.type==='marduk_view';
-      if (!tileVisible) {
-        // Unvisited pre-quiz: just show "undiscovered" hint
+      const kudra2   = isKudraUnlocked();
+      const postQ2   = isMVUnlocked() && !kudra2;
+      const preQ2    = !isMVUnlocked() && !kudra2;
+      const info2    = tile.info;
+      const isHouse2 = !!(info2.house_id);
+      const isPath2  = !!(info2.on_path && info2.on_path.length > 0
+                         && info2.type !== 'home' && info2.type !== 'marduk_view');
+      const isEmpty2 = info2.type === 'empty' && !info2.name && !info2.lore
+                       && !isHouse2 && !info2.zone_id && !isPath2;
+      const isVisited2 = vis2.has(`${tile.x},${tile.y}`)
+                         || (tile.x===0&&tile.y===0);
+
+      // Is this tile revealed/interactable in the current state?
+      // Mirrors the showFull logic in the MV draw exactly.
+      const isContentReveal2 = (isHouse2 || info2.type === 'house_front_door') && !isPath2;
+
+      const tileInteractable = kudra2
+        || isVisited2
+        || (postQ2 && isContentReveal2);
+
+      if (!tileInteractable) {
+        // Not yet revealed — show nothing
         const hov2 = document.getElementById('mvHover');
-        if (hov2) hov2.textContent = 'Undiscovered — explore on foot to reveal';
-        return; // no selection
+        if (hov2) hov2.textContent = '';
+        return;
       }
       mvSelected = {x: tile.x, y: tile.y};
       hideInfoPanel();
@@ -2417,8 +2455,17 @@ function travelFromMV(x, y) {
   const vis3 = new Set(p3.visited||[]);
 
   if (!kudra) {
-    // Pre-quiz: can only travel to visited tiles
-    if (!mvDone && !vis3.has(`${x},${y}`) && !(x===0&&y===0)) return;
+    // Pre-quiz: ONLY visited tiles. No exceptions.
+    if (!mvDone) {
+      if (!vis3.has(`${x},${y}`) && !(x===0&&y===0)) return;
+    }
+    // Post-quiz: house tiles (even unvisited) + visited tiles.
+    // Everything else (empty transit, paths, zones, etc.) requires prior visit.
+    if (mvDone) {
+      const isHouseT3 = !!(info.house_id) && !(info.on_path && info.on_path.length);
+      const isVisited3 = vis3.has(`${x},${y}`) || (x===0&&y===0);
+      if (!isHouseT3 && !isVisited3) return;
+    }
     // MV tile: needs unlock
     if (info.type === 'marduk_view' && !mvDone) return;
     // Quiz gating
