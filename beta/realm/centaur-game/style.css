@@ -1,0 +1,32 @@
+body {
+  margin:0;
+  background:black;
+  overflow:hidden;
+}
+
+canvas {
+  display:block;
+  margin:auto;
+  width:100vw;
+  height:100vh;
+  image-rendering: pixelated;
+}
+
+#ui {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  pointer-events: none;
+}
+
+button {
+  pointer-events: all;
+  font-size: 22px;
+  padding: 10px 20px;
+  opacity: 0.25;
+  background: black;
+  color: white;
+  border: 1px solid #666;
+}
