@@ -1,4 +1,106 @@
-# Marduk's Map — v4.2 Informational Realm
+# Marduk's Map — v6.8
+
+A web-based literary maze, map, and sanctum built around the novels of James Alexander Higgins (The Ghosts of Men trilogy, and the wider Mardukverse).
+
+## Directory structure
+
+```
+/                               ← deploy as jamesalexanderhiggins.github.io/marduk
+├── index.html                  ← scrolling homepage (front door)
+└── realm/
+    ├── index.html              ← grid SPA (33×33 tiles, hash-routed)
+    ├── realm.json              ← all tile content, questions, paths
+    ├── images/                 ← path scene assets
+    │   ├── emily-forest-bg.jpg
+    │   ├── emily-forest-mid.png
+    │   └── emily-ghost.png
+    └── music/                  ← ambient score (MP3s — not included in zip)
+        ├── emily_path_music_1.mp3
+        ├── emily_path_music_2.mp3
+        ├── eli_house_music.mp3
+        ├── eli_path_music.mp3
+        ├── house_threshold_music.mp3
+        ├── melchizedek_path_music.mp3
+        ├── low_stress_major.mp3
+        ├── low_stress_minor.mp3
+        ├── quiz_stress_music.mp3
+        └── high_stress_music.mp3
+```
+
+## Music setup
+
+Place the 10 MP3 files into `realm/music/` before deploying. The engine will
+load them automatically. If a file is absent, that zone plays silently.
+
+**Zone → track mapping:**
+
+| Zone | Track |
+|---|---|
+| Emily path steps 0–11 (forest edge, Stage 1–2) | `emily_path_music_1` |
+| Emily path steps 12–23 (dark wood + facility, Stage 3–4) | `emily_path_music_2` |
+| Path E (Eve/Crimson) | `eli_path_music` |
+| House E interior (Eve) | `eli_house_music` |
+| Any house front door / zone threshold | `house_threshold_music` |
+| Path D (Jeremy/Melchizedek/Ice) | `melchizedek_path_music` |
+| Quiz tiles | `quiz_stress_music` |
+| Paths C, G, H, B | `low_stress_minor` |
+| Home, Path F, Path M, general exploration | `low_stress_major` |
+
+Tracks crossfade over 2.2 seconds between zones. A **♪ MUSIC** button in the
+top navigation bar toggles mute; preference is persisted in localStorage.
+Autoplay unlocks on the first user interaction (tap, click, or keypress).
+
+## Deployment
+
+Replace the existing contents of your `jamesalexanderhiggins/marduk` GitHub
+repo with these files (preserving any other assets the homepage references).
+GitHub Pages will serve it at the usual URL without configuration changes.
+
+## v6.8 changes
+
+- **Music engine** — zone-aware ambient score, two-element crossfade, mute
+  toggle, autoplay-policy-safe
+- **Emily path text** — panel raised and enlarged for legibility on iPad;
+  lore font increased, gradient extended higher up the screen
+- **Emily ghost system** — four-stage escalation matching Design v1 schematic:
+  - Stage 1 (steps 0–5): no ghosts — warm amber forest, text and choice
+  - Stage 2 (steps 6–11): sparse ghosts at the edge of perception
+  - Stage 3 (steps 12–17): frequent, closer — dark wood
+  - Stage 4 (steps 18–23): erratic, aggressive — the facility threshold
+- **Ghost step set updated** — EMILY_GHOST_STEPS aligned to schematic stages
+
+## Local preview
+
+No build step. To preview locally:
+
+```bash
+cd path/to/this/folder
+python3 -m http.server 8000
+```
+
+Then visit `http://localhost:8000`.
+
+## Resetting progress
+
+```js
+localStorage.removeItem('marduk_realm');
+location.reload();
+```
+
+## Keyboard cheat-sheet
+
+| Key | Action |
+|---|---|
+| Arrow keys / WASD | Move in cardinal directions |
+| Type `MARDUK` on homepage | Open the Threshold (quiz entry) |
+| Type `KUDRAMARDUK` on any page | Unlock author-private Marduk View |
+| `Esc` in Marduk View | Close and return to centre |
+| Click ⁂ asterism on any tile | Return to the centre tile (0, 0) |
+
+## Version
+
+v6.8.0 · 22 April 2026
+
 
 A web-based literary maze, map, and sanctum built around the novels of James Alexander Higgins (The Ghosts of Men trilogy, and the wider Mardukverse).
 
