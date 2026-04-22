@@ -2,67 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Vector Mask Lock</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div id="app">
-    <canvas id="gameCanvas" aria-label="Vector Mask Lock"></canvas>
+    <canvas id="gameCanvas" aria-label="Vector mask puzzle"></canvas>
 
-    <div id="hud" class="glass">
-      <div class="hud-col left">
-        <div class="eyebrow">VECTOR MASK LOCK</div>
-        <div class="title-row">
-          <div id="levelLabel">LEVEL 1</div>
-          <div id="bandLabel">ASCENT</div>
-          <div id="modeLabel">ALIGNMENT</div>
-        </div>
-        <div id="objectiveLabel">Rotate the gate into phase.</div>
-        <div id="storyLabel">The machine wakes and waits for calibration.</div>
-      </div>
-      <div class="hud-col right">
-        <div class="metric timer">
-          <div class="metric-label">TIME LEFT</div>
-          <div id="timerLabel">60.0s</div>
-        </div>
-        <div class="metric secondary">
-          <div class="metric-label">RUN</div>
-          <div id="runLabel">1 / 100</div>
-        </div>
-        <button id="soundButton" class="sound-button" type="button" aria-label="Enable sound">SOUND OFF</button>
-      </div>
+    <div id="leftRail" class="rail">
+      <button id="soundButton" class="iconButton" aria-label="Enable sound" title="Sound">
+        <span class="speaker">
+          <span class="speaker-body"></span>
+          <span class="speaker-wave wave1"></span>
+          <span class="speaker-wave wave2"></span>
+        </span>
+      </button>
+      <input id="sliderX" class="vslider red" type="range" min="-100" max="100" value="0" aria-label="Tilt" />
+      <input id="sliderY" class="vslider green" type="range" min="-100" max="100" value="0" aria-label="Swivel" />
+      <input id="sliderZ" class="vslider blue" type="range" min="-100" max="100" value="0" aria-label="Roll" />
     </div>
 
-    <div id="help" class="glass">
-      <div id="helpText">Drag to rotate. Use the on-screen sliders for precise control.</div>
+    <div id="rightRail" class="rail rightRail">
+      <input id="zoomSlider" class="vslider zoom" type="range" min="50" max="180" value="100" aria-label="Zoom" />
     </div>
 
-    <div id="controls" class="glass">
-      <div class="controls-title">PRECISION CONTROLS</div>
-      <div class="control-grid">
-        <label><strong>TILT</strong><input id="sliderX" type="range" min="-100" max="100" value="0" /><span class="control-value" id="valueX">0</span></label>
-        <label><strong>SWIVEL</strong><input id="sliderY" type="range" min="-100" max="100" value="0" /><span class="control-value" id="valueY">0</span></label>
-        <label><strong>ROLL</strong><input id="sliderZ" type="range" min="-100" max="100" value="0" /><span class="control-value" id="valueZ">0</span></label>
-        <label><strong>DEPTH</strong><input id="sliderDepth" type="range" min="-100" max="100" value="0" /><span class="control-value" id="valueDepth">0</span></label>
-      </div>
-      <div class="controls-hint">Touch or drag the bright handles for precise adjustment. Read the mask by eye: sound, sparks, tremor, glow, and lock-in tell you when alignment is closing.</div>
-    </div>
+    <div id="versionMarker">v17</div>
 
-    <div id="audioPrompt" class="glass">TAP FOR SOUND</div>
-
-    <div id="versionMarker">v16</div>
-
-    <div id="overlay" class="hidden">
-      <div class="overlay-panel glass">
-        <div class="eyebrow">SEQUENCE STABLE</div>
-        <h1 id="overlayTitle">Level cleared</h1>
-        <p id="overlayText">Continue deeper into the gate.</p>
-        <button id="overlayButton">Continue</button>
-      </div>
+    <div id="overlay" class="hidden" aria-hidden="true">
+      <button id="overlayButton" class="overlayButton" aria-label="Continue"></button>
     </div>
   </div>
-
   <script src="game.js"></script>
 </body>
 </html>
