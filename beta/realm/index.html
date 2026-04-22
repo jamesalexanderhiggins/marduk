@@ -538,7 +538,7 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v5.1
+ *  MARDUK'S MAP — /realm/  grid SPA  v5.4
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -980,7 +980,7 @@ function render(x, y) {
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v5.1';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v5.4';
 
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
@@ -1503,8 +1503,74 @@ function renderNavArrows(x, y) {
   });
 }
 
+
+/* ── Deterministic coordinate shape for MV tiles ────
+ * Each (x,y) produces a unique irregular polygon.
+ * No emoji — pure geometry, consistent cross-platform.
+ * ─────────────────────────────────────────────────── */
+function tileHash(x, y) {
+  // Stable integer hash from coordinate pair
+  let h = Math.imul(x + 16, 73856093) ^ Math.imul(y + 16, 19349663);
+  h = Math.imul((h >>> 16) ^ h, 0x45d9f3b);
+  h = Math.imul((h >>> 16) ^ h, 0x45d9f3b);
+  h = (h >>> 16) ^ h;
+  return h;
+}
+
+function seededR(hash, i) {
+  let h = hash ^ Math.imul(i, 2246822519);
+  h = Math.imul((h >>> 16) ^ h, 0x45d9f3b);
+  h = (h >>> 16) ^ h;
+  return ((h >>> 0) & 0x7fffffff) / 0x7fffffff;
+}
+
+function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
+  const h     = tileHash(x, y);
+  // 3–6 vertices depending on hash
+  const nVerts = 3 + (Math.abs(h) % 4);
+  const rot    = seededR(h, 0) * Math.PI * 2;
+  // Whether to use star (inner+outer) or simple polygon
+  const isStar = seededR(h, 99) > 0.45;
+  const innerR = isStar ? (0.28 + seededR(h, 1) * 0.28) : 0;
+
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = color;
+  ctx.lineWidth   = 1.2;
+  ctx.lineJoin    = 'round';
+  ctx.shadowColor = color;
+  ctx.shadowBlur  = 5;
+
+  ctx.beginPath();
+  const total = isStar ? nVerts * 2 : nVerts;
+  for (let i = 0; i < total; i++) {
+    const baseAngle = rot + (i * Math.PI * 2) / total;
+    // Small per-vertex angle jitter makes it organic not mechanical
+    const jitter = (seededR(h, i * 5 + 2) - 0.5) * (Math.PI / total) * 0.55;
+    const angle  = baseAngle + jitter;
+    // Alternate inner/outer for star, vary radius for polygon
+    let vr;
+    if (isStar) {
+      vr = i % 2 === 0 ? r : r * innerR;
+    } else {
+      vr = r * (0.65 + seededR(h, i * 5 + 3) * 0.35);
+    }
+    if (i === 0) ctx.moveTo(cx + Math.cos(angle) * vr, cy + Math.sin(angle) * vr);
+    else         ctx.lineTo(cx + Math.cos(angle) * vr, cy + Math.sin(angle) * vr);
+  }
+  ctx.closePath();
+
+  // Fill very faint, stroke visible
+  ctx.fillStyle = color;
+  ctx.globalAlpha = alpha * 0.12;
+  ctx.fill();
+  ctx.globalAlpha = alpha;
+  ctx.stroke();
+  ctx.restore();
+}
+
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v5.1)
+ *  MARDUK VIEW — game-like map (v5.4)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -2032,8 +2098,11 @@ function setupMVCanvas() {
       hideInfoPanel();
       // show footer hint
       const hov = document.getElementById('mvHover');
-      if (hov) hov.textContent =
-        `${tile.info.emoji||'·'}  ${tile.info.name||'empty'}  — tap again to open info`;
+      if (hov) {
+        const cx_ = tile.x>=0 ? `+${tile.x}` : `${tile.x}`;
+        const cy_ = tile.y>=0 ? `+${tile.y}` : `${tile.y}`;
+        hov.textContent = `(${cx_},${cy_})${tile.info.name ? '  ·  ' + tile.info.name : '  ·  empty'}  — tap again to open`;
+      }
       return;
     }
 
@@ -2175,9 +2244,8 @@ function showInfoPanel(tileRef) {
   const panel = document.getElementById('mvInfo');
   const p = getP();
   const visitedSet = new Set(p.visited || []);
-  const titleText = info.name
-    ? `${info.emoji ? info.emoji + '  ' : ''}${info.name}`
-    : 'An empty tile';
+  // Title: name only — no emoji (emoji varies cross-platform)
+  const titleText = info.name || 'An empty tile';
 
   const tags = [];
   if (visitedSet.has(`${x},${y}`)) tags.push('Visited');
