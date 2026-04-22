@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vector Gate Journey v4</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="gameCanvas" aria-label="Vector Gate Journey"></canvas>
+
+    <div id="hud" class="glass">
+      <div class="hud-col left">
+        <div class="eyebrow">VECTOR GATE JOURNEY</div>
+        <div class="title-row">
+          <div id="levelLabel">LEVEL 1</div>
+          <div id="bandLabel">ASCENT</div>
+          <div id="modeLabel">ALIGNMENT</div>
+        </div>
+        <div id="objectiveLabel">Rotate the gate into phase.</div>
+        <div id="storyLabel">The machine wakes and waits for calibration.</div>
+      </div>
+      <div class="hud-col right">
+        <div class="metric">
+          <div class="metric-label">COHERENCE</div>
+          <div class="meter"><div id="coherenceBar"></div></div>
+        </div>
+        <div class="metric secondary">
+          <div class="metric-label">RUN</div>
+          <div id="runLabel">1 / 100</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="help" class="glass">
+      <div id="helpText">Drag to rotate. Wheel changes depth. A / D rotate on the Z axis.</div>
+    </div>
+
+    <div id="overlay" class="hidden">
+      <div class="overlay-panel glass">
+        <div class="eyebrow">SEQUENCE STABLE</div>
+        <h1 id="overlayTitle">Level cleared</h1>
+        <p id="overlayText">Continue deeper into the gate.</p>
+        <button id="overlayButton">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
