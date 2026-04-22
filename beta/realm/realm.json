@@ -16,27 +16,27 @@
       "on_path": [
         "emily",
         "A",
-        "B",
-        "C",
         "E",
+        "G",
+        "C",
         "F",
-        "G"
+        "B"
       ],
       "path_step": {
         "A": 0,
-        "B": 0,
-        "C": 0,
         "E": 0,
+        "G": 0,
+        "C": 0,
         "F": 0,
-        "G": 0
+        "B": 0
       },
       "path_colors": {
         "A": "#A07030",
-        "B": "#2E5C38",
-        "C": "#503B80",
         "E": "#701818",
+        "G": "#145858",
+        "C": "#503B80",
         "F": "#6E4418",
-        "G": "#145858"
+        "B": "#2E5C38"
       }
     },
     "0,1": {
@@ -255,7 +255,16 @@
       "name": "Ally’s Photograph",
       "emoji": "📷",
       "era": "TGOE · What Marcus Lost",
-      "lore": "<p>Her face and the curve of her pregnant body, orbiting slowly on his screen in a parallax that makes him believe, for a moment, she is still somewhere a plane could reach.</p><p>He stares at it for ten minutes and his cheeks ache from smiling at no one.</p>"
+      "lore": "<p>Her face and the curve of her pregnant body, orbiting slowly on his screen in a parallax that makes him believe, for a moment, she is still somewhere a plane could reach.</p><p>He stares at it for ten minutes and his cheeks ache from smiling at no one.</p>",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 2
+      },
+      "path_colors": {
+        "G": "#145858"
+      }
     },
     "2,-2": {
       "type": "content",
@@ -267,7 +276,7 @@
         "G"
       ],
       "path_step": {
-        "G": 2
+        "G": 3
       },
       "path_colors": {
         "G": "#145858"
@@ -377,7 +386,7 @@
         "C"
       ],
       "path_step": {
-        "C": 3
+        "C": 4
       },
       "path_colors": {
         "C": "#503B80"
@@ -420,7 +429,16 @@
       "name": "The Cavern Platform",
       "emoji": "🪨",
       "era": "TGOE · Below the Hotel",
-      "lore": "<p>Industrial walkways suspended above a vast black pool, deep in the rock below Shangri-La. The submersibles come and go on a schedule only Eli understands.</p><p>It is here Marcus first sees the scale of what the Wells fortune has built.</p>"
+      "lore": "<p>Industrial walkways suspended above a vast black pool, deep in the rock below Shangri-La. The submersibles come and go on a schedule only Eli understands.</p><p>It is here Marcus first sees the scale of what the Wells fortune has built.</p>",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 3
+      },
+      "path_colors": {
+        "C": "#503B80"
+      }
     },
     "-3,0": {
       "type": "content",
@@ -490,7 +508,16 @@
       "name": "The Second-Hand Shop",
       "emoji": "📖",
       "era": "Before the Fall · The Book",
-      "lore": "<p>A London second-hand shop where a boy saved his pennies for months to buy a heavy leather volume titled <em>Heroes of the Ages</em>.</p><p>The lady behind the counter held it for him. He ran his fingers across every page until his mother called him to dinner. He was eleven.</p>"
+      "lore": "<p>A London second-hand shop where a boy saved his pennies for months to buy a heavy leather volume titled <em>Heroes of the Ages</em>.</p><p>The lady behind the counter held it for him. He ran his fingers across every page until his mother called him to dinner. He was eleven.</p>",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 3
+      },
+      "path_colors": {
+        "F": "#6E4418"
+      }
     },
     "3,-1": {
       "type": "content",
@@ -502,7 +529,7 @@
         "F"
       ],
       "path_step": {
-        "F": 3
+        "F": 4
       },
       "path_colors": {
         "F": "#6E4418"
@@ -513,7 +540,16 @@
       "name": "The Town Fire",
       "emoji": "🔥",
       "era": "TGOE · The Smoke in the Valley",
-      "lore": "<p>The first sign of settlement in days. Smoke, rising above a ridge. Jake knows what it means. He also knows he has no choice.</p><p>He leaves Gus with Nimrod and walks down alone.</p>"
+      "lore": "<p>The first sign of settlement in days. Smoke, rising above a ridge. Jake knows what it means. He also knows he has no choice.</p><p>He leaves Gus with Nimrod and walks down alone.</p>",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 4
+      },
+      "path_colors": {
+        "G": "#145858"
+      }
     },
     "3,-3": {
       "type": "content",
@@ -525,7 +561,7 @@
         "G"
       ],
       "path_step": {
-        "G": 3
+        "G": 5
       },
       "path_colors": {
         "G": "#145858"
@@ -1464,7 +1500,7 @@
         "B"
       ],
       "path_step": {
-        "B": 13
+        "B": 15
       },
       "path_colors": {
         "B": "#2E5C38"
@@ -1647,7 +1683,7 @@
         "C"
       ],
       "path_step": {
-        "C": 13
+        "C": 24
       },
       "path_colors": {
         "C": "#503B80"
@@ -1928,7 +1964,7 @@
         "D"
       ],
       "path_step": {
-        "D": 11
+        "D": 13
       },
       "path_colors": {
         "D": "#2A6880"
@@ -2122,7 +2158,7 @@
         "E"
       ],
       "path_step": {
-        "E": 13
+        "E": 22
       },
       "path_colors": {
         "E": "#701818"
@@ -2382,7 +2418,7 @@
         "F"
       ],
       "path_step": {
-        "F": 14
+        "F": 16
       },
       "path_colors": {
         "F": "#6E4418"
@@ -2676,7 +2712,7 @@
         "G"
       ],
       "path_step": {
-        "G": 13
+        "G": 23
       },
       "path_colors": {
         "G": "#145858"
@@ -3063,7 +3099,7 @@
         "B"
       ],
       "path_step": {
-        "B": 4
+        "B": 5
       },
       "path_colors": {
         "B": "#2E5C38"
@@ -3075,7 +3111,7 @@
         "B"
       ],
       "path_step": {
-        "B": 5
+        "B": 6
       },
       "path_colors": {
         "B": "#2E5C38"
@@ -3087,7 +3123,7 @@
         "B"
       ],
       "path_step": {
-        "B": 6
+        "B": 7
       },
       "path_colors": {
         "B": "#2E5C38"
@@ -3099,7 +3135,7 @@
         "B"
       ],
       "path_step": {
-        "B": 7
+        "B": 8
       },
       "path_colors": {
         "B": "#2E5C38"
@@ -3111,7 +3147,7 @@
         "B"
       ],
       "path_step": {
-        "B": 8
+        "B": 9
       },
       "path_colors": {
         "B": "#2E5C38"
@@ -3123,7 +3159,7 @@
         "B"
       ],
       "path_step": {
-        "B": 9
+        "B": 10
       },
       "path_colors": {
         "B": "#2E5C38"
@@ -3135,7 +3171,7 @@
         "B"
       ],
       "path_step": {
-        "B": 10
+        "B": 11
       },
       "path_colors": {
         "B": "#2E5C38"
@@ -3147,7 +3183,7 @@
         "B"
       ],
       "path_step": {
-        "B": 11
+        "B": 12
       },
       "path_colors": {
         "B": "#2E5C38"
@@ -3159,7 +3195,7 @@
         "B"
       ],
       "path_step": {
-        "B": 12
+        "B": 13
       },
       "path_colors": {
         "B": "#2E5C38"
@@ -3171,7 +3207,7 @@
         "C"
       ],
       "path_step": {
-        "C": 4
+        "C": 6
       },
       "path_colors": {
         "C": "#503B80"
@@ -3183,7 +3219,7 @@
         "C"
       ],
       "path_step": {
-        "C": 5
+        "C": 8
       },
       "path_colors": {
         "C": "#503B80"
@@ -3195,7 +3231,7 @@
         "C"
       ],
       "path_step": {
-        "C": 6
+        "C": 10
       },
       "path_colors": {
         "C": "#503B80"
@@ -3207,7 +3243,7 @@
         "C"
       ],
       "path_step": {
-        "C": 7
+        "C": 12
       },
       "path_colors": {
         "C": "#503B80"
@@ -3219,7 +3255,7 @@
         "C"
       ],
       "path_step": {
-        "C": 8
+        "C": 14
       },
       "path_colors": {
         "C": "#503B80"
@@ -3231,7 +3267,7 @@
         "C"
       ],
       "path_step": {
-        "C": 9
+        "C": 16
       },
       "path_colors": {
         "C": "#503B80"
@@ -3243,7 +3279,7 @@
         "C"
       ],
       "path_step": {
-        "C": 10
+        "C": 18
       },
       "path_colors": {
         "C": "#503B80"
@@ -3255,7 +3291,7 @@
         "C"
       ],
       "path_step": {
-        "C": 11
+        "C": 20
       },
       "path_colors": {
         "C": "#503B80"
@@ -3267,7 +3303,7 @@
         "C"
       ],
       "path_step": {
-        "C": 12
+        "C": 22
       },
       "path_colors": {
         "C": "#503B80"
@@ -3351,7 +3387,7 @@
         "D"
       ],
       "path_step": {
-        "D": 8
+        "D": 9
       },
       "path_colors": {
         "D": "#2A6880"
@@ -3363,7 +3399,7 @@
         "D"
       ],
       "path_step": {
-        "D": 9
+        "D": 11
       },
       "path_colors": {
         "D": "#2A6880"
@@ -3375,7 +3411,7 @@
         "D"
       ],
       "path_step": {
-        "D": 10
+        "D": 12
       },
       "path_colors": {
         "D": "#2A6880"
@@ -3387,7 +3423,7 @@
         "E"
       ],
       "path_step": {
-        "E": 4
+        "E": 5
       },
       "path_colors": {
         "E": "#701818"
@@ -3399,7 +3435,7 @@
         "E"
       ],
       "path_step": {
-        "E": 5
+        "E": 7
       },
       "path_colors": {
         "E": "#701818"
@@ -3411,7 +3447,7 @@
         "E"
       ],
       "path_step": {
-        "E": 6
+        "E": 9
       },
       "path_colors": {
         "E": "#701818"
@@ -3423,7 +3459,7 @@
         "E"
       ],
       "path_step": {
-        "E": 7
+        "E": 11
       },
       "path_colors": {
         "E": "#701818"
@@ -3435,7 +3471,7 @@
         "E"
       ],
       "path_step": {
-        "E": 8
+        "E": 13
       },
       "path_colors": {
         "E": "#701818"
@@ -3447,7 +3483,7 @@
         "E"
       ],
       "path_step": {
-        "E": 9
+        "E": 15
       },
       "path_colors": {
         "E": "#701818"
@@ -3459,7 +3495,7 @@
         "E"
       ],
       "path_step": {
-        "E": 10
+        "E": 17
       },
       "path_colors": {
         "E": "#701818"
@@ -3471,7 +3507,7 @@
         "E"
       ],
       "path_step": {
-        "E": 11
+        "E": 19
       },
       "path_colors": {
         "E": "#701818"
@@ -3483,7 +3519,7 @@
         "E"
       ],
       "path_step": {
-        "E": 12
+        "E": 21
       },
       "path_colors": {
         "E": "#701818"
@@ -3495,7 +3531,7 @@
         "F"
       ],
       "path_step": {
-        "F": 4
+        "F": 5
       },
       "path_colors": {
         "F": "#6E4418"
@@ -3507,7 +3543,7 @@
         "F"
       ],
       "path_step": {
-        "F": 5
+        "F": 6
       },
       "path_colors": {
         "F": "#6E4418"
@@ -3519,7 +3555,7 @@
         "F"
       ],
       "path_step": {
-        "F": 6
+        "F": 7
       },
       "path_colors": {
         "F": "#6E4418"
@@ -3531,7 +3567,7 @@
         "F"
       ],
       "path_step": {
-        "F": 7
+        "F": 8
       },
       "path_colors": {
         "F": "#6E4418"
@@ -3543,7 +3579,7 @@
         "F"
       ],
       "path_step": {
-        "F": 8
+        "F": 9
       },
       "path_colors": {
         "F": "#6E4418"
@@ -3555,7 +3591,7 @@
         "F"
       ],
       "path_step": {
-        "F": 9
+        "F": 11
       },
       "path_colors": {
         "F": "#6E4418"
@@ -3567,7 +3603,7 @@
         "F"
       ],
       "path_step": {
-        "F": 10
+        "F": 12
       },
       "path_colors": {
         "F": "#6E4418"
@@ -3579,7 +3615,7 @@
         "F"
       ],
       "path_step": {
-        "F": 11
+        "F": 13
       },
       "path_colors": {
         "F": "#6E4418"
@@ -3591,7 +3627,7 @@
         "F"
       ],
       "path_step": {
-        "F": 12
+        "F": 14
       },
       "path_colors": {
         "F": "#6E4418"
@@ -3603,7 +3639,7 @@
         "F"
       ],
       "path_step": {
-        "F": 13
+        "F": 15
       },
       "path_colors": {
         "F": "#6E4418"
@@ -3615,7 +3651,7 @@
         "G"
       ],
       "path_step": {
-        "G": 4
+        "G": 7
       },
       "path_colors": {
         "G": "#145858"
@@ -3627,7 +3663,7 @@
         "G"
       ],
       "path_step": {
-        "G": 5
+        "G": 9
       },
       "path_colors": {
         "G": "#145858"
@@ -3639,7 +3675,7 @@
         "G"
       ],
       "path_step": {
-        "G": 6
+        "G": 11
       },
       "path_colors": {
         "G": "#145858"
@@ -3651,7 +3687,7 @@
         "G"
       ],
       "path_step": {
-        "G": 7
+        "G": 13
       },
       "path_colors": {
         "G": "#145858"
@@ -3663,7 +3699,7 @@
         "G"
       ],
       "path_step": {
-        "G": 8
+        "G": 15
       },
       "path_colors": {
         "G": "#145858"
@@ -3675,7 +3711,7 @@
         "G"
       ],
       "path_step": {
-        "G": 9
+        "G": 17
       },
       "path_colors": {
         "G": "#145858"
@@ -3687,7 +3723,7 @@
         "G"
       ],
       "path_step": {
-        "G": 10
+        "G": 19
       },
       "path_colors": {
         "G": "#145858"
@@ -3699,7 +3735,7 @@
         "G"
       ],
       "path_step": {
-        "G": 11
+        "G": 21
       },
       "path_colors": {
         "G": "#145858"
@@ -3711,7 +3747,7 @@
         "G"
       ],
       "path_step": {
-        "G": 12
+        "G": 22
       },
       "path_colors": {
         "G": "#145858"
@@ -5584,6 +5620,390 @@
       "path_colors": {
         "M": "#D4AF37"
       }
+    },
+    "4,1": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 4
+      },
+      "path_colors": {
+        "E": "#701818"
+      }
+    },
+    "5,2": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 6
+      },
+      "path_colors": {
+        "E": "#701818"
+      }
+    },
+    "6,3": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 8
+      },
+      "path_colors": {
+        "E": "#701818"
+      }
+    },
+    "7,4": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 10
+      },
+      "path_colors": {
+        "E": "#701818"
+      }
+    },
+    "8,5": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 12
+      },
+      "path_colors": {
+        "E": "#701818"
+      }
+    },
+    "9,6": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 14
+      },
+      "path_colors": {
+        "E": "#701818"
+      }
+    },
+    "10,7": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 16
+      },
+      "path_colors": {
+        "E": "#701818"
+      }
+    },
+    "11,8": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 18
+      },
+      "path_colors": {
+        "E": "#701818"
+      }
+    },
+    "12,9": {
+      "type": "empty",
+      "on_path": [
+        "E"
+      ],
+      "path_step": {
+        "E": 20
+      },
+      "path_colors": {
+        "E": "#701818"
+      }
+    },
+    "4,-3": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 6
+      },
+      "path_colors": {
+        "G": "#145858"
+      }
+    },
+    "5,-4": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 8
+      },
+      "path_colors": {
+        "G": "#145858"
+      }
+    },
+    "6,-5": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 10
+      },
+      "path_colors": {
+        "G": "#145858"
+      }
+    },
+    "7,-6": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 12
+      },
+      "path_colors": {
+        "G": "#145858"
+      }
+    },
+    "8,-7": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 14
+      },
+      "path_colors": {
+        "G": "#145858"
+      }
+    },
+    "9,-8": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 16
+      },
+      "path_colors": {
+        "G": "#145858"
+      }
+    },
+    "10,-9": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 18
+      },
+      "path_colors": {
+        "G": "#145858"
+      }
+    },
+    "11,-10": {
+      "type": "empty",
+      "on_path": [
+        "G"
+      ],
+      "path_step": {
+        "G": 20
+      },
+      "path_colors": {
+        "G": "#145858"
+      }
+    },
+    "-4,2": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 5
+      },
+      "path_colors": {
+        "C": "#503B80"
+      }
+    },
+    "-5,3": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 7
+      },
+      "path_colors": {
+        "C": "#503B80"
+      }
+    },
+    "-6,4": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 9
+      },
+      "path_colors": {
+        "C": "#503B80"
+      }
+    },
+    "-7,5": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 11
+      },
+      "path_colors": {
+        "C": "#503B80"
+      }
+    },
+    "-7,7": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 13
+      },
+      "path_colors": {
+        "C": "#503B80"
+      }
+    },
+    "-9,7": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 15
+      },
+      "path_colors": {
+        "C": "#503B80"
+      }
+    },
+    "-10,8": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 17
+      },
+      "path_colors": {
+        "C": "#503B80"
+      }
+    },
+    "-11,9": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 19
+      },
+      "path_colors": {
+        "C": "#503B80"
+      }
+    },
+    "-12,10": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 21
+      },
+      "path_colors": {
+        "C": "#503B80"
+      }
+    },
+    "-13,11": {
+      "type": "empty",
+      "on_path": [
+        "C"
+      ],
+      "path_step": {
+        "C": 23
+      },
+      "path_colors": {
+        "C": "#503B80"
+      }
+    },
+    "9,-1": {
+      "type": "empty",
+      "on_path": [
+        "F"
+      ],
+      "path_step": {
+        "F": 10
+      },
+      "path_colors": {
+        "F": "#6E4418"
+      }
+    },
+    "2,9": {
+      "type": "empty",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 8
+      },
+      "path_colors": {
+        "D": "#2A6880"
+      }
+    },
+    "1,10": {
+      "type": "empty",
+      "on_path": [
+        "D"
+      ],
+      "path_step": {
+        "D": 10
+      },
+      "path_colors": {
+        "D": "#2A6880"
+      }
+    },
+    "-4,0": {
+      "type": "empty",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 4
+      },
+      "path_colors": {
+        "B": "#2E5C38"
+      }
+    },
+    "-12,0": {
+      "type": "empty",
+      "on_path": [
+        "B"
+      ],
+      "path_step": {
+        "B": 14
+      },
+      "path_colors": {
+        "B": "#2E5C38"
+      }
     }
   },
   "questions": {
@@ -6072,6 +6492,10 @@
       ],
       [
         -4,
+        0
+      ],
+      [
+        -4,
         1
       ],
       [
@@ -6105,6 +6529,10 @@
       [
         -12,
         1
+      ],
+      [
+        -12,
+        0
       ],
       [
         -13,
@@ -6126,6 +6554,14 @@
       ],
       [
         -3,
+        1
+      ],
+      [
+        -3,
+        2
+      ],
+      [
+        -4,
         2
       ],
       [
@@ -6134,6 +6570,14 @@
       ],
       [
         -5,
+        3
+      ],
+      [
+        -5,
+        4
+      ],
+      [
+        -6,
         4
       ],
       [
@@ -6142,10 +6586,22 @@
       ],
       [
         -7,
+        5
+      ],
+      [
+        -7,
         6
       ],
       [
+        -7,
+        7
+      ],
+      [
         -8,
+        7
+      ],
+      [
+        -9,
         7
       ],
       [
@@ -6154,6 +6610,14 @@
       ],
       [
         -10,
+        8
+      ],
+      [
+        -10,
+        9
+      ],
+      [
+        -11,
         9
       ],
       [
@@ -6162,6 +6626,14 @@
       ],
       [
         -12,
+        10
+      ],
+      [
+        -12,
+        11
+      ],
+      [
+        -13,
         11
       ],
       [
@@ -6204,6 +6676,14 @@
       ],
       [
         2,
+        9
+      ],
+      [
+        2,
+        10
+      ],
+      [
+        1,
         10
       ],
       [
@@ -6238,6 +6718,14 @@
       ],
       [
         4,
+        1
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        5,
         2
       ],
       [
@@ -6246,6 +6734,14 @@
       ],
       [
         6,
+        3
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        7,
         4
       ],
       [
@@ -6254,6 +6750,14 @@
       ],
       [
         8,
+        5
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        9,
         6
       ],
       [
@@ -6262,10 +6766,22 @@
       ],
       [
         10,
+        7
+      ],
+      [
+        10,
         8
       ],
       [
         11,
+        8
+      ],
+      [
+        11,
+        9
+      ],
+      [
+        12,
         9
       ],
       [
@@ -6292,6 +6808,10 @@
       ],
       [
         3,
+        0
+      ],
+      [
+        3,
         -1
       ],
       [
@@ -6312,6 +6832,10 @@
       ],
       [
         8,
+        -1
+      ],
+      [
+        9,
         -1
       ],
       [
@@ -6350,6 +6874,14 @@
       ],
       [
         2,
+        -1
+      ],
+      [
+        2,
+        -2
+      ],
+      [
+        3,
         -2
       ],
       [
@@ -6358,6 +6890,14 @@
       ],
       [
         4,
+        -3
+      ],
+      [
+        4,
+        -4
+      ],
+      [
+        5,
         -4
       ],
       [
@@ -6366,6 +6906,14 @@
       ],
       [
         6,
+        -5
+      ],
+      [
+        6,
+        -6
+      ],
+      [
+        7,
         -6
       ],
       [
@@ -6374,6 +6922,14 @@
       ],
       [
         8,
+        -7
+      ],
+      [
+        8,
+        -8
+      ],
+      [
+        9,
         -8
       ],
       [
@@ -6382,6 +6938,14 @@
       ],
       [
         10,
+        -9
+      ],
+      [
+        10,
+        -10
+      ],
+      [
+        11,
         -10
       ],
       [

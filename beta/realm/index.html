@@ -483,6 +483,21 @@ body.kudra-active #stage{padding-top:110px;}
 .ef-lore{font-family:'EB Garamond',serif;font-size:clamp(13px,1.6vw,15px);
   font-style:italic;color:rgba(210,185,255,0.72);line-height:1.7;
   max-width:460px;margin:0 auto;}
+
+/* ── Per-path animated scene ───────────────────────── */
+.pt-root{position:absolute;inset:0;overflow:hidden;background:#02010a;}
+.pt-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.pt-panel{position:absolute;bottom:0;left:0;right:0;z-index:5;
+  padding:14px 20px 56px;max-height:45%;overflow-y:auto;
+  background:linear-gradient(to top,rgba(2,1,12,0.97) 0%,rgba(2,1,12,0.82) 55%,transparent 100%);
+  text-align:center;-webkit-overflow-scrolling:touch;}
+.pt-step{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.5em;
+  text-transform:uppercase;opacity:0.55;margin-bottom:4px;}
+.pt-title{font-family:'Cinzel Decorative',serif;
+  font-size:clamp(14px,2.6vw,24px);
+  text-shadow:0 0 18px currentColor;margin-bottom:6px;}
+.pt-lore{font-family:'EB Garamond',serif;font-size:clamp(13px,1.6vw,15px);
+  font-style:italic;line-height:1.7;max-width:460px;margin:0 auto;opacity:0.75;}
 </style>
 </head>
 <body>
@@ -549,7 +564,7 @@ body.kudra-active #stage{padding-top:110px;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v6.2
+ *  MARDUK'S MAP — /realm/  grid SPA  v6.3
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -943,6 +958,7 @@ function render(x, y) {
   if (prevStage && prevStage._hsCleanup) { prevStage._hsCleanup(); prevStage._hsCleanup = null; }
   detachTileParallax();
   detachEmilyParallax();
+  detachPathScene();
 
   // Lock only applies to the quiz corridor: threshold → quiz tiles → spine.
   // marduk_view is excluded — KUDRAMARDUK routes there directly and must bypass.
@@ -985,7 +1001,7 @@ function render(x, y) {
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v6.2';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v6.3';
 
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
@@ -1229,6 +1245,128 @@ function attachEmilyParallax(basePanX, basePanY, bgScale) {
     apply();
   }
   loop();
+}
+
+
+/* ══════════════════════════════════════════════════
+ *  PATH SCENE RENDERER — data-rain background
+ *  Used for all non-Emily path tile walks.
+ *  Color matches the path's key/house palette.
+ * ═════════════════════════════════════════════════*/
+const PATH_SCENE_COLORS = {
+  B:'#2E5C38', C:'#503B80', D:'#2A6880',
+  E:'#701818', F:'#6E4418', G:'#145858',
+  H:'#3A1258', M:'#D4AF37',
+};
+const PATH_SCENE_NAMES = {
+  B:'Path of Moss — The Western Way',
+  C:'Path of Violet — The Spiral Stair',
+  D:'Path of Ice — The Northern Spire',
+  E:'Path of Crimson — The Eastern Rise',
+  F:'Path of Copper — The Open Road',
+  G:'Path of Teal — The Southern Descent',
+  H:'Path of Shadow — The Hidden Way',
+  M:"Marduk's Path — The Outer Circuit",
+};
+
+let pathSceneRaf = null;
+function detachPathScene() {
+  if (pathSceneRaf) { cancelAnimationFrame(pathSceneRaf); pathSceneRaf = null; }
+}
+
+function renderPathScene(s, x, y, tile) {
+  detachPathScene();
+  if (particleInterval) clearInterval(particleInterval);
+  document.getElementById('particles').innerHTML = '';
+
+  // Determine primary path and color
+  const pid   = tile.on_path ? tile.on_path.find(p => PATH_SCENE_COLORS[p]) : null;
+  const color = pid ? PATH_SCENE_COLORS[pid] : '#888888';
+  const pathName = pid ? PATH_SCENE_NAMES[pid] : 'An Unknown Path';
+
+  const step  = pid && tile.path_step ? (tile.path_step[pid] ?? 0) : 0;
+  const total = pid && REALM && REALM.paths[pid] ? REALM.paths[pid].length : 1;
+  const stepLabel = `${pathName} · Step ${step + 1} of ${total}`;
+  const tileTitle = tile.name || '';
+  const tileLore  = tile.lore || '';
+
+  // Parse color for rgba
+  const r = parseInt(color.slice(1,3),16);
+  const g = parseInt(color.slice(3,5),16);
+  const b2= parseInt(color.slice(5,7),16);
+
+  s.innerHTML = `
+    <div class="pt-root">
+      <canvas class="pt-canvas" id="ptCanvas"></canvas>
+      <div class="pt-panel" style="color:rgb(${r+80},${g+80},${b2+80});">
+        <div class="pt-step" style="color:rgba(${r+100},${g+100},${b2+100},0.6);">${stepLabel}</div>
+        ${tileTitle ? `<div class="pt-title" style="color:rgb(${r+120},${g+120},${b2+120});">${tileTitle}</div>` : ''}
+        ${tileLore  ? `<div class="pt-lore">${tileLore}</div>` : ''}
+      </div>
+    </div>`;
+
+  document.body.style.background = '#02010a';
+
+  // Data-rain canvas animation
+  const canvas = document.getElementById('ptCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function sizeCanvas() {
+    canvas.width  = canvas.offsetWidth  || window.innerWidth;
+    canvas.height = canvas.offsetHeight || window.innerHeight;
+  }
+  sizeCanvas();
+
+  // Columns of falling particles
+  const COLS = 28;
+  const particles = Array.from({length: COLS * 3}, (_, i) => ({
+    x: (Math.floor(i / 3) + Math.random()) / COLS,
+    y: Math.random(),
+    vy: 0.0008 + Math.random() * 0.0018,
+    size: 1.5 + Math.random() * 3,
+    alpha: 0.1 + Math.random() * 0.6,
+    char: Math.random() > 0.5,
+  }));
+
+  function frame() {
+    pathSceneRaf = requestAnimationFrame(frame);
+    const W = canvas.width, H = canvas.height;
+    ctx.fillStyle = 'rgba(2,1,12,0.18)';
+    ctx.fillRect(0,0,W,H);
+
+    particles.forEach(p => {
+      p.y += p.vy;
+      if (p.y > 1.05) { p.y = -0.05; p.x = (Math.floor(Math.random()*COLS)+Math.random())/COLS; }
+      const px = p.x * W, py = p.y * H;
+      const glow = p.alpha * (0.6 + 0.4 * Math.sin(performance.now()*0.002 + px));
+      ctx.globalAlpha = glow;
+      if (p.char) {
+        ctx.font = `${p.size * 3}px monospace`;
+        ctx.fillStyle = `rgba(${r+80},${g+80},${b2+80},1)`;
+        ctx.textAlign = 'center';
+        ctx.fillText(Math.random() > 0.95 ? '⁂' : '·', px, py);
+      } else {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(px, py, p.size, 0, Math.PI*2);
+        ctx.fill();
+      }
+    });
+    ctx.globalAlpha = 1;
+
+    // Scanline sweep
+    const sweep = (performance.now() * 0.0003 % 1) * H;
+    const sg = ctx.createLinearGradient(0, sweep-40, 0, sweep+40);
+    sg.addColorStop(0,'rgba('+r+','+g+','+b2+',0)');
+    sg.addColorStop(0.5,'rgba('+r+','+g+','+b2+',0.08)');
+    sg.addColorStop(1,'rgba('+r+','+g+','+b2+',0)');
+    ctx.fillStyle = sg;
+    ctx.fillRect(0, sweep-40, W, 80);
+  }
+
+  window.addEventListener('resize', sizeCanvas, {once:true});
+  frame();
 }
 
 function renderEmpty(s, x, y, tile) {
@@ -1589,7 +1727,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v6.2)
+ *  MARDUK VIEW — game-like map (v6.3)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -1920,21 +2058,39 @@ function setupMVCanvas() {
           ctx.restore();
         }
 
-        // Selected halo — dual ring pulse
+        // Selected halo — bright triple ring + "tap again" label
         if (isSelected) {
-          const pulse = 0.72 + 0.28 * Math.sin(now * 0.006);
+          const pulse = 0.65 + 0.35 * Math.sin(now * 0.007);
           ctx.save();
-          ctx.shadowColor = 'rgba(232,201,110,0.9)';
-          ctx.shadowBlur = 22;
-          drawHex(ctx, px, py, r * 1.08);
+          // Inner ring — solid gold
+          ctx.shadowColor = 'rgba(232,201,110,1)';
+          ctx.shadowBlur = 28;
+          drawHex(ctx, px, py, r * 1.06);
           ctx.strokeStyle = `rgba(232,201,110,${pulse})`;
-          ctx.lineWidth = 2.6;
+          ctx.lineWidth = 3.0;
           ctx.stroke();
+          // Mid ring
+          ctx.shadowBlur = 12;
+          drawHex(ctx, px, py, r * 1.22);
+          ctx.strokeStyle = `rgba(232,201,110,${pulse * 0.55})`;
+          ctx.lineWidth = 1.6;
+          ctx.stroke();
+          // Outer ring
+          ctx.shadowBlur = 0;
+          drawHex(ctx, px, py, r * 1.42);
+          ctx.strokeStyle = `rgba(232,201,110,${pulse * 0.2})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+          // "tap again" text below the hex
+          if (r > 18) {
+            ctx.shadowBlur = 0;
+            ctx.font = `${Math.min(r * 0.22, 9)}px Cinzel,serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.fillStyle = `rgba(232,201,110,${pulse * 0.85})`;
+            ctx.fillText('· tap again ·', px, py + r * 1.55);
+          }
           ctx.restore();
-          drawHex(ctx, px, py, r * 1.35);
-          ctx.strokeStyle = `rgba(232,201,110,${pulse * 0.28})`;
-          ctx.lineWidth = 1.4;
-          ctx.stroke();
         }
 
 
