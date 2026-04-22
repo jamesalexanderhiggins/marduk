@@ -17,6 +17,10 @@
   const sliderY = document.getElementById('sliderY');
   const sliderZ = document.getElementById('sliderZ');
   const sliderDepth = document.getElementById('sliderDepth');
+  const valueX = document.getElementById('valueX');
+  const valueY = document.getElementById('valueY');
+  const valueZ = document.getElementById('valueZ');
+  const valueDepth = document.getElementById('valueDepth');
 
   const params = new URLSearchParams(location.search);
   const levelParam = params.get('level');
@@ -146,9 +150,9 @@
       mode: 'ALIGNMENT',
       objective: 'Drag to rotate the frame until it locks into the ghost orientation.',
       help: 'Drag to rotate. Use the on-screen sliders for precise control. Early levels gently snap into place.',
-      tolerance: clamp(0.72 - level * 0.0062, 0.09, 0.72),
-      depthTolerance: clamp(0.95 - level * 0.008, 0.12, 0.95),
-      magnetRadius: lerp(0.95, 0.08, phase01(level)),
+      tolerance: clamp(0.98 - level * 0.0078, 0.1, 0.98),
+      depthTolerance: clamp(1.2 - level * 0.0105, 0.16, 1.2),
+      magnetRadius: lerp(1.22, 0.09, phase01(level)),
       shape: buildAlignmentShape(complexity, layers, level),
       rx: rand(seed) * Math.PI * 2,
       ry: rand(seed + 1) * Math.PI * 2,
@@ -241,18 +245,28 @@
     return { x: innerWidth / 2 + p.x * scale, y: innerHeight / 2 + p.y * scale, s: scale, z: p.z };
   }
 
+  function setSliderValue(el, out, val) {
+    const v = clamp(Math.round(val), -100, 100);
+    el.value = v;
+    if (out) out.textContent = `${v > 0 ? '+' : ''}${v}`;
+  }
   function syncSliders() {
     if (!state) return;
     if (state.mode === 'ALIGNMENT') {
-      sliderX.value = Math.round((state.rx - state.targetRx) / Math.PI * 100);
-      sliderY.value = Math.round((state.ry - state.targetRy) / Math.PI * 100);
-      sliderZ.value = Math.round((state.rz - state.targetRz) / Math.PI * 100);
-      sliderDepth.value = Math.round((state.depth - state.targetDepth) * 55);
+      setSliderValue(sliderX, valueX, (state.rx - state.targetRx) / Math.PI * 100);
+      setSliderValue(sliderY, valueY, (state.ry - state.targetRy) / Math.PI * 100);
+      setSliderValue(sliderZ, valueZ, (state.rz - state.targetRz) / Math.PI * 100);
+      setSliderValue(sliderDepth, valueDepth, (state.depth - state.targetDepth) * 55);
+    } else if (state.mode === 'CIRCUIT' || (state.mode === 'GATE' && state.phase === 1)) {
+      setSliderValue(sliderX, valueX, 0);
+      setSliderValue(sliderY, valueY, 0);
+      setSliderValue(sliderZ, valueZ, (state.rings[activeRing].angle - state.rings[activeRing].target) / Math.PI * 100);
+      setSliderValue(sliderDepth, valueDepth, 0);
     } else {
-      sliderX.value = 0;
-      sliderY.value = 0;
-      sliderZ.value = 0;
-      sliderDepth.value = 0;
+      setSliderValue(sliderX, valueX, 0);
+      setSliderValue(sliderY, valueY, 0);
+      setSliderValue(sliderZ, valueZ, 0);
+      setSliderValue(sliderDepth, valueDepth, 0);
     }
   }
 
@@ -511,7 +525,7 @@
     if (assist <= 0.001) return;
     if (state.mode === 'ALIGNMENT') {
       const magnet = state.magnetRadius;
-      const pull = 0.03 + assist * 0.07;
+      const pull = 0.05 + assist * 0.12;
       if (angleDiff(state.rx, state.targetRx) < magnet) state.rx = lerp(state.rx, state.targetRx, pull);
       if (angleDiff(state.ry, state.targetRy) < magnet) state.ry = lerp(state.ry, state.targetRy, pull);
       if (angleDiff(state.rz, state.targetRz) < magnet) state.rz = lerp(state.rz, state.targetRz, pull * 0.9);
@@ -519,7 +533,7 @@
     } else if (state.mode === 'CIRCUIT' || (state.mode === 'GATE' && state.phase === 1)) {
       for (const ring of state.rings) {
         const diff = angleDiff(ring.angle, ring.target);
-        if (diff < state.snap * (0.75 + assist * 1.6)) ring.angle = lerp(ring.angle, ring.target, 0.08 + assist * 0.08);
+        if (diff < state.snap * (0.95 + assist * 2.2)) ring.angle = lerp(ring.angle, ring.target, 0.12 + assist * 0.12);
       }
     }
   }
@@ -533,8 +547,8 @@
       helpText.textContent = 'Phase 2: tap the core nodes. Match the target pulse count and pattern.';
     }
     const targetReached = (() => {
-      if (state.mode === 'ALIGNMENT') return coherence > 0.992;
-      if (state.mode === 'CIRCUIT') return coherence > 0.995;
+      if (state.mode === 'ALIGNMENT') return coherence > 0.985;
+      if (state.mode === 'CIRCUIT') return coherence > 0.992;
       if (state.mode === 'CONSTELLATION') return coherence === 1;
       return state.phase >= 2 && getGateRingCoherence() > 0.995 && getGateNodeCoherence() === 1;
     })();
@@ -600,7 +614,7 @@
     pointer.x = x; pointer.y = y;
     if (!pointer.down || inputLocked || !state) return;
     const dx = x - pointer.lastX, dy = y - pointer.lastY;
-    if (state.mode === 'ALIGNMENT') { state.ry += dx * 0.008; state.rx += dy * 0.008; }
+    if (state.mode === 'ALIGNMENT') { state.ry += dx * 0.0065; state.rx += dy * 0.0065; }
     else if (state.mode === 'CIRCUIT') rotateSelectedRing(dx * 0.01);
     else if (state.mode === 'GATE' && state.phase === 1) rotateSelectedRing(dx * 0.01);
     pointer.lastX = x; pointer.lastY = y;
@@ -624,16 +638,21 @@
   }
 
   function sliderNudge(value, scale) { return Number(value) / 100 * scale; }
-  sliderX.addEventListener('input', e => { if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.rx = state.targetRx + sliderNudge(e.target.value, Math.PI); });
-  sliderY.addEventListener('input', e => { if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.ry = state.targetRy + sliderNudge(e.target.value, Math.PI); });
+  sliderX.addEventListener('input', e => { if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.rx = state.targetRx + sliderNudge(e.target.value, Math.PI); syncSliders(); });
+  sliderY.addEventListener('input', e => { if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.ry = state.targetRy + sliderNudge(e.target.value, Math.PI); syncSliders(); });
   sliderZ.addEventListener('input', e => {
     if (!state || inputLocked) return;
     if (state.mode === 'ALIGNMENT') state.rz = state.targetRz + sliderNudge(e.target.value, Math.PI);
     else if (state.mode === 'CIRCUIT' || (state.mode === 'GATE' && state.phase === 1)) state.rings[activeRing].angle = state.rings[activeRing].target + sliderNudge(e.target.value, Math.PI);
+    syncSliders();
   });
-  sliderDepth.addEventListener('input', e => { if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.depth = state.targetDepth + sliderNudge(e.target.value, 1.8); });
+  sliderDepth.addEventListener('input', e => { if (!state || inputLocked) return; if (state.mode === 'ALIGNMENT') state.depth = state.targetDepth + sliderNudge(e.target.value, 1.8); syncSliders(); });
 
   overlayButton.addEventListener('click', continueFlow);
+
+  ['touchstart','touchmove','mousedown','pointerdown'].forEach(evt => {
+    document.getElementById('controls').addEventListener(evt, e => e.stopPropagation(), { passive: false });
+  });
   window.addEventListener('resize', resize);
   resize();
 
