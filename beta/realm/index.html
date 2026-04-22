@@ -41,11 +41,12 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 
 /* Top-right progress pill */
 /* Key bar — replaces quiz progress pill */
-.key-bar{display:flex;align-items:center;gap:6px;
-  background:transparent;border:none;padding:0;margin-left:auto;}
-.key-sym{font-size:15px;line-height:1;cursor:default;
-  opacity:0.18;transition:opacity 0.6s,filter 0.6s,transform 0.4s;
-  filter:grayscale(1);display:inline-block;}
+.key-bar{display:flex;align-items:center;gap:5px;
+  background:transparent;border:none;padding:0 4px;margin-left:auto;
+  border-left:1px solid rgba(201,168,76,0.18);}
+.key-sym{font-size:16px;line-height:1;cursor:default;
+  opacity:0.48;transition:opacity 0.6s,filter 0.6s,transform 0.4s;
+  filter:grayscale(0.5) brightness(0.8);display:inline-block;}
 .key-sym.collected{opacity:1;filter:none;
   animation:keyGlow 2.5s ease-in-out infinite;}
 @keyframes keyGlow{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
@@ -60,6 +61,7 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 
 /* Stage */
 #stage{position:relative;z-index:10;width:100%;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:72px 24px 24px;text-align:center;overflow-y:auto;transition:opacity 0.5s ease;}
+body.kudra-active #stage{padding-top:110px;}
 
 .room-era{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;opacity:0;animation:fadeUp 0.8s 0.3s forwards;}
 .room-title{font-family:'Cinzel Decorative',serif;font-size:clamp(26px,5vw,52px);color:var(--text);line-height:1.2;margin-bottom:28px;opacity:0;animation:fadeUp 0.8s 0.5s forwards;}
@@ -247,17 +249,17 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 @keyframes ptPulse{0%,100%{text-shadow:0 0 30px var(--pt-color,#C9A84C),0 0 60px var(--pt-color,#C9A84C);}50%{text-shadow:0 0 60px var(--pt-color,#C9A84C),0 0 120px var(--pt-color,#C9A84C),0 0 160px var(--pt-color,#C9A84C);}}
 
 /* ── MAP button (KUDRAMARDUK unlock) ─────────────── */
+/* EXIT K button — inline in header, always visible when K mode on */
 #exitKBtn{display:none;font-family:'Cinzel',serif;font-size:10px;
   letter-spacing:0.2em;text-transform:uppercase;
   color:#ff6b2b;background:transparent;
-  border:1px solid #ff6b2b;padding:7px 12px;cursor:pointer;
+  border:1px solid #ff6b2b;padding:7px 13px;cursor:pointer;
   transition:all 0.3s;-webkit-tap-highlight-color:transparent;
-  animation:exitKPulse 2.5s ease-in-out infinite;flex-shrink:0;}
+  flex-shrink:0;animation:exitKPulse 2.5s ease-in-out infinite;}
 #exitKBtn.show{display:block;}
-#exitKBtn:hover,#exitKBtn:active{background:rgba(255,107,43,0.12);
-  box-shadow:0 0 16px rgba(255,107,43,0.5);}
+#exitKBtn:hover,#exitKBtn:active{background:rgba(255,107,43,0.15);}
 @keyframes exitKPulse{0%,100%{border-color:rgba(255,107,43,0.6);}
-  50%{border-color:#ff6b2b;box-shadow:0 0 12px rgba(255,107,43,0.4);}}
+  50%{border-color:#ff6b2b;box-shadow:0 0 10px rgba(255,107,43,0.45);}}
 #mapBtn{display:none;font-family:'Cinzel',serif;font-size:10px;
   letter-spacing:0.22em;text-transform:uppercase;
   color:rgba(192,132,252,0.8);background:transparent;
@@ -538,7 +540,7 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v5.4
+ *  MARDUK'S MAP — /realm/  grid SPA  v5.5
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -631,10 +633,7 @@ function unlockKudra() {
 function isKudraUnlocked() {
   return !!getP().kudra;
 }
-function updateKeyBar() {
-  const el = document.getElementById('progressDisplay');
-  if (el) el.textContent = `${countCorrect()} / 10`;
-}
+// updateKeyBar is defined later (key system section) — this alias removed
 
 /* ── tile lookup ───────────────────────────────── */
 function getTile(x, y) {
@@ -837,8 +836,7 @@ function getDoors(x, y) {
             (succ && succ[0] === x && succ[1] === y)) {
           anyPathAllows = true; break; // walking along path
         }
-        const curStep = (tile.path_step || {})[pid];
-        if (curStep === 0) { anyPathAllows = true; break; } // at entrance
+        // (curStep===0 check removed — entrance is handled by nIdx<=0 above)
       }
       if (!anyPathAllows) {
         out[d] = {sealed: true, reason: 'path-wall'};
@@ -980,7 +978,7 @@ function render(x, y) {
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v5.4';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v5.5';
 
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
@@ -988,6 +986,14 @@ function render(x, y) {
   else if (tile.type === 'quiz')   { renderQuiz(s, x, y, tile); }
   else if (tile.type === 'home')   { renderHome(s, x, y, tile); }
   else if (tile.type === 'spine')  { renderSpine(s, x, y, tile); }
+  // ── Emily's path: checked BEFORE generic content dispatch ──────────────
+  // on_path includes 'A' on all 24 path tiles. Home tile excluded by type.
+  // Covers content, empty, and house_front_door types equally.
+  else if (tile.on_path && tile.on_path.includes('A')) {
+    detachTileParallax();
+    renderEmilyPath(s, x, y, tile);
+  }
+  // ── Generic content + other path tiles ─────────────────────────────────
   else if (tile.type === 'content' || tile.type === 'house_interior' || tile.type === 'house_front_door') {
     const sceneKey = `${x},${y}`;
     if (HOUSE_SCENES[sceneKey]) {
@@ -1000,17 +1006,13 @@ function render(x, y) {
     }
   }
   else if (tile.on_path && tile.on_path.length > 0) {
-    if (tile.on_path.includes('A') && !tile.on_path.some(p => p !== 'A')) {
-      // Path A (Emily) — immersive forest scene
+    if (tile.theme) {
       detachTileParallax();
-      renderEmilyPath(s, x, y, tile);
-    } else if (tile.theme) {
-      detachTileParallax();
-      renderTile(s, x, y, tile);  // themed path tile
+      renderTile(s, x, y, tile);
     } else if (!tile.name) {
-      renderPathTile(s, x, y, tile); // unthemed transit
+      renderPathTile(s, x, y, tile);
     } else {
-      renderContent(s, x, y, tile);  // path tile with content but no theme
+      renderContent(s, x, y, tile);
     }
   }
   else if (tile.type === 'locked_zone_threshold' || tile.type === 'locked_zone_interior') {
@@ -1073,14 +1075,18 @@ function renderEmilyPath(s, x, y, tile) {
   const step     = (tile.path_step && tile.path_step['A'] != null) ? tile.path_step['A'] : 0;
   const total    = PATH_A_SEQ.length; // 24
   const progress = step / (total - 1);
+  const isThreshold = step === total - 1;  // step 23 = front door
   const showGhost = EMILY_GHOST_STEPS.has(step);
 
-  // Background pan: drift left+down as you go deeper
-  const bgPanX = -(progress * 6);
-  const bgPanY = -(progress * 4);
+  // Background pan: increasingly south-west as you walk deeper into the forest.
+  // Total drift: 14% horizontal, 10% vertical — noticeably different per tile.
+  const bgPanX = -(progress * 14);
+  const bgPanY = -(progress * 10);
+  // Background slowly zooms in as you get deeper (0% → 8% scale increase)
+  const bgScale = 1 + progress * 0.08;
 
   const stepLabel = step === 0          ? 'Entering the Forest'
-                  : step === total - 1  ? 'House of Emily · At the Threshold'
+                  : isThreshold         ? 'House of Emily · You have arrived'
                   : `The Forest Path · Step ${step + 1} of ${total}`;
   const tileTitle = tile.name  || '';
   const tileLore  = tile.lore  || '';
@@ -1095,12 +1101,13 @@ function renderEmilyPath(s, x, y, tile) {
 
       <!-- Layer 1: Background forest (parallax via JS) -->
       <div class="ef-bg" id="efBg"
-           style="transform:translate(${bgPanX}%,${bgPanY}%);"></div>
+           style="transform:translate(${bgPanX}%,${bgPanY}%) scale(${bgScale.toFixed(3)});"></div>
 
       <!-- Layer 2: Midground tree trunks (multiply = white transparent) -->
       <img class="ef-mid" id="efMid"
            src="../images/emily-forest-mid.png"
-           alt="" draggable="false">
+           alt="" draggable="false"
+           style="opacity:${0.6 + progress * 0.35};">
 
       <!-- Layer 3: Emily ghost (screen blend = dark transparent) -->
       ${showGhost ? `
@@ -1113,6 +1120,12 @@ function renderEmilyPath(s, x, y, tile) {
                     efGhostFlash ${7 + step % 4}s ${ghostDelay + 3}s ease-in-out infinite;">
         <img src="../images/emily-ghost.png" alt="Emily" draggable="false">
       </div>` : ''}
+
+      <!-- Threshold: glow arch when at the front door -->
+      ${isThreshold ? `<div style="position:absolute;inset:0;pointer-events:none;z-index:3;
+        background:radial-gradient(ellipse 55% 70% at 50% 40%,
+          rgba(160,80,255,0.35) 0%,rgba(80,20,180,0.12) 45%,transparent 70%);
+        animation:efGlowBreath 2.8s ease-in-out infinite;"></div>` : ''}
 
       <!-- Glow / vignette -->
       <div class="ef-glow"></div>
@@ -1156,13 +1169,13 @@ function renderEmilyPath(s, x, y, tile) {
   }
 
   // Parallax
-  attachEmilyParallax(bgPanX, bgPanY);
+  attachEmilyParallax(bgPanX, bgPanY, bgScale);
 }
 
-function attachEmilyParallax(basePanX, basePanY) {
-  const MAX_BG  = 3.2;   // % bg travel per unit tilt
-  const MAX_MID = 6.8;   // midground moves more (closer)
-  const MAX_GHOST = 4.5; // ghost: mid-depth parallax
+function attachEmilyParallax(basePanX, basePanY, bgScale) {
+  const MAX_BG  = 3.2;
+  const MAX_MID = 6.8;
+  const MAX_GHOST = 4.5;
 
   function apply() {
     const bg    = document.getElementById('efBg');
@@ -1170,10 +1183,9 @@ function attachEmilyParallax(basePanX, basePanY) {
     const ghost = document.getElementById('efGhost');
     if (!bg) { detachEmilyParallax(); return; }
     const tx = emilyCurrent.x, ty = emilyCurrent.y;
-    bg.style.transform    = `translate(${basePanX + tx*MAX_BG}%, ${basePanY + ty*MAX_BG}%)`;
+    bg.style.transform  = `translate(${basePanX + tx*MAX_BG}%, ${basePanY + ty*MAX_BG}%) scale(${bgScale})`;
     if (mid)   mid.style.transform   = `translate(${tx*MAX_MID}%, ${ty*MAX_MID*0.5}%)`;
     if (ghost) {
-      // Keep ghost's CSS animation transform; add translate via margin
       ghost.style.marginLeft = `${tx * MAX_GHOST * 8}px`;
       ghost.style.marginTop  = `${ty * MAX_GHOST * 5}px`;
     }
@@ -1570,7 +1582,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v5.4)
+ *  MARDUK VIEW — game-like map (v5.5)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -2477,7 +2489,7 @@ function activateKudraMode() {
   // Dim key bar (mode bar replaces it visually)
   const kb = document.getElementById('keyBar');
   if (kb) kb.style.opacity = '0.4';
-  // Show EXIT K button
+  // Show EXIT K button in header
   const ekb = document.getElementById('exitKBtn');
   if (ekb) ekb.classList.add('show');
   // Purple flash
@@ -2533,19 +2545,16 @@ function hideSitePopup() {
   if (popup) popup.style.display = 'none';
 }
 
-// EXIT K button — same popup
-document.addEventListener('DOMContentLoaded', () => {
-  const ekBtn = document.getElementById('exitKBtn');
-  if (ekBtn) ekBtn.addEventListener('click', () => {
-    showSitePopup(
-      'Exit Kudramarduk Mode?',
-      'Normal access will be restored. Keys you collected by physically reaching their tiles will be kept.',
-      [
-        { label:'Exit Mode', cls:'primary', fn: () => { deactivateKudraMode(); hideSitePopup(); } },
-        { label:'Stay', cls:'secondary', fn: hideSitePopup },
-      ]
-    );
-  });
+// EXIT K button click → popup
+document.getElementById('exitKBtn').addEventListener('click', () => {
+  showSitePopup(
+    'Exit Kudramarduk Mode?',
+    'Normal access will be restored. Keys you collected by physically reaching their tiles will be kept.',
+    [
+      { label:'Exit Mode', cls:'primary', fn: () => { deactivateKudraMode(); hideSitePopup(); } },
+      { label:'Stay', cls:'secondary', fn: hideSitePopup },
+    ]
+  );
 });
 
 // Kudra bar click → exit popup
@@ -2583,14 +2592,14 @@ document.addEventListener('keydown', (ev) => {
 
 /* ── Key system ───────────────────────────────────── */
 const KEY_DEFS = {
-  A: {sym:'♦', color:'#C9A84C', name:'The Gold Key'},
+  A: {sym:'♦︎', color:'#C9A84C', name:'The Gold Key'},
   B: {sym:'◆', color:'#4A7C59', name:'The Moss Key'},
   C: {sym:'✦', color:'#7B5EA7', name:'The Violet Key'},
   D: {sym:'❆', color:'#5B9AB8', name:'The Ice Key'},
   E: {sym:'✸', color:'#A83232', name:'The Crimson Key'},
   F: {sym:'⬡', color:'#A86A32', name:'The Copper Key'},
   G: {sym:'◈', color:'#2D8888', name:'The Teal Key'},
-  H: {sym:'★', color:'#5C2D82', name:'The Purple Key'},
+  H: {sym:'★︎', color:'#5C2D82', name:'The Purple Key'},
   I: {sym:'◇', color:'#AAAAAA', name:'The Silver Key'},
   J: {sym:'⊕', color:'#CC5500', name:'The Ember Key'},
 };
@@ -3155,6 +3164,15 @@ async function boot() {
   const res = await fetch('realm.json');
   REALM = await res.json();
   updateMapBtn(); // show MAP button if kudra already unlocked from a prior session
+  updateKeyBar(); // render key symbols from saved state
+  // Restore kudra visual state across page reloads
+  if (isKudraUnlocked()) {
+    const kbar = document.getElementById('kudraMode');
+    if (kbar) kbar.classList.add('on');
+    const ekban = document.getElementById('exitKBanner');
+    if (ekban) ekban.classList.add('show');
+    document.body.classList.add('kudra-active');
+  }
   window.addEventListener('resize', () => {
     const bg = document.getElementById('bg');
     const fx = document.getElementById('fx');
