@@ -2175,7 +2175,10 @@
       "lore": null,
       "on_path": [],
       "path_step": {},
-      "path_colors": {}
+      "path_colors": {},
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232"
     },
     "12,13": {
       "type": "house_interior",
@@ -2229,7 +2232,10 @@
       "lore": null,
       "on_path": [],
       "path_step": {},
-      "path_colors": {}
+      "path_colors": {},
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232"
     },
     "13,13": {
       "type": "house_interior",
@@ -2283,7 +2289,10 @@
       "lore": null,
       "on_path": [],
       "path_step": {},
-      "path_colors": {}
+      "path_colors": {},
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232"
     },
     "14,13": {
       "type": "house_interior",
@@ -2339,7 +2348,10 @@
       "lore": null,
       "on_path": [],
       "path_step": {},
-      "path_colors": {}
+      "path_colors": {},
+      "house_id": "e",
+      "house_letter": "E",
+      "house_color": "#A83232"
     },
     "15,13": {
       "type": "house_interior",
@@ -6004,6 +6016,180 @@
       "path_colors": {
         "B": "#2E5C38"
       }
+    },
+    "-15,-13": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-15,-12": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-15,-11": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-15,-10": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-15,-9": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-15,-8": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-15,-7": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-15,-6": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-15,-5": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-15,-4": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-14,-13": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-14,-12": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-14,-11": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-14,-10": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-14,-9": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-14,-8": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-14,-7": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-14,-6": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-14,-4": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-13,-13": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-13,-12": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-13,-11": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-13,-10": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-13,-9": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-13,-8": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-13,-7": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-13,-6": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-13,-5": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
+    },
+    "-13,-4": {
+      "type": "house_interior",
+      "house_id": "b",
+      "house_letter": "B",
+      "house_color": "#4A7C59"
     }
   },
   "questions": {

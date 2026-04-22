@@ -423,29 +423,9 @@ body.kudra-active #stage{padding-top:110px;}
   mix-blend-mode:multiply;
   pointer-events:none;will-change:transform;}
 
-/* Layer 3: Emily ghost — mix-blend-mode:screen on wrapper blends whole layer */
-.ef-ghost-wrap{position:absolute;left:50%;top:32%;
-  transform:translate(-50%,-50%);
-  width:min(28vw,180px);pointer-events:none;
-  mix-blend-mode:screen;
-  background:transparent;
-  will-change:transform,opacity;}
-.ef-ghost-wrap img{width:100%;height:auto;display:block;
-  filter:drop-shadow(0 0 18px rgba(120,80,255,0.9));}
+/* Ghost layer removed — replaced by hex ghost sprites */
 
-/* Ghost animations */
-@keyframes efGhostFloat{
-  0%,100%{transform:translate(-50%,-50%) translateY(0);}
-  50%{transform:translate(-50%,-50%) translateY(-12px);}}
-@keyframes efGhostFlash{
-  0%,75%,100%{opacity:var(--ghost-base,0.6);}
-  78%{opacity:1;}
-  80%{opacity:0.35;}
-  82%{opacity:0.95;}
-  84%{opacity:var(--ghost-base,0.6);}}
-@keyframes efGhostFade{
-  0%{opacity:0;transform:translate(-50%,-52%) scale(0.94);}
-  100%{opacity:var(--ghost-base,0.6);transform:translate(-50%,-50%) scale(1);}}
+/* Ghost animations removed */
 
 /* Atmospheric overlays */
 .ef-vign{position:absolute;inset:0;pointer-events:none;z-index:5;
@@ -498,6 +478,15 @@ body.kudra-active #stage{padding-top:110px;}
   text-shadow:0 0 18px currentColor;margin-bottom:6px;}
 .pt-lore{font-family:'EB Garamond',serif;font-size:clamp(13px,1.6vw,15px);
   font-style:italic;line-height:1.7;max-width:460px;margin:0 auto;opacity:0.75;}
+
+/* ── Hex ghost sprites ────────────────────────────── */
+.hex-ghost{position:absolute;pointer-events:none;z-index:8;
+  will-change:transform,opacity;animation:hexGhostFlash linear forwards;}
+@keyframes hexGhostFlash{
+  0%{opacity:0;transform:scale(0.6) translateY(8px);}
+  15%{opacity:1;transform:scale(1) translateY(0);}
+  75%{opacity:0.9;}
+  100%{opacity:0;transform:scale(0.8) translateY(-6px);}}
 </style>
 </head>
 <body>
@@ -564,7 +553,7 @@ body.kudra-active #stage{padding-top:110px;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v6.3
+ *  MARDUK'S MAP — /realm/  grid SPA  v6.4
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -1001,7 +990,7 @@ function render(x, y) {
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v6.3';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v6.4';
 
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
@@ -1085,6 +1074,7 @@ let emilyTarget  = {x:0, y:0};
 let emilyCurrent = {x:0, y:0};
 
 function detachEmilyParallax() {
+  stopEmilyGhosts();
   if (emilyParallaxRaf)  { cancelAnimationFrame(emilyParallaxRaf); emilyParallaxRaf = null; }
   if (emilyMouseHandler) { document.removeEventListener('mousemove', emilyMouseHandler); emilyMouseHandler = null; }
   if (emilyGyroHandler)  { window.removeEventListener('deviceorientation', emilyGyroHandler); emilyGyroHandler = null; }
@@ -1132,17 +1122,7 @@ function renderEmilyPath(s, x, y, tile) {
            alt="" draggable="false"
            style="opacity:${0.6 + progress * 0.35};">
 
-      <!-- Layer 3: Emily ghost (screen blend = dark transparent) -->
-      ${showGhost ? `
-      <div class="ef-ghost-wrap" id="efGhost"
-           style="--ghost-base:${ghostBase};
-                  opacity:0;
-                  animation:
-                    efGhostFade 1.8s ${ghostDelay}s ease both,
-                    efGhostFloat ${4.5 + step % 3 * 0.7}s ${ghostDelay + 1.8}s ease-in-out infinite,
-                    efGhostFlash ${7 + step % 4}s ${ghostDelay + 3}s ease-in-out infinite;">
-        <img src="images/emily-ghost.png" alt="Emily" draggable="false">
-      </div>` : ''}
+      <!-- Ghost image removed — hex sprites spawned via JS -->
 
       <!-- Threshold: glow arch when at the front door -->
       ${isThreshold ? `<div style="position:absolute;inset:0;pointer-events:none;z-index:3;
@@ -1167,6 +1147,7 @@ function renderEmilyPath(s, x, y, tile) {
     </div>`;
 
   document.body.style.background = '#050010';
+  startEmilyGhosts(step, total);
 
   // Sparse purple starfield — canopy light
   initStars({count: 28, color: '130,60,210', speed: 0.003});
@@ -1196,47 +1177,44 @@ function renderEmilyPath(s, x, y, tile) {
 }
 
 function attachEmilyParallax(basePanX, basePanY, bgScale) {
-  const MAX_BG  = 3.2;
-  const MAX_MID = 6.8;
-  const MAX_GHOST = 4.5;
+  const MAX_BG  = 4.5;
+  const MAX_MID = 9.0;
 
   function apply() {
-    const bg    = document.getElementById('efBg');
-    const mid   = document.getElementById('efMid');
-    const ghost = document.getElementById('efGhost');
+    const bg  = document.getElementById('efBg');
+    const mid = document.getElementById('efMid');
     if (!bg) { detachEmilyParallax(); return; }
     const tx = emilyCurrent.x, ty = emilyCurrent.y;
     bg.style.transform  = `translate(${basePanX + tx*MAX_BG}%, ${basePanY + ty*MAX_BG}%) scale(${bgScale})`;
-    if (mid)   mid.style.transform   = `translate(${tx*MAX_MID}%, ${ty*MAX_MID*0.5}%)`;
-    if (ghost) {
-      ghost.style.marginLeft = `${tx * MAX_GHOST * 8}px`;
-      ghost.style.marginTop  = `${ty * MAX_GHOST * 5}px`;
-    }
+    if (mid) mid.style.transform = `translate(${tx*MAX_MID}%, ${ty*MAX_MID*0.5}%)`;
   }
 
-  emilyMouseHandler = ev => {
-    emilyTarget.x = (ev.clientX / window.innerWidth  - 0.5) * 2;
-    emilyTarget.y = (ev.clientY / window.innerHeight - 0.5) * 2;
+  // Touch parallax — finger drag moves the forest layers
+  emilyMouseHandler = (ev) => {
+    if (ev.touches && ev.touches.length === 1) {
+      const t = ev.touches[0];
+      emilyTarget.x = (t.clientX / window.innerWidth  - 0.5) * 2;
+      emilyTarget.y = (t.clientY / window.innerHeight - 0.5) * 2;
+      ev.preventDefault();
+    } else if (!ev.touches) {
+      emilyTarget.x = (ev.clientX / window.innerWidth  - 0.5) * 2;
+      emilyTarget.y = (ev.clientY / window.innerHeight - 0.5) * 2;
+    }
   };
+
+  // Touch-start: spawn particle burst at touch point
+  const touchStartHandler = (ev) => {
+    for (const t of ev.changedTouches) {
+      spawnTouchBurst(t.clientX, t.clientY);
+    }
+  };
+
+  const efRoot = document.getElementById('efRoot');
+  if (efRoot) {
+    efRoot.addEventListener('touchmove',  emilyMouseHandler, {passive:false});
+    efRoot.addEventListener('touchstart', touchStartHandler, {passive:true});
+  }
   document.addEventListener('mousemove', emilyMouseHandler);
-
-  const setupGyro = () => {
-    emilyGyroHandler = ev => {
-      emilyTarget.x = Math.max(-1, Math.min(1,  (ev.gamma||0) / 22));
-      emilyTarget.y = Math.max(-1, Math.min(1, -(ev.beta ||0) / 35));
-    };
-    window.addEventListener('deviceorientation', emilyGyroHandler);
-  };
-  if (typeof DeviceOrientationEvent !== 'undefined') {
-    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-      document.addEventListener('touchstart', () => {
-        DeviceOrientationEvent.requestPermission()
-          .then(s => { if (s === 'granted') setupGyro(); });
-      }, {once: true});
-    } else {
-      setupGyro();
-    }
-  }
 
   function loop() {
     emilyParallaxRaf = requestAnimationFrame(loop);
@@ -1245,6 +1223,28 @@ function attachEmilyParallax(basePanX, basePanY, bgScale) {
     apply();
   }
   loop();
+}
+
+function spawnTouchBurst(cx, cy) {
+  const mist = document.getElementById('efMist');
+  if (!mist) return;
+  for (let i = 0; i < 7; i++) {
+    const p = document.createElement('div');
+    p.className = 'ef-particle';
+    const sz = 12 + Math.random()*30;
+    const dx = (Math.random()-0.5)*60, dy = -(20+Math.random()*60);
+    p.style.cssText = [
+      `width:${sz}px`,`height:${sz}px`,
+      `left:${cx/window.innerWidth*100}%`,
+      `top:${cy/window.innerHeight*100}%`,
+      `--dy:${dy}px`,`--dx:${dx}px`,
+      `animation-duration:${1.2+Math.random()*1.5}s`,
+      `animation-delay:0s`,
+      `opacity:0.8`,
+    ].join(';');
+    mist.appendChild(p);
+    setTimeout(()=>p.remove(), 3000);
+  }
 }
 
 
@@ -1271,6 +1271,7 @@ const PATH_SCENE_NAMES = {
 
 let pathSceneRaf = null;
 function detachPathScene() {
+  stopPathGhosts();
   if (pathSceneRaf) { cancelAnimationFrame(pathSceneRaf); pathSceneRaf = null; }
 }
 
@@ -1306,6 +1307,7 @@ function renderPathScene(s, x, y, tile) {
     </div>`;
 
   document.body.style.background = '#02010a';
+  if (pid && color) startPathGhosts(pid, step, total, color);
 
   // Data-rain canvas animation
   const canvas = document.getElementById('ptCanvas');
@@ -1368,6 +1370,130 @@ function renderPathScene(s, x, y, tile) {
   window.addEventListener('resize', sizeCanvas, {once:true});
   frame();
 }
+
+
+/* ══════════════════════════════════════════════════
+ *  HEX GHOST SPRITE — tiny SVG hexagonal humanoid
+ *  Generated in-browser, no images.
+ *  Color-toned to path/scene, flashes and vanishes.
+ * ═════════════════════════════════════════════════*/
+
+function hexPath6(cx, cy, r) {
+  const pts = [];
+  for (let i=0;i<6;i++) {
+    const a = Math.PI/3*i - Math.PI/6;
+    pts.push(`${(cx+r*Math.cos(a)).toFixed(1)},${(cy+r*Math.sin(a)).toFixed(1)}`);
+  }
+  return `M${pts.join('L')}Z`;
+}
+
+function makeHexGhostSVG(color, size) {
+  // Humanoid made of hexagons: head, shoulders, torso, hips, legs
+  const r = size * 0.13;
+  const layout = [
+    // [cx_offset, cy_offset, scale, opacity]
+    [0,    -0.82, 1.1, 0.95],   // head
+    [-0.32, -0.42, 0.8, 0.85],  // left shoulder
+    [0.32,  -0.42, 0.8, 0.85],  // right shoulder
+    [0,    -0.05, 1.0, 0.9],    // torso
+    [-0.22,  0.38, 0.85, 0.8],  // left hip
+    [0.22,   0.38, 0.85, 0.8],  // right hip
+    [-0.2,   0.78, 0.75, 0.7],  // left leg
+    [0.2,    0.78, 0.75, 0.7],  // right leg
+  ];
+
+  const W = size, H = size * 1.1;
+  const cx = W/2, cy = H * 0.45;
+
+  let paths = '';
+  for (const [ox,oy,sc,op] of layout) {
+    const hx = cx + ox*size*0.5;
+    const hy = cy + oy*size*0.5;
+    const hr = r * sc;
+    const lum = Math.floor(op * 255).toString(16).padStart(2,'0');
+    paths += `<path d="${hexPath6(hx,hy,hr)}" fill="${color}${lum}" stroke="${color}" stroke-width="0.5"/>`;
+  }
+
+  const glowId = `g${Math.random().toString(36).slice(2,6)}`;
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="${glowId}">
+        <feGaussianBlur stdDeviation="1.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <g filter="url(#${glowId})">${paths}</g>
+  </svg>`;
+}
+
+function spawnHexGhost(container, color, options={}) {
+  const { size=28, duration=1400, x, y, drift=true } = options;
+  const el = document.createElement('div');
+  el.className = 'hex-ghost';
+  el.innerHTML = makeHexGhostSVG(color, size);
+
+  const px = x !== undefined ? x : (10 + Math.random()*80);
+  const py = y !== undefined ? y : (10 + Math.random()*70);
+  el.style.left = px + '%';
+  el.style.top  = py + '%';
+  el.style.animationDuration = duration + 'ms';
+  if (drift) {
+    const dx = (Math.random()-0.5)*40, dy = -(10+Math.random()*30);
+    el.style.transform = `translate(${dx}px,${dy}px)`;
+  }
+  container.appendChild(el);
+  setTimeout(()=>el.remove(), duration + 100);
+}
+
+// Emily path ghost system — frequency increases near the house
+let emilyGhostInterval = null;
+function startEmilyGhosts(step, total) {
+  clearInterval(emilyGhostInterval);
+  const progress   = step / (total - 1); // 0→1
+  const baseDelay  = Math.max(400, 3500 - progress * 3000); // ms between ghosts
+  const erratic    = progress > 0.65;    // last 35% = erratic
+
+  function scheduleNext() {
+    const delay = erratic
+      ? baseDelay * (0.2 + Math.random()*0.9)  // chaotic near house
+      : baseDelay * (0.7 + Math.random()*0.6);
+    emilyGhostInterval = setTimeout(() => {
+      const mist = document.getElementById('efMist');
+      if (!mist) return;
+      const hue = erratic
+        ? ['#b060ff','#60b0ff','#ff60b0','#8080ff'][Math.floor(Math.random()*4)]
+        : '#8844cc';
+      const count = erratic ? (1 + Math.floor(Math.random()*3)) : 1;
+      for (let i=0;i<count;i++) {
+        spawnHexGhost(mist, hue, {
+          size: 20 + Math.random()*22,
+          duration: erratic ? 600+Math.random()*800 : 1000+Math.random()*800,
+        });
+      }
+      scheduleNext();
+    }, delay);
+  }
+  scheduleNext();
+}
+function stopEmilyGhosts() { clearInterval(emilyGhostInterval); emilyGhostInterval = null; }
+
+// Path ghost system — for non-Emily paths
+let pathGhostTimer = null;
+function startPathGhosts(pid, step, total, color) {
+  clearInterval(pathGhostTimer);
+  const progress = step/(total-1);
+  const delay = Math.max(600, 4000 - progress*3000);
+  function go() {
+    pathGhostTimer = setTimeout(()=>{
+      const stage = document.getElementById('stage');
+      if (!stage) return;
+      spawnHexGhost(stage, color, {size:18+Math.random()*16, duration:900+Math.random()*700});
+      go();
+    }, delay*(0.6+Math.random()*0.9));
+  }
+  go();
+}
+function stopPathGhosts() { clearInterval(pathGhostTimer); pathGhostTimer = null; }
 
 function renderEmpty(s, x, y, tile) {
   s.innerHTML = `
@@ -1727,7 +1853,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v6.3)
+ *  MARDUK VIEW — game-like map (v6.4)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -1961,13 +2087,12 @@ function setupMVCanvas() {
         const postQuiz = isMVUnlocked()  && !isKudraUnlocked();
         const kudra    = isKudraUnlocked();
 
-        // Tiles that post-quiz reveals even if not visited
-        const isContentReveal = (isHouse || isFrontDoor)
-          && !isPurePath; // house tiles that aren't also path tiles
+        // House tiles always show color+key for all users (discover by sight, travel by foot)
+        const isHouseTile = (isHouse || isFrontDoor) && !isPurePath;
 
-        const showFull = kudra                                    // K: everything
-          || isVisited                                           // always: what you walked
-          || (postQuiz && isContentReveal);                      // post-quiz: houses only
+        const showFull = kudra                   // K: everything
+          || isVisited                           // always: walked tiles
+          || isHouseTile;                        // houses: always colored for all users
 
         const isSelected  = selKey === `${x},${y}`;
 
@@ -2138,7 +2263,37 @@ function setupMVCanvas() {
       }
     }
 
-    // Tap ripples (gold ring expanding out from tap point)
+    // ── Player position marker ─────────────────────
+    const _pp = getP().lastPos;
+    if (_pp) {
+      const [plx, ply] = _pp;
+      const pmPx = CX + (plx - ply * 0.5) * HW * mvZoom + mvOffset.x;
+      const pmPy = CY + ply * HH * mvZoom + mvOffset.y;
+      const pmR  = Math.max(6, r_base * mvZoom * 0.55);
+      const pmPulse = 0.7 + 0.3 * Math.sin(now * 0.005);
+      ctx.save();
+      ctx.shadowColor = 'rgba(255,255,255,0.9)';
+      ctx.shadowBlur  = 14;
+      // Chevron arrow pointing up
+      ctx.fillStyle  = `rgba(255,255,255,${pmPulse})`;
+      ctx.strokeStyle= 'rgba(255,255,255,0.4)';
+      ctx.lineWidth  = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(pmPx,            pmPy - pmR * 1.6);
+      ctx.lineTo(pmPx - pmR*0.7,  pmPy + pmR * 0.2);
+      ctx.lineTo(pmPx,            pmPy - pmR * 0.4);
+      ctx.lineTo(pmPx + pmR*0.7,  pmPy + pmR * 0.2);
+      ctx.closePath();
+      ctx.fill();
+      // Small pulsing dot at base
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(pmPx, pmPy + pmR*0.4, pmR*0.28, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+        // Tap ripples (gold ring expanding out from tap point)
     mvRipples = mvRipples.filter(rp => now - rp.t0 < 650);
     mvRipples.forEach(rp => {
       const t = (now - rp.t0) / 650; // 0..1
@@ -2351,13 +2506,11 @@ function setupMVCanvas() {
       const isVisited2 = vis2.has(`${tile.x},${tile.y}`)
                          || (tile.x===0&&tile.y===0);
 
-      // Is this tile revealed/interactable in the current state?
-      // Mirrors the showFull logic in the MV draw exactly.
-      const isContentReveal2 = (isHouse2 || info2.type === 'house_front_door') && !isPath2;
-
+      // Houses: visible (color) always, but info/travel only after visiting
+      // Pre-quiz: only visited tiles interactable
+      // Post-quiz/kudra: all non-house tiles, plus houses only if visited
       const tileInteractable = kudra2
-        || isVisited2
-        || (postQ2 && isContentReveal2);
+        || isVisited2;  // only visited tiles get info+travel
 
       if (!tileInteractable) {
         // Not yet revealed — show nothing
@@ -2615,13 +2768,8 @@ function travelFromMV(x, y) {
     if (!mvDone) {
       if (!vis3.has(`${x},${y}`) && !(x===0&&y===0)) return;
     }
-    // Post-quiz: house tiles (even unvisited) + visited tiles.
-    // Everything else (empty transit, paths, zones, etc.) requires prior visit.
-    if (mvDone) {
-      const isHouseT3 = !!(info.house_id) && !(info.on_path && info.on_path.length);
-      const isVisited3 = vis3.has(`${x},${y}`) || (x===0&&y===0);
-      if (!isHouseT3 && !isVisited3) return;
-    }
+    // All modes: require prior visit for info+travel (houses show color but no travel until walked)
+    if (!vis3.has(`${x},${y}`) && !(x===0&&y===0)) return;
     // MV tile: needs unlock
     if (info.type === 'marduk_view' && !mvDone) return;
     // Quiz gating
