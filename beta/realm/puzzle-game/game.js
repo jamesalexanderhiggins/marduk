@@ -28,7 +28,7 @@
   const rangeParam = params.get('range');
   const redirect = params.get('redirect') || '';
   const autoAdvance = params.get('auto') !== '0';
-  const VERSION = 'v12';
+  const VERSION = 'v13';
   const hue = Number(params.get('hue') || '195');
   if (versionMarker) versionMarker.textContent = VERSION;
 
@@ -299,6 +299,46 @@
 
 
   function buildStarterFaceShape() { return buildFaceShape(1); }
+
+  function buildAlignmentLevel(level, base) {
+    const seed = level * 9.127;
+    const span = level === 1 ? 2.25 : lerp(2.2, Math.PI * 1.08, phase01(level));
+    const targetRx = (rand(seed + 3) * 2 - 1) * Math.PI;
+    const targetRy = (rand(seed + 4) * 2 - 1) * Math.PI;
+    const targetRz = (rand(seed + 5) * 2 - 1) * Math.PI;
+    const startOffsetRx = (rand(seed + 31) > 0.5 ? 1 : -1) * span;
+    const startOffsetRy = (rand(seed + 41) > 0.5 ? 1 : -1) * (span * 0.9);
+    const startOffsetRz = (rand(seed + 51) > 0.5 ? 1 : -1) * (span * 0.74);
+    const targetDepth = (rand(seed + 7) * 2 - 1) * lerp(0.08, 0.8, phase01(level));
+    const depthSpan = level === 1 ? 0.9 : lerp(0.86, 1.1, phase01(level));
+    const startDepth = targetDepth + (rand(seed + 61) > 0.5 ? 1 : -1) * depthSpan;
+    const isStarter = level === 1;
+    return {
+      ...base,
+      mode: 'ALIGNMENT',
+      objective: isStarter
+        ? 'Rotate the face lattice until it settles into the ghost mask.'
+        : 'Rotate the live face lattice until it occupies the ghost mask exactly.',
+      help: 'Drag to rotate in space. Use the sliders for precise correction. Read the face by eye and settle it deliberately into the ghost frame.',
+      tolerance: isStarter ? 0.5 : clamp(1.02 - level * 0.0078, 0.07, 1.02),
+      depthTolerance: isStarter ? 0.42 : clamp(1.02 - level * 0.0072, 0.1, 1.02),
+      magnetRadius: isStarter ? 0.3 : lerp(0.74, 0.02, phase01(level)),
+      shape: isStarter ? buildStarterFaceShape() : buildFaceShape(level),
+      rx: wrapAngle(targetRx + startOffsetRx),
+      ry: wrapAngle(targetRy + startOffsetRy),
+      rz: wrapAngle(targetRz + startOffsetRz),
+      targetRx,
+      targetRy,
+      targetRz,
+      depth: clamp(startDepth, -1.15, 1.15),
+      targetDepth,
+      solvedHold: 0,
+      autoSpin: level > 18 ? 0.0005 + level * 0.00001 : 0,
+      worldSpin: rotationSpeedForLevel(level),
+      minSolveTime: isStarter ? 2600 : Math.max(800, 1500 - level * 6),
+      tutorialVisibleBoost: isStarter ? 1 : 0,
+    };
+  }
 
   function buildFaceShape(level) {
     const pts = [];
