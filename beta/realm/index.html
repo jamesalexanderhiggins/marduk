@@ -585,7 +585,7 @@ body.kudra-active #stage{padding-top:110px;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v6.5
+ *  MARDUK'S MAP — /realm/  grid SPA  v6.6
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -1044,7 +1044,7 @@ function render(x, y) {
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v6.5';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v6.6';
 
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
@@ -1984,7 +1984,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v6.5)
+ *  MARDUK VIEW — game-like map (v6.6)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -1999,6 +1999,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
  * ═══════════════════════════════════════════════ */
 
 const MV_R = 24;                   // base hex radius at zoom 1
+let mvBgRot = 0;                    // background honeycomb rotation angle
 const MV_ZOOM_MIN  = 0.5;
 const MV_ZOOM_MAX  = 5.5;
 const MV_ZOOM_HOME = 1.8;          // default zoom on open / recenter
@@ -2144,13 +2145,64 @@ function setupMVCanvas() {
     const zoomStage = mvZoom < 0.75 ? 'far' : (mvZoom < 1.6 ? 'mid' : 'near');
     const now = performance.now();
 
-    // Parallax background wash — subtle coloured radial that shifts with offset
-    const bgGrad = ctx.createRadialGradient(W / 2 + mvOffset.x * 0.3, H / 2 + mvOffset.y * 0.3, 40,
-                                            W / 2, H / 2, Math.max(W, H) * 0.8);
-    bgGrad.addColorStop(0, 'rgba(40,30,15,0.22)');
-    bgGrad.addColorStop(1, 'rgba(5,7,12,0)');
-    ctx.fillStyle = bgGrad;
-    ctx.fillRect(0, 0, W, H);
+    // ── BACKGROUND: rotating honeycomb in space ──────────────────────────
+    mvBgRot += 0.000028;   // one full rotation every ~220 s
+    const BG_R  = 34;      // background hex radius (fixed, not zoom-dependent)
+    const BG_HW = Math.sqrt(3) * BG_R;
+    const BG_HH = BG_R * 1.5;
+    const HOUSE_COLS_MV = ['#C9A84C','#4A7C59','#7B5EA7','#5B9AB8',
+                            '#A83232','#A86A32','#2D8888','#5C2D82'];
+    ctx.save();
+    ctx.translate(W/2, H/2);
+    ctx.rotate(mvBgRot);
+    ctx.translate(-W/2, -H/2);
+    // Cover canvas + rotation margin
+    const bgMargin = Math.max(W, H) * 0.7;
+    const bgXmin = Math.floor((-W/2 - bgMargin) / BG_HW) - 1;
+    const bgXmax = Math.ceil( ( W/2 + bgMargin) / BG_HW) + 1;
+    const bgYmin = Math.floor((-H/2 - bgMargin) / BG_HH) - 1;
+    const bgYmax = Math.ceil( ( H/2 + bgMargin) / BG_HH) + 1;
+    for (let bq = bgXmin; bq <= bgXmax; bq++) {
+      for (let br = bgYmin; br <= bgYmax; br++) {
+        const bx = W/2 + bq * BG_HW + (br % 2 === 0 ? 0 : BG_HW * 0.5);
+        const by = H/2 + br * BG_HH;
+        const ang = Math.atan2(by - H/2, bx - W/2);
+        const sector = Math.floor(((ang + Math.PI) / (Math.PI*2)) * 8 + 0.5) % 8;
+        const col = HOUSE_COLS_MV[sector];
+        const dist = Math.hypot(bx - W/2, by - H/2) / (Math.max(W,H)*0.6);
+        const fade = Math.max(0, 1 - dist * 0.7);
+        // Fill
+        ctx.beginPath();
+        for (let i = 0; i < 6; i++) {
+          const a = Math.PI/3*i - Math.PI/2;
+          i===0 ? ctx.moveTo(bx+Math.cos(a)*BG_R, by+Math.sin(a)*BG_R)
+                : ctx.lineTo(bx+Math.cos(a)*BG_R, by+Math.sin(a)*BG_R);
+        }
+        ctx.closePath();
+        ctx.fillStyle   = col + Math.round(fade * 12).toString(16).padStart(2,'0');
+        ctx.strokeStyle = col + Math.round(fade * 30).toString(16).padStart(2,'0');
+        ctx.lineWidth   = 0.6;
+        ctx.fill(); ctx.stroke();
+      }
+    }
+    ctx.restore();
+
+    // ── INFINITE VOID: black hexes for all positions beyond ±GRID_EXTENT ─
+    // Calculate visible grid range from current pan/zoom
+    const voidMinX = Math.floor((-W/2 - mvOffset.x) / hexW) - 2;
+    const voidMaxX = Math.ceil( ( W/2 - mvOffset.x) / hexW) + 2;
+    const voidMinY = Math.floor((-H/2 - mvOffset.y) / hexH) - 2;
+    const voidMaxY = Math.ceil( ( H/2 - mvOffset.y) / hexH) + 2;
+    ctx.fillStyle   = 'rgba(0,0,0,1)';
+    ctx.strokeStyle = 'rgba(0,0,0,0)';
+    for (let vx = voidMinX; vx <= voidMaxX; vx++) {
+      for (let vy = voidMinY; vy <= voidMaxY; vy++) {
+        if (Math.abs(vx) <= GRID_EXTENT && Math.abs(vy) <= GRID_EXTENT) continue;
+        const [vpx, vpy] = gridToScreen(vx, vy, m);
+        drawHex(ctx, vpx, vpy, r * 0.95);
+        ctx.fill();
+      }
+    }
 
     // KUDRAMARDUK path overlay
     if (isKudraUnlocked()) {
