@@ -3036,9 +3036,6 @@ function updateMapBtn() {
 }
 
 document.getElementById('mapBtn').addEventListener('click', () => {
-  // Save current position for "YOU ARE HERE" marker
-  const _cp = getP(); _cp.lastPos = [currentX, currentY]; saveP(_cp);
-  unlockMV();
   renderMardukView();
 });
 
