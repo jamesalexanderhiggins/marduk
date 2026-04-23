@@ -10,24 +10,25 @@
   <div id="app">
     <canvas id="gameCanvas" aria-label="Vector mask puzzle"></canvas>
 
-    <div id="leftRail" class="rail">
-      <button id="soundButton" class="iconButton" aria-label="Enable sound" title="Sound">
+    <div id="controlPanel" aria-label="Controls">
+      <button id="soundButton" class="iconButton is-muted" aria-label="Unmute sound" title="Sound">
         <span class="speaker">
           <span class="speaker-body"></span>
           <span class="speaker-wave wave1"></span>
           <span class="speaker-wave wave2"></span>
         </span>
       </button>
-      <input id="sliderX" class="vslider red" type="range" min="-100" max="100" value="0" aria-label="Tilt" />
-      <input id="sliderY" class="vslider green" type="range" min="-100" max="100" value="0" aria-label="Swivel" />
-      <input id="sliderZ" class="vslider blue" type="range" min="-100" max="100" value="0" aria-label="Roll" />
+      <div class="hstack">
+        <input id="sliderX" class="hslider red" type="range" min="-100" max="100" value="0" aria-label="X" />
+        <input id="sliderY" class="hslider green" type="range" min="-100" max="100" value="0" aria-label="Y" />
+        <input id="sliderZ" class="hslider blue" type="range" min="-100" max="100" value="0" aria-label="Z" />
+        <input id="sliderW" class="hslider white" type="range" min="70" max="140" value="100" aria-label="Depth" />
+      </div>
     </div>
 
-    <div id="rightRail" class="rail rightRail">
+    <div id="rightRail" class="rightRail">
       <input id="zoomSlider" class="vslider zoom" type="range" min="50" max="180" value="100" aria-label="Zoom" />
     </div>
-
-    <div id="versionMarker">v17</div>
 
     <div id="overlay" class="hidden" aria-hidden="true">
       <button id="overlayButton" class="overlayButton" aria-label="Continue"></button>

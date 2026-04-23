@@ -4,14 +4,12 @@
   const sliderX = document.getElementById('sliderX');
   const sliderY = document.getElementById('sliderY');
   const sliderZ = document.getElementById('sliderZ');
+  const sliderW = document.getElementById('sliderW');
   const zoomSlider = document.getElementById('zoomSlider');
   const soundButton = document.getElementById('soundButton');
   const overlay = document.getElementById('overlay');
   const overlayButton = document.getElementById('overlayButton');
-  const versionMarker = document.getElementById('versionMarker');
 
-  const VERSION = 'v17';
-  versionMarker.textContent = VERSION;
 
   const params = new URLSearchParams(location.search);
   const redirect = params.get('redirect') || '';
@@ -40,8 +38,8 @@
     solved: false,
     failed: false,
     transitioning: false,
-    player: { x: 0, y: 0, z: 0 },
-    target: { x: 0, y: 0, z: 0 },
+    player: { x: 0, y: 0, z: 0, w: 1 },
+    target: { x: 0, y: 0, z: 0, w: 1 },
     worldSpin: 0,
     worldTilt: 0,
     worldRoll: 0,
@@ -68,7 +66,7 @@
   let humOsc = null;
   let humGain = null;
   let audioReady = false;
-  let audioMuted = false;
+  let audioMuted = true;
   let lastBleepAt = 0;
   let lastLaserAt = 0;
 
@@ -92,11 +90,12 @@
   function angleToSlider(v) { return clamp(Math.round(wrapAngle(v) / Math.PI * 100), -100, 100); }
   function linesForLevel(level) {
     const t = phase01(level);
-    return Math.round(3 + 297 * Math.pow(t, 1.12));
+    return Math.round(3 + 297 * Math.pow(t, 1.05));
   }
   function toleranceForLevel(level) {
     const t = phase01(level);
-    return lerp(0.42, 0.13, t);
+    const base = lerp(0.42, 0.13, t);
+    return base * (1 + 0.10 * (1 - t));
   }
   function rotationSpeedForLevel(level) {
     const t = phase01(level);
@@ -104,7 +103,7 @@
   }
   function timerForLevel(level) {
     const t = phase01(level);
-    return lerp(82, 44, t);
+    return lerp(92, 54, t);
   }
   function assistanceForLevel(level) {
     const t = phase01(level);
@@ -171,7 +170,7 @@
     if (!Ctx) return null;
     audioCtx = new Ctx();
     masterGain = audioCtx.createGain();
-    masterGain.gain.value = 0.22;
+    masterGain.gain.value = 0.38;
     masterGain.connect(audioCtx.destination);
     return audioCtx;
   }
@@ -185,7 +184,7 @@
     audioReady = ctxA.state === 'running';
     if (forceOn) audioMuted = false;
     if (audioReady && !humOsc) startHum();
-    if (audioReady) chirp(620, 0.1, 'square', 0.12, 160);
+    if (audioReady && !audioMuted) { chirp(620, 0.1, 'square', 0.16, 160); chirp(980, 0.07, 'triangle', 0.10, -220, 0.05); }
     updateSoundButton();
   }
 
@@ -275,7 +274,7 @@
     if (!soundOn() || !humOsc || !humGain) return;
     const n = coherence();
     humOsc.frequency.setTargetAtTime(72 + phase01(state.level) * 36 + n * 44, audioCtx.currentTime, 0.08);
-    humGain.gain.setTargetAtTime(0.006 + n * 0.02, audioCtx.currentTime, 0.08);
+    humGain.gain.setTargetAtTime(audioMuted ? 0.0001 : (0.01 + n * 0.028), audioCtx.currentTime, 0.08);
   }
 
   function resize() {
@@ -313,6 +312,7 @@
     state.target.x = randAngle(1.1);
     state.target.y = randAngle(2.7);
     state.target.z = randAngle(4.5);
+    state.target.w = 0.82 + rand(seed + 5.9) * 0.34;
 
     const offsetMin = lerp(1.0, 0.85, state.phase);
     const pickStart = (targetAngle, s) => {
@@ -322,10 +322,12 @@
     state.player.x = pickStart(state.target.x, 6.1);
     state.player.y = pickStart(state.target.y, 7.9);
     state.player.z = pickStart(state.target.z, 9.7);
+    state.player.w = clamp(state.target.w + (signedRand(seed + 11.3) >= 0 ? 1 : -1) * (0.12 + rand(seed + 13.1) * 0.12), 0.7, 1.4);
 
     sliderX.value = String(angleToSlider(state.player.x));
     sliderY.value = String(angleToSlider(state.player.y));
     sliderZ.value = String(angleToSlider(state.player.z));
+    sliderW.value = String(Math.round(state.player.w * 100));
 
     const mesh = buildMaskLines(linesForLevel(level));
     state.mesh = mesh;
@@ -367,8 +369,8 @@
     const cheekR = 0.075 * Math.exp(-(Math.pow((u - 0.44) / 0.18, 2) + Math.pow((v - 0.14) / 0.42, 2)));
     const eyeDipL = -0.12 * Math.exp(-(Math.pow((u + 0.27) / 0.14, 2) + Math.pow((v + 0.04) / 0.12, 2)));
     const eyeDipR = -0.12 * Math.exp(-(Math.pow((u - 0.27) / 0.14, 2) + Math.pow((v + 0.04) / 0.12, 2)));
-    const noseBridge = 0.028 * Math.exp(-(Math.pow(u / 0.24, 2) + Math.pow((v + 0.01) / 0.34, 2)));
-    const noseSoft = 0.022 * Math.exp(-(Math.pow(u / 0.2, 2) + Math.pow((v - 0.22) / 0.14, 2)));
+    const noseBridge = 0.012 * Math.exp(-(Math.pow(u / 0.24, 2) + Math.pow((v + 0.01) / 0.34, 2)));
+    const noseSoft = 0.008 * Math.exp(-(Math.pow(u / 0.2, 2) + Math.pow((v - 0.22) / 0.14, 2)));
     const philtrum = -0.018 * Math.exp(-(Math.pow(u / 0.08, 2) + Math.pow((v - 0.35) / 0.08, 2)));
     const mouthDip = -0.055 * Math.exp(-(Math.pow(u / 0.34, 2) + Math.pow((v - 0.49) / 0.09, 2)));
     const lipLift = 0.024 * Math.exp(-(Math.pow(u / 0.28, 2) + Math.pow((v - 0.57) / 0.09, 2)));
@@ -551,7 +553,8 @@
     const dx = angleDiff(state.player.x, state.target.x);
     const dy = angleDiff(state.player.y, state.target.y);
     const dz = angleDiff(state.player.z, state.target.z);
-    const score = 1 - clamp((dx + dy + dz) / (tol * 3.6), 0, 1);
+    const dw = Math.abs(state.player.w - state.target.w);
+    const score = 1 - clamp((dx + dy + dz + dw * 1.35) / (tol * 4.8), 0, 1);
     return Math.pow(score, 1.4);
   }
 
@@ -563,9 +566,11 @@
     state.player.x = wrapAngle(mix(state.player.x, state.target.x, pull));
     state.player.y = wrapAngle(mix(state.player.y, state.target.y, pull));
     state.player.z = wrapAngle(mix(state.player.z, state.target.z, pull));
+    state.player.w = mix(state.player.w, state.target.w, pull * 0.85);
     sliderX.value = String(angleToSlider(state.player.x));
     sliderY.value = String(angleToSlider(state.player.y));
     sliderZ.value = String(angleToSlider(state.player.z));
+    sliderW.value = String(Math.round(state.player.w * 100));
   }
 
   function spawnSparkBurst(n = 10) {
@@ -725,7 +730,26 @@
     ctx.stroke();
   }
 
-  function drawMask(mesh, rot, style, scale, jitter = 0) {
+  function drawCountdownGhost() {
+    const remaining = Math.max(0, Math.ceil(state.timeLimit - (performance.now() - state.startTime) / 1000));
+    const pulse = 0.18 + 0.12 * Math.sin(performance.now() * 0.004);
+    const warn = remaining <= 10 ? 0.12 : 0;
+    const alpha = pulse + warn;
+    const text = String(remaining);
+    ctx.save();
+    ctx.font = `700 ${Math.max(72, Math.min(innerWidth, innerHeight) * 0.12)}px Inter, system-ui, sans-serif`;
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = `rgba(255,255,255,${alpha * 0.18})`;
+    ctx.shadowColor = `rgba(140,220,255,${alpha * 0.16})`;
+    ctx.shadowBlur = 24;
+    ctx.textAlign = 'left';
+    ctx.fillText(text, 18, innerHeight * 0.14);
+    ctx.textAlign = 'right';
+    ctx.fillText(text, innerWidth - 18, innerHeight * 0.86);
+    ctx.restore();
+  }
+
+  function drawMask(mesh, rot, style, scale, jitter = 0, depthScale = 1) {
     const worldX = state.worldTilt;
     const worldY = state.worldSpin;
     const worldZ = state.worldRoll;
@@ -737,7 +761,8 @@
       for (let i = 0; i < line.length; i++) {
         const point = line[i];
         if (!point) { open = false; continue; }
-        const local = rotatePoint(point, rot.x, rot.y, rot.z);
+        const depthPoint = { x: point.x, y: point.y, z: point.z * depthScale };
+        const local = rotatePoint(depthPoint, rot.x, rot.y, rot.z);
         const world = rotatePoint(local, worldX, worldY, worldZ);
         const jit = jitter ? {
           x: world.x + signedRand(i * 0.31 + performance.now() * 0.001) * jitter,
@@ -767,9 +792,11 @@
       { x: state.target.x, y: state.target.y, z: state.target.z },
       `hsla(${lineHue} 100% 75% / ${ghostAlpha})`,
       scale,
-      0
+      0,
+      state.target.w
     );
 
+    drawCountdownGhost();
     if (c > 0.45 && Math.random() < 0.18 + c * 0.25) spawnSparkBurst(2 + Math.round(c * 5));
     const tremble = c > 0.62 ? (0.002 + c * 0.016 + p * 0.007) : 0;
     const mainAlpha = 0.58 + c * 0.34;
@@ -780,7 +807,8 @@
       { x: state.player.x, y: state.player.y, z: state.player.z },
       `rgba(250,252,255,${mainAlpha})`,
       scale,
-      tremble
+      tremble,
+      state.player.w
     );
     ctx.shadowBlur = 0;
   }
@@ -827,6 +855,7 @@
     state.player.x = sliderToAngle(sliderX.value);
     state.player.y = sliderToAngle(sliderY.value);
     state.player.z = sliderToAngle(sliderZ.value);
+    state.player.w = clamp(Number(sliderW.value) / 100, 0.7, 1.4);
   }
 
   function setZoomFromSlider(v) {
@@ -836,21 +865,23 @@
   sliderX.addEventListener('input', () => { syncFromSliders(); sliderSound(); unlockAudio(); });
   sliderY.addEventListener('input', () => { syncFromSliders(); sliderSound(); unlockAudio(); });
   sliderZ.addEventListener('input', () => { syncFromSliders(); sliderSound(); unlockAudio(); });
+  sliderW.addEventListener('input', () => { syncFromSliders(); sliderSound(); unlockAudio(); });
   zoomSlider.addEventListener('input', () => { setZoomFromSlider(zoomSlider.value); sliderSound(); unlockAudio(); });
 
-  soundButton.addEventListener('click', async (e) => {
-    e.preventDefault();
-    if (!audioReady) {
+  async function toggleSound(e) {
+    if (e) e.preventDefault();
+    if (!audioReady || audioMuted) {
+      audioMuted = false;
       await unlockAudio(true);
+      chirp(700, 0.1, 'square', 0.16, 160);
+      chirp(1100, 0.08, 'triangle', 0.11, -180, 0.05);
+      updateSoundButton();
       return;
     }
-    audioMuted = !audioMuted;
+    audioMuted = true;
     updateSoundButton();
-    if (!audioMuted) {
-      await unlockAudio(true);
-      chirp(700, 0.1, 'square', 0.12, 160);
-    }
-  });
+  }
+  soundButton.addEventListener('pointerup', toggleSound);
 
   overlayButton.addEventListener('click', () => {
     const action = overlayButton.dataset.action;
