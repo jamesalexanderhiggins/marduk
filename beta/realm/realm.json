@@ -133,6 +133,15 @@
       },
       "path_colors": {
         "F": "#6E4418"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 2,
+        "title": "The Spatial Key",
+        "desc": "A challenge on Path F. Solve it to continue."
       }
     },
     "1,-1": {
@@ -264,6 +273,15 @@
       },
       "path_colors": {
         "G": "#145858"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 7,
+        "title": "The Machine Asks",
+        "desc": "A challenge on Path G. Solve it to continue."
       }
     },
     "2,-2": {
@@ -280,6 +298,15 @@
       },
       "path_colors": {
         "G": "#145858"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 7,
+        "title": "What Faces Where",
+        "desc": "A challenge on Path G. Solve it to continue."
       }
     },
     "1,-2": {
@@ -351,6 +378,15 @@
       },
       "path_colors": {
         "B": "#2E5C38"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 6,
+        "title": "The Tilted Seal",
+        "desc": "A challenge on Path B. Solve it to continue."
       }
     },
     "-2,1": {
@@ -367,6 +403,15 @@
       },
       "path_colors": {
         "C": "#503B80"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 2,
+        "title": "A Turning Lock",
+        "desc": "A challenge on Path C. Solve it to continue."
       }
     },
     "-3,3": {
@@ -520,6 +565,15 @@
       },
       "path_colors": {
         "E": "#701818"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 3,
+        "title": "The Machine Asks",
+        "desc": "A challenge on Path E. Solve it to continue."
       }
     },
     "3,0": {
@@ -677,6 +731,19 @@
       "gate_lock": {
         "type": "turing",
         "target": 150
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "range": [
+          1,
+          20
+        ],
+        "title": "La Fille aux Cheveux de Lin",
+        "desc": "Twenty levels stand between you and Emily's house. The music is already playing. Earn it.",
+        "on_complete_music": "emily_triumph"
       }
     },
     "-12,-13": {
@@ -1004,6 +1071,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 66,
+        "title": "A Civilisation of One",
+        "desc": "Level 66. Marduk has passed through every age. Can you follow?"
       }
     },
     "-10,-16": {
@@ -1324,6 +1400,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 152,
+        "title": "Three Suns",
+        "desc": "Level 152. Marduk has passed through every age. Can you follow?"
       }
     },
     "-16,0": {
@@ -1371,7 +1456,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,-2": {
       "type": "house_interior",
@@ -1382,7 +1475,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,-1": {
       "type": "house_interior",
@@ -1393,7 +1494,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,0": {
       "type": "house_interior",
@@ -1404,7 +1513,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,1": {
       "type": "house_interior",
@@ -1415,7 +1532,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,2": {
       "type": "house_interior",
@@ -1426,7 +1551,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,-3": {
       "type": "house_interior",
@@ -1437,7 +1570,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,-2": {
       "type": "house_interior",
@@ -1448,7 +1589,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,-1": {
       "type": "house_interior",
@@ -1459,7 +1608,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,0": {
       "type": "house_interior",
@@ -1470,7 +1627,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,1": {
       "type": "house_interior",
@@ -1481,7 +1646,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,2": {
       "type": "house_interior",
@@ -1492,7 +1665,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-3": {
       "type": "house_interior",
@@ -1503,7 +1684,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-2": {
       "type": "house_interior",
@@ -1514,7 +1703,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-1": {
       "type": "house_interior",
@@ -1525,7 +1722,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,0": {
       "type": "house_front_door",
@@ -1553,6 +1758,15 @@
         "type": "masklock",
         "level": 15,
         "range": 8
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 25,
+        "title": "The House of the World",
+        "desc": "The world does not open for the uninitiated."
       }
     },
     "-13,1": {
@@ -1564,7 +1778,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,2": {
       "type": "house_interior",
@@ -1575,7 +1797,15 @@
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
-      "house_sector": "W"
+      "house_sector": "W",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-16,12": {
       "type": "empty",
@@ -1611,6 +1841,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 285,
+        "title": "The War of Mirrors",
+        "desc": "Level 285. Marduk has passed through every age. Can you follow?"
       }
     },
     "-16,15": {
@@ -1634,7 +1873,15 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,13": {
       "type": "house_interior",
@@ -1645,7 +1892,15 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,14": {
       "type": "house_interior",
@@ -1656,7 +1911,15 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,15": {
       "type": "house_interior",
@@ -1667,7 +1930,15 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,12": {
       "type": "house_interior",
@@ -1678,7 +1949,15 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,13": {
       "type": "house_interior",
@@ -1702,7 +1981,15 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,15": {
       "type": "house_interior",
@@ -1713,7 +2000,15 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,12": {
       "type": "house_front_door",
@@ -1741,6 +2036,15 @@
         "type": "masklock",
         "level": 25,
         "range": 10
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 12,
+        "title": "The Violet Chamber",
+        "desc": "Ariadne's threshold. Only clear sight passes."
       }
     },
     "-13,13": {
@@ -1752,7 +2056,15 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,14": {
       "type": "house_interior",
@@ -1763,7 +2075,15 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,15": {
       "type": "house_interior",
@@ -1774,7 +2094,15 @@
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
-      "house_sector": "NW"
+      "house_sector": "NW",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-4,13": {
       "type": "house_interior",
@@ -1785,7 +2113,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-4,14": {
       "type": "house_interior",
@@ -1796,7 +2132,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-4,15": {
       "type": "house_interior",
@@ -1807,7 +2151,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-4,16": {
       "type": "empty",
@@ -1830,7 +2182,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-3,14": {
       "type": "house_interior",
@@ -1841,7 +2201,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-3,15": {
       "type": "house_interior",
@@ -1852,7 +2220,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-3,16": {
       "type": "empty",
@@ -1864,6 +2240,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 534,
+        "title": "The Dreaming Machine",
+        "desc": "Level 534. Marduk has passed through every age. Can you follow?"
       }
     },
     "-2,13": {
@@ -1875,7 +2260,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-2,14": {
       "type": "house_interior",
@@ -1886,7 +2279,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-2,15": {
       "type": "house_interior",
@@ -1897,7 +2298,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-2,16": {
       "type": "empty",
@@ -1920,7 +2329,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-1,14": {
       "type": "house_interior",
@@ -1931,7 +2348,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-1,15": {
       "type": "house_interior",
@@ -1942,7 +2367,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-1,16": {
       "type": "empty",
@@ -1965,7 +2398,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "0,14": {
       "type": "house_interior",
@@ -1976,7 +2417,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "0,15": {
       "type": "house_interior",
@@ -1987,7 +2436,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "0,16": {
       "type": "empty",
@@ -2027,6 +2484,15 @@
         "type": "masklock",
         "level": 20,
         "range": 9
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 5,
+        "title": "The Northern Spire",
+        "desc": "Jeremy's domain. The ice-door asks for understanding."
       }
     },
     "1,14": {
@@ -2038,7 +2504,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "1,15": {
       "type": "house_interior",
@@ -2049,7 +2523,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "1,16": {
       "type": "empty",
@@ -2072,7 +2554,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "2,14": {
       "type": "house_interior",
@@ -2083,7 +2573,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "2,15": {
       "type": "house_interior",
@@ -2094,7 +2592,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "2,16": {
       "type": "empty",
@@ -2110,6 +2616,15 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 818
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 658,
+        "title": "The Second Fall",
+        "desc": "Level 658. Marduk has passed through every age. Can you follow?"
       }
     },
     "3,13": {
@@ -2121,7 +2636,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "3,14": {
       "type": "house_interior",
@@ -2132,7 +2655,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "3,15": {
       "type": "house_interior",
@@ -2143,7 +2674,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "3,16": {
       "type": "empty",
@@ -2166,7 +2705,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "4,14": {
       "type": "house_interior",
@@ -2190,7 +2737,15 @@
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
-      "house_sector": "N"
+      "house_sector": "N",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "4,16": {
       "type": "empty",
@@ -2230,6 +2785,15 @@
         "type": "masklock",
         "level": 35,
         "range": 12
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 40,
+        "title": "The Eye of Eve",
+        "desc": "Eve's door. The machine asks: do you understand what you are entering?"
       }
     },
     "12,12": {
@@ -2254,7 +2818,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "12,14": {
       "type": "house_interior",
@@ -2265,7 +2837,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "12,15": {
       "type": "house_interior",
@@ -2276,7 +2856,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "13,11": {
       "type": "house_interior",
@@ -2287,7 +2875,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "13,12": {
       "type": "transit",
@@ -2311,7 +2907,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "13,14": {
       "type": "house_interior",
@@ -2322,7 +2926,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "13,15": {
       "type": "house_interior",
@@ -2333,7 +2945,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "14,11": {
       "type": "house_interior",
@@ -2344,7 +2964,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "14,12": {
       "type": "transit",
@@ -2381,7 +3009,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "14,15": {
       "type": "house_interior",
@@ -2392,7 +3028,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "15,11": {
       "type": "locked_zone_threshold",
@@ -2431,7 +3075,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "15,14": {
       "type": "house_interior",
@@ -2442,7 +3094,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "15,15": {
       "type": "house_interior",
@@ -2453,7 +3113,15 @@
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
-      "house_sector": "NE"
+      "house_sector": "NE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "16,11": {
       "type": "empty",
@@ -2515,6 +3183,15 @@
         "type": "masklock",
         "level": 18,
         "range": 8
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 1,
+        "title": "The Gate at Shangri-La",
+        "desc": "The copper gate requires alignment."
       }
     },
     "13,2": {
@@ -2526,7 +3203,15 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "13,3": {
       "type": "house_interior",
@@ -2537,7 +3222,15 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "13,4": {
       "type": "house_interior",
@@ -2548,7 +3241,15 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "14,1": {
       "type": "house_interior",
@@ -2559,7 +3260,15 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "14,2": {
       "type": "house_interior",
@@ -2583,7 +3292,15 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "14,4": {
       "type": "house_interior",
@@ -2594,7 +3311,15 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "15,1": {
       "type": "house_interior",
@@ -2605,7 +3330,15 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "15,2": {
       "type": "house_interior",
@@ -2616,7 +3349,15 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "15,3": {
       "type": "house_interior",
@@ -2627,7 +3368,15 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "15,4": {
       "type": "house_interior",
@@ -2638,7 +3387,15 @@
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
-      "house_sector": "E"
+      "house_sector": "E",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "16,1": {
       "type": "empty",
@@ -2674,6 +3431,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 28,
+        "title": "The Empire's Last Night",
+        "desc": "Level 28. Marduk has passed through every age. Can you follow?"
       }
     },
     "9,-15": {
@@ -2685,7 +3451,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "9,-14": {
       "type": "house_interior",
@@ -2696,7 +3470,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "9,-13": {
       "type": "house_interior",
@@ -2707,7 +3489,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "10,-16": {
       "type": "empty",
@@ -2730,7 +3520,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "10,-14": {
       "type": "house_interior",
@@ -2741,7 +3539,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "10,-13": {
       "type": "house_interior",
@@ -2752,7 +3558,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "11,-16": {
       "type": "empty",
@@ -2775,7 +3589,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "11,-14": {
       "type": "house_interior",
@@ -2816,6 +3638,15 @@
         "type": "masklock",
         "level": 22,
         "range": 9
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 55,
+        "title": "The Kingdom Gate",
+        "desc": "Gus keeps a hard threshold."
       }
     },
     "12,-16": {
@@ -2839,7 +3670,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "12,-14": {
       "type": "house_interior",
@@ -2850,7 +3689,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "12,-13": {
       "type": "house_interior",
@@ -2861,7 +3708,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "13,-16": {
       "type": "empty",
@@ -2884,7 +3739,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "13,-14": {
       "type": "house_interior",
@@ -2895,7 +3758,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "13,-13": {
       "type": "house_interior",
@@ -2906,7 +3777,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "14,-16": {
       "type": "empty",
@@ -2918,6 +3797,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 23,
+        "title": "The Long Road Through",
+        "desc": "Level 23. Marduk has passed through every age. Can you follow?"
       }
     },
     "14,-15": {
@@ -2929,7 +3817,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "14,-14": {
       "type": "house_interior",
@@ -2940,7 +3836,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "14,-13": {
       "type": "house_interior",
@@ -2951,7 +3855,15 @@
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
-      "house_sector": "SE"
+      "house_sector": "SE",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-2,-16": {
       "type": "empty",
@@ -2974,7 +3886,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-2,-14": {
       "type": "house_interior",
@@ -2985,7 +3905,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-2,-13": {
       "type": "house_interior",
@@ -2996,7 +3924,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-1,-16": {
       "type": "empty",
@@ -3008,6 +3944,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 43,
+        "title": "The Faithful Remnant",
+        "desc": "Level 43. Marduk has passed through every age. Can you follow?"
       }
     },
     "-1,-15": {
@@ -3019,7 +3964,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-1,-14": {
       "type": "house_interior",
@@ -3030,7 +3983,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-1,-13": {
       "type": "house_interior",
@@ -3041,7 +4002,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "0,-16": {
       "type": "empty",
@@ -3064,7 +4033,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "0,-14": {
       "type": "house_interior",
@@ -3075,7 +4052,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "0,-13": {
       "type": "house_front_door",
@@ -3103,6 +4088,15 @@
         "type": "masklock",
         "level": 28,
         "range": 10
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 75,
+        "title": "The Author's House",
+        "desc": "The final door. One who has come this far already knows."
       }
     },
     "1,-16": {
@@ -3126,7 +4120,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "1,-14": {
       "type": "house_interior",
@@ -3137,7 +4139,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "1,-13": {
       "type": "house_interior",
@@ -3148,7 +4158,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "2,-16": {
       "type": "empty",
@@ -3171,7 +4189,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "2,-14": {
       "type": "house_interior",
@@ -3182,7 +4208,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "2,-13": {
       "type": "house_interior",
@@ -3193,7 +4227,15 @@
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
-      "house_sector": "S"
+      "house_sector": "S",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-4,1": {
       "type": "empty",
@@ -3205,6 +4247,15 @@
       },
       "path_colors": {
         "B": "#2E5C38"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 7,
+        "title": "The Rotation Gate",
+        "desc": "A challenge on Path B. Solve it to continue."
       }
     },
     "-5,1": {
@@ -3217,6 +4268,15 @@
       },
       "path_colors": {
         "B": "#2E5C38"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 15,
+        "title": "The Face of the Code",
+        "desc": "A challenge on Path B. Solve it to continue."
       }
     },
     "-6,1": {
@@ -3265,6 +4325,15 @@
       },
       "path_colors": {
         "B": "#2E5C38"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 5,
+        "title": "Alignment Required",
+        "desc": "A challenge on Path B. Solve it to continue."
       }
     },
     "-10,1": {
@@ -3313,6 +4382,15 @@
       },
       "path_colors": {
         "C": "#503B80"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 3,
+        "title": "A Turning Lock",
+        "desc": "A challenge on Path C. Solve it to continue."
       }
     },
     "-5,4": {
@@ -3337,6 +4415,15 @@
       },
       "path_colors": {
         "C": "#503B80"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 10,
+        "title": "The Logic Gate",
+        "desc": "A challenge on Path C. Solve it to continue."
       }
     },
     "-7,6": {
@@ -3361,6 +4448,15 @@
       },
       "path_colors": {
         "C": "#503B80"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 10,
+        "title": "The Spatial Key",
+        "desc": "A challenge on Path C. Solve it to continue."
       }
     },
     "-9,8": {
@@ -3397,6 +4493,15 @@
       },
       "path_colors": {
         "C": "#503B80"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 10,
+        "title": "The Sequence Seal",
+        "desc": "A challenge on Path C. Solve it to continue."
       }
     },
     "-12,11": {
@@ -3409,6 +4514,15 @@
       },
       "path_colors": {
         "C": "#503B80"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 20,
+        "title": "Alignment Required",
+        "desc": "A challenge on Path C. Solve it to continue."
       }
     },
     "3,4": {
@@ -3445,6 +4559,15 @@
       },
       "path_colors": {
         "D": "#2A6880"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 12,
+        "title": "The Cipher Face",
+        "desc": "A challenge on Path D. Solve it to continue."
       }
     },
     "3,7": {
@@ -3517,6 +4640,15 @@
       },
       "path_colors": {
         "D": "#2A6880"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 8,
+        "title": "The Pattern Lock",
+        "desc": "A challenge on Path D. Solve it to continue."
       }
     },
     "4,2": {
@@ -3541,6 +4673,15 @@
       },
       "path_colors": {
         "E": "#701818"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 5,
+        "title": "A Locked Door",
+        "desc": "A challenge on Path E. Solve it to continue."
       }
     },
     "6,4": {
@@ -3553,6 +4694,15 @@
       },
       "path_colors": {
         "E": "#701818"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 25,
+        "title": "A Locked Door",
+        "desc": "A challenge on Path E. Solve it to continue."
       }
     },
     "7,5": {
@@ -3565,6 +4715,15 @@
       },
       "path_colors": {
         "E": "#701818"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 12,
+        "title": "Orient and Pass",
+        "desc": "A challenge on Path E. Solve it to continue."
       }
     },
     "8,6": {
@@ -3577,6 +4736,15 @@
       },
       "path_colors": {
         "E": "#701818"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 12,
+        "title": "The Logic Gate",
+        "desc": "A challenge on Path E. Solve it to continue."
       }
     },
     "9,7": {
@@ -3613,6 +4781,15 @@
       },
       "path_colors": {
         "E": "#701818"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 10,
+        "title": "The Geometric Seal",
+        "desc": "A challenge on Path E. Solve it to continue."
       }
     },
     "12,10": {
@@ -3709,6 +4886,15 @@
       },
       "path_colors": {
         "F": "#6E4418"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 20,
+        "title": "A Turning Lock",
+        "desc": "A challenge on Path F. Solve it to continue."
       }
     },
     "11,0": {
@@ -3745,6 +4931,15 @@
       },
       "path_colors": {
         "F": "#6E4418"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 8,
+        "title": "The Pattern Lock",
+        "desc": "A challenge on Path F. Solve it to continue."
       }
     },
     "4,-4": {
@@ -3757,6 +4952,15 @@
       },
       "path_colors": {
         "G": "#145858"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 7,
+        "title": "The Direction Puzzle",
+        "desc": "A challenge on Path G. Solve it to continue."
       }
     },
     "5,-5": {
@@ -3793,6 +4997,15 @@
       },
       "path_colors": {
         "G": "#145858"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 4,
+        "title": "A Locked Door",
+        "desc": "A challenge on Path G. Solve it to continue."
       }
     },
     "8,-8": {
@@ -3817,6 +5030,15 @@
       },
       "path_colors": {
         "G": "#145858"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 1,
+        "title": "The Spatial Key",
+        "desc": "A challenge on Path G. Solve it to continue."
       }
     },
     "10,-10": {
@@ -3829,6 +5051,15 @@
       },
       "path_colors": {
         "G": "#145858"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 2,
+        "title": "The Tilted Seal",
+        "desc": "A challenge on Path G. Solve it to continue."
       }
     },
     "11,-11": {
@@ -3841,6 +5072,15 @@
       },
       "path_colors": {
         "G": "#145858"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 7,
+        "title": "Orient and Pass",
+        "desc": "A challenge on Path G. Solve it to continue."
       }
     },
     "11,-12": {
@@ -3889,6 +5129,15 @@
       },
       "path_colors": {
         "H": "#3A1258"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 1,
+        "title": "The Geometric Seal",
+        "desc": "A challenge on Path H. Solve it to continue."
       }
     },
     "0,-10": {
@@ -3901,6 +5150,15 @@
       },
       "path_colors": {
         "H": "#3A1258"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 15,
+        "title": "The Rotation Gate",
+        "desc": "A challenge on Path H. Solve it to continue."
       }
     },
     "0,-11": {
@@ -3913,6 +5171,15 @@
       },
       "path_colors": {
         "H": "#3A1258"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 20,
+        "title": "The Geometric Seal",
+        "desc": "A challenge on Path H. Solve it to continue."
       }
     },
     "0,-12": {
@@ -3943,7 +5210,19 @@
       "type": "special",
       "lore": null,
       "era": "Pre-Collapse · JFK Terminal B",
-      "dead_end": true
+      "dead_end": true,
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": false,
+        "lock_exit": true,
+        "range": [
+          5,
+          10
+        ],
+        "title": "The FBI Holding Cell",
+        "desc": "Transportation suspended. The only way out is the puzzle on the wall."
+      }
     },
     "6,11": {
       "name": "The Med Pod Room",
@@ -4743,6 +6022,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 12,
+        "title": "The Turning Age",
+        "desc": "Level 12. Marduk has passed through every age. Can you follow?"
       }
     },
     "16,-4": {
@@ -4803,6 +6091,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 15,
+        "title": "A Name Forgotten",
+        "desc": "Level 15. Marduk has passed through every age. Can you follow?"
       }
     },
     "16,-9": {
@@ -4863,6 +6160,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 19,
+        "title": "The Burning Library",
+        "desc": "Level 19. Marduk has passed through every age. Can you follow?"
       }
     },
     "16,-14": {
@@ -4979,6 +6285,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 35,
+        "title": "What the Waters Covered",
+        "desc": "Level 35. Marduk has passed through every age. Can you follow?"
       }
     },
     "3,-16": {
@@ -5043,6 +6358,15 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 147
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 53,
+        "title": "The Language Before Language",
+        "desc": "Level 53. Marduk has passed through every age. Can you follow?"
       }
     },
     "-13,-16": {
@@ -5091,6 +6415,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 81,
+        "title": "The Crossing",
+        "desc": "Level 81. Marduk has passed through every age. Can you follow?"
       }
     },
     "-16,-15": {
@@ -5155,6 +6488,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 100,
+        "title": "The Desert of Clocks",
+        "desc": "Level 100. Marduk has passed through every age. Can you follow?"
       }
     },
     "-16,-10": {
@@ -5215,6 +6557,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 123,
+        "title": "The Watcher on the Bridge",
+        "desc": "Level 123. Marduk has passed through every age. Can you follow?"
       }
     },
     "-16,-5": {
@@ -5263,6 +6614,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 187,
+        "title": "The Last Oracle",
+        "desc": "Level 187. Marduk has passed through every age. Can you follow?"
       }
     },
     "-16,5": {
@@ -5323,6 +6683,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 231,
+        "title": "A City Made of Salt",
+        "desc": "Level 231. Marduk has passed through every age. Can you follow?"
       }
     },
     "-16,10": {
@@ -5399,6 +6768,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 351,
+        "title": "The Garden That Was Not Eden",
+        "desc": "Level 351. Marduk has passed through every age. Can you follow?"
       }
     },
     "-12,16": {
@@ -5463,6 +6841,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 433,
+        "title": "The Frequency",
+        "desc": "Level 433. Marduk has passed through every age. Can you follow?"
       }
     },
     "-7,16": {
@@ -5535,6 +6922,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 811,
+        "title": "Marduk's Grief",
+        "desc": "Level 811. Marduk has passed through every age. Can you follow?"
       }
     },
     "8,16": {
@@ -5595,6 +6991,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 1000,
+        "title": "The Final Recursion",
+        "desc": "Level 1000. Marduk has passed through every age. Can you follow?"
       }
     },
     "13,16": {
@@ -5719,6 +7124,15 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 10,
+        "title": "The First Recursion",
+        "desc": "Level 10. Marduk has passed through every age. Can you follow?"
       }
     },
     "13,-2": {
@@ -5767,6 +7181,15 @@
       },
       "path_colors": {
         "E": "#701818"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 2,
+        "title": "The Sequence Seal",
+        "desc": "A challenge on Path E. Solve it to continue."
       }
     },
     "5,2": {
@@ -5791,6 +7214,15 @@
       },
       "path_colors": {
         "E": "#701818"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 15,
+        "title": "Alignment Required",
+        "desc": "A challenge on Path E. Solve it to continue."
       }
     },
     "7,4": {
@@ -5839,6 +7271,15 @@
       },
       "path_colors": {
         "E": "#701818"
+      },
+      "puzzle": {
+        "type": "masklock",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 10,
+        "title": "The Face of the Code",
+        "desc": "A challenge on Path E. Solve it to continue."
       }
     },
     "11,8": {
@@ -5851,6 +7292,15 @@
       },
       "path_colors": {
         "E": "#701818"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 12,
+        "title": "What Faces Where",
+        "desc": "A challenge on Path E. Solve it to continue."
       }
     },
     "12,9": {
@@ -5863,6 +7313,15 @@
       },
       "path_colors": {
         "E": "#701818"
+      },
+      "puzzle": {
+        "type": "tesseract",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 4,
+        "title": "The Direction Puzzle",
+        "desc": "A challenge on Path E. Solve it to continue."
       }
     },
     "4,-3": {
@@ -5887,6 +7346,15 @@
       },
       "path_colors": {
         "G": "#145858"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 25,
+        "title": "The Cipher Face",
+        "desc": "A challenge on Path G. Solve it to continue."
       }
     },
     "6,-5": {
@@ -6079,6 +7547,15 @@
       },
       "path_colors": {
         "C": "#503B80"
+      },
+      "puzzle": {
+        "type": "turing",
+        "music": "puzzle_tension",
+        "lock_entry": true,
+        "lock_exit": false,
+        "level": 3,
+        "title": "The Face of the Code",
+        "desc": "A challenge on Path C. Solve it to continue."
       }
     },
     "9,-1": {
@@ -6145,175 +7622,407 @@
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,-12": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,-11": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,-10": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,-9": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,-8": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,-7": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,-6": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,-5": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-15,-4": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,-13": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,-12": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,-11": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,-10": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,-9": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,-8": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,-7": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,-6": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-14,-4": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-13": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-12": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-11": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-10": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-9": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-8": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-7": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-6": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-5": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "-13,-4": {
       "type": "house_interior",
       "house_id": "b",
       "house_letter": "B",
-      "house_color": "#4A7C59"
+      "house_color": "#4A7C59",
+      "puzzle": {
+        "type": "tesseract",
+        "level": 101,
+        "title": "An Empty Room",
+        "desc": "This room will not reveal itself without effort.",
+        "music": "puzzle_tension",
+        "lock_entry": true
+      }
     },
     "15,9": {
       "type": "locked_zone_threshold",
