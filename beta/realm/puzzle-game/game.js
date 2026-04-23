@@ -18,6 +18,7 @@
   const lineHue = Number(params.get('hue') || '205');
   const queue = parseQueue();
   let queueIndex = 0;
+  const VERSION = 'v19';
 
   function parseQueue() {
     if (rangeParam && /^\d+\-\d+$/.test(rangeParam)) {
@@ -312,7 +313,7 @@
     state.target.x = randAngle(1.1);
     state.target.y = randAngle(2.7);
     state.target.z = randAngle(4.5);
-    state.target.w = 0.82 + rand(seed + 5.9) * 0.34;
+    state.target.w = 0.55 + rand(seed + 5.9) * 1.00;
 
     const offsetMin = lerp(1.0, 0.85, state.phase);
     const pickStart = (targetAngle, s) => {
@@ -322,7 +323,7 @@
     state.player.x = pickStart(state.target.x, 6.1);
     state.player.y = pickStart(state.target.y, 7.9);
     state.player.z = pickStart(state.target.z, 9.7);
-    state.player.w = clamp(state.target.w + (signedRand(seed + 11.3) >= 0 ? 1 : -1) * (0.12 + rand(seed + 13.1) * 0.12), 0.7, 1.4);
+    state.player.w = clamp(state.target.w + (signedRand(seed + 11.3) >= 0 ? 1 : -1) * (0.22 + rand(seed + 13.1) * 0.18), 0.55, 1.55);
 
     sliderX.value = String(angleToSlider(state.player.x));
     sliderY.value = String(angleToSlider(state.player.y));
@@ -554,7 +555,7 @@
     const dy = angleDiff(state.player.y, state.target.y);
     const dz = angleDiff(state.player.z, state.target.z);
     const dw = Math.abs(state.player.w - state.target.w);
-    const score = 1 - clamp((dx + dy + dz + dw * 1.35) / (tol * 4.8), 0, 1);
+    const score = 1 - clamp((dx + dy + dz + dw * 0.95) / (tol * 4.4), 0, 1);
     return Math.pow(score, 1.4);
   }
 
@@ -566,7 +567,7 @@
     state.player.x = wrapAngle(mix(state.player.x, state.target.x, pull));
     state.player.y = wrapAngle(mix(state.player.y, state.target.y, pull));
     state.player.z = wrapAngle(mix(state.player.z, state.target.z, pull));
-    state.player.w = mix(state.player.w, state.target.w, pull * 0.85);
+    state.player.w = mix(state.player.w, state.target.w, pull * 0.70);
     sliderX.value = String(angleToSlider(state.player.x));
     sliderY.value = String(angleToSlider(state.player.y));
     sliderZ.value = String(angleToSlider(state.player.z));
@@ -761,7 +762,8 @@
       for (let i = 0; i < line.length; i++) {
         const point = line[i];
         if (!point) { open = false; continue; }
-        const depthPoint = { x: point.x, y: point.y, z: point.z * depthScale };
+        const relief = 0.35 + depthScale * 1.15;
+        const depthPoint = { x: point.x + point.z * (depthScale - 1) * 0.22, y: point.y, z: point.z * relief };
         const local = rotatePoint(depthPoint, rot.x, rot.y, rot.z);
         const world = rotatePoint(local, worldX, worldY, worldZ);
         const jit = jitter ? {
@@ -810,7 +812,15 @@
       tremble,
       state.player.w
     );
+
     ctx.shadowBlur = 0;
+    ctx.save();
+    ctx.font = '600 12px Inter, system-ui, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'bottom';
+    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.fillText(VERSION, innerWidth - 12, innerHeight - 12);
+    ctx.restore();
   }
 
   function showOverlay(next = true) {
@@ -855,11 +865,19 @@
     state.player.x = sliderToAngle(sliderX.value);
     state.player.y = sliderToAngle(sliderY.value);
     state.player.z = sliderToAngle(sliderZ.value);
-    state.player.w = clamp(Number(sliderW.value) / 100, 0.7, 1.4);
+    state.player.w = clamp(Number(sliderW.value) / 100, 0.55, 1.55);
   }
 
   function setZoomFromSlider(v) {
     state.zoomTarget = clamp(Number(v) / 100, 0.5, 1.8);
+  }
+
+  function setZoomSliderPosition(clientY) {
+    const rect = zoomSlider.getBoundingClientRect();
+    const t = clamp(1 - ((clientY - rect.top) / rect.height), 0, 1);
+    const next = 50 + t * 130;
+    zoomSlider.value = String(Math.round(next));
+    setZoomFromSlider(next);
   }
 
   sliderX.addEventListener('input', () => { syncFromSliders(); sliderSound(); unlockAudio(); });
@@ -867,6 +885,29 @@
   sliderZ.addEventListener('input', () => { syncFromSliders(); sliderSound(); unlockAudio(); });
   sliderW.addEventListener('input', () => { syncFromSliders(); sliderSound(); unlockAudio(); });
   zoomSlider.addEventListener('input', () => { setZoomFromSlider(zoomSlider.value); sliderSound(); unlockAudio(); });
+
+  let zoomDrag = false;
+  zoomSlider.addEventListener('pointerdown', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    zoomDrag = true;
+    try { zoomSlider.setPointerCapture(e.pointerId); } catch (err) {}
+    setZoomSliderPosition(e.clientY);
+    sliderSound();
+    await unlockAudio();
+  });
+  zoomSlider.addEventListener('pointermove', (e) => {
+    if (!zoomDrag) return;
+    e.preventDefault();
+    setZoomSliderPosition(e.clientY);
+    sliderSound();
+  });
+  function endZoomDrag(e) {
+    zoomDrag = false;
+    try { zoomSlider.releasePointerCapture(e.pointerId); } catch (err) {}
+  }
+  zoomSlider.addEventListener('pointerup', endZoomDrag);
+  zoomSlider.addEventListener('pointercancel', endZoomDrag);
 
   async function toggleSound(e) {
     if (e) e.preventDefault();

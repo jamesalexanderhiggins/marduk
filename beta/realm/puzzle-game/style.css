@@ -161,13 +161,15 @@ body::after {
 .blue::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgba(80,170,255,0.08), 0 0 16px rgba(80,170,255,0.35), 0 7px 18px rgba(0,0,0,0.4); }
 .white::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgba(255,255,255,0.06), 0 0 16px rgba(255,255,255,0.28), 0 7px 18px rgba(0,0,0,0.4); }
 .vslider {
-  -webkit-appearance: slider-vertical;
+  -webkit-appearance: none;
   appearance: none;
   width: 54px;
   height: min(34vh, 220px);
   border-radius: 18px;
   padding: 8px 0;
   touch-action: none;
+  writing-mode: vertical-lr;
+  direction: rtl;
 }
 .vslider::-webkit-slider-runnable-track {
   width: 8px;
