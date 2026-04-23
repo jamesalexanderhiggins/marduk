@@ -190,14 +190,7 @@ body.kudra-active #stage{padding-top:110px;}
 @keyframes breathe{0%,100%{text-shadow:0 0 20px rgba(201,168,76,0.4),0 0 60px rgba(201,168,76,0.1);}50%{text-shadow:0 0 30px rgba(201,168,76,0.7),0 0 80px rgba(201,168,76,0.25);}}
 @keyframes eveBlink{0%,92%,100%{opacity:1;}93%,97%{opacity:0.4;}}
 @keyframes glitchT{0%,100%{transform:translateX(0);}50%{transform:translateX(2px);}}
-/* KUDRAMARDUK mode badge — top centre, very visible */
-#kudraMode{display:none;position:fixed;top:14px;left:50%;
-  transform:translateX(-50%);z-index:300;
-  align-items:center;gap:10px;
-  background:rgba(4,2,10,0.95);cursor:pointer;
-  border:1px solid rgba(192,132,252,0.55);
-  padding:9px 22px;white-space:nowrap;
-  box-shadow:0 0 24px rgba(192,132,252,0.35),0 0 60px rgba(192,132,252,0.12);}
+#kudraMode{display:none !important;}
 #kudraMode.on{display:flex;}
 #kudraMode:hover{border-color:#c084fc;
   box-shadow:0 0 32px rgba(192,132,252,0.6),0 0 80px rgba(192,132,252,0.25);}
@@ -889,18 +882,21 @@ function closeLockPopup() {
 window.addEventListener('load', function checkSolvedParam() {
   const params = new URLSearchParams(window.location.search);
   const solvedKey = params.get('solved');
-  if (!solvedKey) return;
+  const solvedGate = params.get('solved_gate');
+  if (!solvedKey && !solvedGate) return;
   const cleanURL = window.location.pathname + window.location.hash;
   history.replaceState(null, '', cleanURL);
-  if (typeof collectKey === 'function') {
+  if (solvedKey && typeof collectKey === 'function') {
     const isNew = collectKey(solvedKey);
-    if (isNew) {
-      setTimeout(() => {
-        if (typeof flashKeyCollect === 'function') flashKeyCollect(solvedKey);
-        if (typeof updateKeyBar === 'function') updateKeyBar();
-        showDoorLockBubble('🗝️ Key ' + solvedKey + ' collected — door unlocked!', '#7ed49a');
-      }, 600);
-    }
+    if (isNew) setTimeout(() => {
+      if (typeof flashKeyCollect === 'function') flashKeyCollect(solvedKey);
+      if (typeof updateKeyBar === 'function') updateKeyBar();
+      showDoorLockBubble('🗝️ Key ' + solvedKey + ' collected — door unlocked!', '#7ed49a');
+    }, 600);
+  }
+  if (solvedGate && typeof markGateSolved === 'function') {
+    markGateSolved(decodeURIComponent(solvedGate));
+    setTimeout(() => showDoorLockBubble('✓ Gate solved — the way is open', '#7ed49a'), 600);
   }
 });
 
@@ -1208,35 +1204,8 @@ function copySkmJson() {
   showDoorLockBubble('JSON copied to clipboard', '#c084fc');
 }
 
-// Wire KUDRAMARDUK toggle to open/close SKM panel
-(function wireSkmToggle() {
-  const kudra = document.getElementById('kudraMode');
-  if (!kudra) return;
-  kudra.addEventListener('click', (e) => {
-    if (e.target.classList.contains('km-exit')) {
-      // Exit kudramarduk mode
-      const p = getP();
-      delete p.kudra;
-      saveP(p);
-      kudra.classList.remove('on');
-      document.body.classList.remove('kudra-active');
-      document.getElementById('mapBtn').classList.remove('show');
-      document.getElementById('exitKBtn').classList.remove('show');
-      closeSkmPanel();
-    } else {
-      // Toggle SKM panel
-      const panel = document.getElementById('skmPanel');
-      if (panel.classList.contains('show')) {
-        closeSkmPanel();
-      } else {
-        openSkmPanel();
-      }
-    }
-  });
-})();
-
-// Update SKM when navigating in kudra mode
-const _origRender = typeof render === 'function' ? render : null;
+// SKM panel wiring deferred — handled by SUPERKUDRAMARDUK in main script
+// (avoids conflicting with existing KUDRAMARDUK click handler)
 
 </script>
 
@@ -1467,6 +1436,12 @@ function getDoors(x, y) {
     if (!inBounds(nx, ny)) { out[d] = {sealed: true, reason: 'edge'}; continue; }
 
     const neighbour = getTile(nx, ny);
+
+    // ── Gate lock: neighbour has gate_lock and not yet solved ──
+    if (neighbour && neighbour.gate_lock && !isGateSolved(`${nx},${ny}`) && !isKudraUnlocked()) {
+      out[d] = {open: true, gate_locked: true};
+      continue;
+    }
 
     /* House perimeter rules: sealed except at front door */
     if (tile.type === 'house_interior' || tile.type === 'house_front_door') {
@@ -1718,7 +1693,7 @@ function render(x, y) {
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v6.8';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v8.0';
 
   // Music — zone-aware track selection
   MusicEngine.playForTile(x, y, tile);
@@ -2627,6 +2602,26 @@ function renderNavArrows(x, y) {
 
     // Emily strict mode: skip dirs not in allowed set
     if (allowedDirs && !allowedDirs.has(d.key)) return;
+
+    // ── Gate-locked arrows: lock icon opens puzzle popup ──
+    if (door && door.gate_locked) {
+      const dX = x + d.dx, dY = y + d.dy;
+      const nb = getTile(dX, dY);
+      const lock = nb && nb.gate_lock;
+      const icons = {masklock:'🔒', tesseract:'🔷', turing:'⚡'};
+      const a = document.createElement('button');
+      a.className = 'nav-arrow ' + d.key;
+      a.style.color = 'var(--ember)';
+      a.style.borderColor = 'rgba(255,107,43,0.45)';
+      a.textContent = lock ? (icons[lock.type]||'🔒') : '🔒';
+      a.title = lock ? `${lock.type} · level ${lock.level||lock.target||'?'} · solve to pass` : 'Locked gate';
+      a.addEventListener('click', () => {
+        if (lock) openGateLock(lock, dX, dY);
+        else showDoorLockBubble('🔒 Door Lock — solve the puzzle to pass');
+      });
+      el.appendChild(a);
+      return;
+    }
 
     // Handle lock-gated tiles: show arrow that opens lock popup
     if (door && door.sealed && door.reason === 'key-locked') {
@@ -3858,6 +3853,36 @@ document.addEventListener('keydown', (ev) => {
   goTo(cur.x + dx, cur.y + dy);
 });
 
+/* ── Gate lock helpers ─────────────────────────── */
+const TESSERACT_BASE = 'https://jamesalexanderhiggins.github.io/marduk/beta/realm/tesseract';
+
+function isGateSolved(tileKey) {
+  const p = getP(); return !!(p.solved_gates && p.solved_gates[tileKey]);
+}
+function markGateSolved(tileKey) {
+  const p = getP(); p.solved_gates = p.solved_gates || {}; p.solved_gates[tileKey] = true; saveP(p);
+}
+function openGateLock(lock, targetX, targetY) {
+  const nb = getTile(targetX, targetY);
+  const doorName = nb.name || 'The Sealed Gate';
+  if (lock.type === 'turing') {
+    showTuringPopup(lock.target || 150, targetX, targetY, {rounds: lock.rounds || 5});
+  } else if (lock.type === 'tesseract') {
+    const tileKey = `${targetX},${targetY}`;
+    const redirectURL = encodeURIComponent(
+      window.location.origin + window.location.pathname +
+      '?solved_gate=' + encodeURIComponent(tileKey) + '#' + encodeXY(targetX, targetY)
+    );
+    const src = `${TESSERACT_BASE}?level=${lock.level||1}&redirect=${redirectURL}`;
+    document.getElementById('lpTitle').textContent = `Tesseract · Level ${lock.level||1} · ${doorName}`;
+    document.getElementById('lpIframe').src = src;
+    document.getElementById('lockPopupOverlay').classList.add('show');
+  } else {
+    const tileKey = `${targetX},${targetY}`;
+    showLockPopup(tileKey, targetX, targetY, {level: lock.level||10, range: lock.range||5, doorName});
+  }
+}
+
 /* ── KUDRAMARDUK mode — full system ─────────────── */
 function updateMapBtn() {
   const btn = document.getElementById('mapBtn');
@@ -3994,11 +4019,29 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   );
 });
 
-/* ── KUDRAMARDUK typing trigger ─────────────────── */
+/* ── KUDRAMARDUK + SUPERKUDRAMARDUK typing triggers ─────────────────── */
 let secretBuf = '';
 document.addEventListener('keydown', (ev) => {
   if (ev.key.length !== 1) return;
   secretBuf = (secretBuf + ev.key.toUpperCase()).slice(-11);
+  if (secretBuf.length > 16) secretBuf = secretBuf.slice(-16);
+  if (secretBuf.endsWith('SUPERKUDRAMARDUK')) {
+    activateKudraMode();
+    setTimeout(() => {
+      const panel = document.getElementById('skmPanel');
+      if (panel) {
+        panel.classList.add('show');
+        const hd = panel.querySelector('.skm-head-title');
+        if (hd) hd.textContent = '✦ SUPER SKM · Full Tile Editor';
+        const h = (window.location.hash||'').replace('#','');
+        const pos = decodeXY(h);
+        if (pos && typeof loadSkmTile === 'function') loadSkmTile(pos.x, pos.y);
+        else if (typeof loadSkmTile === 'function') loadSkmTile(0, 0);
+      }
+    }, 600);
+    secretBuf = '';
+    return;
+  }
   if (secretBuf.endsWith('KUDRAMARDUK')) {
     activateKudraMode();
     secretBuf = '';

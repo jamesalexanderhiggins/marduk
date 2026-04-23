@@ -390,6 +390,11 @@
       },
       "path_colors": {
         "C": "#503B80"
+      },
+      "gate_lock": {
+        "type": "masklock",
+        "level": 12,
+        "range": 6
       }
     },
     "3,2": {
@@ -406,6 +411,11 @@
       },
       "path_colors": {
         "D": "#2A6880"
+      },
+      "gate_lock": {
+        "type": "masklock",
+        "level": 14,
+        "range": 7
       }
     },
     "3,3": {
@@ -422,6 +432,10 @@
       },
       "path_colors": {
         "D": "#2A6880"
+      },
+      "gate_lock": {
+        "type": "tesseract",
+        "level": 40
       }
     },
     "-3,1": {
@@ -454,6 +468,11 @@
       },
       "path_colors": {
         "B": "#2E5C38"
+      },
+      "gate_lock": {
+        "type": "masklock",
+        "level": 8,
+        "range": 5
       }
     },
     "-3,-1": {
@@ -517,6 +536,11 @@
       },
       "path_colors": {
         "F": "#6E4418"
+      },
+      "gate_lock": {
+        "type": "masklock",
+        "level": 10,
+        "range": 5
       }
     },
     "3,-1": {
@@ -549,6 +573,11 @@
       },
       "path_colors": {
         "G": "#145858"
+      },
+      "gate_lock": {
+        "type": "masklock",
+        "level": 12,
+        "range": 6
       }
     },
     "3,-3": {
@@ -565,6 +594,10 @@
       },
       "path_colors": {
         "G": "#145858"
+      },
+      "gate_lock": {
+        "type": "tesseract",
+        "level": 30
       }
     },
     "-2,-3": {
@@ -640,7 +673,11 @@
       },
       "keys_required": [
         "A"
-      ]
+      ],
+      "gate_lock": {
+        "type": "turing",
+        "target": 150
+      }
     },
     "-12,-13": {
       "type": "house_interior",
@@ -1271,6 +1308,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "gate_lock": {
+        "type": "tesseract",
+        "level": 350
       }
     },
     "-16,-1": {
@@ -1507,7 +1548,12 @@
       },
       "keys_required": [
         "B"
-      ]
+      ],
+      "gate_lock": {
+        "type": "masklock",
+        "level": 15,
+        "range": 8
+      }
     },
     "-13,1": {
       "type": "house_interior",
@@ -1690,7 +1736,12 @@
       },
       "keys_required": [
         "C"
-      ]
+      ],
+      "gate_lock": {
+        "type": "masklock",
+        "level": 25,
+        "range": 10
+      }
     },
     "-13,13": {
       "type": "house_interior",
@@ -1971,7 +2022,12 @@
       },
       "keys_required": [
         "D"
-      ]
+      ],
+      "gate_lock": {
+        "type": "masklock",
+        "level": 20,
+        "range": 9
+      }
     },
     "1,14": {
       "type": "house_interior",
@@ -2050,6 +2106,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "gate_lock": {
+        "type": "tesseract",
+        "level": 818
       }
     },
     "3,13": {
@@ -2165,7 +2225,12 @@
       },
       "keys_required": [
         "E"
-      ]
+      ],
+      "gate_lock": {
+        "type": "masklock",
+        "level": 35,
+        "range": 12
+      }
     },
     "12,12": {
       "type": "transit",
@@ -2445,7 +2510,12 @@
       "path_colors": {
         "F": "#6E4418"
       },
-      "keys_required": []
+      "keys_required": [],
+      "gate_lock": {
+        "type": "masklock",
+        "level": 18,
+        "range": 8
+      }
     },
     "13,2": {
       "type": "house_interior",
@@ -2741,7 +2811,12 @@
       },
       "keys_required": [
         "G"
-      ]
+      ],
+      "gate_lock": {
+        "type": "masklock",
+        "level": 22,
+        "range": 9
+      }
     },
     "12,-16": {
       "type": "empty",
@@ -3023,7 +3098,12 @@
       },
       "keys_required": [
         "H"
-      ]
+      ],
+      "gate_lock": {
+        "type": "masklock",
+        "level": 28,
+        "range": 10
+      }
     },
     "1,-16": {
       "type": "empty",
@@ -4647,6 +4727,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "gate_lock": {
+        "type": "tesseract",
+        "level": 6
       }
     },
     "16,-3": {
@@ -4791,6 +4875,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "gate_lock": {
+        "type": "tesseract",
+        "level": 31
       }
     },
     "16,-15": {
@@ -4863,6 +4951,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "gate_lock": {
+        "type": "tesseract",
+        "level": 78
       }
     },
     "5,-16": {
@@ -4947,6 +5039,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "gate_lock": {
+        "type": "tesseract",
+        "level": 147
       }
     },
     "-13,-16": {
@@ -5019,6 +5115,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "gate_lock": {
+        "type": "tesseract",
+        "level": 238
       }
     },
     "-16,-13": {
@@ -5235,6 +5335,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "gate_lock": {
+        "type": "tesseract",
+        "level": 484
       }
     },
     "-16,11": {
@@ -5331,6 +5435,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "gate_lock": {
+        "type": "tesseract",
+        "level": 640
       }
     },
     "-9,16": {
@@ -5499,6 +5607,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
+      },
+      "gate_lock": {
+        "type": "tesseract",
+        "level": 1000
       }
     },
     "14,16": {
