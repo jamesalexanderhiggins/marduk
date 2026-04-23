@@ -526,6 +526,138 @@ body.kudra-active #stage{padding-top:110px;}
 @keyframes transcendPulse{
   0%,100%{box-shadow:0 0 0 rgba(212,175,55,0);border-color:rgba(212,175,55,0.3);}
   50%{box-shadow:0 0 20px rgba(212,175,55,0.4);border-color:rgba(212,175,55,0.9);}}
+
+/* ── v7.0 Central content card ───────────────────── */
+/* Stage is now a transparent overlay; content lives in .tile-card */
+#stage{position:fixed;inset:0;z-index:10;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;}
+.tile-card{pointer-events:auto;position:relative;
+  width:min(660px,88vw);max-height:72vh;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  display:flex;flex-direction:column;align-items:center;
+  gap:14px;text-align:center;padding:24px 20px 80px;}
+/* override old stage padding rules */
+body.kudra-active #stage{padding-top:0;}
+#stage > *:not(.tile-card){display:none;}
+
+/* ── Puzzle overlay ───────────────────────────────── */
+#puzzleOverlay{position:fixed;inset:0;z-index:60;
+  background:rgba(2,1,12,0.97);display:none;
+  flex-direction:column;align-items:stretch;}
+#puzzleOverlay.show{display:flex;}
+#puzzleHeader{flex:0 0 auto;padding:14px 20px 10px;
+  display:flex;align-items:center;gap:16px;
+  border-bottom:1px solid rgba(201,168,76,0.2);}
+#puzzleTitle{font-family:'Cinzel Decorative',serif;
+  font-size:clamp(13px,2vw,18px);color:var(--gold);flex:1;}
+#puzzleClose{font-family:'Cinzel',serif;font-size:9px;
+  letter-spacing:0.3em;color:var(--dim);
+  background:transparent;border:1px solid rgba(201,168,76,0.15);
+  padding:6px 14px;cursor:pointer;flex:0 0 auto;}
+#puzzleClose:hover{color:var(--gold);border-color:var(--gold);}
+#puzzleDesc{flex:0 0 auto;padding:8px 20px;
+  font-family:'EB Garamond',serif;font-style:italic;
+  font-size:clamp(13px,1.6vw,15px);color:rgba(228,220,203,0.6);
+  max-width:600px;align-self:center;text-align:center;}
+#puzzleFrame{flex:1 1 auto;border:none;width:100%;
+  background:#000;}
+
+/* ── Nav arrows — always at true screen cardinal edges ─ */
+.nav-arrows{position:fixed;inset:0;pointer-events:none;z-index:15;}
+.nav-arrow{position:absolute;pointer-events:auto;
+  width:52px;height:52px;border:1px solid var(--border);
+  background:rgba(7,9,16,0.82);color:var(--gold);font-size:22px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all 0.22s;text-decoration:none;border-radius:2px;}
+.nav-arrow:hover{border-color:var(--gold);background:rgba(201,168,76,0.12);
+  box-shadow:var(--glow);transform:scale(1.08);}
+.nav-arrow.up   {top:12px;   left:50%;transform:translateX(-50%);}
+.nav-arrow.down {bottom:12px;left:50%;transform:translateX(-50%);}
+.nav-arrow.left {left:12px;  top:50%; transform:translateY(-50%);}
+.nav-arrow.right{right:12px; top:50%; transform:translateY(-50%);}
+.nav-arrow.up:hover   {transform:translateX(-50%) scale(1.08);}
+.nav-arrow.down:hover {transform:translateX(-50%) scale(1.08);}
+.nav-arrow.left:hover {transform:translateY(-50%) scale(1.08);}
+.nav-arrow.right:hover{transform:translateY(-50%) scale(1.08);}
+.nav-arrow.path{color:var(--gold2);border-color:var(--gold);
+  box-shadow:0 0 12px rgba(201,168,76,0.45);}
+.nav-arrow.sealed{color:var(--dim);opacity:0.35;
+  cursor:not-allowed;pointer-events:none;}
+.nav-arrow.puzzle-lock{color:#c084fc;border-color:#9155cc;
+  box-shadow:0 0 14px rgba(192,132,252,0.5);}
+
+/* ── Puzzle tile render ────────────────────────────── */
+.puzzle-tile-root{width:100%;display:flex;flex-direction:column;
+  align-items:center;gap:16px;}
+.puzzle-tile-title{font-family:'Cinzel Decorative',serif;
+  font-size:clamp(15px,2.4vw,22px);color:#c084fc;
+  text-shadow:0 0 20px rgba(192,132,252,0.7);}
+.puzzle-tile-desc{font-family:'EB Garamond',serif;font-style:italic;
+  font-size:clamp(13px,1.6vw,15px);color:rgba(228,220,203,0.65);
+  line-height:1.7;max-width:480px;}
+.puzzle-launch-btn{font-family:'Cinzel',serif;font-size:10px;
+  letter-spacing:0.28em;text-transform:uppercase;
+  color:#1a1a2e;background:#c084fc;border:none;
+  padding:12px 28px;cursor:pointer;margin-top:8px;
+  transition:opacity 0.25s;}
+.puzzle-launch-btn:hover{opacity:0.85;}
+.puzzle-solved-badge{font-family:'Cinzel',serif;font-size:9px;
+  letter-spacing:0.4em;color:#4ade80;
+  border:1px solid rgba(74,222,128,0.3);padding:6px 16px;}
+
+/* ── SuperKudraMarduk edit mode ────────────────────── */
+body.skm-active #mv-stage .mv-info-content{display:none;}
+body.skm-active #mvInfo.show .skm-editor{display:flex;}
+.skm-badge{display:none;font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:0.4em;color:#f0abfc;padding:4px 12px;
+  border:1px solid rgba(240,171,252,0.3);margin-bottom:8px;}
+body.skm-active .skm-badge{display:block;}
+.skm-editor{display:none;flex-direction:column;gap:10px;
+  width:100%;padding:8px 0;font-family:'EB Garamond',serif;}
+.skm-section{font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:0.3em;color:rgba(240,171,252,0.5);
+  text-transform:uppercase;margin-top:6px;}
+.skm-mechanics{font-size:12px;color:rgba(201,168,76,0.55);
+  background:rgba(0,0,0,0.3);padding:8px 10px;border-radius:2px;
+  line-height:1.8;white-space:pre-wrap;}
+.skm-content-type{display:flex;gap:6px;flex-wrap:wrap;}
+.skm-type-btn{font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:0.2em;padding:5px 10px;cursor:pointer;
+  background:transparent;border:1px solid rgba(201,168,76,0.2);
+  color:rgba(201,168,76,0.5);transition:all 0.2s;}
+.skm-type-btn.active,.skm-type-btn:hover{
+  border-color:var(--gold);color:var(--gold);}
+.skm-field{width:100%;background:rgba(0,0,0,0.5);
+  border:1px solid rgba(201,168,76,0.2);color:var(--cream);
+  font-family:'EB Garamond',serif;font-size:14px;
+  padding:8px;resize:vertical;min-height:40px;}
+.skm-field:focus{outline:none;border-color:rgba(201,168,76,0.5);}
+.skm-wysiwyg{min-height:80px;text-align:left;line-height:1.7;}
+.skm-toolbar{display:flex;gap:4px;flex-wrap:wrap;}
+.skm-tb-btn{font-family:serif;font-size:13px;padding:3px 8px;
+  background:rgba(0,0,0,0.4);border:1px solid rgba(201,168,76,0.15);
+  color:var(--cream);cursor:pointer;}
+.skm-tb-btn:hover{border-color:var(--gold);}
+.skm-row{display:flex;gap:8px;align-items:center;}
+.skm-label{font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:0.2em;color:rgba(201,168,76,0.5);
+  white-space:nowrap;min-width:60px;}
+.skm-select{background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
+  color:var(--cream);font-family:'EB Garamond',serif;font-size:13px;
+  padding:5px 8px;flex:1;}
+.skm-input{background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
+  color:var(--cream);font-family:'EB Garamond',serif;font-size:13px;
+  padding:5px 8px;width:100%;}
+.skm-actions{display:flex;gap:8px;margin-top:6px;}
+.skm-save-btn{font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:0.2em;padding:8px 16px;cursor:pointer;flex:1;
+  background:#c084fc;color:#1a0a2e;border:none;}
+.skm-export-btn{font-family:'Cinzel',serif;font-size:8px;
+  letter-spacing:0.2em;padding:8px 16px;cursor:pointer;
+  background:transparent;border:1px solid rgba(201,168,76,0.3);
+  color:var(--gold);}
+.skm-note{font-size:11px;color:rgba(201,168,76,0.35);font-style:italic;}
+
 </style>
 </head>
 <body>
@@ -546,6 +678,16 @@ body.kudra-active #stage{padding-top:110px;}
 
 <div id="stage"></div>
 <button id="transcendBtn" onclick="goTo(15,10)">✦ Transcend ✦</button>
+
+<!-- Puzzle overlay -->
+<div id="puzzleOverlay">
+  <div id="puzzleHeader">
+    <div id="puzzleTitle">Challenge</div>
+    <button id="puzzleClose" onclick="closePuzzleOverlay()">✕ CLOSE</button>
+  </div>
+  <div id="puzzleDesc"></div>
+  <iframe id="puzzleFrame" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>
+</div>
 <div class="nav-arrows" id="navArrows"></div>
 
 <!-- Marduk View overlay -->
@@ -594,7 +736,7 @@ body.kudra-active #stage{padding-top:110px;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v6.7
+ *  MARDUK'S MAP — /realm/  grid SPA  v7.0
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -1045,43 +1187,56 @@ function render(x, y) {
   const navEl = document.getElementById('navArrows');
   s.style.opacity = '1';
   navEl.innerHTML = '';
-  // Reset stage style so house-scene leftover styles don't bleed
-  s.style.cssText = 'position:relative;z-index:10;width:100%;height:100vh;'
-    + 'display:flex;flex-direction:column;justify-content:center;'
-    + 'align-items:center;padding:72px 24px 24px;text-align:center;'
-    + 'overflow-y:auto;transition:opacity 0.5s ease;';
+  // v7.0: ensure tile-card exists for renderers
+  if (!document.getElementById('tileCard')) {
+    s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
+  }
+  // v7.0: stage is a fixed transparent overlay; content lives in .tile-card
+  s.style.cssText = '';
+  // Inject a fresh .tile-card for all renderers to write into
+  s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v6.8';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v7.0';
 
   // Music — zone-aware track selection
   MusicEngine.playForTile(x, y, tile);
 
+  // v7.0: tile content card (centred on screen)
+  const tc = document.getElementById('tileCard') || s;
+
+  // Check puzzle lock on entry (if tile has puzzle.lock_entry, show puzzle first)
+  if (tile.puzzle && tile.puzzle.lock_entry && !isPuzzleSolved(x, y)) {
+    renderPuzzleTile(tc, x, y, tile);
+    renderNavArrows(x, y);
+    return;
+  }
+
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
-  if (tile.tree_of_life) { renderTreeOfLife(s); return; }
-  if (tile.type === 'threshold')   { renderThreshold(s, x, y); }
-  else if (tile.type === 'quiz')   { renderQuiz(s, x, y, tile); }
-  else if (tile.type === 'home')   { renderHome(s, x, y, tile); }
-  else if (tile.type === 'spine')  { renderSpine(s, x, y, tile); }
+  if (tile.tree_of_life) { renderTreeOfLife(tc); return; }
+  if (tile.type === 'threshold')   { renderThreshold(tc, x, y); }
+  else if (tile.type === 'quiz')   { renderQuiz(tc, x, y, tile); }
+  else if (tile.type === 'home')   { renderHome(tc, x, y, tile); }
+  else if (tile.type === 'spine')  { renderSpine(tc, x, y, tile); }
   // ── Emily's path: checked BEFORE generic content dispatch ──────────────
   // on_path includes 'A' on all 24 path tiles. Home tile excluded by type.
   // Covers content, empty, and house_front_door types equally.
   else if (tile.on_path && tile.on_path.includes('A')) {
     detachTileParallax();
-    renderEmilyPath(s, x, y, tile);
+    renderEmilyPath(tc, x, y, tile);
   }
   // ── Generic content + other path tiles ─────────────────────────────────
   else if (tile.type === 'content' || tile.type === 'house_interior' || tile.type === 'house_front_door') {
     const sceneKey = `${x},${y}`;
     if (HOUSE_SCENES[sceneKey]) {
-      renderHouseScene(s, x, y, tile, HOUSE_SCENES[sceneKey]);
+      renderHouseScene(tc, x, y, tile, HOUSE_SCENES[sceneKey]);
     } else if (tile.theme) {
       detachTileParallax();
-      renderTile(s, x, y, tile);
+      renderTile(tc, x, y, tile);
     } else {
-      renderContent(s, x, y, tile);
+      renderContent(tc, x, y, tile);
     }
   }
   else if (tile.on_path && tile.on_path.length > 0) {
@@ -1089,18 +1244,18 @@ function render(x, y) {
       detachTileParallax();
       renderTile(s, x, y, tile);
     } else if (!tile.name) {
-      renderPathTile(s, x, y, tile);
+      renderPathTile(tc, x, y, tile);
     } else {
       renderContent(s, x, y, tile);
     }
   }
   else if (tile.type === 'locked_zone_threshold' || tile.type === 'locked_zone_interior') {
-    renderZoneTile(s, x, y, tile);
+    renderZoneTile(tc, x, y, tile);
   }
   else if (tile.type === 'special') {
-    renderSpecialTile(s, x, y, tile);
+    renderSpecialTile(tc, x, y, tile);
   }
-  else { renderEmpty(s, x, y, tile); }
+  else { renderEmpty(tc, x, y, tile); }
 
   // Navigation arrows — suppressed inside house scenes (exits are in-scene)
   if (!HOUSE_SCENES[`${x},${y}`]) {
@@ -1653,6 +1808,120 @@ function updateTranscendBtn(tile) {
   }
 }
 
+
+/* ══════════════════════════════════════════════════
+ *  PUZZLE SYSTEM v7.0
+ *  Two game types: face3d (100 levels) + tesseract (1000 levels)
+ *  Solved tiles stored in localStorage; persist across sessions
+ * ═════════════════════════════════════════════════*/
+const PUZZLE_BASE = {
+  face3d:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/puzzle-game/',
+  tesseract: 'https://jamesalexanderhiggins.github.io/marduk/beta/realm/tesseract/',
+};
+
+const PUZZLE_SOLVED_KEY = 'mm_puzzle_solved';
+function _loadSolved() {
+  try { return new Set(JSON.parse(localStorage.getItem(PUZZLE_SOLVED_KEY)||'[]')); }
+  catch(e) { return new Set(); }
+}
+function _saveSolved(set) {
+  try { localStorage.setItem(PUZZLE_SOLVED_KEY, JSON.stringify([...set])); } catch(e){}
+}
+let _solvedTiles = _loadSolved();
+
+function isPuzzleSolved(x, y) {
+  return _solvedTiles.has(`${x},${y}`);
+}
+function markPuzzleSolved(x, y) {
+  _solvedTiles.add(`${x},${y}`);
+  _saveSolved(_solvedTiles);
+}
+
+function buildPuzzleURL(pzl, destX, destY) {
+  const base = PUZZLE_BASE[pzl.type];
+  if (!base) return null;
+  // Redirect back to this realm page with a puzzle_complete hash
+  const redirectHash = 'pzl:' + encodeXY(destX, destY);
+  const redirectURL  = window.location.href.split('#')[0] + '#' + redirectHash;
+  let url = base;
+  const params = [];
+  if (pzl.range)        params.push(`range=${pzl.range[0]}-${pzl.range[1]}`);
+  else if (pzl.level)   params.push(`level=${pzl.level}`);
+  params.push('redirect=' + encodeURIComponent(redirectURL));
+  if (params.length) url += '?' + params.join('&');
+  return url;
+}
+
+// Show the puzzle in a full-screen overlay iframe
+let _puzzleDestX = null, _puzzleDestY = null;
+function showPuzzleOverlay(pzl, destX, destY) {
+  _puzzleDestX = destX; _puzzleDestY = destY;
+  const url = buildPuzzleURL(pzl, destX, destY);
+  if (!url) return;
+  document.getElementById('puzzleTitle').textContent = pzl.title || 'Challenge';
+  document.getElementById('puzzleDesc').textContent  = pzl.desc  || '';
+  document.getElementById('puzzleFrame').src = url;
+  document.getElementById('puzzleOverlay').classList.add('show');
+  MusicEngine.playByKey('puzzle_tension');
+}
+
+function closePuzzleOverlay() {
+  document.getElementById('puzzleOverlay').classList.remove('show');
+  document.getElementById('puzzleFrame').src = 'about:blank';
+  _puzzleDestX = null; _puzzleDestY = null;
+}
+
+// Detect puzzle completion via iframe load event
+document.getElementById('puzzleFrame').addEventListener('load', function() {
+  try {
+    const href = this.contentWindow.location.href;
+    if (href && href.includes('#pzl:')) {
+      const hash = href.split('#pzl:')[1];
+      const dec  = decodeXY(hash);
+      if (dec && _puzzleDestX !== null) {
+        markPuzzleSolved(_puzzleDestX, _puzzleDestY);
+        closePuzzleOverlay();
+        const onCompleteMusic = getTile(_puzzleDestX, _puzzleDestY)?.puzzle?.on_complete_music;
+        goTo(_puzzleDestX, _puzzleDestY);
+        if (onCompleteMusic) setTimeout(() => MusicEngine.playByKey(onCompleteMusic), 600);
+      }
+    }
+  } catch(e) { /* cross-origin guard */ }
+});
+
+// Also handle redirect hash on page load (puzzle completes → navigates top page)
+// (handled in boot below)
+
+// Render a puzzle tile — centred in the tile-card
+function renderPuzzleTile(tc, x, y, tile) {
+  const pzl = tile.puzzle || {};
+  const solved = isPuzzleSolved(x, y);
+  const typeLabel = pzl.type === 'tesseract' ? 'Tesseract'
+                  : pzl.type === 'face3d'    ? '3D Face'
+                  : 'Puzzle';
+  const levelStr = pzl.range  ? `Levels ${pzl.range[0]}–${pzl.range[1]}`
+                 : pzl.level  ? `Level ${pzl.level}`
+                 : '';
+
+  tc.innerHTML = `
+    <div class="puzzle-tile-root">
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.4em;
+        color:rgba(192,132,252,0.55);margin-bottom:6px;">
+        ${typeLabel.toUpperCase()} · ${levelStr}
+      </div>
+      <div class="puzzle-tile-title">${pzl.title || 'Challenge'}</div>
+      ${pzl.desc ? `<div class="puzzle-tile-desc">${pzl.desc}</div>` : ''}
+      ${solved
+        ? `<div class="puzzle-solved-badge">✓ SOLVED — PATH OPEN</div>`
+        : `<button class="puzzle-launch-btn" onclick="showPuzzleOverlay(
+              ${JSON.stringify(pzl).replace(/</g,'&lt;')},
+              ${x}, ${y})">
+            ▶ BEGIN CHALLENGE
+           </button>`
+      }
+    </div>`;
+}
+
 function renderEmpty(s, x, y, tile) {
   s.innerHTML = `
     <div class="empty-stage">
@@ -1706,6 +1975,30 @@ function renderPathTile(s, x, y, tile) {
 }
 
 function renderContent(s, x, y, tile) {
+  // Check for embed types added by SKM editor
+  if (tile.embed_url) {
+    s.innerHTML = `<div class="puzzle-tile-root">
+      ${tile.name ? `<div class="puzzle-tile-title">${tile.name}</div>` : ''}
+      ${tile.embed_title ? `<div class="puzzle-tile-desc">${tile.embed_title}</div>` : ''}
+      <iframe src="${tile.embed_url}" style="width:min(660px,88vw);height:60vh;border:1px solid rgba(201,168,76,0.2);"
+        allowfullscreen sandbox="allow-scripts allow-same-origin"></iframe></div>`;
+    return;
+  }
+  if (tile.video_url) {
+    s.innerHTML = `<div class="puzzle-tile-root">
+      ${tile.name ? `<div class="puzzle-tile-title">${tile.name}</div>` : ''}
+      <iframe src="${tile.video_url}" style="width:min(660px,88vw);height:56vh;border:none;"
+        allowfullscreen></iframe></div>`;
+    return;
+  }
+  if (tile.image_url) {
+    s.innerHTML = `<div class="puzzle-tile-root">
+      ${tile.name ? `<div class="puzzle-tile-title">${tile.name}</div>` : ''}
+      <img src="${tile.image_url}" style="max-width:min(560px,84vw);max-height:55vh;object-fit:contain;border:1px solid rgba(201,168,76,0.1);">
+      ${tile.image_caption ? `<div class="puzzle-tile-desc" style="margin-top:6px;">${tile.image_caption}</div>` : ''}
+    </div>`;
+    return;
+  }
   const displayName = tile.name || '· · ·';
   const displayLore = tile.lore || '';
   s.innerHTML = `
@@ -1934,12 +2227,33 @@ function renderNavArrows(x, y) {
     const door = doors[d.key];
     if (!door || door.sealed) return;
     const dX = x + d.dx, dY = y + d.dy;
+    const destTile = getTile(dX, dY);
     const a = document.createElement('a');
-    a.className = 'nav-arrow ' + d.key + (door.path ? ' path' : '');
     a.href = '#' + encodeXY(dX, dY);
     a.textContent = d.glyph;
-    a.title = `Go ${d.key}`;
-    a.addEventListener('click', ev => { ev.preventDefault(); goTo(dX, dY); });
+
+    // Check: destination has puzzle lock_entry and not yet solved
+    const destPzl = destTile && destTile.puzzle;
+    const destLocked = destPzl && destPzl.lock_entry && !isPuzzleSolved(dX, dY);
+    // Check: current tile has lock_exit (FBI cell) and not yet solved
+    const srcPzl = tile.puzzle;
+    const srcExitLocked = srcPzl && srcPzl.lock_exit && !isPuzzleSolved(x, y);
+
+    if (destLocked || srcExitLocked) {
+      const lockPzl = destLocked ? destPzl : srcPzl;
+      const lockX   = destLocked ? dX : x;
+      const lockY   = destLocked ? dY : y;
+      a.className = 'nav-arrow ' + d.key + ' puzzle-lock';
+      a.title = `Puzzle lock: ${lockPzl.title || 'Challenge'}`;
+      a.addEventListener('click', ev => {
+        ev.preventDefault();
+        showPuzzleOverlay(lockPzl, lockX, lockY);
+      });
+    } else {
+      a.className = 'nav-arrow ' + d.key + (door.path ? ' path' : '');
+      a.title = `Go ${d.key}`;
+      a.addEventListener('click', ev => { ev.preventDefault(); goTo(dX, dY); });
+    }
     el.appendChild(a);
   });
 }
@@ -2011,7 +2325,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v6.7)
+ *  MARDUK VIEW — game-like map (v7.0)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -2760,6 +3074,7 @@ function setupMVCanvas() {
     // (travel is now via the "Travel here" button, not a third tap)
     if (!document.getElementById('mvInfo').classList.contains('show')) {
       showInfoPanel(tile);
+      if (_skmActive) skmOpenEditor(tile.x, tile.y);
       return;
     }
 
@@ -3931,6 +4246,8 @@ const MusicEngine = (() => {
     low_stress_minor:      BASE + 'low_stress_minor.mp3',
     quiz_stress_music:     BASE + 'quiz_stress_music.mp3',
     high_stress_music:     BASE + 'high_stress_music.mp3',
+    puzzle_tension:        BASE + 'puzzle_tension.mp3',
+    emily_triumph:         BASE + 'emily_triumph.mp3',
   };
 
   const TARGET_VOL = 0.62;
@@ -4012,6 +4329,11 @@ const MusicEngine = (() => {
       return 'melchizedek_path_music';
     }
 
+    // Puzzle tiles
+    if (tile.puzzle && tile.puzzle.music) {
+      return tile.puzzle.music;
+    }
+
     // Quiz area
     if (tile.type === 'quiz') {
       return 'quiz_stress_music';
@@ -4068,7 +4390,10 @@ const MusicEngine = (() => {
     });
   }
 
-  return { playForTile, start, toggleMute, isMuted, initBtn };
+  // playByKey: play a specific named track (called by puzzle system etc.)
+  function playByKey(key) { _play(key); }
+
+  return { playForTile, start, toggleMute, isMuted, initBtn, playByKey };
 })();
 
 // Unlock music on any first user interaction
@@ -4082,10 +4407,337 @@ document.addEventListener('touchstart', _musicUnlockOnce, {passive:true});
 document.addEventListener('click',      _musicUnlockOnce);
 document.addEventListener('keydown',    _musicUnlockOnce);
 
+
+/* ══════════════════════════════════════════════════
+ *  SUPER KUDRAMARDUK — In-browser tile editor
+ *  Trigger: type "superkudramarduk" anywhere
+ *  Function: edit tile content, puzzle config, embeds
+ *  Saves to localStorage; exports as JSON snippet
+ * ═════════════════════════════════════════════════*/
+let _skmActive = false;
+let _skmBuffer = '';
+const SKM_CODE = 'superkudramarduk';
+const SKM_OVERRIDES_KEY = 'mm_tile_overrides';
+
+function _loadOverrides() {
+  try { return JSON.parse(localStorage.getItem(SKM_OVERRIDES_KEY)||'{}'); }
+  catch(e) { return {}; }
+}
+function _saveOverrides(obj) {
+  try { localStorage.setItem(SKM_OVERRIDES_KEY, JSON.stringify(obj)); } catch(e) {}
+}
+// Merge overrides into REALM on boot (called after REALM loads)
+function applyTileOverrides() {
+  const ov = _loadOverrides();
+  for (const [k, patch] of Object.entries(ov)) {
+    if (!REALM.tiles[k]) REALM.tiles[k] = {};
+    Object.assign(REALM.tiles[k], patch);
+  }
+}
+
+document.addEventListener('keydown', (ev) => {
+  if (ev.ctrlKey || ev.metaKey || ev.altKey) return;
+  if (['INPUT','TEXTAREA'].includes(document.activeElement?.tagName)) return;
+  if (ev.key.length === 1) {
+    _skmBuffer += ev.key.toLowerCase();
+    if (_skmBuffer.length > SKM_CODE.length) _skmBuffer = _skmBuffer.slice(-SKM_CODE.length);
+    if (_skmBuffer === SKM_CODE) {
+      _activateSKM();
+    }
+  }
+});
+
+function _activateSKM() {
+  if (_skmActive) return;
+  _skmActive = true;
+  // Activate full K mode
+  activateKudraMode();
+  document.body.classList.add('skm-active');
+  // Show badge in mvInfo
+  const badge = document.querySelector('.skm-badge');
+  if (badge) badge.style.display = 'block';
+  // Flash notification
+  _skmFlash();
+  console.log('[SKM] SuperKudraMarduk activated');
+}
+
+function _skmFlash() {
+  const flash = document.createElement('div');
+  flash.style.cssText = `position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    z-index:999;font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3vw,28px);
+    color:#f0abfc;text-shadow:0 0 30px rgba(240,171,252,0.9);
+    pointer-events:none;text-align:center;animation:skmFlash 2.2s ease forwards;`;
+  flash.textContent = '✦ SUPERKUDRAMARDUK ✦';
+  const style = document.createElement('style');
+  style.textContent = '@keyframes skmFlash{0%{opacity:0;transform:translate(-50%,-50%) scale(0.8)}' +
+    '20%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}' +
+    '70%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}';
+  document.head.appendChild(style);
+  document.body.appendChild(flash);
+  setTimeout(() => { flash.remove(); }, 2300);
+}
+
+// Called when a tile is double-tapped in MV while SKM is active
+// Injects the editor into the mvInfo panel
+function skmOpenEditor(x, y) {
+  if (!_skmActive) return;
+  const tile = getTile(x, y);
+  const infoEl = document.getElementById('mvInfo');
+  if (!infoEl) return;
+
+  const doors = getDoors(x, y);
+  const dirLabels = {up:'↑N',down:'↓S',left:'←W',right:'→E'};
+  let mechLines = '';
+  for (const [dir, door] of Object.entries(doors)) {
+    const nx = x + (dir==='right'?1:dir==='left'?-1:0);
+    const ny = y + (dir==='up'?1:dir==='down'?-1:0);
+    const nb = getTile(nx,ny);
+    const status = door.sealed ? `SEALED (${door.reason||'blocked'})`
+                 : door.path   ? `OPEN — Path ${nb?.on_path?.join(',')}`
+                 : 'OPEN';
+    mechLines += `${dirLabels[dir]} ${status}\n`;
+  }
+  mechLines += `\nType: ${tile.type||'empty'}`;
+  if (tile.on_path?.length) mechLines += ` | Paths: ${tile.on_path.join(',')}`;
+  if (tile.house_id) mechLines += ` | House: ${tile.house_id.toUpperCase()}`;
+  if (tile.key_id)   mechLines += ` | KEY: ${tile.key_id}`;
+
+  const curName  = tile.name  || '';
+  const curLore  = tile.lore  || '';
+  const curType  = tile.puzzle ? (tile.puzzle.type||'face3d') : 'text';
+  const pzl      = tile.puzzle || {};
+
+  // Build editor HTML
+  const editorHtml = `
+  <div class="skm-badge">✦ SUPERKUDRAMARDUK EDITOR</div>
+  <div class="skm-editor" id="skmEditorPanel">
+    <div class="skm-section">📍 Mechanics (locked — read only)</div>
+    <pre class="skm-mechanics">${mechLines}</pre>
+
+    <div class="skm-section">Content Type</div>
+    <div class="skm-content-type">
+      ${['text','face3d','tesseract','iframe','video','image'].map(ct =>
+        `<button class="skm-type-btn${ct===curType?' active':''}"
+          onclick="skmSetType('${ct}',this)">${ct.toUpperCase()}</button>`
+      ).join('')}
+    </div>
+
+    <div id="skmTextPanel" style="${curType!=='text'?'display:none':''}">
+      <div class="skm-section">Tile Name</div>
+      <input class="skm-field" id="skmName" value="${curName.replace(/"/g,'&quot;')}" placeholder="Short title (40 chars)">
+      <div class="skm-section">Lore / Body Text  (WYSIWYG)</div>
+      <div class="skm-toolbar">
+        <button class="skm-tb-btn" onclick="document.execCommand('bold')"><b>B</b></button>
+        <button class="skm-tb-btn" onclick="document.execCommand('italic')"><i>I</i></button>
+        <button class="skm-tb-btn" onclick="document.execCommand('underline')"><u>U</u></button>
+        <button class="skm-tb-btn" onclick="document.execCommand('insertOrderedList')">1.</button>
+        <button class="skm-tb-btn" onclick="document.execCommand('insertUnorderedList')">•</button>
+        <button class="skm-tb-btn" onclick="skmInsertLink()">🔗</button>
+      </div>
+      <div class="skm-field skm-wysiwyg" id="skmLore" contenteditable="true"
+        style="min-height:90px;text-align:left;">${curLore}</div>
+    </div>
+
+    <div id="skmPuzzlePanel" style="${['face3d','tesseract'].includes(curType)?'':'display:none'}">
+      <div class="skm-section">Puzzle Settings</div>
+      <div class="skm-row">
+        <span class="skm-label">GAME</span>
+        <select class="skm-select" id="skmPzlType">
+          <option value="face3d"   ${pzl.type==='face3d'   ?'selected':''}>3D Face Puzzle (100 levels)</option>
+          <option value="tesseract"${pzl.type==='tesseract'?'selected':''}>Tesseract (1000 levels)</option>
+        </select>
+      </div>
+      <div class="skm-row">
+        <span class="skm-label">LEVEL</span>
+        <input class="skm-input" id="skmPzlLevel" type="number" min="1" max="1000"
+          value="${pzl.level||1}" style="width:80px;">
+        <span class="skm-label" style="margin:0 4px;">OR RANGE</span>
+        <input class="skm-input" id="skmPzlRangeA" type="number" min="1" max="1000"
+          value="${(pzl.range||[1,''])[0]}" style="width:60px;" placeholder="from">
+        <span style="color:var(--dim);padding:0 4px;">–</span>
+        <input class="skm-input" id="skmPzlRangeB" type="number" min="1" max="1000"
+          value="${(pzl.range||['',1])[1]}" style="width:60px;" placeholder="to">
+      </div>
+      <div class="skm-row">
+        <span class="skm-label">TITLE</span>
+        <input class="skm-input" id="skmPzlTitle" value="${(pzl.title||'').replace(/"/g,'&quot;')}" placeholder="Challenge title">
+      </div>
+      <div class="skm-row">
+        <span class="skm-label">DESC</span>
+        <textarea class="skm-input" id="skmPzlDesc" rows="2">${pzl.desc||''}</textarea>
+      </div>
+      <div class="skm-row">
+        <span class="skm-label">LOCK</span>
+        <label style="color:var(--cream);font-size:13px;cursor:pointer;">
+          <input type="checkbox" id="skmPzlLock" ${pzl.lock_entry?'checked':''}> Block entry until solved
+        </label>
+        <label style="color:var(--cream);font-size:13px;cursor:pointer;margin-left:12px;">
+          <input type="checkbox" id="skmPzlExitLock" ${pzl.lock_exit?'checked':''}> Block exit until solved
+        </label>
+      </div>
+      <div class="skm-row">
+        <span class="skm-label">MUSIC</span>
+        <select class="skm-select" id="skmPzlMusic">
+          ${['puzzle_tension','high_stress_music','quiz_stress_music','low_stress_minor',
+             'low_stress_major','emily_path_music_1','emily_triumph'].map(m=>
+            `<option value="${m}"${(pzl.music||'puzzle_tension')===m?' selected':''}>${m}</option>`
+          ).join('')}
+        </select>
+      </div>
+      <div class="skm-row">
+        <span class="skm-label">ON SOLVE</span>
+        <select class="skm-select" id="skmPzlCompleteMusic">
+          <option value="">— none —</option>
+          ${['emily_triumph','low_stress_major','eli_house_music'].map(m=>
+            `<option value="${m}"${(pzl.on_complete_music||'')===m?' selected':''}>${m}</option>`
+          ).join('')}
+        </select>
+        <span class="skm-note" style="margin-left:6px;">play on completion</span>
+      </div>
+    </div>
+
+    <div id="skmIframePanel" style="${curType==='iframe'?'':'display:none'}">
+      <div class="skm-section">Embed URL</div>
+      <input class="skm-input" id="skmIframeUrl" value="${tile.embed_url||''}" placeholder="https://...">
+      <div class="skm-row" style="margin-top:6px;">
+        <span class="skm-label">TITLE</span>
+        <input class="skm-input" id="skmEmbedTitle" value="${tile.embed_title||''}" placeholder="Embed title">
+      </div>
+    </div>
+
+    <div id="skmVideoPanel" style="${curType==='video'?'':'display:none'}">
+      <div class="skm-section">Video URL (YouTube embed or direct mp4)</div>
+      <input class="skm-input" id="skmVideoUrl" value="${tile.video_url||''}" placeholder="https://www.youtube.com/embed/...">
+    </div>
+
+    <div id="skmImagePanel" style="${curType==='image'?'':'display:none'}">
+      <div class="skm-section">Image URL</div>
+      <input class="skm-input" id="skmImageUrl" value="${tile.image_url||''}" placeholder="https://...">
+      <div class="skm-row" style="margin-top:6px;">
+        <span class="skm-label">CAPTION</span>
+        <input class="skm-input" id="skmImageCaption" value="${tile.image_caption||''}" placeholder="Optional caption">
+      </div>
+    </div>
+
+    <div class="skm-section">Tile Name (shown in all modes)</div>
+    <input class="skm-input" id="skmNameGlobal"
+      value="${curName.replace(/"/g,'&quot;')}" placeholder="Short title">
+
+    <div class="skm-actions">
+      <button class="skm-save-btn" onclick="skmSave(${x},${y})">💾 SAVE TO MEMORY</button>
+      <button class="skm-export-btn" onclick="skmExport()">↓ EXPORT JSON</button>
+    </div>
+    <div class="skm-note">Changes save to browser localStorage and persist across sessions. Export to get a JSON patch for permanent installation.</div>
+  </div>`;
+
+  // Replace info panel content with editor
+  const existingContent = infoEl.querySelector('.mv-info-content');
+  if (existingContent) existingContent.style.display = 'none';
+  let editorDiv = infoEl.querySelector('#skmEditorMount');
+  if (!editorDiv) {
+    editorDiv = document.createElement('div');
+    editorDiv.id = 'skmEditorMount';
+    infoEl.appendChild(editorDiv);
+  }
+  editorDiv.innerHTML = editorHtml;
+}
+
+function skmSetType(type, btn) {
+  document.querySelectorAll('.skm-type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const panels = ['text','puzzle','iframe','video','image'];
+  // Show/hide panels
+  const textP   = document.getElementById('skmTextPanel');
+  const pzlP    = document.getElementById('skmPuzzlePanel');
+  const ifrP    = document.getElementById('skmIframePanel');
+  const vidP    = document.getElementById('skmVideoPanel');
+  const imgP    = document.getElementById('skmImagePanel');
+  if (textP) textP.style.display = type==='text'                     ? '' : 'none';
+  if (pzlP)  pzlP.style.display  = ['face3d','tesseract'].includes(type) ? '' : 'none';
+  if (ifrP)  ifrP.style.display  = type==='iframe'                  ? '' : 'none';
+  if (vidP)  vidP.style.display  = type==='video'                   ? '' : 'none';
+  if (imgP)  imgP.style.display  = type==='image'                   ? '' : 'none';
+}
+
+function skmInsertLink() {
+  const url = prompt('Enter URL:');
+  if (url) document.execCommand('createLink', false, url);
+}
+
+function skmSave(x, y) {
+  const k = `${x},${y}`;
+  const activeType = document.querySelector('.skm-type-btn.active')?.textContent.toLowerCase() || 'text';
+  const nameGlobal = document.getElementById('skmNameGlobal')?.value?.trim();
+
+  let patch = {};
+  if (nameGlobal) patch.name = nameGlobal;
+
+  if (activeType === 'text') {
+    patch.name = document.getElementById('skmName')?.value?.trim() || nameGlobal;
+    const loreEl = document.getElementById('skmLore');
+    if (loreEl) patch.lore = loreEl.innerHTML;
+    delete patch.puzzle; delete patch.embed_url; delete patch.video_url; delete patch.image_url;
+  } else if (['face3d','tesseract'].includes(activeType)) {
+    const lvA  = parseInt(document.getElementById('skmPzlRangeA')?.value)||null;
+    const lvB  = parseInt(document.getElementById('skmPzlRangeB')?.value)||null;
+    const lv   = parseInt(document.getElementById('skmPzlLevel')?.value)||1;
+    patch.puzzle = {
+      type:   document.getElementById('skmPzlType')?.value || activeType,
+      title:  document.getElementById('skmPzlTitle')?.value || '',
+      desc:   document.getElementById('skmPzlDesc')?.value  || '',
+      music:  document.getElementById('skmPzlMusic')?.value || 'puzzle_tension',
+      on_complete_music: document.getElementById('skmPzlCompleteMusic')?.value || null,
+      lock_entry: document.getElementById('skmPzlLock')?.checked || false,
+      lock_exit:  document.getElementById('skmPzlExitLock')?.checked || false,
+    };
+    if (lvA && lvB) patch.puzzle.range = [lvA,lvB];
+    else patch.puzzle.level = lv;
+  } else if (activeType === 'iframe') {
+    patch.embed_url   = document.getElementById('skmIframeUrl')?.value || '';
+    patch.embed_title = document.getElementById('skmEmbedTitle')?.value || '';
+  } else if (activeType === 'video') {
+    patch.video_url = document.getElementById('skmVideoUrl')?.value || '';
+  } else if (activeType === 'image') {
+    patch.image_url     = document.getElementById('skmImageUrl')?.value     || '';
+    patch.image_caption = document.getElementById('skmImageCaption')?.value || '';
+  }
+
+  // Apply to live REALM
+  if (!REALM.tiles[k]) REALM.tiles[k] = {};
+  Object.assign(REALM.tiles[k], patch);
+
+  // Persist
+  const ov = _loadOverrides();
+  ov[k] = Object.assign(ov[k]||{}, patch);
+  _saveOverrides(ov);
+
+  // Re-render current tile to show changes
+  const coords = decodeXY(window.location.hash.replace('#',''));
+  if (coords && coords.x===x && coords.y===y) render(x, y);
+
+  // Flash save confirmation
+  const btn = document.querySelector('.skm-save-btn');
+  if (btn) { btn.textContent='✓ SAVED'; setTimeout(()=>btn.textContent='💾 SAVE TO MEMORY',1500); }
+}
+
+function skmExport() {
+  const ov = _loadOverrides();
+  const json = JSON.stringify(ov, null, 2);
+  const blob = new Blob([json], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tile-overrides.json';
+  a.click();
+}
+
+// Hook into MV: when SKM active and tile double-tapped, open editor instead of regular panel
+// We'll inject after showInfoPanel is called
+
 /* ── Boot ──────────────────────────────────────── */
 async function boot() {
   const res = await fetch('realm.json');
   REALM = await res.json();
+  applyTileOverrides(); // merge localStorage SKM overrides
   updateMapBtn(); // show MAP button if kudra already unlocked from a prior session
   updateKeyBar(); // render key symbols from saved state
   // Restore kudra visual state across page reloads
@@ -4107,7 +4759,15 @@ async function boot() {
   let start = {x: 0, y: 0};
   const h = (window.location.hash || '').replace('#', '');
   if (h) {
-    if (h === 'gate=left')  start = {x: -1, y: 0};
+    if (h.startsWith('pzl:')) {
+      // Puzzle completion redirect — mark solved and navigate there
+      const dec = decodeXY(h.replace('pzl:',''));
+      if (dec) {
+        markPuzzleSolved(dec.x, dec.y);
+        start = dec;
+      }
+    }
+    else if (h === 'gate=left')  start = {x: -1, y: 0};
     else if (h === 'gate=right') start = {x: 1, y: 0};
     else if (h === 'gate=down')  start = {x: 0, y: -1};
     else if (h === 'threshold')  start = {x: 0, y: 5};
