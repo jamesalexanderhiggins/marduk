@@ -4,66 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>THE TURING TEST</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=2026.04.23.0558">
 </head>
 <body>
-  <div class="overlay"></div>
-  <div class="wrap">
-    <div class="shell">
-      <div class="header">
-        <div>
-          <div class="title">THE TURING TEST</div>
-          <div class="subtitle">DAEDALUS INTERROGATION CHANNEL // ELI WELLS</div>
-        </div>
-        <div class="stats">
-          <div>SCORE: <span id="score">0</span></div>
-          <div>ANSWERS: <span id="qCount">0</span></div>
-          <div>TARGET: <span id="target">∞</span></div>
-        </div>
+  <div id="app" class="theme-green">
+    <header class="topbar">
+      <div class="titleblock">
+        <div class="title">THE TURING TEST</div>
+        <div class="version">build 2026.04.23.0558</div>
       </div>
-
-      <div class="grid">
-        <div class="panel">
-          <div class="feedWrap">
-            <div class="feed" id="feed"></div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="prompt">
-            <div class="promptHead" id="promptHead"></div>
-            <div class="promptBody" id="promptBody"></div>
-            <div class="note" id="note"></div>
-          </div>
-          <div class="answers" id="answers"></div>
-          <div id="freeformRow" class="freeformRow">
-            <div style="margin-bottom:8px; font-size:11px;" id="freeformHelp"></div>
-            <input class="input" id="freeform" maxlength="80" placeholder="Type a short answer and press Enter" />
-            <div style="margin-top:8px;"><button class="answer" id="submitFreeform">Submit text</button></div>
-          </div>
-        </div>
+      <div class="statusline">
+        <span id="actLabel">ACT 1 // HANDSHAKE</span>
+        <span id="positionLabel">POSITION 1/1000</span>
+        <span id="targetLabel">TARGET: ENDLESS</span>
+        <span id="scoreLabel">HUMAN FACTOR 0</span>
       </div>
+    </header>
 
-      <div class="footerGrid">
-        <div class="panel">
-          <div style="margin-bottom:8px; font-size:11px; color:var(--accent);">HUMAN FACTOR VECTOR</div>
-          <div class="meter">
-            <div class="meterNeg" id="humanityBarNeg" style="width:0%"></div>
-            <div class="meterPos" id="humanityBarPos" style="width:0%"></div>
-          </div>
-        </div>
-        <div class="panel">
-          <div style="margin-bottom:8px; font-size:11px; color:var(--accent);">CHANNEL OBSERVATIONS</div>
-          <div class="systemText" id="systemText"></div>
-        </div>
-      </div>
+    <main class="frame">
+      <section class="transcript-panel">
+        <div class="panel-label">TRANSCRIPT</div>
+        <div id="transcript" class="transcript"></div>
+      </section>
 
-      <div class="endCard" id="endCard">
-        <div style="font-size:20px; margin-bottom:8px;" id="endTitle"></div>
-        <div style="white-space:pre-wrap; line-height:1.55;" id="endBody"></div>
-      </div>
-    </div>
+      <section class="question-panel">
+        <div class="panel-label">ELI WELLS</div>
+        <div id="prompt" class="prompt"></div>
+        <div id="answers" class="answers"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div id="footerLine" class="footer-line">Awaiting response.</div>
+    </footer>
   </div>
-  <script type="module" src="game.js"></script>
+
+  <script src="questions.js?v=2026.04.23.0558"></script>
+  <script src="game.js?v=2026.04.23.0558"></script>
 </body>
 </html>

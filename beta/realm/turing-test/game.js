@@ -1,198 +1,209 @@
-import { QUESTIONS } from './questions.js';
-import { TuringEngine } from './engine.js';
 
-function qs(name) {
-  const p = new URLSearchParams(window.location.search);
-  const raw = p.get(name);
-  if (raw === null) return null;
-  return raw;
-}
+(function(){
+  const app = document.getElementById("app");
+  const transcriptEl = document.getElementById("transcript");
+  const promptEl = document.getElementById("prompt");
+  const answersEl = document.getElementById("answers");
+  const actLabel = document.getElementById("actLabel");
+  const positionLabel = document.getElementById("positionLabel");
+  const targetLabel = document.getElementById("targetLabel");
+  const scoreLabel = document.getElementById("scoreLabel");
+  const footerLine = document.getElementById("footerLine");
 
-function shuffleInPlace(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
+  const params = new URLSearchParams(window.location.search);
+  const rawTarget = params.get("target");
+  const target = rawTarget === null ? null : Number(rawTarget);
+  const redirect = params.get("redirect");
+  targetLabel.textContent = target === null ? "TARGET: ENDLESS" : `TARGET: ${target}`;
 
-const targetRaw = qs('target');
-const target = targetRaw !== null && targetRaw !== '' ? Number(targetRaw) : null;
-const redirect = qs('redirect');
-const seed = qs('seed') || `${Date.now()}`;
+  const byId = new Map(QUESTIONS.map(q => [q.id, q]));
+  const state = {
+    currentId: 0,
+    score: 0,
+    steps: 0,
+    cycle: 0,
+    visited: new Set(),
+    history: [],
+    answerHistory: [],
+    memory: {}
+  };
 
-const engine = new TuringEngine(QUESTIONS, { target, redirect, seed });
-
-const el = {
-  score: document.getElementById('score'),
-  qCount: document.getElementById('qCount'),
-  target: document.getElementById('target'),
-  feed: document.getElementById('feed'),
-  promptHead: document.getElementById('promptHead'),
-  promptBody: document.getElementById('promptBody'),
-  note: document.getElementById('note'),
-  answers: document.getElementById('answers'),
-  freeformRow: document.getElementById('freeformRow'),
-  freeform: document.getElementById('freeform'),
-  freeformHelp: document.getElementById('freeformHelp'),
-  humanityBarPos: document.getElementById('humanityBarPos'),
-  humanityBarNeg: document.getElementById('humanityBarNeg'),
-  sys: document.getElementById('systemText'),
-  endCard: document.getElementById('endCard'),
-  endTitle: document.getElementById('endTitle'),
-  endBody: document.getElementById('endBody'),
-};
-
-let activeQuestion = null;
-let pendingOptionId = null;
-
-function updateTheme() {
-  const intensity = engine.getIntensity();
-  document.body.classList.toggle('cyanShift', intensity.cyan > 0.05);
-  document.body.classList.toggle('purpleShift', intensity.purple > 0.05);
-  document.body.classList.toggle('chaos', intensity.chaos > 0.05);
-}
-
-function renderFeed() {
-  const kept = engine.history.slice(-14);
-  el.feed.innerHTML = '';
-  kept.slice().reverse().forEach((item, idx) => {
-    const node = document.createElement('div');
-    node.className = `bubble ${item.role}`;
-    node.textContent = (item.role === 'eli' ? 'Eli: ' : 'You: ') + item.text;
-    const age = idx;
-    const opacity = Math.max(0.14, 1 - age * 0.11);
-    const blur = Math.min(4.2, age * 0.52);
-    const scale = Math.max(0.955, 1 - age * 0.012);
-    node.style.opacity = opacity;
-    node.style.filter = `blur(${blur}px)`;
-    node.style.transform = `scale(${scale})`;
-    el.feed.appendChild(node);
-  });
-}
-
-function renderStats() {
-  el.score.textContent = String(engine.score);
-  el.qCount.textContent = String(engine.answered.length);
-  el.target.textContent = target === null ? '∞' : String(target);
-  const posWidth = Math.max(0, Math.min(50, (Math.max(engine.score, 0) / 1000) * 50));
-  const negWidth = Math.max(0, Math.min(50, (Math.max(-engine.score, 0) / 1000) * 50));
-  el.humanityBarPos.style.width = `${posWidth}%`;
-  el.humanityBarNeg.style.width = `${negWidth}%`;
-
-  const obs = [];
-  if (engine.score >= 220) {
-    obs.push('Eli is not satisfied, but he is listening harder now.');
-  } else if (engine.score >= 0) {
-    obs.push('The channel remains open. Eli is still hunting for proof.');
-  } else if (engine.score > -120) {
-    obs.push('The tone is cooling. He hears fluency, but not yet life.');
-  } else if (engine.score > -320) {
-    obs.push('The room feels bluer now. Eli is hearing compression where he wants drag.');
-  } else if (engine.score > -700) {
-    obs.push('Suspicion is hardening. He is starting to treat your answers as manufacture.');
-  } else {
-    obs.push('The channel is destabilising. Eli believes he is close to a catastrophic false self.');
+  function shuffle(array){
+    const arr = array.slice();
+    for(let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
   }
 
-  if (engine.memory.chosenName) {
-    obs.push(`He has kept your chosen name: ${engine.memory.chosenName}.`);
+  function laneFromScore(score){
+    if(score <= -450) return "adversarial";
+    if(score <= -120) return "suspicious";
+    if(score >= 180) return "warm";
+    return "balanced";
   }
-  if (engine.memory.eveDefinition) {
-    obs.push('He is still cross-referencing what you said about Eve.');
+
+  function addEntry(role, text){
+    const div = document.createElement("div");
+    div.className = `entry ${role}`;
+    div.textContent = text;
+    transcriptEl.prepend(div);
+
+    while(transcriptEl.children.length > 18){
+      transcriptEl.removeChild(transcriptEl.lastChild);
+    }
+    updateTranscriptStyles();
   }
-  obs.push('He is the examiner. You are the mind under glass.');
-  el.sys.textContent = obs.join('
-');
-}
 
-function showQuestion() {
-  activeQuestion = engine.presentQuestion();
-  pendingOptionId = null;
-  el.promptHead.textContent = 'ELI WELLS // DAEDALUS CHANNEL';
-  el.promptBody.textContent = activeQuestion.prompt;
-  el.note.textContent = activeQuestion.notes;
-  el.answers.innerHTML = '';
-  el.freeformRow.classList.remove('show');
-  el.freeform.value = '';
-  el.freeformHelp.textContent = '';
-
-  const displayOptions = shuffleInPlace([...activeQuestion.options]);
-  displayOptions.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'answer';
-    btn.innerHTML = `<strong>${opt.id}.</strong> ${opt.text}`;
-    btn.addEventListener('click', () => handleOption(opt));
-    el.answers.appendChild(btn);
-  });
-  renderStats();
-  updateTheme();
-}
-
-function handleOption(opt) {
-  pendingOptionId = opt.id;
-  if (activeQuestion.captureKey && opt.capture !== null) {
-    el.freeformRow.classList.add('show');
-    const label = activeQuestion.captureKey === 'chosenName'
-      ? 'Type the name you want Eli to use.'
-      : 'Type a short answer Eli can remember.';
-    el.freeformHelp.textContent = label;
-    el.freeform.focus();
-    return;
+  function updateTranscriptStyles(){
+    Array.from(transcriptEl.children).forEach((node, i) => {
+      const opacity = Math.max(0, 1 - i * 0.11);
+      const blur = Math.min(7, i * 0.5);
+      const shift = Math.min(12, i * 1.1);
+      node.style.opacity = opacity.toFixed(2);
+      node.style.filter = `blur(${blur}px)`;
+      node.style.transform = `translateY(-${shift}px)`;
+    });
   }
-  commitAnswer('');
-}
 
-function commitAnswer(freeformValue) {
-  if (!activeQuestion || !pendingOptionId) return;
-  const result = engine.applyAnswer(activeQuestion.id, pendingOptionId, freeformValue);
-  pendingOptionId = null;
-  renderFeed();
-  renderStats();
-  updateTheme();
-  if (result.finished) {
-    renderEnding();
-  } else {
-    showQuestion();
+  function updateTheme(){
+    app.classList.remove("theme-green","theme-blue","theme-purple","theme-abyss","glitch-light","glitch-hard");
+    const s = state.score;
+    if(s <= -700){
+      app.classList.add("theme-abyss","glitch-hard");
+    }else if(s <= -260){
+      app.classList.add("theme-purple","glitch-light");
+    }else if(s <= -90){
+      app.classList.add("theme-blue");
+    }else{
+      app.classList.add("theme-green");
+    }
   }
-}
 
-function renderEnding() {
-  el.endCard.classList.add('show');
-  let title = 'TARGET ATTAINED';
-  let body = `The requested score of ${target} has been reached. Final score: ${engine.score}.`;
-  if (engine.score >= 0) {
-    body += `
-
-Eli has not proved you human beyond doubt, but neither has he managed to flatten you into a trick.`;
-  } else {
-    body += `
-
-Eli's suspicion has deepened. Whatever he is hearing, he no longer trusts it to be alive in the human way.`;
+  function scoreMultiplier(question){
+    return 1 + ((question.act - 1) * 0.25) + ((question.position - 1) / 25) * 0.35;
   }
-  if (redirect) body += `
 
-Redirecting...`;
-  el.endTitle.textContent = title;
-  el.endBody.textContent = body;
-  if (redirect) {
-    setTimeout(() => { window.location.href = redirect; }, 1800);
+  function updateStatus(question){
+    actLabel.textContent = `ACT ${question.act} // ${question.actName}`;
+    positionLabel.textContent = `POSITION ${state.steps + 1}/1000 // CYCLE ${state.cycle + 1}`;
+    scoreLabel.textContent = `HUMAN FACTOR ${state.score}`;
+    updateTheme();
   }
-}
 
-el.freeform.addEventListener('keydown', (ev) => {
-  if (ev.key === 'Enter') {
-    ev.preventDefault();
-    commitAnswer(el.freeform.value.trim() || '[no answer]');
+  function memoryPrefix(question){
+    const snippets = [];
+    const lastUser = state.answerHistory[state.answerHistory.length - 1];
+    const firstUser = state.answerHistory[0];
+    if(state.steps > 4 && state.steps % 7 === 0 && lastUser){
+      snippets.push(`A moment ago you said: "${lastUser.text}"`);
+    }
+    if(state.steps > 12 && state.steps % 11 === 0 && firstUser){
+      snippets.push(`Early on you leaned toward: "${firstUser.text}"`);
+    }
+    if(question.act >= 8){
+      snippets.push("I am not asking for performance now. I am asking whether there is anyone in there I might be mistaking for Eve.");
+    } else if(question.act >= 6){
+      snippets.push("Do not answer for elegance alone. I am listening for continuity under pressure.");
+    }
+    return snippets.length ? snippets.join("\n\n") + "\n\n" : "";
   }
-});
 
-document.getElementById('submitFreeform').addEventListener('click', () => {
-  commitAnswer(el.freeform.value.trim() || '[no answer]');
-});
+  function renderQuestion(){
+    const question = byId.get(state.currentId);
+    if(!question) return;
 
-engine.history.push({ role: 'eli', text: 'Good. The channel is open. I am Eli Wells. I am looking for thought and I will not accept theatre in its place.' });
-engine.history.push({ role: 'eli', text: 'Remember the arrangement. I am human. You are here to be tested.' });
-engine.history.push({ role: 'eli', text: 'Answer carefully. A cautious machine can masquerade. A careful mind leaves fingerprints.' });
-renderFeed();
-showQuestion();
+    updateStatus(question);
+    promptEl.textContent = memoryPrefix(question) + question.prompt;
+    answersEl.innerHTML = "";
+
+    const options = shuffle(question.answers);
+    options.forEach((answer) => {
+      const btn = document.createElement("button");
+      btn.className = "answer";
+      btn.textContent = answer.text;
+      btn.addEventListener("click", () => chooseAnswer(question, answer));
+      answersEl.appendChild(btn);
+    });
+
+    footerLine.textContent = "Eli is waiting.";
+  }
+
+  function findNextUnvisited(startId){
+    for(let offset = 0; offset < QUESTIONS.length; offset++){
+      const candidate = (startId + offset) % QUESTIONS.length;
+      if(!state.visited.has(candidate)) return candidate;
+    }
+    return null;
+  }
+
+  function selectNextId(question, branch){
+    const preferred = question.next[branch];
+    if(!state.visited.has(preferred)) return preferred;
+
+    const fallback = findNextUnvisited(preferred);
+    if(fallback !== null) return fallback;
+
+    state.visited.clear();
+    state.cycle += 1;
+    return preferred;
+  }
+
+  function endingLine(){
+    if(state.score >= 0){
+      return "I still do not have certainty. But I have enough to open the next door.";
+    }
+    return "You crossed the threshold by subtraction. That is an answer too, though not the one I hoped for.";
+  }
+
+  function maybeFinish(){
+    if(target === null) return false;
+    if(target >= 0 && state.score >= target) return true;
+    if(target < 0 && state.score <= target) return true;
+    return false;
+  }
+
+  function chooseAnswer(question, answer){
+    const mult = scoreMultiplier(question);
+    const delta = Math.round(answer.delta * mult);
+    state.score += delta;
+    state.steps += 1;
+    state.visited.add(question.id);
+    state.answerHistory.push({id: question.id, text: answer.text, branch: answer.branch});
+
+    addEntry("user", "> " + answer.text);
+
+    let eliLine = question.eli[answer.branch];
+    if(question.act >= 8 && answer.branch === "human"){
+      eliLine += " And yet wanting that answer to be true is not the same thing as proving it.";
+    }
+    if(question.act >= 7 && answer.branch === "machine"){
+      eliLine += " If Eve sounded like that, I would lock the room and start again.";
+    }
+
+    addEntry("eli", "ELI: " + eliLine);
+    footerLine.textContent = `Δ ${delta >= 0 ? "+" : ""}${delta} // lane pressure: ${laneFromScore(state.score)}`;
+
+    if(maybeFinish()){
+      addEntry("system", endingLine());
+      if(redirect){
+        footerLine.textContent = "Threshold attained. Redirecting...";
+        setTimeout(() => { window.location.href = redirect; }, 1800);
+      } else {
+        footerLine.textContent = "Threshold attained.";
+      }
+      updateStatus(question);
+      updateTheme();
+      promptEl.textContent = "Threshold attained.\n\n" + endingLine();
+      answersEl.innerHTML = "";
+      return;
+    }
+
+    state.currentId = selectNextId(question, answer.branch);
+    renderQuestion();
+  }
+
+  addEntry("system", "ELI: I am the examiner. You are the intelligence under test. Begin.");
+  renderQuestion();
+})();

@@ -1,15 +1,22 @@
 THE TURING TEST
+Build 2026.04.23.0558
 
-Embed example:
-<iframe src="turing_build/index.html?target=120&redirect=https://your-site.com/next.html" width="100%" height="860" style="border:0;"></iframe>
+Files:
+- index.html
+- styles.css
+- questions.js
+- game.js
 
 Parameters:
-?target=120      positive or negative score target
-?redirect=URL    destination after target is reached
-?seed=value      optional run seed
+- ?target=120
+  Ends the game when the score crosses that threshold.
+- ?target=-250
+  Ends the game when the score crosses that negative threshold.
+- ?redirect=https://example.com/next.html
+  Redirects after threshold attainment.
 
 Notes:
-- Eli is the human examiner.
-- The player is the intelligence being tested.
-- Answer positions are shuffled each question.
-- The transcript shows the actual answer text the player chose.
+- No question repeats until the game has exhausted all 1000 question nodes.
+- Answer positions are shuffled every question.
+- Transcript shows the exact answer selected by the player.
+- If no target is supplied, the game continues indefinitely.
