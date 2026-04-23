@@ -18,7 +18,9 @@
   const lineHue = Number(params.get('hue') || '205');
   const queue = parseQueue();
   let queueIndex = 0;
-  const VERSION = 'v21';
+  const VERSION = 'v22';
+  const ANGLE_SLIDER_MAX = 100;
+  const W_SLIDER_MAX = 160;
 
   function parseQueue() {
     if (rangeParam && /^\d+\-\d+$/.test(rangeParam)) {
@@ -87,8 +89,10 @@
     const d = wrapAngle(a - b);
     return Math.abs(d);
   }
-  function sliderToAngle(v) { return Number(v) / 100 * Math.PI; }
-  function angleToSlider(v) { return clamp(Math.round(wrapAngle(v) / Math.PI * 100), -100, 100); }
+  function sliderToAngle(v) { return Number(v) / ANGLE_SLIDER_MAX * Math.PI; }
+  function angleToSlider(v) { return clamp(Math.round(wrapAngle(v) / Math.PI * ANGLE_SLIDER_MAX), -ANGLE_SLIDER_MAX, ANGLE_SLIDER_MAX); }
+  function sliderToW(v) { return clamp(Number(v) / W_SLIDER_MAX * 1.6, -1.6, 1.6); }
+  function wToSlider(v) { return clamp(Math.round(v / 1.6 * W_SLIDER_MAX), -W_SLIDER_MAX, W_SLIDER_MAX); }
   function linesForLevel(level) {
     const t = phase01(level);
     return Math.round(3 + 297 * Math.pow(t, 1.05));
@@ -317,7 +321,7 @@
     state.target.x = randAngle(1.1);
     state.target.y = randAngle(2.7);
     state.target.z = randAngle(4.5);
-    state.target.w = (rand(seed + 5.9) * 2 - 1) * 0.55;
+    state.target.w = (rand(seed + 5.9) * 2 - 1) * 1.05;
 
     const offsetMin = lerp(1.0, 0.85, state.phase);
     const pickStart = (targetAngle, s) => {
@@ -327,12 +331,12 @@
     state.player.x = pickStart(state.target.x, 6.1);
     state.player.y = pickStart(state.target.y, 7.9);
     state.player.z = pickStart(state.target.z, 9.7);
-    state.player.w = clamp(state.target.w + (signedRand(seed + 11.3) >= 0 ? 1 : -1) * (0.22 + rand(seed + 13.1) * 0.25), -0.9, 0.9);
+    state.player.w = clamp(state.target.w + (signedRand(seed + 11.3) >= 0 ? 1 : -1) * (0.42 + rand(seed + 13.1) * 0.42), -1.45, 1.45);
 
     sliderX.value = String(angleToSlider(state.player.x));
     sliderY.value = String(angleToSlider(state.player.y));
     sliderZ.value = String(angleToSlider(state.player.z));
-    sliderW.value = String(Math.round(state.player.w * 100));
+    sliderW.value = String(wToSlider(state.player.w));
 
     const mesh = buildMaskLines(linesForLevel(level));
     state.mesh = mesh;
@@ -578,7 +582,7 @@
     sliderX.value = String(angleToSlider(state.player.x));
     sliderY.value = String(angleToSlider(state.player.y));
     sliderZ.value = String(angleToSlider(state.player.z));
-    sliderW.value = String(Math.round(state.player.w * 100));
+    sliderW.value = String(wToSlider(state.player.w));
   }
 
   function spawnSparkBurst(n = 10) {
@@ -874,7 +878,7 @@
     state.player.x = sliderToAngle(sliderX.value);
     state.player.y = sliderToAngle(sliderY.value);
     state.player.z = sliderToAngle(sliderZ.value);
-    state.player.w = clamp(Number(sliderW.value) / 100, -1.0, 1.0);
+    state.player.w = sliderToW(sliderW.value);
   }
 
   function setZoomFromSlider(v) {
