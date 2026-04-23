@@ -885,24 +885,24 @@ function closeLockPopup() {
 }
 
 // Check on load if we returned from a successful masklock solve
-(function checkSolvedParam() {
+// Deferred until after main script defines collectKey
+window.addEventListener('load', function checkSolvedParam() {
   const params = new URLSearchParams(window.location.search);
   const solvedKey = params.get('solved');
-  if (solvedKey) {
-    // Clean URL
-    const cleanURL = window.location.pathname + window.location.hash;
-    history.replaceState(null, '', cleanURL);
-    // Collect the key
+  if (!solvedKey) return;
+  const cleanURL = window.location.pathname + window.location.hash;
+  history.replaceState(null, '', cleanURL);
+  if (typeof collectKey === 'function') {
     const isNew = collectKey(solvedKey);
     if (isNew) {
       setTimeout(() => {
-        flashKeyCollect(solvedKey);
-        updateKeyBar();
+        if (typeof flashKeyCollect === 'function') flashKeyCollect(solvedKey);
+        if (typeof updateKeyBar === 'function') updateKeyBar();
         showDoorLockBubble('🗝️ Key ' + solvedKey + ' collected — door unlocked!', '#7ed49a');
-      }, 400);
+      }, 600);
     }
   }
-})();
+});
 
 function showDoorLockBubble(msg, color) {
   const el = document.getElementById('doorLockBubble');
