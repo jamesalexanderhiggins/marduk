@@ -18,7 +18,7 @@
   const lineHue = Number(params.get('hue') || '205');
   const queue = parseQueue();
   let queueIndex = 0;
-  const VERSION = 'v20';
+  const VERSION = 'v21';
 
   function parseQueue() {
     if (rangeParam && /^\d+\-\d+$/.test(rangeParam)) {
@@ -100,7 +100,7 @@
   }
   function rotationSpeedForLevel(level) {
     const t = phase01(level);
-    return lerp(0.00018, 0.00155, t);
+    return 0.00018 * Math.pow(t, 1.8);
   }
   function timerForLevel(level) {
     const t = phase01(level);
@@ -108,11 +108,11 @@
   }
   function magnetWindowForLevel(level) {
     const t = phase01(level);
-    return lerp(0.05, 0.50, t);
+    return lerp(0.091, 0.90, t);
   }
   function magnetStrengthForLevel(level) {
     const t = phase01(level);
-    return lerp(0.06, 0.18, t);
+    return lerp(0.09, 0.34, t);
   }
 
   function initBackground() {
@@ -570,7 +570,7 @@
     if (c < activation) return;
     const strength = magnetStrengthForLevel(state.level);
     const normalized = clamp((c - activation) / Math.max(0.0001, window), 0, 1);
-    const pull = strength * Math.pow(normalized, 1.35) * dt * 0.0024;
+    const pull = strength * Math.pow(normalized, 1.05) * dt * 0.0032;
     state.player.x = wrapAngle(mix(state.player.x, state.target.x, pull));
     state.player.y = wrapAngle(mix(state.player.y, state.target.y, pull));
     state.player.z = wrapAngle(mix(state.player.z, state.target.z, pull));
@@ -757,12 +757,12 @@
     ctx.restore();
   }
 
-  function drawMask(mesh, rot, style, scale, jitter = 0, zOffset = 0) {
+  function drawMask(mesh, rot, style, scale, jitter = 0, zOffset = 0, lineWidth = 0.55) {
     const worldX = state.worldTilt;
     const worldY = state.worldSpin;
     const worldZ = state.worldRoll;
     ctx.strokeStyle = style;
-    ctx.lineWidth = 0.55;
+    ctx.lineWidth = lineWidth;
     for (const line of mesh) {
       let open = false;
       ctx.beginPath();
@@ -794,29 +794,31 @@
     const c = coherence();
     const p = phase01(state.level);
     const scale = Math.min(innerWidth, innerHeight) * 0.34 * state.zoom;
-    const ghostAlpha = 0.08 + (1 - c) * 0.12;
+    const ghostAlpha = 0.10 + (1 - c) * 0.15;
     drawMask(
       state.ghostMesh,
       { x: state.target.x, y: state.target.y, z: state.target.z },
       `hsla(${lineHue} 100% 75% / ${ghostAlpha})`,
       scale,
       0,
-      state.target.w
+      state.target.w,
+      0.45 + (1 - c) * 0.15
     );
 
     drawCountdownGhost();
-    if (c > 0.45 && Math.random() < 0.18 + c * 0.25) spawnSparkBurst(2 + Math.round(c * 5));
-    const tremble = c > 0.62 ? (0.002 + c * 0.016 + p * 0.007) : 0;
-    const mainAlpha = 0.58 + c * 0.34;
-    ctx.shadowBlur = 16 + c * 26;
-    ctx.shadowColor = `hsla(${lineHue} 100% 80% / ${0.08 + c * 0.22})`;
+    if (c > 0.22 && Math.random() < 0.10 + c * 0.42) spawnSparkBurst(2 + Math.round(2 + c * 8));
+    const tremble = c > 0.35 ? (0.001 + c * 0.020 + p * 0.008) : 0;
+    const mainAlpha = 0.52 + c * 0.42;
+    ctx.shadowBlur = 14 + c * 34;
+    ctx.shadowColor = `hsla(${lineHue} 100% 82% / ${0.10 + c * 0.30})`;
     drawMask(
       state.mesh,
       { x: state.player.x, y: state.player.y, z: state.player.z },
       `rgba(250,252,255,${mainAlpha})`,
       scale,
       tremble,
-      state.player.w
+      state.player.w,
+      0.42 + c * 0.26
     );
 
     ctx.shadowBlur = 0;
@@ -845,8 +847,9 @@
   function update(dt) {
     if (state.transitioning) return;
     state.worldSpin += rotationSpeedForLevel(state.level) * dt;
-    state.worldTilt = Math.sin(performance.now() * 0.00019) * (0.02 + state.phase * 0.08);
-    state.worldRoll = Math.cos(performance.now() * 0.00011) * (0.03 + state.phase * 0.1);
+    const worldAmp = Math.pow(state.phase, 1.45);
+    state.worldTilt = Math.sin(performance.now() * (0.00008 + worldAmp * 0.00011)) * (worldAmp * 0.08);
+    state.worldRoll = Math.cos(performance.now() * (0.00005 + worldAmp * 0.00008)) * (worldAmp * 0.10);
     state.zoom += (state.zoomTarget - state.zoom) * Math.min(1, dt * 0.01);
     updateBackground(dt);
     applyAssist(dt);
