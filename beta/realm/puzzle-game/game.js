@@ -18,7 +18,7 @@
   const lineHue = Number(params.get('hue') || '205');
   const queue = parseQueue();
   let queueIndex = 0;
-  const VERSION = 'v22';
+  const VERSION = 'v23';
   const ANGLE_SLIDER_MAX = 100;
   const W_SLIDER_MAX = 160;
 
@@ -112,11 +112,11 @@
   }
   function magnetWindowForLevel(level) {
     const t = phase01(level);
-    return lerp(0.091, 0.90, t);
+    return lerp(0.18, 0.96, t);
   }
   function magnetStrengthForLevel(level) {
     const t = phase01(level);
-    return lerp(0.09, 0.34, t);
+    return lerp(0.22, 0.62, t);
   }
 
   function initBackground() {
@@ -563,7 +563,7 @@
     const dy = angleDiff(state.player.y, state.target.y);
     const dz = angleDiff(state.player.z, state.target.z);
     const dw = Math.abs(state.player.w - state.target.w);
-    const score = 1 - clamp((dx + dy + dz + dw * 1.25) / (tol * 4.55), 0, 1);
+    const score = 1 - clamp((dx + dy + dz + dw * 1.1) / (tol * 5.2), 0, 1);
     return Math.pow(score, 1.4);
   }
 
@@ -574,11 +574,17 @@
     if (c < activation) return;
     const strength = magnetStrengthForLevel(state.level);
     const normalized = clamp((c - activation) / Math.max(0.0001, window), 0, 1);
-    const pull = strength * Math.pow(normalized, 1.05) * dt * 0.0032;
+    const pull = strength * Math.pow(normalized, 0.8) * dt * 0.0056;
     state.player.x = wrapAngle(mix(state.player.x, state.target.x, pull));
     state.player.y = wrapAngle(mix(state.player.y, state.target.y, pull));
     state.player.z = wrapAngle(mix(state.player.z, state.target.z, pull));
     state.player.w = mix(state.player.w, state.target.w, pull * 0.95);
+    if (c > 0.93 || normalized > 0.985) {
+      state.player.x = state.target.x;
+      state.player.y = state.target.y;
+      state.player.z = state.target.z;
+      state.player.w = state.target.w;
+    }
     sliderX.value = String(angleToSlider(state.player.x));
     sliderY.value = String(angleToSlider(state.player.y));
     sliderZ.value = String(angleToSlider(state.player.z));
@@ -810,8 +816,8 @@
     );
 
     drawCountdownGhost();
-    if (c > 0.22 && Math.random() < 0.10 + c * 0.42) spawnSparkBurst(2 + Math.round(2 + c * 8));
-    const tremble = c > 0.35 ? (0.001 + c * 0.020 + p * 0.008) : 0;
+    if (c > 0.16 && Math.random() < 0.16 + c * 0.5) spawnSparkBurst(3 + Math.round(3 + c * 10));
+    const tremble = c > 0.24 ? (0.0015 + c * 0.024 + p * 0.009) : 0;
     const mainAlpha = 0.52 + c * 0.42;
     ctx.shadowBlur = 14 + c * 34;
     ctx.shadowColor = `hsla(${lineHue} 100% 82% / ${0.10 + c * 0.30})`;
@@ -859,9 +865,18 @@
     applyAssist(dt);
     updateHum();
 
-    if (coherence() > 0.988) {
+    const cNow = coherence();
+    if (cNow > 0.965) {
       state.solved = true;
       state.transitioning = true;
+      state.player.x = state.target.x;
+      state.player.y = state.target.y;
+      state.player.z = state.target.z;
+      state.player.w = state.target.w;
+      sliderX.value = String(angleToSlider(state.player.x));
+      sliderY.value = String(angleToSlider(state.player.y));
+      sliderZ.value = String(angleToSlider(state.player.z));
+      sliderW.value = String(wToSlider(state.player.w));
       solveSound();
       setTimeout(() => showOverlay(true), 220);
     } else if (!state.failed) {
