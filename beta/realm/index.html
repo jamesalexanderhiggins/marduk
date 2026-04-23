@@ -40,10 +40,9 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 .exit-home:hover{color:var(--gold);border-color:var(--gold);}
 
 /* Top-right progress pill */
-/* Key bar — replaces quiz progress pill */
-.key-bar{display:flex;align-items:center;gap:5px;
-  background:transparent;border:none;padding:0 4px;margin-left:auto;
-  border-left:1px solid rgba(201,168,76,0.18);}
+/* Key bar — moved below header (see fixed positioning) */
+/* Old inline position overridden */
+.key-bar{}
 .key-sym{font-size:16px;line-height:1;cursor:default;
   opacity:0.48;transition:opacity 0.6s,filter 0.6s,transform 0.4s;
   filter:grayscale(0.5) brightness(0.8);display:inline-block;}
@@ -131,7 +130,7 @@ body.kudra-active #stage{padding-top:110px;}
 #mv-canvas{display:block;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;}
 
 /* Info panel — slides up from bottom when a cell is tapped */
-.mv-info{position:absolute;left:12px;right:12px;bottom:12px;max-width:640px;margin:0 auto;background:linear-gradient(180deg,rgba(13,17,25,0.96),rgba(7,9,16,0.98));border:1px solid var(--border);padding:18px 22px;transform:translateY(calc(100% + 24px));opacity:0;transition:transform 0.3s ease,opacity 0.3s ease;pointer-events:none;box-shadow:0 -8px 40px rgba(0,0,0,0.6),0 0 30px rgba(201,168,76,0.08);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}
+.mv-info{position:absolute;left:12px;right:12px;bottom:12px;max-width:640px;margin:0 auto;max-height:72vh;overflow-y:auto;background:linear-gradient(180deg,rgba(13,17,25,0.96),rgba(7,9,16,0.98));border:1px solid var(--border);padding:18px 22px;transform:translateY(calc(100% + 24px));opacity:0;transition:transform 0.3s ease,opacity 0.3s ease;pointer-events:none;box-shadow:0 -8px 40px rgba(0,0,0,0.6),0 0 30px rgba(201,168,76,0.08);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}
 .mv-info.show{transform:translateY(0);opacity:1;pointer-events:auto;}
 .info-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;}
 .info-title{font-family:'Cinzel Decorative',serif;font-size:20px;color:var(--gold);line-height:1.25;flex:1;}
@@ -191,13 +190,7 @@ body.kudra-active #stage{padding-top:110px;}
 @keyframes eveBlink{0%,92%,100%{opacity:1;}93%,97%{opacity:0.4;}}
 @keyframes glitchT{0%,100%{transform:translateX(0);}50%{transform:translateX(2px);}}
 /* KUDRAMARDUK mode badge — top centre, very visible */
-#kudraMode{display:none;position:fixed;top:14px;left:50%;
-  transform:translateX(-50%);z-index:300;
-  align-items:center;gap:10px;
-  background:rgba(4,2,10,0.95);cursor:pointer;
-  border:1px solid rgba(192,132,252,0.55);
-  padding:9px 22px;white-space:nowrap;
-  box-shadow:0 0 24px rgba(192,132,252,0.35),0 0 60px rgba(192,132,252,0.12);}
+/* kudraMode removed */#kudraMode{display:none!important;}
 #kudraMode.on{display:flex;}
 #kudraMode:hover{border-color:#c084fc;
   box-shadow:0 0 32px rgba(192,132,252,0.6),0 0 80px rgba(192,132,252,0.25);}
@@ -527,7 +520,7 @@ body.kudra-active #stage{padding-top:110px;}
   0%,100%{box-shadow:0 0 0 rgba(212,175,55,0);border-color:rgba(212,175,55,0.3);}
   50%{box-shadow:0 0 20px rgba(212,175,55,0.4);border-color:rgba(212,175,55,0.9);}}
 
-/* ── v7.0 Central content card ───────────────────── */
+/* ── v7.1 Central content card ───────────────────── */
 /* Stage is now a transparent overlay; content lives in .tile-card */
 #stage{position:fixed;inset:0;z-index:10;pointer-events:none;
   display:flex;align-items:center;justify-content:center;}
@@ -658,6 +651,98 @@ body.skm-active .skm-badge{display:block;}
   color:var(--gold);}
 .skm-note{font-size:11px;color:rgba(201,168,76,0.35);font-style:italic;}
 
+
+/* Key bar floats just below header, right-aligned */
+#keyBar{position:fixed;top:54px;right:16px;z-index:149;
+  display:flex;align-items:center;gap:5px;
+  background:rgba(7,9,16,0.88);
+  border:1px solid rgba(201,168,76,0.12);
+  padding:4px 10px;border-radius:0 0 2px 2px;
+  backdrop-filter:blur(4px);}
+
+
+/* ── v7.1 Stage architecture ─────────────────────
+ *  #tileBg  = full-screen immersive background (z:2)
+ *  #stage   = full-screen transparent overlay (z:10)
+ *  .tile-card = centred content card, floats over bg
+ *  nav-arrows = fixed cardinal edges (z:15)
+ * ─────────────────────────────────────────────────*/
+#tileBg{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden;}
+#stage{position:fixed;inset:0;z-index:10;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;}
+body.kudra-active #stage{padding-top:0;}
+.tile-card{pointer-events:auto;position:relative;
+  z-index:11;
+  width:min(660px,calc(100vw - 144px));  /* leave 72px each side for arrows */
+  max-height:calc(100vh - 120px);        /* leave room for header + coords */
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  display:flex;flex-direction:column;align-items:center;
+  gap:14px;text-align:center;padding:28px 24px 28px;
+  background:transparent;  /* see-through — background shows behind */
+}
+/* Text content inside card gets a subtle readability backing */
+.tile-card .room-lore,.tile-card .ef-lore,
+.tile-card .pt-body,.tile-card .puzzle-tile-desc {
+  text-shadow:0 2px 12px rgba(0,0,0,0.95),0 0 40px rgba(0,0,0,0.8);
+}
+
+
+/* ── House A (Emily's House) — stone walls, warm fire, moonlight ── */
+.house-a-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.house-a-stone{position:absolute;inset:0;
+  background:
+    repeating-linear-gradient(0deg,
+      transparent,transparent 28px,
+      rgba(60,50,40,0.18) 28px, rgba(60,50,40,0.18) 30px),
+    repeating-linear-gradient(90deg,
+      transparent,transparent 48px,
+      rgba(60,50,40,0.12) 48px, rgba(60,50,40,0.12) 50px),
+    radial-gradient(ellipse 120% 80% at 75% 20%,
+      rgba(180,210,255,0.13) 0%, transparent 60%),
+    linear-gradient(180deg,
+      rgba(10,8,18,0.95) 0%,
+      rgba(28,20,14,0.92) 60%,
+      rgba(40,22,10,0.9) 100%);
+}
+.house-a-fire{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:220px;height:180px;pointer-events:none;
+  background:radial-gradient(ellipse 50% 70% at 50% 100%,
+    rgba(255,140,30,0.55) 0%,rgba(255,80,10,0.3) 35%,transparent 70%);
+  animation:houseAFire 1.8s ease-in-out infinite alternate;}
+@keyframes houseAFire{
+  0%{opacity:0.7;transform:translateX(-50%) scaleX(1);}
+  50%{opacity:1;transform:translateX(-50%) scaleX(1.06);}
+  100%{opacity:0.8;transform:translateX(-50%) scaleX(0.96);}}
+.house-a-moon{position:absolute;top:12%;right:18%;
+  width:64px;height:64px;border-radius:50%;
+  background:radial-gradient(circle,rgba(210,220,255,0.7) 0%,rgba(160,180,255,0.2) 55%,transparent 70%);
+  box-shadow:0 0 30px rgba(180,200,255,0.35);
+  animation:moonGlow 5s ease-in-out infinite alternate;}
+@keyframes moonGlow{0%{opacity:0.7;}100%{opacity:1;}}
+.house-a-window{position:absolute;top:8%;right:16%;
+  width:80px;height:110px;
+  border:2px solid rgba(100,110,140,0.4);
+  background:radial-gradient(ellipse 80% 80% at 50% 30%,
+    rgba(180,200,255,0.18) 0%,rgba(60,70,110,0.08) 60%,transparent 100%);
+  box-shadow:inset 0 0 20px rgba(140,160,220,0.1);}
+
+
+/* Inline puzzle (non-threshold) */
+.puzzle-inline{width:100%;display:flex;flex-direction:column;align-items:center;gap:12px;}
+.puzzle-inline-frame{width:100%;height:min(480px,60vh);border:1px solid rgba(192,132,252,0.3);
+  background:#000;}
+.puzzle-quit-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;
+  color:var(--dim);background:transparent;
+  border:1px solid rgba(201,168,76,0.15);padding:8px 20px;cursor:pointer;margin-top:4px;}
+.puzzle-quit-btn:hover{color:var(--gold);border-color:var(--gold);}
+
+
+/* Emily path taunt arrows */
+.nav-arrow.taunt{color:#c084fc;border-color:rgba(192,132,252,0.5);
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.15em;
+  width:auto;height:auto;padding:10px 14px;white-space:nowrap;}
+.nav-arrow.taunt:hover{color:#fff;border-color:#c084fc;}
+
 </style>
 </head>
 <body>
@@ -671,11 +756,13 @@ body.skm-active .skm-badge{display:block;}
   <button id="mapBtn" title="Open the Marduk View">⬡ MAP</button>
   <button id="muteBtn" title="Toggle music">♪ MUSIC</button>
   <button id="exitKBtn" title="Exit Kudramarduk Mode">✕ EXIT K MODE</button>
+  <button id="exitSkmBtn" style="display:none" title="Exit SuperKudraMarduk editing">✕ EXIT EDIT</button>
   <button id="resetBtn" title="Reset all progress">↺ RESET</button>
-  <div class="key-bar" id="keyBar"></div>
 </div>
+<div class="key-bar" id="keyBar"></div>
 <div class="room-coords" id="roomCoords"></div>
 
+<div id="tileBg"></div>
 <div id="stage"></div>
 <button id="transcendBtn" onclick="goTo(15,10)">✦ Transcend ✦</button>
 
@@ -736,7 +823,7 @@ body.skm-active .skm-badge{display:block;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v7.0
+ *  MARDUK'S MAP — /realm/  grid SPA  v7.1
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -1016,6 +1103,19 @@ function getDoors(x, y) {
       continue;
     }
 
+    /* House exit rule: interior tiles can ONLY exit through the front door.
+     * Key-holder side entry: path step 0 always accessible if player has the house key. */
+
+    // Block exit from house interior unless going to own front door or another interior tile
+    if (tile.house_id && tile.type === 'house_interior') {
+      const samehouse = neighbour.house_id && neighbour.house_id === tile.house_id;
+      const isFrontDoor = neighbour.type === 'house_front_door' && neighbour.house_id === tile.house_id;
+      if (!samehouse && !isFrontDoor && !isKudraUnlocked()) {
+        out[d] = {sealed: true, reason: 'house-interior-exit-blocked'};
+        continue;
+      }
+    }
+
     /* Special: house front door always accessible from within its own house
      * Fixes path-guard blocking front door from house interior tiles */
     if (neighbour.type === 'house_front_door'
@@ -1099,6 +1199,20 @@ function getLastTile() {
 /* Path guard: returns true if arriving at (x,y) from lastTile is legal.
  * Rule: step 0 of any path = open entry. Any other step = must come
  * from the adjacent step on the same path (prev or next). */
+// Map path ID → key required to enter the house it leads to
+const PATH_HOUSE_KEYS = {
+  'F': null,       // free entry
+  'D': 'D',        // Key D opens path D
+  'C': 'C',
+  'B': 'B',
+  'E': 'E',
+  'G': 'G',
+  'A': 'A',
+  'H': 'H',
+  'M': null,
+};
+function _getPathHouseKey(pid) { return PATH_HOUSE_KEYS[pid] || null; }
+
 function pathGuardOk(x, y) {
   const tile = getTile(x, y);
   if (!tile.on_path || tile.on_path.length === 0) return true;
@@ -1106,6 +1220,10 @@ function pathGuardOk(x, y) {
     const myStep = (tile.path_step || {})[pid];
     if (myStep === undefined) continue;
     if (myStep === 0) return true;            // entrance — always open
+    // Key-holder side entry: if player has the key for the house at the end of this path,
+    // allow stepping onto this path from any adjacent tile
+    const _pathHouseKey = _getPathHouseKey(pid);
+    if (_pathHouseKey && hasKey(_pathHouseKey)) return true;
     const lt = getLastTile();
     if (!lt) return true;                     // fresh start — be lenient
     const prev = getTile(lt.x, lt.y);
@@ -1187,23 +1305,23 @@ function render(x, y) {
   const navEl = document.getElementById('navArrows');
   s.style.opacity = '1';
   navEl.innerHTML = '';
-  // v7.0: ensure tile-card exists for renderers
+  // v7.1: ensure tileCard exists
   if (!document.getElementById('tileCard')) {
     s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
   }
-  // v7.0: stage is a fixed transparent overlay; content lives in .tile-card
+  // v7.1: stage is a fixed transparent overlay; content lives in .tile-card
   s.style.cssText = '';
   // Inject a fresh .tile-card for all renderers to write into
   s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v7.0';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v7.1';
 
   // Music — zone-aware track selection
   MusicEngine.playForTile(x, y, tile);
 
-  // v7.0: tile content card (centred on screen)
+  // v7.1: tile content card (centred on screen)
   const tc = document.getElementById('tileCard') || s;
 
   // Check puzzle lock on entry (if tile has puzzle.lock_entry, show puzzle first)
@@ -1336,8 +1454,11 @@ function renderEmilyPath(s, x, y, tile) {
   const ghostBase  = 0.55 + Math.sin(step) * 0.1;
   const ghostDelay = (step % 3) * 0.8;
 
-  s.innerHTML = `
-    <div class="ef-root" id="efRoot">
+  // v7.1: background layers → tileBg, content → tileCard
+  const _efBg = document.getElementById('tileBg');
+  const _efTc = document.getElementById('tileCard');
+  if (_efBg) _efBg.innerHTML = `
+    <div class="ef-root" id="efRoot" style="pointer-events:auto;">
 
       <!-- Layer 1: Background forest (parallax via JS) -->
       <div class="ef-bg" id="efBg"
@@ -1364,16 +1485,18 @@ function renderEmilyPath(s, x, y, tile) {
       <!-- Mist particles -->
       <div class="ef-mist" id="efMist"></div>
 
-      <!-- Content panel -->
-      <div class="ef-panel">
-        <div class="ef-step">${stepLabel}</div>
-        ${tileTitle ? `<div class="ef-title">${tileTitle}</div>` : ''}
-        ${tileLore  ? `<div class="ef-lore">${tileLore}</div>`   : ''}
-        ${tileHint  ? `<div class="ef-lore" style="margin-top:6px;font-size:0.88em;opacity:0.6;">· ${tileHint} ·</div>` : ''}
-      </div>
+    </div>`;
+  // Content overlay in tile-card
+  if (_efTc) _efTc.innerHTML = `
+    <div class="ef-panel" style="position:relative;z-index:12;">
+      <div class="ef-step">${stepLabel}</div>
+      ${tileTitle ? `<div class="ef-title">${tileTitle}</div>` : ''}
+      ${tileLore  ? `<div class="ef-lore">${tileLore}</div>`   : ''}
+      ${tileHint  ? `<div class="ef-lore" style="margin-top:6px;font-size:0.88em;opacity:0.6;">· ${tileHint} ·</div>` : ''}
     </div>`;
 
   document.body.style.background = '#050010';
+  document.getElementById('tileBg') && (document.getElementById('tileBg').style.background='#050010');
   startEmilyGhosts(step, total);
 
   // Sparse purple starfield — canopy light
@@ -1523,14 +1646,15 @@ function renderPathScene(s, x, y, tile) {
   const g = parseInt(color.slice(3,5),16);
   const b2= parseInt(color.slice(5,7),16);
 
-  s.innerHTML = `
-    <div class="pt-root">
-      <canvas class="pt-canvas" id="ptCanvas"></canvas>
-      <div class="pt-panel" style="color:rgb(${r+80},${g+80},${b2+80});">
-        <div class="pt-step" style="color:rgba(${r+100},${g+100},${b2+100},0.6);">${stepLabel}</div>
-        ${tileTitle ? `<div class="pt-title" style="color:rgb(${r+120},${g+120},${b2+120});">${tileTitle}</div>` : ''}
-        ${tileLore  ? `<div class="pt-lore">${tileLore}</div>` : ''}
-      </div>
+  // v7.1: canvas background → tileBg, text content → tile-card
+  const _ptBg = document.getElementById('tileBg');
+  const _ptTc = document.getElementById('tileCard');
+  if (_ptBg) _ptBg.innerHTML = `<div class="pt-root"><canvas class="pt-canvas" id="ptCanvas"></canvas></div>`;
+  if (_ptTc) _ptTc.innerHTML = `
+    <div class="pt-body" style="position:relative;z-index:12;text-align:center;">
+      <div class="pt-step" style="color:rgba(${r+100},${g+100},${b2+100},0.6);">${stepLabel}</div>
+      ${tileTitle ? `<div class="pt-title" style="color:rgb(${r+120},${g+120},${b2+120});">${tileTitle}</div>` : ''}
+      ${tileLore  ? `<div class="pt-lore">${tileLore}</div>` : ''}
     </div>`;
 
   document.body.style.background = '#02010a';
@@ -1539,6 +1663,8 @@ function renderPathScene(s, x, y, tile) {
   // Data-rain canvas animation
   const canvas = document.getElementById('ptCanvas');
   if (!canvas) return;
+  // size canvas to full viewport
+  canvas.style.width='100%'; canvas.style.height='100%';
   const ctx = canvas.getContext('2d');
 
   function sizeCanvas() {
@@ -1810,7 +1936,7 @@ function updateTranscendBtn(tile) {
 
 
 /* ══════════════════════════════════════════════════
- *  PUZZLE SYSTEM v7.0
+ *  PUZZLE SYSTEM v7.1
  *  Two game types: face3d (100 levels) + tesseract (1000 levels)
  *  Solved tiles stored in localStorage; persist across sessions
  * ═════════════════════════════════════════════════*/
@@ -1837,6 +1963,24 @@ function markPuzzleSolved(x, y) {
   _saveSolved(_solvedTiles);
 }
 
+
+// Find first interior tile adjacent to a house front door
+function _findFirstInterior(fx, fy, houseId) {
+  const hid = (houseId||'').toLowerCase();
+  for (const [dx,dy] of [[0,-1],[0,1],[-1,0],[1,0]]) {
+    const t = getTile(fx+dx, fy+dy);
+    if (t && t.house_id && t.house_id.toLowerCase()===hid
+        && t.type==='house_interior') {
+      return [fx+dx, fy+dy];
+    }
+  }
+  return null;
+}
+
+function isHouseThreshold(x, y) {
+  const t = getTile(x, y);
+  return t.type === 'house_front_door';
+}
 function buildPuzzleURL(pzl, destX, destY) {
   const base = PUZZLE_BASE[pzl.type];
   if (!base) return null;
@@ -1881,8 +2025,15 @@ document.getElementById('puzzleFrame').addEventListener('load', function() {
       if (dec && _puzzleDestX !== null) {
         markPuzzleSolved(_puzzleDestX, _puzzleDestY);
         closePuzzleOverlay();
-        const onCompleteMusic = getTile(_puzzleDestX, _puzzleDestY)?.puzzle?.on_complete_music;
-        goTo(_puzzleDestX, _puzzleDestY);
+        const _solvedTile = getTile(_puzzleDestX, _puzzleDestY);
+        const onCompleteMusic = _solvedTile?.puzzle?.on_complete_music;
+        // If this was a house front door, go to the interior (not back to the door)
+        let _destX = _puzzleDestX, _destY = _puzzleDestY;
+        if (_solvedTile?.type === 'house_front_door') {
+          const _firstInside = _findFirstInterior(_puzzleDestX, _puzzleDestY, _solvedTile.house_id);
+          if (_firstInside) { _destX = _firstInside[0]; _destY = _firstInside[1]; }
+        }
+        goTo(_destX, _destY);
         if (onCompleteMusic) setTimeout(() => MusicEngine.playByKey(onCompleteMusic), 600);
       }
     }
@@ -1892,34 +2043,66 @@ document.getElementById('puzzleFrame').addEventListener('load', function() {
 // Also handle redirect hash on page load (puzzle completes → navigates top page)
 // (handled in boot below)
 
-// Render a puzzle tile — centred in the tile-card
+// Render a puzzle tile — inline (with quit button), or full-screen overlay for house doors
 function renderPuzzleTile(tc, x, y, tile) {
   const pzl = tile.puzzle || {};
   const solved = isPuzzleSolved(x, y);
-  const typeLabel = pzl.type === 'tesseract' ? 'Tesseract'
-                  : pzl.type === 'face3d'    ? '3D Face'
+  const isThreshold = isHouseThreshold(x, y);
+  const typeLabel = pzl.type === 'tesseract' ? 'Tesseract (1000 levels)'
+                  : pzl.type === 'face3d'    ? '3D Face Puzzle (100 levels)'
                   : 'Puzzle';
   const levelStr = pzl.range  ? `Levels ${pzl.range[0]}–${pzl.range[1]}`
                  : pzl.level  ? `Level ${pzl.level}`
                  : '';
-
-  tc.innerHTML = `
-    <div class="puzzle-tile-root">
+  if (solved) {
+    tc.innerHTML = `<div class="puzzle-tile-root">
+      <div class="puzzle-tile-title">${pzl.title || 'Challenge'}</div>
+      <div class="puzzle-solved-badge">✓ SOLVED — PATH OPEN</div></div>`;
+    return;
+  }
+  if (isThreshold) {
+    // House door: full-screen overlay
+    tc.innerHTML = `<div class="puzzle-tile-root">
       <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.4em;
-        color:rgba(192,132,252,0.55);margin-bottom:6px;">
-        ${typeLabel.toUpperCase()} · ${levelStr}
-      </div>
+        color:rgba(192,132,252,0.55);margin-bottom:6px;">${typeLabel} · ${levelStr}</div>
       <div class="puzzle-tile-title">${pzl.title || 'Challenge'}</div>
       ${pzl.desc ? `<div class="puzzle-tile-desc">${pzl.desc}</div>` : ''}
-      ${solved
-        ? `<div class="puzzle-solved-badge">✓ SOLVED — PATH OPEN</div>`
-        : `<button class="puzzle-launch-btn" onclick="showPuzzleOverlay(
-              ${JSON.stringify(pzl).replace(/</g,'&lt;')},
-              ${x}, ${y})">
-            ▶ BEGIN CHALLENGE
-           </button>`
-      }
+      <button class="puzzle-launch-btn" onclick="showPuzzleOverlay(
+        ${JSON.stringify(pzl).replace(/</g,'&lt;')}, ${x}, ${y})">▶ BEGIN CHALLENGE</button>
+      <button class="puzzle-quit-btn" onclick="_puzzleQuit(${x},${y})">
+        ← I can't do it — go back</button></div>`;
+  } else {
+    // Path tile: embed inline, no full-screen takeover
+    const url = buildPuzzleURL(pzl, x, y);
+    tc.innerHTML = `<div class="puzzle-inline">
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.4em;
+        color:rgba(192,132,252,0.55);">${typeLabel} · ${levelStr}</div>
+      <div class="puzzle-tile-title" style="font-size:clamp(14px,2vw,20px);">${pzl.title||'Challenge'}</div>
+      ${pzl.desc ? `<div class="puzzle-tile-desc" style="font-size:13px;">${pzl.desc}</div>` : ''}
+      <iframe class="puzzle-inline-frame" src="${url||'about:blank'}"
+        allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>
+      <button class="puzzle-quit-btn" onclick="_puzzleQuit(${x},${y})">
+        ← I can't do it — go back a step</button>
     </div>`;
+  }
+}
+
+// Quit a puzzle — go back one step
+function _puzzleQuit(x, y) {
+  const lt = getLastTile();
+  if (lt) goTo(lt.x, lt.y);
+  else {
+    // Fall back: find previous step on path
+    const tile = getTile(x, y);
+    for (const pid of (tile.on_path||[])) {
+      const myStep = (tile.path_step||{})[pid];
+      if (myStep > 0 && REALM.paths[pid]) {
+        const prev = REALM.paths[pid][myStep-1];
+        if (prev) { goTo(prev[0], prev[1]); return; }
+      }
+    }
+    goTo(0, 0);
+  }
 }
 
 function renderEmpty(s, x, y, tile) {
@@ -1975,6 +2158,18 @@ function renderPathTile(s, x, y, tile) {
 }
 
 function renderContent(s, x, y, tile) {
+  // House A interior — stone/fire/moonlight background in tileBg
+  if (tile.house_id === 'a' || tile.house_id === 'A') {
+    const bg = document.getElementById('tileBg');
+    if (bg) bg.innerHTML = `
+      <div class="house-a-bg">
+        <div class="house-a-stone"></div>
+        <div class="house-a-window"></div>
+        <div class="house-a-moon"></div>
+        <div class="house-a-fire"></div>
+      </div>`;
+    document.body.style.background = '#0a0814';
+  }
   // Check for embed types added by SKM editor
   if (tile.embed_url) {
     s.innerHTML = `<div class="puzzle-tile-root">
@@ -2213,8 +2408,53 @@ function renderNavArrows(x, y) {
   const el = document.getElementById('navArrows');
   el.innerHTML = '';
   const tile = getTile(x, y);
-  // Quiz / threshold: no arrows (doors are the nav)
   if (tile.type === 'quiz' || tile.type === 'threshold' || tile.type === 'marduk_view') return;
+
+  // Emily's path: only show forward/back along path A; near end add spooky taunt exits
+  if (tile.on_path && tile.on_path.includes('A') && tile.type !== 'house_interior') {
+    const myStep = (tile.path_step||{})['A'] ?? 0;
+    const total = PATH_A_SEQ.length;
+    const seq = PATH_A_SEQ;
+    // Back arrow
+    if (myStep > 0) {
+      const [bx,by] = seq[myStep-1];
+      const a = document.createElement('a');
+      a.className = 'nav-arrow left path';
+      a.href='#'+encodeXY(bx,by); a.textContent='←';
+      a.addEventListener('click',ev=>{ev.preventDefault();goTo(bx,by);});
+      el.appendChild(a);
+    }
+    // Forward arrow
+    if (myStep < total-1) {
+      const [fx,fy] = seq[myStep+1];
+      const a = document.createElement('a');
+      a.className = 'nav-arrow right path';
+      a.href='#'+encodeXY(fx,fy); a.textContent='→';
+      a.addEventListener('click',ev=>{ev.preventDefault();goTo(fx,fy);});
+      el.appendChild(a);
+    }
+    // Near end (last 6 steps): spooky taunt exit arrows pointing away from path
+    if (myStep >= total - 6 && myStep < total - 1) {
+      const taunts = ["← go back before it's too late",
+                      "↑ leave the path", "she wants your soul ↓"];
+      const taunt = taunts[myStep % taunts.length];
+      // Find a direction not on the path
+      for (const [dx,dy,dir] of [[0,1,'up'],[0,-1,'down'],[-1,0,'left'],[1,0,'right']]) {
+        const nx=x+dx,ny=y+dy;
+        const nb=getTile(nx,ny);
+        if (!nb.on_path?.includes('A') && nb.type!=='house_interior') {
+          const a=document.createElement('a');
+          a.className='nav-arrow '+dir+' taunt';
+          a.href='#'+encodeXY(nx,ny);
+          a.textContent=taunt;
+          a.addEventListener('click',ev=>{ev.preventDefault();goTo(nx,ny);});
+          el.appendChild(a);
+          break;
+        }
+      }
+    }
+    return;
+  }
 
   const doors = getDoors(x, y);
   const dirs = [
@@ -2325,7 +2565,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v7.0)
+ *  MARDUK VIEW — game-like map (v7.1)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -3408,7 +3648,7 @@ document.addEventListener('keydown', (ev) => {
       }
       return;
     }
-    if ((ev.key === 'Enter' || ev.key === ' ') && mvSelected) {
+    if (ev.key === 'Enter' && mvSelected) {
       ev.preventDefault();
       travelFromMV(mvSelected.x, mvSelected.y);
       return;
@@ -3434,6 +3674,7 @@ document.addEventListener('keydown', (ev) => {
     'ArrowLeft': 'left', 'a': 'left', 'A': 'left',
     'ArrowRight': 'right', 'd': 'right', 'D': 'right',
   };
+  if (ev.key === ' ') return;  // space reserved for text editing
   const dir = map[ev.key];
   if (!dir) return;
   const door = doors[dir];
@@ -4450,15 +4691,26 @@ document.addEventListener('keydown', (ev) => {
 function _activateSKM() {
   if (_skmActive) return;
   _skmActive = true;
-  // Activate full K mode
   activateKudraMode();
   document.body.classList.add('skm-active');
+  const exitBtn = document.getElementById('exitSkmBtn');
+  if (exitBtn) exitBtn.style.display = '';
   // Show badge in mvInfo
   const badge = document.querySelector('.skm-badge');
   if (badge) badge.style.display = 'block';
   // Flash notification
   _skmFlash();
   console.log('[SKM] SuperKudraMarduk activated');
+}
+
+function _deactivateSKM() {
+  _skmActive = false;
+  document.body.classList.remove('skm-active');
+  const exitBtn = document.getElementById('exitSkmBtn');
+  if (exitBtn) exitBtn.style.display = 'none';
+  // Close any open editor
+  const mount = document.getElementById('skmEditorMount');
+  if (mount) mount.innerHTML = '';
 }
 
 function _skmFlash() {
@@ -4543,8 +4795,8 @@ function skmOpenEditor(x, y) {
       <div class="skm-row">
         <span class="skm-label">GAME</span>
         <select class="skm-select" id="skmPzlType">
-          <option value="face3d"   ${pzl.type==='face3d'   ?'selected':''}>3D Face Puzzle (100 levels)</option>
-          <option value="tesseract"${pzl.type==='tesseract'?'selected':''}>Tesseract (1000 levels)</option>
+          <option value="face3d"   ${(!pzl.type||pzl.type==='face3d')   ?'selected':''}>3D Face Puzzle (100 levels)</option>
+          <option value="tesseract"${pzl.type==='tesseract' ?'selected':''}>Tesseract (1000 levels)</option>
         </select>
       </div>
       <div class="skm-row">
@@ -4733,6 +4985,11 @@ function skmExport() {
 // Hook into MV: when SKM active and tile double-tapped, open editor instead of regular panel
 // We'll inject after showInfoPanel is called
 
+// Wire EXIT SKM button
+document.addEventListener('DOMContentLoaded', ()=>{
+  const b = document.getElementById('exitSkmBtn');
+  if (b) b.addEventListener('click', _deactivateSKM);
+});
 /* ── Boot ──────────────────────────────────────── */
 async function boot() {
   const res = await fetch('realm.json');
@@ -4760,11 +5017,14 @@ async function boot() {
   const h = (window.location.hash || '').replace('#', '');
   if (h) {
     if (h.startsWith('pzl:')) {
-      // Puzzle completion redirect — mark solved and navigate there
       const dec = decodeXY(h.replace('pzl:',''));
       if (dec) {
         markPuzzleSolved(dec.x, dec.y);
-        start = dec;
+        const _bt = REALM ? getTile(dec.x, dec.y) : null;
+        if (_bt && _bt.type === 'house_front_door') {
+          const _fi = _findFirstInterior(dec.x, dec.y, _bt.house_id);
+          start = _fi ? {x:_fi[0],y:_fi[1]} : dec;
+        } else start = dec;
       }
     }
     else if (h === 'gate=left')  start = {x: -1, y: 0};
