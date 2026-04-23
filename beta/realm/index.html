@@ -27,14 +27,7 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 
 /* Top-left HOME link */
 /* ── Realm header strip ─────────────────────────── */
-#realmHeader{position:fixed;top:0;left:0;right:0;z-index:150;
-  height:48px;display:flex;align-items:center;
-  flex-wrap:nowrap;overflow:hidden;
-  justify-content:flex-start;
-  background:rgba(7,9,16,0.96);
-  border-bottom:1px solid rgba(201,168,76,0.12);
-  padding:0 10px;gap:6px;backdrop-filter:blur(4px);
-  box-sizing:border-box;}
+#realmHeader{position:fixed;top:0;left:0;right:0;z-index:150;height:44px;display:flex;align-items:center;flex-wrap:nowrap;overflow:hidden;justify-content:space-between;background:rgba(7,9,16,0.97);border-bottom:1px solid rgba(201,168,76,0.12);padding:0 8px;gap:4px;backdrop-filter:blur(4px);box-sizing:border-box;}
 .exit-home{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;
   text-transform:uppercase;color:var(--dim);text-decoration:none;
   border:1px solid rgba(201,168,76,0.12);padding:5px 9px;
@@ -522,7 +515,7 @@ body.kudra-active #stage{padding-top:110px;}
   0%,100%{box-shadow:0 0 0 rgba(212,175,55,0);border-color:rgba(212,175,55,0.3);}
   50%{box-shadow:0 0 20px rgba(212,175,55,0.4);border-color:rgba(212,175,55,0.9);}}
 
-/* ── v8.1 Central content card ───────────────────── */
+/* ── v8.2 Central content card ───────────────────── */
 /* Stage is now a transparent overlay; content lives in .tile-card */
 #stage{position:fixed;inset:0;z-index:10;pointer-events:none;
   display:flex;align-items:center;justify-content:center;}
@@ -663,7 +656,7 @@ body.skm-active .skm-badge{display:block;}
   backdrop-filter:blur(4px);}
 
 
-/* ── v8.1 Stage architecture ─────────────────────
+/* ── v8.2 Stage architecture ─────────────────────
  *  #tileBg  = full-screen immersive background (z:2)
  *  #stage   = full-screen transparent overlay (z:10)
  *  .tile-card = centred content card, floats over bg
@@ -837,7 +830,82 @@ body.kudra-active #stage{padding-top:0;}
 .nav-arrow.gate-solved{color:#4ade80;border-color:rgba(74,222,128,0.4);}
 .nav-arrow.gate-solved::after{content:'✓';position:absolute;
   font-size:9px;top:2px;right:3px;opacity:0.8;}
-.nav-arrow{position:relative;}  /* needed for ::after */
+/* nav-arrow position:relative removed — absolute positioning preserved */
+
+
+/* ── Header buttons all compact ──────────────────── */
+#realmHeader > *, #realmHeader button, #realmHeader a {
+  font-family:'Cinzel',serif!important;
+  font-size:8.5px!important;letter-spacing:0.1em!important;
+  padding:5px 8px!important;flex-shrink:1!important;
+  white-space:nowrap!important;min-width:0!important;
+}
+#exitSkmBtn{
+  color:#f0abfc!important;border-color:#c084fc!important;
+  animation:skmBtnPulse 2s ease-in-out infinite;
+}
+
+
+/* ── SKM slide-in editor panel ──────────────────────
+ * Completely independent of the map. Fixed right side.
+ * Has its own scroll — not constrained by any parent.
+ * ─────────────────────────────────────────────────*/
+#skmPanel{
+  position:fixed;
+  top:44px;right:0;bottom:0;
+  width:min(480px,100vw);
+  z-index:300;
+  background:rgba(5,4,14,0.98);
+  border-left:1px solid rgba(192,132,252,0.25);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  pointer-events:none;
+}
+#skmPanel.open{
+  transform:translateX(0);
+  pointer-events:auto;
+}
+#skmPanelHead{
+  flex:0 0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px 8px;
+  border-bottom:1px solid rgba(192,132,252,0.15);
+  background:rgba(5,4,14,0.99);
+}
+#skmPanelTitle{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.35em;
+  color:#f0abfc;
+}
+#skmPanelClose{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.2em;
+  color:rgba(201,168,76,0.5);background:transparent;
+  border:1px solid rgba(201,168,76,0.15);
+  padding:4px 10px;cursor:pointer;
+}
+#skmPanelClose:hover{color:var(--gold);border-color:var(--gold);}
+#skmPanelScroll{
+  flex:1 1 auto;
+  min-height:0;          /* CRITICAL — flex child must have min-height:0 to scroll */
+  overflow-y:scroll;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  padding:14px 16px 24px;
+  /* Scrollbar */
+  scrollbar-width:thin;
+  scrollbar-color:rgba(192,132,252,0.6) rgba(10,5,20,0.8);
+}
+#skmPanelScroll::-webkit-scrollbar{width:8px;}
+#skmPanelScroll::-webkit-scrollbar-track{background:rgba(10,5,20,0.8);}
+#skmPanelScroll::-webkit-scrollbar-thumb{
+  background:rgba(192,132,252,0.6);border-radius:4px;
+  border:2px solid rgba(10,5,20,0.8);}
+#skmPanelScroll::-webkit-scrollbar-thumb:hover{background:#f0abfc;}
+/* SKM fields inside the panel */
+#skmPanelScroll input,#skmPanelScroll select,#skmPanelScroll textarea{
+  box-sizing:border-box;width:100%;
+}
 
 </style>
 </head>
@@ -860,6 +928,15 @@ body.kudra-active #stage{padding-top:0;}
 
 <div id="tileBg"></div>
 <div id="stage"></div>
+
+<!-- SKM slide-in editor panel -->
+<div id="skmPanel">
+  <div id="skmPanelHead">
+    <span id="skmPanelTitle">✦ SKM EDITOR</span>
+    <button id="skmPanelClose" onclick="closeSkmPanel()">✕ CLOSE</button>
+  </div>
+  <div id="skmPanelScroll"></div>
+</div>
 <button id="transcendBtn" onclick="goTo(15,10)">✦ Transcend ✦</button>
 
 <!-- Puzzle overlay -->
@@ -919,7 +996,7 @@ body.kudra-active #stage{padding-top:0;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v8.1
+ *  MARDUK'S MAP — /realm/  grid SPA  v8.2
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -1401,26 +1478,26 @@ function render(x, y) {
   const navEl = document.getElementById('navArrows');
   s.style.opacity = '1';
   navEl.innerHTML = '';
-  // v8.1: ensure tileCard exists
+  // v8.2: ensure tileCard exists
   if (!document.getElementById('tileCard')) {
     s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
   }
-  // v8.1: stage is a fixed transparent overlay; content lives in .tile-card
+  // v8.2: stage is a fixed transparent overlay; content lives in .tile-card
   s.style.cssText = '';
   // Inject a fresh .tile-card for all renderers to write into
   s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v8.1';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v8.2';
 
   // Music — zone-aware track selection
   MusicEngine.playForTile(x, y, tile);
 
-  // v8.1: tile content card (centred on screen)
+  // v8.2: tile content card (centred on screen)
   const tc = document.getElementById('tileCard') || s;
 
-  // v8.1: no tile-level puzzle locks — gates are on edges (nav arrows)
+  // v8.2: no tile-level puzzle locks — gates are on edges (nav arrows)
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
   // 'content' type from v4 realm.json = same as named tile with lore
@@ -1546,7 +1623,7 @@ function renderEmilyPath(s, x, y, tile) {
   const ghostBase  = 0.55 + Math.sin(step) * 0.1;
   const ghostDelay = (step % 3) * 0.8;
 
-  // v8.1: background layers → tileBg, content → tileCard
+  // v8.2: background layers → tileBg, content → tileCard
   const _efBg = document.getElementById('tileBg');
   const _efTc = document.getElementById('tileCard');
   if (_efBg) _efBg.innerHTML = `
@@ -1738,10 +1815,11 @@ function renderPathScene(s, x, y, tile) {
   const g = parseInt(color.slice(3,5),16);
   const b2= parseInt(color.slice(5,7),16);
 
-  // v8.1: canvas background → tileBg, text content → tile-card
+  // v8.2: canvas background → tileBg, text content → tile-card
   const _ptBg = document.getElementById('tileBg');
   const _ptTc = document.getElementById('tileCard');
-  if (_ptBg) _ptBg.innerHTML = `<div class="pt-root"><canvas class="pt-canvas" id="ptCanvas"></canvas></div>`;
+  if (_ptBg) { _ptBg.style.cssText='position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden;';
+  _ptBg.innerHTML = `<div style="position:absolute;inset:0;"><canvas id="ptCanvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas></div>`; }
   if (_ptTc) _ptTc.innerHTML = `
     <div class="pt-body" style="position:relative;z-index:12;text-align:center;">
       <div class="pt-step" style="color:rgba(${r+100},${g+100},${b2+100},0.6);">${stepLabel}</div>
@@ -2028,7 +2106,7 @@ function updateTranscendBtn(tile) {
 
 
 /* ══════════════════════════════════════════════════
- *  PUZZLE SYSTEM v8.1
+ *  PUZZLE SYSTEM v8.2
  *  Two game types: face3d (100 levels) + tesseract (1000 levels)
  *  Solved tiles stored in localStorage; persist across sessions
  * ═════════════════════════════════════════════════*/
@@ -2597,7 +2675,7 @@ function renderNavArrows(x, y) {
     const srcPzl = tile.puzzle;
     const srcExitLocked = srcPzl && srcPzl.lock_exit && !isPuzzleSolved(x, y);
 
-    // v8.1: check edge gate
+    // v8.2: check edge gate
     const arrowDir = d.key === 'up' ? 'N' : d.key === 'down' ? 'S'
                    : d.key === 'left' ? 'W' : 'E';
     const edgeGate   = getGate(x, y, arrowDir);
@@ -2688,7 +2766,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v8.1)
+ *  MARDUK VIEW — game-like map (v8.2)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -3454,7 +3532,11 @@ function setupMVCanvas() {
     // (travel is now via the "Travel here" button, not a third tap)
     if (!document.getElementById('mvInfo').classList.contains('show')) {
       showInfoPanel(tile);
-      if (_skmActive) skmOpenEditor(tile.x, tile.y);
+      return;
+    }
+    // Second tap: if SKM active, open editor panel instead of travel
+    if (_skmActive) {
+      skmOpenEditor(tile.x, tile.y);
       return;
     }
 
@@ -4852,9 +4934,7 @@ function _deactivateSKM() {
   document.body.classList.remove('skm-active');
   const exitBtn = document.getElementById('exitSkmBtn');
   if (exitBtn) exitBtn.style.display = 'none';
-  // Close any open editor
-  const mount = document.getElementById('skmEditorMount');
-  if (mount) mount.innerHTML = '';
+  closeSkmPanel();
 }
 
 function _skmFlash() {
@@ -4877,10 +4957,14 @@ function _skmFlash() {
 // Injects the editor into the mvInfo panel
 function skmOpenEditor(x, y) {
   if (!_skmActive) return;
-  const tile = getTile(x, y);
-  const infoEl = document.getElementById('mvInfo');
-  if (!infoEl) return;
+  const panel  = document.getElementById('skmPanel');
+  const scroll = document.getElementById('skmPanelScroll');
+  const title  = document.getElementById('skmPanelTitle');
+  if (!panel || !scroll) return;
 
+  title.textContent = `✦ SKM · (${x},${y})`;
+
+  const tile  = getTile(x, y);
   const doors = getDoors(x, y);
   const dirMap = {up:'↑N',down:'↓S',left:'←W',right:'→E'};
   let mechLines = '';
@@ -4891,7 +4975,7 @@ function skmOpenEditor(x, y) {
     const status = door.sealed ? `SEALED (${door.reason||'blocked'})`
                  : door.path   ? `OPEN — Path ${nb?.on_path?.join(',')}`
                  : 'OPEN';
-    mechLines += `${dirMap[dir]} ${status}\n`;
+    mechLines += `${dirMap[dir]||dir} ${status}\n`;
   }
   mechLines += `\nType: ${tile.type||'empty'}`;
   if (tile.on_path?.length) mechLines += ` | Paths: ${tile.on_path.join(',')}`;
@@ -4900,268 +4984,187 @@ function skmOpenEditor(x, y) {
 
   const pzl     = tile.puzzle || {};
   const curName = tile.name  || '';
-  const curLore = tile.lore  || '';
-  // Determine current content type
+  const curLore = tile.lore  || tile.description || '';
   let curType = 'text';
-  if (pzl.type) curType = ['tesseract','masklock','turing','face3d'].includes(pzl.type) ? 'game' : pzl.type;
-  else if (tile.embed_url) curType = 'iframe';
-  else if (tile.video_url) curType = 'video';
-  else if (tile.image_url) curType = 'image';
+  if (pzl.type && ['tesseract','masklock','turing','face3d'].includes(pzl.type)) curType='game';
+  else if (tile.embed_url) curType='iframe';
+  else if (tile.video_url) curType='video';
+  else if (tile.image_url) curType='image';
 
-  // Music options from existing files
-  const MUSIC_OPTS = [
-    'puzzle_tension','high_stress_music','quiz_stress_music',
+  const MUSIC_OPTS = ['puzzle_tension','high_stress_music','quiz_stress_music',
     'low_stress_minor','low_stress_major','emily_path_music_1',
-    'emily_triumph','house_threshold_music','melchizedek_path_music'
-  ];
+    'emily_triumph','house_threshold_music','melchizedek_path_music'];
 
-  infoEl.innerHTML = `
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-    <span style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.4em;color:#f0abfc;">
-      ✦ SKM EDITOR · (${x},${y})</span>
-    <button onclick="document.getElementById('mvInfo').classList.remove('show');if(mvDrawFn)mvDrawFn();"
-      style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.2em;color:var(--dim);
-      background:transparent;border:1px solid rgba(201,168,76,0.15);padding:4px 10px;cursor:pointer;">
-      ✕ CLOSE</button>
-  </div>
-
-  <div id="skmScroll" style="
-    flex:1 1 auto;
-    min-height:0;
-    max-height:calc(82vh - 80px);
-    overflow-y:scroll;overflow-x:hidden;
-    -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
-    scrollbar-width:thin;scrollbar-color:rgba(240,171,252,0.6) rgba(20,10,30,0.6);
-    padding-right:10px;">
-
-    <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.3em;
-      color:rgba(240,171,252,0.4);text-transform:uppercase;margin-bottom:4px;">
-      📍 Mechanics (read only)</div>
-    <pre style="font-size:11px;color:rgba(201,168,76,0.5);background:rgba(0,0,0,0.3);
-      padding:7px 9px;border-radius:2px;line-height:1.7;white-space:pre-wrap;
-      margin:0 0 10px;">${mechLines}</pre>
-
-    <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.3em;
-      color:rgba(240,171,252,0.4);text-transform:uppercase;margin-bottom:6px;">
-      Content Type</div>
-    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;">
-      ${['text','game','iframe','video','image'].map(ct =>
-        `<button data-type="${ct}"
-          onclick="skm_setType('${ct}')"
-          style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;
-          padding:5px 10px;cursor:pointer;border-radius:1px;transition:all 0.2s;
-          background:${ct===curType?'rgba(201,168,76,0.15)':'transparent'};
-          border:1px solid ${ct===curType?'var(--gold)':'rgba(201,168,76,0.2)'};
-          color:${ct===curType?'var(--gold)':'rgba(201,168,76,0.45)'};">
-          ${ct==='game'?'🎮 GAME':ct.toUpperCase()}</button>`
-      ).join('')}
-    </div>
-
-    <!-- TEXT PANEL -->
-    <div id="skmP_text" style="${curType!=='text'?'display:none':''}">
+  const row = (label, content) =>
+    `<div style="margin-bottom:10px;">
       <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.3em;
-        color:rgba(240,171,252,0.4);margin-bottom:4px;">TILE NAME</div>
-      <input id="skm_name" value="${curName.replace(/"/g,'&quot;')}" placeholder="Short title"
-        style="width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-        color:var(--cream);font-family:'EB Garamond',serif;font-size:13px;
-        padding:6px 8px;box-sizing:border-box;margin-bottom:8px;">
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.3em;
-        color:rgba(240,171,252,0.4);margin-bottom:4px;">BODY TEXT (WYSIWYG)</div>
-      <div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:4px;">
+        color:rgba(192,132,252,0.45);margin-bottom:4px;">${label}</div>
+      ${content}</div>`;
+
+  const inp = (id, val='', placeholder='', type='text', extra='') =>
+    `<input id="${id}" type="${type}" value="${String(val).replace(/"/g,'&quot;')}"
+      placeholder="${placeholder}" ${extra}
+      style="width:100%;background:rgba(0,0,0,0.55);border:1px solid rgba(201,168,76,0.2);
+      color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;">`;
+
+  const sel = (id, opts, selected) =>
+    `<select id="${id}" style="width:100%;background:rgba(0,0,0,0.55);
+      border:1px solid rgba(201,168,76,0.2);color:var(--cream);
+      font-size:13px;padding:6px 8px;box-sizing:border-box;">
+      ${opts.map(([v,l])=>`<option value="${v}"${v===selected?' selected':''}>${l}</option>`).join('')}
+    </select>`;
+
+  const typeBtns = ['text','game','iframe','video','image'].map(ct =>
+    `<button data-type="${ct}" onclick="skm_setType('${ct}')"
+      style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;
+      padding:5px 10px;cursor:pointer;border-radius:1px;
+      background:${ct===curType?'rgba(201,168,76,0.15)':'transparent'};
+      border:1px solid ${ct===curType?'var(--gold)':'rgba(201,168,76,0.2)'};
+      color:${ct===curType?'var(--gold)':'rgba(201,168,76,0.4)'};">
+      ${ct==='game'?'🎮 GAME':ct.toUpperCase()}</button>`
+  ).join('');
+
+  // Gate rows
+  const gateRows = ['N','S','E','W'].map(dir => {
+    const g = getGate(x,y,dir)||{};
+    const solved = isGateSolved(x,y,dir);
+    const dirLabel = {N:'↑ N',S:'↓ S',E:'→ E',W:'← W'}[dir];
+    const gLabel = g.type ? (GATE_LABELS[g.type]||g.type) : 'open';
+    return `<div style="margin-bottom:8px;padding:8px 10px;
+      background:rgba(0,0,0,0.3);border:1px solid rgba(192,132,252,${g.type?'0.18':'0.06'});">
+      <div style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:0.2em;
+        color:${g.type?'#c084fc':'rgba(201,168,76,0.3)'};margin-bottom:6px;">
+        ${dirLabel} — ${gLabel}${solved?' ✓':''}</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;">
+        ${sel('skm_gate_'+dir+'_type',
+          [['','— open —'],['tesseract','Tesseract'],['masklock','Mask Lock'],['turing','Turing']],
+          g.type||'')}
+        ${inp('skm_gate_'+dir+'_level', g.level||'', 'lvl', 'number', 'min="1" max="1000" style="width:58px!important;"')}
+        ${inp('skm_gate_'+dir+'_title', g.title||'', 'Title')}
+        <button onclick="skm_saveGate(${x},${y},'${dir}')"
+          style="font-family:'Cinzel',serif;font-size:8px;padding:5px 10px;
+          cursor:pointer;background:rgba(192,132,252,0.15);
+          border:1px solid rgba(192,132,252,0.3);color:#c084fc;white-space:nowrap;">
+          SET</button>
+        ${g.type?`<button onclick="skm_clearGate(${x},${y},'${dir}')"
+          style="font-size:10px;padding:5px 8px;cursor:pointer;
+          background:transparent;border:1px solid rgba(201,168,76,0.15);
+          color:var(--dim);">✕</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  scroll.innerHTML = `
+  <!-- Mechanics -->
+  ${row('📍 MECHANICS (READ ONLY)',
+    `<pre style="font-size:11px;color:rgba(201,168,76,0.5);background:rgba(0,0,0,0.3);
+      padding:7px 9px;line-height:1.7;white-space:pre-wrap;margin:0;">${mechLines}</pre>`)}
+
+  <!-- Content type -->
+  ${row('CONTENT TYPE',
+    `<div style="display:flex;gap:5px;flex-wrap:wrap;">${typeBtns}</div>`)}
+
+  <!-- Text panel -->
+  <div id="skmP_text" style="${curType!=='text'?'display:none':''}">
+    ${row('TILE NAME', inp('skm_name', curName, 'Short title'))}
+    ${row('BODY TEXT',
+      `<div style="display:flex;gap:3px;margin-bottom:5px;">
         ${[['B','bold'],['I','italic'],['U','underline']].map(([l,c])=>
           `<button onclick="document.execCommand('${c}')"
-            style="font-family:serif;font-size:12px;padding:2px 7px;
-            background:rgba(0,0,0,0.4);border:1px solid rgba(201,168,76,0.15);
-            color:var(--cream);cursor:pointer;">${l}</button>`).join('')}
-        <button onclick="skm_insertLink()"
-          style="font-size:11px;padding:2px 7px;background:rgba(0,0,0,0.4);
-          border:1px solid rgba(201,168,76,0.15);color:var(--cream);cursor:pointer;">🔗</button>
+            style="font-size:12px;padding:3px 8px;background:rgba(0,0,0,0.4);
+            border:1px solid rgba(201,168,76,0.15);color:var(--cream);cursor:pointer;">${l}</button>`
+        ).join('')}
+        <button onclick="skm_insertLink()" style="font-size:11px;padding:3px 8px;
+          background:rgba(0,0,0,0.4);border:1px solid rgba(201,168,76,0.15);
+          color:var(--cream);cursor:pointer;">🔗</button>
       </div>
       <div id="skm_lore" contenteditable="true"
-        style="min-height:80px;background:rgba(0,0,0,0.5);
+        style="min-height:80px;background:rgba(0,0,0,0.55);
         border:1px solid rgba(201,168,76,0.2);color:var(--cream);
-        font-family:'EB Garamond',serif;font-size:14px;padding:7px;
-        line-height:1.7;text-align:left;">${curLore}</div>
-    </div>
+        font-family:'EB Garamond',serif;font-size:14px;
+        padding:7px;line-height:1.7;text-align:left;">${curLore}</div>`)}
+  </div>
 
-    <!-- GAME PANEL -->
-    <div id="skmP_game" style="${curType!=='game'?'display:none':''}">
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.3em;
-        color:rgba(240,171,252,0.4);margin-bottom:4px;">GAME</div>
-      <select id="skm_game"
-        style="width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-        color:var(--cream);font-family:'EB Garamond',serif;font-size:13px;
-        padding:6px 8px;box-sizing:border-box;margin-bottom:8px;">
-        <option value="tesseract"${pzl.type==='tesseract'?' selected':''}>Tesseract (1000 levels)</option>
-        <option value="masklock"${(pzl.type==='masklock'||pzl.type==='face3d')?' selected':''}>Mask Lock (100 levels)</option>
-        <option value="turing"${pzl.type==='turing'?' selected':''}>Turing Test (100 levels)</option>
-      </select>
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-        <span style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.2em;
-          color:rgba(201,168,76,0.4);white-space:nowrap;">LEVEL</span>
-        <input id="skm_pzl_level" type="number" min="1" max="1000" value="${pzl.level||1}"
-          style="width:70px;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-          color:var(--cream);font-size:13px;padding:5px;flex:none;">
-        <span style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.15em;
-          color:rgba(201,168,76,0.3);white-space:nowrap;">OR RANGE</span>
-        <input id="skm_pzl_range_a" type="number" min="1" max="1000"
-          value="${(pzl.range||['',''])[0]}" placeholder="from"
-          style="width:55px;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-          color:var(--cream);font-size:13px;padding:5px;flex:none;">
-        <span style="color:var(--dim);">–</span>
-        <input id="skm_pzl_range_b" type="number" min="1" max="1000"
-          value="${(pzl.range||['',''])[1]}" placeholder="to"
-          style="width:55px;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-          color:var(--cream);font-size:13px;padding:5px;flex:none;">
-      </div>
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.2em;
-        color:rgba(201,168,76,0.4);margin-bottom:4px;">CHALLENGE TITLE</div>
-      <input id="skm_pzl_title" value="${(pzl.title||'').replace(/"/g,'&quot;')}"
-        placeholder="Challenge title"
-        style="width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-        color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;margin-bottom:8px;">
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.2em;
-        color:rgba(201,168,76,0.4);margin-bottom:4px;">DESCRIPTION</div>
-      <textarea id="skm_pzl_desc" rows="2"
-        style="width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-        color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;
-        resize:vertical;margin-bottom:8px;">${pzl.desc||''}</textarea>
-      <div style="display:flex;gap:12px;margin-bottom:8px;">
-        <label style="color:var(--cream);font-size:12px;cursor:pointer;display:flex;gap:5px;align-items:center;">
-          <input type="checkbox" id="skm_lock_entry" ${pzl.lock_entry?'checked':''}>
-          Block entry until solved</label>
-        <label style="color:var(--cream);font-size:12px;cursor:pointer;display:flex;gap:5px;align-items:center;">
-          <input type="checkbox" id="skm_lock_exit" ${pzl.lock_exit?'checked':''}>
-          Block exit until solved</label>
-      </div>
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.2em;
-        color:rgba(201,168,76,0.4);margin-bottom:4px;">MUSIC CUE</div>
-      <select id="skm_pzl_music"
-        style="width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-        color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;margin-bottom:8px;">
-        ${MUSIC_OPTS.map(m=>`<option value="${m}"${(pzl.music||'puzzle_tension')===m?' selected':''}>${m}</option>`).join('')}
-      </select>
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.2em;
-        color:rgba(201,168,76,0.4);margin-bottom:4px;">PLAY ON COMPLETION</div>
-      <select id="skm_pzl_complete_music"
-        style="width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-        color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;margin-bottom:8px;">
-        <option value="">— none —</option>
-        ${['emily_triumph','low_stress_major','eli_house_music','house_threshold_music'].map(m=>
-          `<option value="${m}"${(pzl.on_complete_music||'')===m?' selected':''}>${m}</option>`
-        ).join('')}
-      </select>
-    </div>
+  <!-- Game panel -->
+  <div id="skmP_game" style="${curType!=='game'?'display:none':''}">
+    ${row('GAME', sel('skm_game',
+      [['tesseract','Tesseract (1000 levels)'],['masklock','Mask Lock (100 levels)'],['turing','Turing Test (100 levels)']],
+      pzl.type||'tesseract'))}
+    ${row('LEVEL', `<div style="display:flex;gap:6px;align-items:center;">
+      ${inp('skm_pzl_level', pzl.level||1, '', 'number', 'min="1" max="1000" style="width:70px!important;"')}
+      <span style="color:var(--dim);font-size:11px;">or range</span>
+      ${inp('skm_pzl_range_a', (pzl.range||['',''])[0], 'from', 'number', 'style="width:60px!important;"')}
+      <span style="color:var(--dim);">–</span>
+      ${inp('skm_pzl_range_b', (pzl.range||['',''])[1], 'to', 'number', 'style="width:60px!important;"')}
+    </div>`)}
+    ${row('TITLE', inp('skm_pzl_title', pzl.title||'', 'Challenge title'))}
+    ${row('DESC', `<textarea id="skm_pzl_desc" rows="2"
+      style="width:100%;background:rgba(0,0,0,0.55);border:1px solid rgba(201,168,76,0.2);
+      color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;resize:vertical;">${pzl.desc||''}</textarea>`)}
+    ${row('LOCKS', `<div style="display:flex;gap:14px;">
+      <label style="color:var(--cream);font-size:12px;cursor:pointer;display:flex;gap:5px;align-items:center;">
+        <input type="checkbox" id="skm_lock_entry" ${pzl.lock_entry?'checked':''}>Entry</label>
+      <label style="color:var(--cream);font-size:12px;cursor:pointer;display:flex;gap:5px;align-items:center;">
+        <input type="checkbox" id="skm_lock_exit" ${pzl.lock_exit?'checked':''}>Exit</label>
+    </div>`)}
+    ${row('MUSIC CUE', sel('skm_pzl_music',
+      MUSIC_OPTS.map(m=>[m,m]), pzl.music||'puzzle_tension'))}
+    ${row('ON COMPLETION', sel('skm_pzl_complete_music',
+      [['','— none —'],...['emily_triumph','low_stress_major','eli_house_music','house_threshold_music'].map(m=>[m,m])],
+      pzl.on_complete_music||''))}
+  </div>
 
-    <!-- IFRAME PANEL -->
-    <div id="skmP_iframe" style="${curType!=='iframe'?'display:none':''}">
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.2em;
-        color:rgba(201,168,76,0.4);margin-bottom:4px;">EMBED URL</div>
-      <input id="skm_embed_url" value="${tile.embed_url||''}" placeholder="https://..."
-        style="width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-        color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;margin-bottom:8px;">
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.2em;
-        color:rgba(201,168,76,0.4);margin-bottom:4px;">EMBED TITLE</div>
-      <input id="skm_embed_title" value="${tile.embed_title||''}" placeholder="Optional title"
-        style="width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-        color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;">
-    </div>
+  <!-- Iframe panel -->
+  <div id="skmP_iframe" style="${curType!=='iframe'?'display:none':''}">
+    ${row('EMBED URL', inp('skm_embed_url', tile.embed_url||'', 'https://...'))}
+    ${row('EMBED TITLE', inp('skm_embed_title', tile.embed_title||'', 'Optional title'))}
+  </div>
 
-    <!-- VIDEO PANEL -->
-    <div id="skmP_video" style="${curType!=='video'?'display:none':''}">
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.2em;
-        color:rgba(201,168,76,0.4);margin-bottom:4px;">VIDEO URL (YouTube embed or mp4)</div>
-      <input id="skm_video_url" value="${tile.video_url||''}" placeholder="https://www.youtube.com/embed/..."
-        style="width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-        color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;">
-    </div>
+  <!-- Video panel -->
+  <div id="skmP_video" style="${curType!=='video'?'display:none':''}">
+    ${row('VIDEO URL', inp('skm_video_url', tile.video_url||'', 'https://www.youtube.com/embed/...'))}
+  </div>
 
-    <!-- IMAGE PANEL -->
-    <div id="skmP_image" style="${curType!=='image'?'display:none':''}">
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.2em;
-        color:rgba(201,168,76,0.4);margin-bottom:4px;">IMAGE URL</div>
-      <input id="skm_image_url" value="${tile.image_url||''}" placeholder="https://..."
-        style="width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-        color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;margin-bottom:8px;">
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.2em;
-        color:rgba(201,168,76,0.4);margin-bottom:4px;">CAPTION</div>
-      <input id="skm_image_caption" value="${tile.image_caption||''}" placeholder="Optional caption"
-        style="width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-        color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;">
-    </div>
+  <!-- Image panel -->
+  <div id="skmP_image" style="${curType!=='image'?'display:none':''}">
+    ${row('IMAGE URL', inp('skm_image_url', tile.image_url||'', 'https://...'))}
+    ${row('CAPTION', inp('skm_image_caption', tile.image_caption||'', 'Optional caption'))}
+  </div>
 
-    <!-- TILE NAME (global) -->
-    <div style="margin-top:10px;font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.2em;
-      color:rgba(201,168,76,0.4);margin-bottom:4px;">TILE NAME (shown on map)</div>
-    <input id="skm_name_global" value="${curName.replace(/"/g,'&quot;')}" placeholder="Short title"
-      style="width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(201,168,76,0.2);
-      color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;margin-bottom:12px;">
+  <!-- Global name -->
+  ${row('TILE NAME (MAP)', inp('skm_name_global', curName, 'Short title'))}
 
-    <div style="display:flex;gap:8px;">
-      <button onclick="skm_save(${x},${y})"
-        style="flex:1;font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.2em;
-        padding:10px;cursor:pointer;background:#c084fc;color:#1a0a2e;border:none;">
-        💾 SAVE TO MEMORY</button>
-      <button onclick="skm_export()"
-        style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;
-        padding:10px 14px;cursor:pointer;background:transparent;
-        border:1px solid rgba(201,168,76,0.3);color:var(--gold);">
-        ↓ EXPORT</button>
-    </div>
-    <div style="font-size:11px;color:rgba(201,168,76,0.3);font-style:italic;margin-top:6px;">
-      Saves to browser memory. Export JSON for permanent installation.</div>
+  <!-- Actions -->
+  <div style="display:flex;gap:8px;margin-top:4px;">
+    <button onclick="skm_save(${x},${y})"
+      style="flex:1;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;
+      padding:11px;cursor:pointer;background:#c084fc;color:#1a0a2e;border:none;">
+      💾 SAVE</button>
+    <button onclick="skm_export()"
+      style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.15em;
+      padding:11px 14px;cursor:pointer;background:transparent;
+      border:1px solid rgba(201,168,76,0.3);color:var(--gold);">↓ EXPORT</button>
+  </div>
+  <div style="font-size:11px;color:rgba(201,168,76,0.3);font-style:italic;margin-top:8px;">
+    Saves to browser. Export JSON for permanent installation.</div>
 
-    <!-- GATE EDITOR -->
-    <div style="margin-top:14px;border-top:1px solid rgba(192,132,252,0.15);padding-top:12px;">
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.35em;
-        color:rgba(192,132,252,0.5);margin-bottom:8px;">⊛ DIRECTIONAL GATES</div>
-      <div style="font-size:11px;color:rgba(201,168,76,0.3);margin-bottom:10px;">
-        Gates block movement in a direction until a puzzle is solved.
-        The return direction is always free.</div>
-      ${['N','S','E','W'].map(dir => {
-        const g = getGate(x,y,dir)||{};
-        const solved = isGateSolved(x,y,dir);
-        const label = {'N':'↑ North','S':'↓ South','E':'→ East','W':'← West'}[dir];
-        return `<div style="margin-bottom:10px;padding:8px;
-          background:rgba(0,0,0,0.3);border:1px solid rgba(192,132,252,0.1);">
-          <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.2em;
-            color:${g.type?'#c084fc':'rgba(201,168,76,0.3)'};margin-bottom:6px;">
-            ${label} ${g.type?'· GATED'+( solved?' · ✓ SOLVED':''):'· open'}</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-            <select id="skm_gate_${dir}_type" style="background:rgba(0,0,0,0.5);
-              border:1px solid rgba(192,132,252,0.2);color:var(--cream);
-              font-size:12px;padding:4px 6px;">
-              <option value="">— no gate —</option>
-              ${['tesseract','masklock','turing'].map(t=>
-                `<option value="${t}"${g.type===t?' selected':''}>${GATE_LABELS[t]||t}</option>`
-              ).join('')}
-            </select>
-            <input id="skm_gate_${dir}_level" type="number" min="1" max="1000"
-              value="${g.level||''}" placeholder="lvl"
-              style="width:54px;background:rgba(0,0,0,0.5);
-              border:1px solid rgba(192,132,252,0.2);color:var(--cream);
-              font-size:12px;padding:4px;">
-            <input id="skm_gate_${dir}_title" value="${(g.title||'').replace(/"/g,'&quot;')}"
-              placeholder="Gate title"
-              style="flex:1;min-width:100px;background:rgba(0,0,0,0.5);
-              border:1px solid rgba(192,132,252,0.2);color:var(--cream);
-              font-size:12px;padding:4px 6px;">
-            <button onclick="skm_saveGate(${x},${y},'${dir}')"
-              style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;
-              padding:4px 10px;cursor:pointer;background:rgba(192,132,252,0.15);
-              border:1px solid rgba(192,132,252,0.3);color:#c084fc;">
-              SET</button>
-            ${g.type?`<button onclick="skm_clearGate(${x},${y},'${dir}')"
-              style="font-size:11px;padding:4px 8px;cursor:pointer;
-              background:transparent;border:1px solid rgba(201,168,76,0.15);
-              color:var(--dim);">✕</button>`:''}
-          </div>
-        </div>`;
-      }).join('')}
-    </div>
+  <!-- Directional gates -->
+  <div style="margin-top:16px;border-top:1px solid rgba(192,132,252,0.12);padding-top:12px;">
+    <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.35em;
+      color:rgba(192,132,252,0.5);margin-bottom:6px;">⊛ DIRECTIONAL GATES</div>
+    <div style="font-size:11px;color:rgba(201,168,76,0.3);margin-bottom:10px;">
+      Block movement in a direction until a puzzle is solved. Return is always free.</div>
+    ${gateRows}
   </div>`;
+
+  // Open panel
+  panel.classList.add('open');
 }
 
+function closeSkmPanel() {
+  const panel = document.getElementById('skmPanel');
+  if (panel) panel.classList.remove('open');
+}
 
 
 // SKM helper functions — called from inline onclick in skmOpenEditor
@@ -5268,7 +5271,7 @@ function skm_saveGate(x, y, dir) {
   _saveOverrides(ov);
   // Refresh arrows
   renderNavArrows(x,y);
-  skmOpenEditor(x,y);  // re-render editor to show updated state
+  skmOpenEditor(x,y);
 }
 
 function skm_clearGate(x, y, dir) {
@@ -5302,7 +5305,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 
 /* ══════════════════════════════════════════════════
- *  GATES SYSTEM v8.1
+ *  GATES SYSTEM v8.2
  *  Gates are directional edge locks stored in REALM.gates
  *  Key format: "x,y:DIR" where DIR ∈ {N,S,E,W}
  *  A gate fires when moving FROM (x,y) in direction DIR.
