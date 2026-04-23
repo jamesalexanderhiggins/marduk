@@ -18,7 +18,7 @@
   const lineHue = Number(params.get('hue') || '205');
   const queue = parseQueue();
   let queueIndex = 0;
-  const VERSION = 'v24';
+  const VERSION = 'v25';
   const ANGLE_SLIDER_MAX = 100;
   const W_SLIDER_MAX = 160;
 
@@ -99,8 +99,8 @@
   }
   function toleranceForLevel(level) {
     const t = phase01(level);
-    const base = lerp(0.72, 0.18, t);
-    return base * (1 + 0.16 * (1 - t));
+    const base = lerp(1.38, 0.24, t);
+    return base * (1 + 0.22 * (1 - t));
   }
   function rotationSpeedForLevel(level) {
     const t = phase01(level);
@@ -112,11 +112,15 @@
   }
   function magnetWindowForLevel(level) {
     const t = phase01(level);
-    return lerp(0.52, 0.985, t);
+    return lerp(0.78, 0.995, t);
   }
   function magnetStrengthForLevel(level) {
     const t = phase01(level);
-    return lerp(0.85, 1.12, t);
+    return lerp(1.45, 1.75, t);
+  }
+  function solveThresholdForLevel(level) {
+    const t = phase01(level);
+    return lerp(0.52, 0.84, t);
   }
 
   function initBackground() {
@@ -323,15 +327,15 @@
     state.target.z = randAngle(4.5);
     state.target.w = (rand(seed + 5.9) * 2 - 1) * lerp(0.45, 1.05, state.phase);
 
-    const offsetMin = lerp(0.42, 0.82, state.phase);
+    const offsetMin = lerp(0.08, 0.78, state.phase);
     const pickStart = (targetAngle, s) => {
       const sign = signedRand(seed + s) >= 0 ? 1 : -1;
-      return wrapAngle(targetAngle + sign * (offsetMin + rand(seed + s * 2.4) * 0.9));
+      return wrapAngle(targetAngle + sign * (offsetMin + rand(seed + s * 2.4) * lerp(0.28, 0.92, state.phase)));
     };
     state.player.x = pickStart(state.target.x, 6.1);
     state.player.y = pickStart(state.target.y, 7.9);
     state.player.z = pickStart(state.target.z, 9.7);
-    state.player.w = clamp(state.target.w + (signedRand(seed + 11.3) >= 0 ? 1 : -1) * lerp(0.22, 0.84, state.phase) * (0.72 + rand(seed + 13.1) * 0.55), -1.45, 1.45);
+    state.player.w = clamp(state.target.w + (signedRand(seed + 11.3) >= 0 ? 1 : -1) * lerp(0.08, 0.84, state.phase) * (0.56 + rand(seed + 13.1) * lerp(0.18, 0.55, state.phase)), -1.45, 1.45);
 
     sliderX.value = String(angleToSlider(state.player.x));
     sliderY.value = String(angleToSlider(state.player.y));
@@ -563,7 +567,7 @@
     const dy = angleDiff(state.player.y, state.target.y);
     const dz = angleDiff(state.player.z, state.target.z);
     const dw = Math.abs(state.player.w - state.target.w);
-    const score = 1 - clamp((dx + dy + dz + dw * 1.1) / (tol * 5.2), 0, 1);
+    const score = 1 - clamp((dx + dy + dz + dw * 0.9) / (tol * 4.2), 0, 1);
     return Math.pow(score, 1.4);
   }
 
@@ -574,19 +578,19 @@
     if (c < activation) return;
     const strength = magnetStrengthForLevel(state.level);
     const normalized = clamp((c - activation) / Math.max(0.0001, window), 0, 1);
-    const pull = strength * (0.18 + Math.pow(normalized, 0.55) * 0.82) * dt * 0.0105;
+    const pull = strength * (0.34 + Math.pow(normalized, 0.42) * 1.06) * dt * 0.0155;
     state.player.x = wrapAngle(mix(state.player.x, state.target.x, pull));
     state.player.y = wrapAngle(mix(state.player.y, state.target.y, pull));
     state.player.z = wrapAngle(mix(state.player.z, state.target.z, pull));
     state.player.w = mix(state.player.w, state.target.w, pull * 1.15);
-    if (c > 0.78 || normalized > 0.86) {
-      const lock = clamp(0.28 + normalized * 0.72, 0, 1) * dt * 0.018;
+    if (c > 0.60 || normalized > 0.72) {
+      const lock = clamp(0.48 + normalized * 0.92, 0, 1.3) * dt * 0.028;
       state.player.x = wrapAngle(mix(state.player.x, state.target.x, lock));
       state.player.y = wrapAngle(mix(state.player.y, state.target.y, lock));
       state.player.z = wrapAngle(mix(state.player.z, state.target.z, lock));
       state.player.w = mix(state.player.w, state.target.w, lock * 1.2);
     }
-    if (c > 0.86 || normalized > 0.93) {
+    if (c > 0.70 || normalized > 0.80) {
       state.player.x = state.target.x;
       state.player.y = state.target.y;
       state.player.z = state.target.z;
@@ -823,8 +827,8 @@
     );
 
     drawCountdownGhost();
-    if (c > 0.08 && Math.random() < 0.22 + c * 0.62) spawnSparkBurst(4 + Math.round(4 + c * 12));
-    const tremble = c > 0.24 ? (0.0015 + c * 0.024 + p * 0.009) : 0;
+    if (c > 0.03 && Math.random() < 0.28 + c * 0.72) spawnSparkBurst(5 + Math.round(5 + c * 14));
+    const tremble = c > 0.12 ? (0.002 + c * 0.032 + p * 0.010) : 0;
     const mainAlpha = 0.52 + c * 0.42;
     ctx.shadowBlur = 14 + c * 34;
     ctx.shadowColor = `hsla(${lineHue} 100% 82% / ${0.10 + c * 0.30})`;
@@ -873,7 +877,7 @@
     updateHum();
 
     const cNow = coherence();
-    if (cNow > 0.86) {
+    if (cNow > solveThresholdForLevel(state.level)) {
       state.solved = true;
       state.transitioning = true;
       state.player.x = state.target.x;
