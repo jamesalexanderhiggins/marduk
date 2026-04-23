@@ -1,777 +1,83 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Vector Mask Lock — Mardukverse</title>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { background: #060403; }
-body {
-  background: #060403;
-  font-family: Georgia, 'Times New Roman', serif;
-  color: #e8d5a3;
-  min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center;
-  padding: 18px 0 30px;
-  overflow-x: hidden;
-}
-
-#hdr { width:100%; max-width:680px; padding:0 20px; text-align:center; margin-bottom:14px; }
-.eyebrow { font-size:9px; letter-spacing:8px; text-transform:uppercase; color:#7a5820; margin-bottom:8px; }
-.title {
-font-size:20px; letter-spacing:7px; text-transform:uppercase; color:#c8a84a;
-font-weight:bold; padding:8px 0;
-border-top:1px solid #3a2010; border-bottom:1px solid #3a2010;
-text-shadow:0 0 28px rgba(180,140,40,0.38);
-}
-.sub { font-size:10px; color:#4a2a0a; font-style:italic; letter-spacing:2px; margin-top:7px; }
-
-#lvlbar { width:100%; max-width:680px; padding:0 20px; display:flex; align-items:center; gap:10px; margin-bottom:8px; }
-.lbl { font-size:9px; letter-spacing:4px; text-transform:uppercase; color:#5a3a10; white-space:nowrap; }
-.num { font-size:18px; color:#c8a84a; font-weight:bold; min-width:42px; text-align:right; letter-spacing:1px; }
-.track { flex:1; height:2px; background:#1a0c06; border-top:1px solid #2e1608; border-bottom:1px solid #2e1608; }
-.fill { height:100%; background:linear-gradient(to right,#3a1a06,#c8a84a); transition:width 0.6s ease; }
-
-#wrap { width:100%; max-width:680px; padding:0 20px; }
-canvas {
-display:block; width:100%; background:#040302;
-border:1px solid #221208;
-cursor:crosshair; touch-action:none; user-select:none;
-}
-
-#rot-controls {
-width:100%; max-width:680px; padding:6px 20px;
-display:flex; align-items:center; gap:6px; margin-top:4px;
-}
-.rot-lbl { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#3a2010; }
-.rot-btn {
-width:28px; height:28px;
-background:transparent; border:1px solid #2a1408;
-color:#5a3a10; font-size:13px;
-cursor:pointer; display:flex; align-items:center; justify-content:center;
-transition:all 0.16s; padding:0;
-user-select:none; touch-action:none;
--webkit-user-select:none;
-}
-.rot-btn:hover { border-color:#7a5820; color:#c8a84a; background:rgba(40,20,8,0.5); }
-.rot-btn.on { border-color:#8b6914; color:#c8a84a; }
-.rot-sep { color:#2a1408; font-size:10px; margin:0 4px; }
-.rot-hint { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#2e1608; margin-left:4px; }
-
-#status {
-width:100%; max-width:680px; padding:7px 20px;
-display:flex; justify-content:space-between; align-items:center;
-border-top:1px solid #1a0c06; margin-top:4px;
-}
-.smsg { font-size:10px; color:#4a2a0a; font-style:italic; letter-spacing:1px; }
-.scnt { font-size:10px; color:#7a5820; letter-spacing:2px; text-transform:uppercase; }
-#note { font-size:9px; color:#2e1608; letter-spacing:2px; text-transform:uppercase; margin-top:3px; text-align:center; }
-#unlock-notice {
-font-size:9px; color:#6a4810; letter-spacing:3px; text-transform:uppercase;
-text-align:center; margin-top:4px; min-height:14px; transition:opacity 0.5s;
-}
-
-#overlay {
-display:none; position:fixed; inset:0;
-background:rgba(3,2,1,0.90); z-index:300;
-flex-direction:column; align-items:center; justify-content:center; gap:16px;
-backdrop-filter:blur(3px);
-}
-#overlay.show { display:flex; }
-.oeye { font-size:9px; letter-spacing:8px; color:#7a5820; text-transform:uppercase; }
-.olvl { font-size:58px; color:#c8a84a; font-weight:bold; letter-spacing:2px; text-shadow:0 0 55px rgba(200,168,74,0.52); }
-.omsg { font-size:11px; color:#5a3a10; font-style:italic; letter-spacing:2px; text-align:center; max-width:280px; line-height:1.9; }
-.onew { font-size:9px; color:#4a2a08; letter-spacing:3px; text-transform:uppercase; margin-top:-6px; min-height:14px; }
-.obtn {
-margin-top:8px; padding:11px 42px;
-background:transparent; border:1px solid #5a3a10;
-color:#c8a84a; font-family:Georgia,serif; font-size:10px; letter-spacing:5px; text-transform:uppercase;
-cursor:pointer; transition:all 0.22s;
-}
-.obtn:hover { background:#2a1208; border-color:#c8a84a; }
-
-#solve-btn {
-display:none; position:fixed; bottom:18px; right:18px; z-index:500;
-padding:8px 18px; background:rgba(28,6,6,0.94); border:1px solid #6a1212;
-color:#cc3030; font-family:Georgia,serif; font-size:9px; letter-spacing:4px;
-text-transform:uppercase; cursor:pointer; transition:all 0.2s;
-}
-#solve-btn:hover { background:#2a0808; border-color:#aa2020; color:#ee4444; }
-</style>
-
+<title>VECTOR MASK LOCK // MARDUKVERSE</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="hdr">
-  <div class="eyebrow">&#10022; &nbsp; the mardukverse &nbsp; &#10022;</div>
-  <div class="title">Vector Mask Lock</div>
-  <div class="sub">restore the face of the realm &#8212; one vertex at a time</div>
+<div id="crt"></div>
+
+<header id="hdr">
+  <div class="sys-line">MARDUKVERSE &gt;&gt; REALM ACCESS PROTOCOL &gt;&gt; v3.14.159</div>
+  <div id="game-title"><span class="br">[</span>VECTOR&nbsp;MASK&nbsp;LOCK<span class="br">]</span></div>
+  <div class="sys-line blink-warn">FACIAL RECONSTRUCTION REQUIRED &#8212; ACCESS DENIED</div>
+</header>
+
+<div id="level-hud">
+  <div class="hud-l">
+    <span class="htag">LVL</span>
+    <span id="h-level">01</span>
+    <span class="hdim">/<span id="h-max">100</span></span>
+  </div>
+  <div id="prog-track"><div id="prog-fill"></div></div>
+  <div class="hud-r">
+    <span class="htag">NODES</span><span id="h-nodes" class="hval">--</span>
+    <span class="hsep">|</span>
+    <span class="htag">OPEN</span><span id="h-open" class="hval hwarn">--</span>
+  </div>
 </div>
 
-<div id="lvlbar">
-  <span class="lbl">Level</span>
-  <span class="num" id="elevel">1</span>
-  <div class="track"><div class="fill" id="efill" style="width:1%"></div></div>
-  <span class="lbl" id="epct">1 / 100</span>
+<div id="wrap">
+  <canvas id="c"></canvas>
+  <div class="cx tl"></div><div class="cx tr"></div>
+  <div class="cx bl"></div><div class="cx br"></div>
 </div>
 
-<div id="wrap"><canvas id="c"></canvas></div>
-
-<div id="rot-controls">
-  <span class="rot-lbl">Rotate</span>
-  <button class="rot-btn" id="rleft"  title="Rotate left">&#9664;</button>
-  <button class="rot-btn" id="rreset" title="Face on">&#9711;</button>
-  <button class="rot-btn" id="rright" title="Rotate right">&#9654;</button>
-  <span class="rot-sep">&#183;</span>
-  <button class="rot-btn on" id="rauto" title="Toggle auto-rotate">&#8635;</button>
-  <span class="rot-sep">&#183;</span>
-  <span class="rot-hint">drag mask or use arrow keys</span>
+<div id="ctrl-bar">
+  <div id="nav-btns">
+    <button class="cb" id="prev-btn">&#9664; PREV</button>
+    <button class="cb" id="next-btn">NEXT &#9654;</button>
+  </div>
+  <div id="rot-btns">
+    <span class="htag">ROT</span>
+    <button class="cb sm" id="rleft">&#9664;</button>
+    <button class="cb sm" id="rreset">&#9711;</button>
+    <button class="cb sm" id="rright">&#9654;</button>
+    <button class="cb sm on" id="rauto">&#8635;</button>
+    <span class="hint-txt">&#8592;&#8594; keys</span>
+  </div>
 </div>
 
-<div id="status">
-  <span class="smsg" id="emsg">Drag glowing vertices to their correct positions</span>
-  <span class="scnt" id="ecnt"></span>
+<div id="status-row">
+  <span id="s-msg">DRAG DISPLACED NODES TO THEIR LOCK POSITIONS</span>
+  <span id="s-cnt"></span>
 </div>
-<div id="note">drag glowing vertex to snap ring &nbsp;&#183;&nbsp; dashed lines show target</div>
-<div id="unlock-notice">&nbsp;</div>
+<div id="unlock-line">&nbsp;</div>
 
 <div id="overlay">
-  <div class="oeye">&#10022; &nbsp; level complete &nbsp; &#10022;</div>
-  <div class="olvl" id="onum">1</div>
-  <div class="omsg" id="omsg">The mask takes shape&#8230;</div>
-  <div class="onew" id="onew">&nbsp;</div>
-  <button class="obtn" id="obtn">Advance</button>
+  <div id="ol-panel">
+    <div class="olc tl"></div><div class="olc tr"></div>
+    <div class="olc bl"></div><div class="olc br"></div>
+    <div id="ol-tag">&#47;&#47; ACCESS GRANTED &#47;&#47;</div>
+    <div id="ol-num">01</div>
+    <div id="ol-title">RECONSTRUCTION COMPLETE</div>
+    <div id="ol-msg">&nbsp;</div>
+    <div id="ol-unlock">&nbsp;</div>
+    <div id="ol-nav">
+      <button class="olb" id="ol-prev">&#9664; PREV</button>
+      <button class="olb" id="ol-next">NEXT &#9654;</button>
+    </div>
+  </div>
 </div>
 
-<button id="solve-btn">⚡ Solve</button>
-
-<script>
-'use strict';
-
-// ════════════════════════════════════════════════════════
-// MASK GEOMETRY
-// ════════════════════════════════════════════════════════
-
-const V = [
-  [ 0.00,  1.15,  0.00],  // 0  crown
-  [ 0.52,  0.95, -0.08],  // 1  top-right
-  [ 0.74,  0.22, -0.18],  // 2  right
-  [ 0.60, -0.68, -0.10],  // 3  bottom-right
-  [ 0.00, -1.10,  0.00],  // 4  chin
-  [-0.60, -0.68, -0.10],  // 5  bottom-left
-  [-0.74,  0.22, -0.18],  // 6  left
-  [-0.52,  0.95, -0.08],  // 7  top-left
-  [ 0.00,  0.88,  0.05],  // 8  forehead
-  [ 0.50,  0.60,  0.07],  // 9  R brow peak
-  [ 0.00,  0.66,  0.10],  // 10 brow centre
-  [-0.50,  0.60,  0.07],  // 11 L brow peak
-  [ 0.54,  0.30,  0.08],  // 12 R-eye outer
-  [ 0.34,  0.44,  0.15],  // 13 R-eye top
-  [ 0.16,  0.30,  0.10],  // 14 R-eye inner
-  [ 0.34,  0.17,  0.10],  // 15 R-eye bottom
-  [-0.54,  0.30,  0.08],  // 16 L-eye outer
-  [-0.34,  0.44,  0.15],  // 17 L-eye top
-  [-0.16,  0.30,  0.10],  // 18 L-eye inner
-  [-0.34,  0.17,  0.10],  // 19 L-eye bottom
-  [ 0.00,  0.15,  0.22],  // 20 nose bridge
-  [ 0.00, -0.12,  0.30],  // 21 nose tip
-  [ 0.20, -0.24,  0.20],  // 22 R nostril
-  [-0.20, -0.24,  0.20],  // 23 L nostril
-  [ 0.64,  0.04,  0.06],  // 24 R cheek
-  [-0.64,  0.04,  0.06],  // 25 L cheek
-  [ 0.00, -0.46,  0.22],  // 26 mouth top
-  [ 0.36, -0.56,  0.16],  // 27 mouth R
-  [ 0.00, -0.72,  0.18],  // 28 mouth bottom
-  [-0.36, -0.56,  0.16],  // 29 mouth L
-  [ 0.00, -0.94,  0.02],  // 30 chin ridge
-];
-
-const E = [
-  [0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,0],
-  [0,8],[8,10],[10,9],[10,11],[9,1],[11,7],
-  [9,13],[11,17],
-  [12,13],[13,14],[14,15],[15,12],
-  [16,17],[17,18],[18,19],[19,16],
-  [12,24],[16,25],[24,2],[25,6],
-  [15,24],[19,25],
-  [24,22],[25,23],
-  [14,20],[18,20],
-  [20,21],[21,22],[21,23],[22,23],
-  [22,27],[23,29],
-  [26,27],[27,28],[28,29],[29,26],
-  [27,3],[29,5],
-  [28,30],[30,4],[3,30],[5,30],
-];
-
-const UL = [
-  1,1,1,1,1,1,1,1,  // 0-7
-  1,                  // 8
-  1,1,1,             // 9-11
-  6,6,6,6,          // 12-15
-  11,11,11,11,      // 16-19
-  16,                // 20
-  21,21,21,         // 21-23
-  27,27,            // 24-25
-  36,36,36,36,      // 26-29
-  47,               // 30
-];
-
-const VNAME = {
-  6: 'Right eye socket revealed.',
-  11:'Left eye socket revealed.',
-  16:'Nose bridge emerges.',
-  21:'Nose takes form.',
-  27:'Cheekbones defined.',
-  36:'The mouth appears.',
-  47:'Chin ridge set.',
-};
-
-// ════════════════════════════════════════════════════════
-// STARFIELD (pre-generated)
-// ════════════════════════════════════════════════════════
-
-const STARS = Array.from({ length: 200 }, () => ({
-  nx: Math.random(), ny: Math.random(),
-  r:  Math.random() * 1.3 + 0.2,
-  a:  Math.random() * 0.50 + 0.08,
-  tw: Math.random() * Math.PI * 2,
-  ts: 0.0007 + Math.random() * 0.0020,
-}));
-
-const BRIGHT = Array.from({ length: 7 }, () => ({
-  nx: Math.random(), ny: Math.random(),
-  r:  1.4 + Math.random() * 1.6,
-  a:  0.38 + Math.random() * 0.38,
-  tw: Math.random() * Math.PI * 2,
-  ts: 0.0004 + Math.random() * 0.0012,
-  gR: 8 + Math.random() * 10,
-}));
-
-// ════════════════════════════════════════════════════════
-// ENGINE STATE
-// ════════════════════════════════════════════════════════
-
-const canvas = document.getElementById('c');
-const ctx    = canvas.getContext('2d');
-const FOCAL  = 5.0;
-const ZOFF   = 2.5;
-
-let level   = 1;
-let rotY    = -0.15;
-let autoRot = true;
-let rotDir  = 0;
-let lastT   = 0;
-let scanY   = 0;
-
-let dm      = {};
-let flashes = [];
-let sparks  = [];
-let drag    = null;
-let sceneDrag = false, sdRotY = 0, sdMx = 0;
-
-let pwBuffer = '';
-const PW = 'evilamaicram';
-
-// ════════════════════════════════════════════════════════
-// RESIZE
-// ════════════════════════════════════════════════════════
-
-function resize() {
-  const wrap = document.getElementById('wrap');
-  const W = wrap.clientWidth - 40;
-  canvas.width  = W;
-  canvas.height = Math.round(W * 0.78);
-}
-window.addEventListener('resize', resize);
-resize();
-
-// ════════════════════════════════════════════════════════
-// PROJECTION
-// ════════════════════════════════════════════════════════
-
-function proj(v, ry) {
-  const c = Math.cos(ry), s = Math.sin(ry);
-  const x3 = v[0]*c - v[2]*s;
-  const z3 = v[0]*s + v[2]*c;
-  const sc = Math.min(canvas.width, canvas.height) * 0.36;
-  const t  = FOCAL / (FOCAL + z3 + ZOFF);
-  return {
-    sx: canvas.width*0.5  + x3*t*sc,
-    sy: canvas.height*0.5 - v[1]*t*sc,
-    z3, t, sc
-  };
-}
-
-function unproj(sx, sy, z0) {
-  let c = Math.cos(rotY), s = Math.sin(rotY);
-  if (Math.abs(c) < 0.10) c = c < 0 ? -0.10 : 0.10;
-  const sc = Math.min(canvas.width, canvas.height) * 0.36;
-  const cx = canvas.width*0.5, cy = canvas.height*0.5;
-  let xm = 0;
-  for (let i = 0; i < 6; i++) {
-    const z3   = xm*s + z0*c;
-    const tval = FOCAL/(FOCAL+z3+ZOFF)*sc;
-    xm = Math.max(-2.5, Math.min(2.5, ((sx-cx)/tval + z0*s)/c));
-  }
-  const z3   = xm*s + z0*c;
-  const tval = FOCAL/(FOCAL+z3+ZOFF)*sc;
-  return [xm, -(sy-cy)/tval, z0];
-}
-
-// ════════════════════════════════════════════════════════
-// LEVEL HELPERS
-// ════════════════════════════════════════════════════════
-
-function unlockedSet(lvl) {
-  const s = new Set();
-  UL.forEach((u,i) => { if (u<=lvl) s.add(i); });
-  return s;
-}
-
-function dispCount(lvl) {
-  if (lvl<=4)  return 1;
-  if (lvl<=12) return 2;
-  if (lvl<=25) return Math.min(4, 1+Math.floor(lvl/7));
-  if (lvl<=55) return Math.min(9, 2+Math.floor(lvl/7));
-  return Math.min(15, 3+Math.floor(lvl/6));
-}
-
-function dispAmt(lvl)  { return 0.26+(lvl/100)*0.62; }
-function snapRad(lvl)  { return Math.max(0.09, 0.22-(lvl/100)*0.13); }
-function snapPx(lvl) {
-  const sc = Math.min(canvas.width, canvas.height)*0.36;
-  return snapRad(lvl)*(FOCAL/(FOCAL+ZOFF))*sc;
-}
-function rng(lo, hi) { return lo+Math.random()*(hi-lo); }
-
-function setupLevel(lvl) {
-  dm={}; flashes=[]; sparks=[];
-  const newVs = UL.map((u,i)=>u===lvl?i:-1).filter(i=>i>=0);
-  const pool  = [...unlockedSet(lvl)];
-  for (let i=pool.length-1;i>0;i--) {
-    const j=0|(Math.random()*(i+1));
-    [pool[i],pool[j]]=[pool[j],pool[i]];
-  }
-  const n=Math.min(dispCount(lvl),pool.length), amt=dispAmt(lvl);
-  for (let i=0;i<n;i++) {
-    const vi=pool[i], tgt=[...V[vi]], ang=rng(0,Math.PI*2), d=amt*rng(0.72,1.28);
-    dm[vi]={ cur:[
-      Math.max(-1.6,Math.min(1.6,tgt[0]+Math.cos(ang)*d)),
-      Math.max(-1.4,Math.min(1.4,tgt[1]+Math.sin(ang)*d)),
-      tgt[2]+rng(-0.08,0.08)*amt
-    ], target:tgt, snapped:false };
-  }
-  updateUI(lvl,newVs);
-  updateStatus();
-}
-
-function updateUI(lvl, newVs) {
-  document.getElementById('elevel').textContent = lvl;
-  document.getElementById('efill').style.width  = lvl+'%';
-  document.getElementById('epct').textContent   = lvl+' / 100';
-  const notice = document.getElementById('unlock-notice');
-  if (newVs&&newVs.length>0) {
-    const key=newVs.reduce((a,b)=>Math.min(a,UL[b]),Infinity);
-    notice.textContent=VNAME[key]||'New vertex unlocked.';
-    notice.style.opacity='1';
-    setTimeout(()=>{ notice.style.opacity='0'; },2800);
-  } else {
-    notice.textContent='\u00a0'; notice.style.opacity='1';
-  }
-}
-
-function updateStatus() {
-  const rem=Object.values(dm).filter(d=>!d.snapped).length;
-  document.getElementById('ecnt').textContent=
-    rem===0 ? 'aligned \u2736' : rem+(rem===1?' vertex to place':' vertices to place');
-}
-
-// ════════════════════════════════════════════════════════
-// SPARKS
-// ════════════════════════════════════════════════════════
-
-function emitSparks(sx, sy) {
-  const n=15+Math.floor(Math.random()*7);
-  for (let i=0;i<n;i++) {
-    const ang=Math.random()*Math.PI*2, spd=1.4+Math.random()*4.2;
-    sparks.push({
-      x:sx, y:sy,
-      vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd-0.6,
-      r:0.8+Math.random()*2.4,
-      life:1.0, decay:0.016+Math.random()*0.030,
-      gold:Math.random()>0.38,
-    });
-  }
-}
-
-function updateSparks() {
-  sparks=sparks.filter(s=>s.life>0);
-  for (const s of sparks) {
-    s.x+=s.vx; s.y+=s.vy;
-    s.vy+=0.07; s.vx*=0.97;
-    s.life-=s.decay;
-    if (s.life<=0) continue;
-    ctx.beginPath();
-    ctx.arc(s.x,s.y,s.r*Math.max(0.1,s.life),0,Math.PI*2);
-    ctx.fillStyle=s.gold
-      ? `rgba(222,188,58,${Math.max(0,s.life)})`
-      : `rgba(232,118,28,${Math.max(0,s.life)})`;
-    ctx.fill();
-  }
-}
-
-// ════════════════════════════════════════════════════════
-// BACKGROUND — digital universe
-// ════════════════════════════════════════════════════════
-
-function drawBackground(W, H, ts) {
-  // Deep space base
-  const bg=ctx.createRadialGradient(W*0.5,H*0.44,0,W*0.5,H*0.5,Math.max(W,H)*0.80);
-  bg.addColorStop(0,'#100a06'); bg.addColorStop(0.5,'#080504'); bg.addColorStop(1,'#040302');
-  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
-
-  // Nebula clouds
-  const neb1=ctx.createRadialGradient(W*0.25,H*0.30,0,W*0.25,H*0.30,W*0.44);
-  neb1.addColorStop(0,'rgba(105,68,8,0.07)'); neb1.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=neb1; ctx.fillRect(0,0,W,H);
-
-  const neb2=ctx.createRadialGradient(W*0.72,H*0.65,0,W*0.72,H*0.65,W*0.34);
-  neb2.addColorStop(0,'rgba(55,28,80,0.055)'); neb2.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=neb2; ctx.fillRect(0,0,W,H);
-
-  // Coordinate rings
-  for (let i=1;i<=5;i++) {
-    ctx.beginPath();
-    ctx.arc(W*0.5,H*0.5,(i/5)*Math.min(W,H)*0.56,0,Math.PI*2);
-    ctx.strokeStyle=`rgba(90,60,10,${0.055-i*0.008})`;
-    ctx.lineWidth=0.5; ctx.stroke();
-  }
-
-  // Micro-dot grid
-  const gsp=28;
-  ctx.fillStyle='rgba(88,58,10,0.16)';
-  for (let x=gsp*0.5;x<W;x+=gsp)
-    for (let y=gsp*0.5;y<H;y+=gsp) {
-      ctx.beginPath(); ctx.arc(x,y,0.55,0,Math.PI*2); ctx.fill();
-    }
-
-  // Regular stars
-  for (const s of STARS) {
-    const twk=0.72+0.28*Math.sin(ts*s.ts+s.tw);
-    ctx.beginPath(); ctx.arc(s.nx*W,s.ny*H,s.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(210,178,108,${s.a*twk})`; ctx.fill();
-  }
-
-  // Bright stars with halos
-  for (const s of BRIGHT) {
-    const twk=0.62+0.38*Math.sin(ts*s.ts+s.tw);
-    const sx=s.nx*W, sy=s.ny*H;
-    const g=ctx.createRadialGradient(sx,sy,0,sx,sy,s.gR);
-    g.addColorStop(0,`rgba(215,178,88,${s.a*twk*0.45})`); g.addColorStop(1,'rgba(0,0,0,0)');
-    ctx.beginPath(); ctx.arc(sx,sy,s.gR,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
-    ctx.beginPath(); ctx.arc(sx,sy,s.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(242,224,142,${s.a*twk})`; ctx.fill();
-  }
-
-  // Scanning band
-  scanY=(scanY+0.022)%1.0;
-  const sy0=scanY*H;
-  const sg=ctx.createLinearGradient(0,sy0-4,0,sy0+4);
-  sg.addColorStop(0,'rgba(190,152,38,0)');
-  sg.addColorStop(0.5,'rgba(190,152,38,0.038)');
-  sg.addColorStop(1,'rgba(190,152,38,0)');
-  ctx.fillStyle=sg; ctx.fillRect(0,sy0-4,W,8);
-
-  // Vignette
-  const vig=ctx.createRadialGradient(W*0.5,H*0.5,W*0.18,W*0.5,H*0.5,W*0.84);
-  vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,0.66)');
-  ctx.fillStyle=vig; ctx.fillRect(0,0,W,H);
-}
-
-// ════════════════════════════════════════════════════════
-// MAIN DRAW LOOP
-// ════════════════════════════════════════════════════════
-
-const MSGS=[
-  'The mask takes shape\u2026','Another fragment locked.',
-  'The face grows clearer.','A line holds firm.',
-  'Form returns to the void.','The realm remembers.',
-  'Truth, vertex by vertex.','The ghost solidifies.',
-  'Ancient geometry restored.','What was lost is found.',
-  'The hollow fills.','A feature finds its home.',
-  'Order from displacement.','The realm holds its breath.',
-  'The form endures.','Each vertex a vow.',
-  'Silence takes a face.','The witness is assembled.',
-];
-
-function draw(ts) {
-  if (!lastT) lastT=ts;
-  const dt=Math.min((ts-lastT)/1000,0.05);
-  lastT=ts;
-
-  if (rotDir!==0&&!drag) {
-    rotY+=rotDir*dt*1.5;
-  } else if (autoRot&&!drag&&!sceneDrag&&rotDir===0) {
-    rotY+=dt*0.16;
-  }
-
-  const W=canvas.width, H=canvas.height;
-  ctx.clearRect(0,0,W,H);
-  drawBackground(W,H,ts);
-
-  const ul=unlockedSet(level);
-  const pos={};
-  for (const vi of ul) pos[vi]=(dm[vi]&&!dm[vi].snapped)?dm[vi].cur:V[vi];
-
-  const sp={};
-  for (const vi of ul) sp[vi]=proj(pos[vi],rotY);
-
-  const tp={};
-  for (const vi of Object.keys(dm)) tp[vi]=proj(V[vi],rotY);
-
-  // Ghost wireframe
-  for (const [a,b] of E) {
-    if (!ul.has(a)||!ul.has(b)) continue;
-    const pa=proj(V[a],rotY), pb=proj(V[b],rotY);
-    ctx.beginPath(); ctx.moveTo(pa.sx,pa.sy); ctx.lineTo(pb.sx,pb.sy);
-    ctx.strokeStyle='rgba(110,75,12,0.12)'; ctx.lineWidth=0.7; ctx.stroke();
-  }
-
-  // Dashed guide lines
-  ctx.setLineDash([3,9]);
-  for (const [vi,d] of Object.entries(dm)) {
-    if (d.snapped) continue;
-    const cp=sp[vi], gt=tp[vi];
-    ctx.beginPath(); ctx.moveTo(cp.sx,cp.sy); ctx.lineTo(gt.sx,gt.sy);
-    ctx.strokeStyle='rgba(140,72,16,0.30)'; ctx.lineWidth=0.8; ctx.stroke();
-  }
-  ctx.setLineDash([]);
-
-  // Snap rings
-  const sr=snapPx(level);
-  for (const [vi,d] of Object.entries(dm)) {
-    if (d.snapped) continue;
-    const t=tp[vi];
-    ctx.beginPath(); ctx.arc(t.sx,t.sy,sr,0,Math.PI*2);
-    ctx.strokeStyle='rgba(110,78,14,0.32)'; ctx.lineWidth=0.8; ctx.stroke();
-    ctx.beginPath(); ctx.arc(t.sx,t.sy,2.2,0,Math.PI*2);
-    ctx.fillStyle='rgba(140,100,18,0.54)'; ctx.fill();
-  }
-
-  // Wireframe edges, depth-sorted
-  const edges=E.filter(([a,b])=>ul.has(a)&&ul.has(b));
-  edges.sort(([a1,b1],[a2,b2])=>(sp[a1].z3+sp[b1].z3)-(sp[a2].z3+sp[b2].z3));
-  for (const [a,b] of edges) {
-    const pa=sp[a],pb=sp[b];
-    const aD=dm[a]&&!dm[a].snapped, bD=dm[b]&&!dm[b].snapped;
-    const df=Math.max(0.30,1.0-((pa.z3+pb.z3)*0.5)*0.20);
-    if (aD||bD) {
-      ctx.beginPath(); ctx.moveTo(pa.sx,pa.sy); ctx.lineTo(pb.sx,pb.sy);
-      ctx.strokeStyle=`rgba(190,98,24,${0.14*df})`; ctx.lineWidth=7; ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(pa.sx,pa.sy); ctx.lineTo(pb.sx,pb.sy);
-      ctx.strokeStyle=`rgba(220,130,40,${0.62*df})`; ctx.lineWidth=1.2; ctx.stroke();
-    } else {
-      ctx.beginPath(); ctx.moveTo(pa.sx,pa.sy); ctx.lineTo(pb.sx,pb.sy);
-      ctx.strokeStyle=`rgba(168,132,44,${0.55*df})`; ctx.lineWidth=1.0; ctx.stroke();
-    }
-  }
-
-  // Flash rings
-  flashes=flashes.filter(f=>ts-f.t0<750);
-  for (const f of flashes) {
-    const age=(ts-f.t0)/750;
-    const p=proj(V[f.vi],rotY);
-    ctx.beginPath(); ctx.arc(p.sx,p.sy,5+age*34,0,Math.PI*2);
-    ctx.strokeStyle=`rgba(200,170,55,${(1-age)*0.58})`; ctx.lineWidth=1.5; ctx.stroke();
-  }
-
-  // Vertex dots
-  for (const vi of ul) {
-    const p=sp[vi], d=dm[vi];
-    if (d&&!d.snapped) {
-      const pulse=0.55+0.45*Math.sin(ts*0.0036+vi*1.5);
-      const g=ctx.createRadialGradient(p.sx,p.sy,0,p.sx,p.sy,26);
-      g.addColorStop(0,`rgba(232,122,32,${0.44*pulse})`); g.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.beginPath(); ctx.arc(p.sx,p.sy,26,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
-      ctx.beginPath(); ctx.arc(p.sx,p.sy,5.5,0,Math.PI*2);
-      ctx.fillStyle=`rgba(248,150,50,${0.76+0.24*pulse})`; ctx.fill();
-      ctx.strokeStyle=`rgba(255,218,88,${0.66+0.34*pulse})`; ctx.lineWidth=0.9; ctx.stroke();
-    } else if (d&&d.snapped) {
-      const gs=ctx.createRadialGradient(p.sx,p.sy,0,p.sx,p.sy,15);
-      gs.addColorStop(0,'rgba(218,182,66,0.36)'); gs.addColorStop(1,'rgba(0,0,0,0)');
-      ctx.beginPath(); ctx.arc(p.sx,p.sy,15,0,Math.PI*2); ctx.fillStyle=gs; ctx.fill();
-      ctx.beginPath(); ctx.arc(p.sx,p.sy,4.5,0,Math.PI*2);
-      ctx.fillStyle='rgba(218,182,66,0.96)'; ctx.fill();
-    } else {
-      ctx.beginPath(); ctx.arc(p.sx,p.sy,2.8,0,Math.PI*2);
-      ctx.fillStyle='rgba(148,118,38,0.64)'; ctx.fill();
-    }
-  }
-
-  // Sparks on top
-  updateSparks();
-
-  // Corner brackets
-  ctx.strokeStyle='rgba(55,30,8,0.52)'; ctx.lineWidth=0.8;
-  const bl=18;
-  [[8,8,1,1],[W-8,8,-1,1],[8,H-8,1,-1],[W-8,H-8,-1,-1]].forEach(([x,y,dx,dy])=>{
-    ctx.beginPath(); ctx.moveTo(x,y+dy*bl); ctx.lineTo(x,y); ctx.lineTo(x+dx*bl,y); ctx.stroke();
-  });
-
-  requestAnimationFrame(draw);
-}
-
-// ════════════════════════════════════════════════════════
-// SNAP & COMPLETE
-// ════════════════════════════════════════════════════════
-
-function snapVert(vi) {
-  const d=dm[vi];
-  if (!d||d.snapped) return;
-  const p=proj(d.cur,rotY);
-  d.cur=[...d.target]; d.snapped=true;
-  flashes.push({vi:+vi,t0:lastT});
-  emitSparks(p.sx,p.sy);
-  updateStatus();
-  if (Object.values(dm).every(d=>d.snapped)) setTimeout(showComplete,400);
-}
-
-function showComplete() {
-  const fin=level>=100, next=level+1;
-  document.getElementById('onum').textContent=fin?'\u2736':String(level);
-  document.getElementById('omsg').textContent=fin
-    ?'The mask is whole. The realm is restored.'
-    :MSGS[Math.floor(Math.random()*MSGS.length)];
-  if (!fin) {
-    const newVs=UL.map((u,i)=>u===next?i:-1).filter(i=>i>=0);
-    const key=newVs.length>0?newVs.reduce((a,b)=>Math.min(a,UL[b]),Infinity):null;
-    document.getElementById('onew').textContent=key&&VNAME[key]?'Next: '+VNAME[key]:'\u00a0';
-  } else { document.getElementById('onew').textContent='\u00a0'; }
-  document.getElementById('obtn').textContent=fin?'Begin Again':'Advance \u2192 Level '+next;
-  document.getElementById('overlay').classList.add('show');
-}
-
-document.getElementById('obtn').addEventListener('click',()=>{
-  if (level>=100) level=0;
-  level++;
-  document.getElementById('overlay').classList.remove('show');
-  setupLevel(level);
-});
-
-// ════════════════════════════════════════════════════════
-// ROTATION CONTROLS
-// ════════════════════════════════════════════════════════
-
-function setRotDir(d) { rotDir=d; }
-
-const RL=document.getElementById('rleft');
-const RR=document.getElementById('rright');
-
-RL.addEventListener('mousedown',()=>setRotDir(-1));
-RR.addEventListener('mousedown',()=>setRotDir(+1));
-RL.addEventListener('mouseup',()=>setRotDir(0));
-RR.addEventListener('mouseup',()=>setRotDir(0));
-RL.addEventListener('mouseleave',()=>setRotDir(0));
-RR.addEventListener('mouseleave',()=>setRotDir(0));
-RL.addEventListener('touchstart',e=>{e.preventDefault();setRotDir(-1);},{passive:false});
-RR.addEventListener('touchstart',e=>{e.preventDefault();setRotDir(+1);},{passive:false});
-RL.addEventListener('touchend',()=>setRotDir(0));
-RR.addEventListener('touchend',()=>setRotDir(0));
-
-document.getElementById('rreset').addEventListener('click',()=>{ rotY=0; rotDir=0; });
-
-document.getElementById('rauto').addEventListener('click',()=>{
-  autoRot=!autoRot;
-  document.getElementById('rauto').classList.toggle('on',autoRot);
-});
-
-// Arrow key rotation
-document.addEventListener('keydown',e=>{
-  if (e.key==='ArrowLeft')  { setRotDir(-1); e.preventDefault(); }
-  if (e.key==='ArrowRight') { setRotDir(+1); e.preventDefault(); }
-});
-document.addEventListener('keyup',e=>{
-  if (e.key==='ArrowLeft'||e.key==='ArrowRight') setRotDir(0);
-});
-
-// ════════════════════════════════════════════════════════
-// CANVAS INPUT
-// ════════════════════════════════════════════════════════
-
-function cvPos(cx,cy) {
-  const r=canvas.getBoundingClientRect();
-  return {mx:(cx-r.left)*(canvas.width/r.width),my:(cy-r.top)*(canvas.height/r.height)};
-}
-
-function pickVert(mx,my) {
-  const PR=30; let best=null,bd=Infinity;
-  for (const [vi,d] of Object.entries(dm)) {
-    if (d.snapped) continue;
-    const p=proj(d.cur,rotY), dist=Math.hypot(p.sx-mx,p.sy-my);
-    if (dist<PR&&dist<bd){best=+vi;bd=dist;}
-  }
-  return best;
-}
-
-function doDown(mx,my) {
-  const vi=pickVert(mx,my);
-  if (vi!==null){drag={vi};autoRot=false;canvas.style.cursor='grabbing';}
-  else{sceneDrag=true;sdRotY=rotY;sdMx=mx;autoRot=false;}
-}
-
-function doMove(mx,my) {
-  if (drag!==null) {
-    const d=dm[drag.vi];
-    if (!d||d.snapped){drag=null;autoRot=true;return;}
-    d.cur=unproj(mx,my,d.target[2]);
-    const cp=proj(d.cur,rotY),tpv=proj(d.target,rotY);
-    if (Math.hypot(cp.sx-tpv.sx,cp.sy-tpv.sy)<snapPx(level)){
-      snapVert(drag.vi);drag=null;autoRot=true;canvas.style.cursor='crosshair';
-    }
-  } else if (sceneDrag) {
-    rotY=sdRotY+(mx-sdMx)*0.007;
-  } else {
-    canvas.style.cursor=pickVert(mx,my)!==null?'grab':'crosshair';
-  }
-}
-
-function doUp(){drag=null;sceneDrag=false;autoRot=true;canvas.style.cursor='crosshair';}
-
-canvas.addEventListener('mousedown',e=>{const{mx,my}=cvPos(e.clientX,e.clientY);doDown(mx,my);});
-canvas.addEventListener('mousemove',e=>{const{mx,my}=cvPos(e.clientX,e.clientY);doMove(mx,my);});
-canvas.addEventListener('mouseup',()=>doUp());
-canvas.addEventListener('mouseleave',()=>doUp());
-canvas.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];const{mx,my}=cvPos(t.clientX,t.clientY);doDown(mx,my);},{passive:false});
-canvas.addEventListener('touchmove',e=>{e.preventDefault();const t=e.touches[0];const{mx,my}=cvPos(t.clientX,t.clientY);doMove(mx,my);},{passive:false});
-canvas.addEventListener('touchend',e=>{e.preventDefault();doUp();},{passive:false});
-
-// ════════════════════════════════════════════════════════
-// MASTER PASSWORD + SOLVE BUTTON
-// ════════════════════════════════════════════════════════
-
-document.addEventListener('keypress',e=>{
-  pwBuffer=(pwBuffer+e.key.toLowerCase()).slice(-PW.length);
-  if (pwBuffer===PW){
-    document.getElementById('solve-btn').style.display='block';
-    pwBuffer='';
-  }
-});
-
-document.getElementById('solve-btn').addEventListener('click',()=>{
-  const toSnap=Object.entries(dm).filter(([,d])=>!d.snapped);
-  toSnap.forEach(([vi],i)=>{
-    setTimeout(()=>{ if(dm[vi]&&!dm[vi].snapped) snapVert(+vi); },i*55);
-  });
-});
-
-// ════════════════════════════════════════════════════════
-// GO
-// ════════════════════════════════════════════════════════
-setupLevel(1);
-requestAnimationFrame(draw);
-</script>
-
+<div id="solve-bar">
+  <button id="solve-btn">&#9889; AUTO-SOLVE</button>
+  <span id="solve-tag">&#9646; SOLVE MODE ACTIVE &#9646;</span>
+</div>
+
+<script src="game.js"></script>
 </body>
 </html>
