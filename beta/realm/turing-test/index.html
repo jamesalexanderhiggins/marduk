@@ -4,37 +4,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>THE TURING TEST</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=2026.04.23.03" />
 </head>
 <body>
-  <div id="app" class="app state-human">
+  <div id="app" class="shell">
     <header class="topbar">
       <div>
         <div class="title">THE TURING TEST</div>
-        <div class="subtitle">Eli Wells // Human Examiner</div>
+        <div class="build">build 2026.04.23.03</div>
       </div>
-      <div class="hud">
-        <div id="versionStamp" class="version">build --</div>
-        <div id="scoreLine" class="metric">Humanity: 0</div>
-        <div id="questionLine" class="metric">Question: 0 / 1000</div>
+      <div class="status">
+        <div id="thresholdLabel">threshold: endless</div>
+        <div id="scoreLabel">score: 0</div>
+        <div id="questionLabel">question: 1 / 1000</div>
       </div>
     </header>
 
-    <section id="stage" class="stage"></section>
-
-    <section class="feed-wrap">
+    <section id="feedWrap" class="feed-wrap">
+      <div class="feed-fade top"></div>
       <div id="feed" class="feed" aria-live="polite"></div>
+      <div class="feed-fade bottom"></div>
     </section>
 
-    <section class="prompt-wrap">
-      <div id="promptLabel" class="prompt-label">Awaiting examination…</div>
-      <div id="questionText" class="question"></div>
-      <div id="answers" class="answers"></div>
+    <section class="prompt-panel">
+      <div class="speaker">ELI WELLS</div>
+      <div id="prompt" class="prompt">Initializing interrogation…</div>
     </section>
+
+    <section id="answers" class="answers"></section>
   </div>
 
-  <script src="questions.js"></script>
-  <script src="engine.js"></script>
-  <script src="game.js"></script>
+  <script src="questions.js?v=2026.04.23.03"></script>
+  <script src="game.js?v=2026.04.23.03"></script>
 </body>
 </html>
