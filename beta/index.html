@@ -39,6 +39,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:fl
 .nav-links{display:flex;gap:28px;}
 .nav-links a{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.15em;color:var(--text-dim);text-decoration:none;text-transform:uppercase;transition:color 0.3s;}
 .nav-links a:hover{color:var(--gold);}
+.nav-links a.nav-map-btn{color:var(--gold);border:1px solid rgba(201,168,76,0.35);padding:6px 14px;letter-spacing:0.2em;transition:all 0.3s;}
+.nav-links a.nav-map-btn:hover{border-color:var(--gold);background:rgba(201,168,76,0.08);box-shadow:0 0 12px rgba(201,168,76,0.25);}
 
 /* HERO */
 #hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px 24px 80px;position:relative;}
@@ -267,6 +269,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24p
     <a href="#library">Library</a>
     <a href="#chapters">Chapters</a>
     <a href="#reviews">Reviews</a>
+    <a href="realm/" class="nav-map-btn">⬡ MAP</a>
   </div>
 </nav>
 
