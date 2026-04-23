@@ -28,15 +28,17 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 /* Top-left HOME link */
 /* ── Realm header strip ─────────────────────────── */
 #realmHeader{position:fixed;top:0;left:0;right:0;z-index:150;
-  height:52px;display:flex;align-items:center;
-  justify-content:space-between;
-  background:rgba(7,9,16,0.92);
+  height:48px;display:flex;align-items:center;
+  flex-wrap:nowrap;overflow:hidden;
+  justify-content:flex-start;
+  background:rgba(7,9,16,0.96);
   border-bottom:1px solid rgba(201,168,76,0.12);
-  padding:0 16px;gap:8px;backdrop-filter:blur(4px);}
-.exit-home{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;
+  padding:0 10px;gap:6px;backdrop-filter:blur(4px);
+  box-sizing:border-box;}
+.exit-home{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;
   text-transform:uppercase;color:var(--dim);text-decoration:none;
-  border:1px solid rgba(201,168,76,0.12);padding:7px 12px;
-  transition:all 0.3s;background:transparent;flex-shrink:0;}
+  border:1px solid rgba(201,168,76,0.12);padding:5px 9px;
+  transition:all 0.3s;background:transparent;flex-shrink:0;white-space:nowrap;}
 .exit-home:hover{color:var(--gold);border-color:var(--gold);}
 
 /* Top-right progress pill */
@@ -130,7 +132,7 @@ body.kudra-active #stage{padding-top:110px;}
 #mv-canvas{display:block;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;}
 
 /* Info panel — slides up from bottom when a cell is tapped */
-.mv-info{position:absolute;left:12px;right:12px;bottom:12px;max-width:640px;margin:0 auto;max-height:80vh;overflow-y:visible;background:linear-gradient(180deg,rgba(13,17,25,0.96),rgba(7,9,16,0.98));border:1px solid var(--border);padding:18px 22px;transform:translateY(calc(100% + 24px));opacity:0;transition:transform 0.3s ease,opacity 0.3s ease;pointer-events:none;box-shadow:0 -8px 40px rgba(0,0,0,0.6),0 0 30px rgba(201,168,76,0.08);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}
+.mv-info{position:absolute;left:12px;right:12px;bottom:12px;max-width:640px;margin:0 auto;max-height:82vh;overflow-y:hidden;background:linear-gradient(180deg,rgba(13,17,25,0.96),rgba(7,9,16,0.98));border:1px solid var(--border);padding:18px 22px;transform:translateY(calc(100% + 24px));opacity:0;transition:transform 0.3s ease,opacity 0.3s ease;pointer-events:none;box-shadow:0 -8px 40px rgba(0,0,0,0.6),0 0 30px rgba(201,168,76,0.08);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);display:flex;flex-direction:column;}
 .mv-info.show{transform:translateY(0);opacity:1;pointer-events:auto;}
 .info-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;}
 .info-title{font-family:'Cinzel Decorative',serif;font-size:20px;color:var(--gold);line-height:1.25;flex:1;}
@@ -520,7 +522,7 @@ body.kudra-active #stage{padding-top:110px;}
   0%,100%{box-shadow:0 0 0 rgba(212,175,55,0);border-color:rgba(212,175,55,0.3);}
   50%{box-shadow:0 0 20px rgba(212,175,55,0.4);border-color:rgba(212,175,55,0.9);}}
 
-/* ── v8.0 Central content card ───────────────────── */
+/* ── v8.1 Central content card ───────────────────── */
 /* Stage is now a transparent overlay; content lives in .tile-card */
 #stage{position:fixed;inset:0;z-index:10;pointer-events:none;
   display:flex;align-items:center;justify-content:center;}
@@ -661,7 +663,7 @@ body.skm-active .skm-badge{display:block;}
   backdrop-filter:blur(4px);}
 
 
-/* ── v8.0 Stage architecture ─────────────────────
+/* ── v8.1 Stage architecture ─────────────────────
  *  #tileBg  = full-screen immersive background (z:2)
  *  #stage   = full-screen transparent overlay (z:10)
  *  .tile-card = centred content card, floats over bg
@@ -763,7 +765,12 @@ body.kudra-active #stage{padding-top:0;}
 /* Scroll hint fade at bottom */
 #skmEditorMount::after{content:'';display:block;height:24px;}
 
-/* EXIT SKM MODE — glowing magical button */
+/* SKM scroll — webkit handle for iPad/Safari */
+#skmScroll::-webkit-scrollbar{width:7px;}
+#skmScroll::-webkit-scrollbar-track{background:rgba(20,10,30,0.6);border-radius:4px;}
+#skmScroll::-webkit-scrollbar-thumb{background:rgba(192,132,252,0.6);border-radius:4px;}
+#skmScroll::-webkit-scrollbar-thumb:hover{background:#f0abfc;}
+
 #exitSkmBtn{
   font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.22em;
   color:#f0abfc;background:transparent;
@@ -782,6 +789,55 @@ body.kudra-active #stage{padding-top:0;}
   border:1px solid rgba(201,168,76,0.15);
   padding:6px 14px;cursor:pointer;width:100%;margin-top:4px;}
 .skm-dismiss-btn:hover{color:var(--gold);border-color:var(--gold);}
+
+
+/* Header buttons — compact, single row */
+#realmHeader button, #realmHeader a.exit-home {
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;
+  padding:5px 9px;flex-shrink:0;white-space:nowrap;
+}
+#exitSkmBtn{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;
+  color:#f0abfc;background:transparent;
+  border:1px solid #c084fc;padding:5px 9px;cursor:pointer;
+  animation:skmBtnPulse 2s ease-in-out infinite;flex-shrink:0;
+  white-space:nowrap;
+}
+
+
+/* ── Gate overlay — full screen puzzle ───────────── */
+#gateOverlay{position:fixed;inset:0;z-index:200;
+  display:none;flex-direction:column;
+  background:rgba(2,1,12,0.98);}
+#gateHeader{flex:0 0 auto;padding:14px 20px 10px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  border-bottom:1px solid rgba(192,132,252,0.2);}
+#gateHeaderText{flex:1;}
+#gateLabel{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.4em;
+  color:rgba(192,132,252,0.6);margin-bottom:5px;}
+#gateTitle{font-family:'Cinzel Decorative',serif;
+  font-size:clamp(14px,2.2vw,20px);color:#c084fc;
+  text-shadow:0 0 18px rgba(192,132,252,0.6);margin-bottom:4px;}
+#gateDesc{font-family:'EB Garamond',serif;font-style:italic;
+  font-size:clamp(13px,1.5vw,15px);color:rgba(228,210,200,0.6);
+  line-height:1.6;max-width:560px;}
+#gateBackBtn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;
+  color:rgba(201,168,76,0.5);background:transparent;
+  border:1px solid rgba(201,168,76,0.2);
+  padding:8px 14px;cursor:pointer;flex-shrink:0;white-space:nowrap;
+  align-self:center;transition:all 0.25s;}
+#gateBackBtn:hover{color:var(--gold);border-color:var(--gold);}
+#gateFrame{flex:1 1 auto;border:none;width:100%;background:#000;}
+
+/* Gated nav arrow */
+.nav-arrow.gated{color:#c084fc;border-color:rgba(192,132,252,0.5);
+  box-shadow:0 0 14px rgba(192,132,252,0.4);}
+.nav-arrow.gated::after{content:'⊛';position:absolute;
+  font-size:9px;top:2px;right:3px;opacity:0.7;}
+.nav-arrow.gate-solved{color:#4ade80;border-color:rgba(74,222,128,0.4);}
+.nav-arrow.gate-solved::after{content:'✓';position:absolute;
+  font-size:9px;top:2px;right:3px;opacity:0.8;}
+.nav-arrow{position:relative;}  /* needed for ::after */
 
 </style>
 </head>
@@ -863,7 +919,7 @@ body.kudra-active #stage{padding-top:0;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v8.0
+ *  MARDUK'S MAP — /realm/  grid SPA  v8.1
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -1345,32 +1401,26 @@ function render(x, y) {
   const navEl = document.getElementById('navArrows');
   s.style.opacity = '1';
   navEl.innerHTML = '';
-  // v8.0: ensure tileCard exists
+  // v8.1: ensure tileCard exists
   if (!document.getElementById('tileCard')) {
     s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
   }
-  // v8.0: stage is a fixed transparent overlay; content lives in .tile-card
+  // v8.1: stage is a fixed transparent overlay; content lives in .tile-card
   s.style.cssText = '';
   // Inject a fresh .tile-card for all renderers to write into
   s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v8.0';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v8.1';
 
   // Music — zone-aware track selection
   MusicEngine.playForTile(x, y, tile);
 
-  // v8.0: tile content card (centred on screen)
+  // v8.1: tile content card (centred on screen)
   const tc = document.getElementById('tileCard') || s;
 
-  // Check puzzle lock on entry (if tile has puzzle.lock_entry, show puzzle first)
-  if (tile.puzzle && tile.puzzle.lock_entry && !isPuzzleSolved(x, y)) {
-    renderPuzzleTile(tc, x, y, tile);
-    renderNavArrows(x, y);
-    return;
-  }
-
+  // v8.1: no tile-level puzzle locks — gates are on edges (nav arrows)
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
   // 'content' type from v4 realm.json = same as named tile with lore
@@ -1496,7 +1546,7 @@ function renderEmilyPath(s, x, y, tile) {
   const ghostBase  = 0.55 + Math.sin(step) * 0.1;
   const ghostDelay = (step % 3) * 0.8;
 
-  // v8.0: background layers → tileBg, content → tileCard
+  // v8.1: background layers → tileBg, content → tileCard
   const _efBg = document.getElementById('tileBg');
   const _efTc = document.getElementById('tileCard');
   if (_efBg) _efBg.innerHTML = `
@@ -1688,7 +1738,7 @@ function renderPathScene(s, x, y, tile) {
   const g = parseInt(color.slice(3,5),16);
   const b2= parseInt(color.slice(5,7),16);
 
-  // v8.0: canvas background → tileBg, text content → tile-card
+  // v8.1: canvas background → tileBg, text content → tile-card
   const _ptBg = document.getElementById('tileBg');
   const _ptTc = document.getElementById('tileCard');
   if (_ptBg) _ptBg.innerHTML = `<div class="pt-root"><canvas class="pt-canvas" id="ptCanvas"></canvas></div>`;
@@ -1978,7 +2028,7 @@ function updateTranscendBtn(tile) {
 
 
 /* ══════════════════════════════════════════════════
- *  PUZZLE SYSTEM v8.0
+ *  PUZZLE SYSTEM v8.1
  *  Two game types: face3d (100 levels) + tesseract (1000 levels)
  *  Solved tiles stored in localStorage; persist across sessions
  * ═════════════════════════════════════════════════*/
@@ -2196,6 +2246,33 @@ function renderPathTile(s, x, y, tile) {
   const b = parseInt(hex.slice(5,7),16);
   initStars({count: 180, color: `${r},${g},${b}`, speed: 0.014});
   startParticles({colors: [hex + '55', hex + '33'], min: 1, max: 2, speed: 6});
+}
+
+function _renderGateCTA(x, y) {
+  // Find any unsolved outgoing gates on this tile and return CTA HTML
+  const dirLabels={N:'North',S:'South',E:'East',W:'West'};
+  let ctas = '';
+  for (const dir of ['N','S','E','W']) {
+    const gate = getGate(x, y, dir);
+    if (!gate || isGateSolved(x,y,dir)) continue;
+    const label = GATE_LABELS[gate.type]||'Challenge';
+    const lv = gate.range ? `Levels ${gate.range[0]}–${gate.range[1]}`
+             : gate.level ? `Level ${gate.level}` : '';
+    ctas += `<div style="margin-top:18px;text-align:center;">
+      <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.35em;
+        color:rgba(192,132,252,0.6);margin-bottom:6px;">
+        ${label.toUpperCase()} · ${lv}</div>
+      ${gate.title?`<div style="font-family:'Cinzel Decorative',serif;font-size:clamp(14px,2vw,20px);
+        color:#c084fc;text-shadow:0 0 16px rgba(192,132,252,0.6);margin-bottom:8px;">${gate.title}</div>`:''}
+      <button onclick="openGateOverlay(${x},${y},'${dir}')"
+        style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.28em;
+        color:#1a0a2e;background:#c084fc;border:none;padding:12px 28px;
+        cursor:pointer;text-transform:uppercase;transition:opacity 0.25s;"
+        onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+        ▶ Take the Test</button>
+    </div>`;
+  }
+  return ctas;
 }
 
 function renderContent(s, x, y, tile) {
@@ -2520,19 +2597,24 @@ function renderNavArrows(x, y) {
     const srcPzl = tile.puzzle;
     const srcExitLocked = srcPzl && srcPzl.lock_exit && !isPuzzleSolved(x, y);
 
-    if (destLocked || srcExitLocked) {
-      const lockPzl = destLocked ? destPzl : srcPzl;
-      const lockX   = destLocked ? dX : x;
-      const lockY   = destLocked ? dY : y;
-      a.className = 'nav-arrow ' + d.key + ' puzzle-lock';
-      a.title = `Puzzle lock: ${lockPzl.title || 'Challenge'}`;
+    // v8.1: check edge gate
+    const arrowDir = d.key === 'up' ? 'N' : d.key === 'down' ? 'S'
+                   : d.key === 'left' ? 'W' : 'E';
+    const edgeGate   = getGate(x, y, arrowDir);
+    const gateSolved  = edgeGate && isGateSolved(x, y, arrowDir);
+
+    if (edgeGate && !gateSolved) {
+      a.className = 'nav-arrow ' + d.key + ' gated';
+      a.title = edgeGate.title || 'Gated — solve puzzle to pass';
       a.addEventListener('click', ev => {
         ev.preventDefault();
-        showPuzzleOverlay(lockPzl, lockX, lockY);
+        openGateOverlay(x, y, arrowDir);
       });
     } else {
-      a.className = 'nav-arrow ' + d.key + (door.path ? ' path' : '');
-      a.title = `Go ${d.key}`;
+      a.className = 'nav-arrow ' + d.key
+        + (gateSolved ? ' gate-solved' : '')
+        + (door.path && !gateSolved ? ' path' : '');
+      a.title = gateSolved ? `✓ Solved — Go ${d.key}` : `Go ${d.key}`;
       a.addEventListener('click', ev => { ev.preventDefault(); goTo(dX, dY); });
     }
     el.appendChild(a);
@@ -2606,7 +2688,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v8.0)
+ *  MARDUK VIEW — game-like map (v8.1)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -4844,10 +4926,13 @@ function skmOpenEditor(x, y) {
   </div>
 
   <div id="skmScroll" style="
-    max-height:55vh;overflow-y:scroll;overflow-x:hidden;
+    flex:1 1 auto;
+    min-height:0;
+    max-height:calc(82vh - 80px);
+    overflow-y:scroll;overflow-x:hidden;
     -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
-    scrollbar-width:thin;scrollbar-color:rgba(240,171,252,0.5) rgba(0,0,0,0.3);
-    padding-right:8px;">
+    scrollbar-width:thin;scrollbar-color:rgba(240,171,252,0.6) rgba(20,10,30,0.6);
+    padding-right:10px;">
 
     <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.3em;
       color:rgba(240,171,252,0.4);text-transform:uppercase;margin-bottom:4px;">
@@ -5025,6 +5110,55 @@ function skmOpenEditor(x, y) {
     </div>
     <div style="font-size:11px;color:rgba(201,168,76,0.3);font-style:italic;margin-top:6px;">
       Saves to browser memory. Export JSON for permanent installation.</div>
+
+    <!-- GATE EDITOR -->
+    <div style="margin-top:14px;border-top:1px solid rgba(192,132,252,0.15);padding-top:12px;">
+      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.35em;
+        color:rgba(192,132,252,0.5);margin-bottom:8px;">⊛ DIRECTIONAL GATES</div>
+      <div style="font-size:11px;color:rgba(201,168,76,0.3);margin-bottom:10px;">
+        Gates block movement in a direction until a puzzle is solved.
+        The return direction is always free.</div>
+      ${['N','S','E','W'].map(dir => {
+        const g = getGate(x,y,dir)||{};
+        const solved = isGateSolved(x,y,dir);
+        const label = {'N':'↑ North','S':'↓ South','E':'→ East','W':'← West'}[dir];
+        return `<div style="margin-bottom:10px;padding:8px;
+          background:rgba(0,0,0,0.3);border:1px solid rgba(192,132,252,0.1);">
+          <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.2em;
+            color:${g.type?'#c084fc':'rgba(201,168,76,0.3)'};margin-bottom:6px;">
+            ${label} ${g.type?'· GATED'+( solved?' · ✓ SOLVED':''):'· open'}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+            <select id="skm_gate_${dir}_type" style="background:rgba(0,0,0,0.5);
+              border:1px solid rgba(192,132,252,0.2);color:var(--cream);
+              font-size:12px;padding:4px 6px;">
+              <option value="">— no gate —</option>
+              ${['tesseract','masklock','turing'].map(t=>
+                `<option value="${t}"${g.type===t?' selected':''}>${GATE_LABELS[t]||t}</option>`
+              ).join('')}
+            </select>
+            <input id="skm_gate_${dir}_level" type="number" min="1" max="1000"
+              value="${g.level||''}" placeholder="lvl"
+              style="width:54px;background:rgba(0,0,0,0.5);
+              border:1px solid rgba(192,132,252,0.2);color:var(--cream);
+              font-size:12px;padding:4px;">
+            <input id="skm_gate_${dir}_title" value="${(g.title||'').replace(/"/g,'&quot;')}"
+              placeholder="Gate title"
+              style="flex:1;min-width:100px;background:rgba(0,0,0,0.5);
+              border:1px solid rgba(192,132,252,0.2);color:var(--cream);
+              font-size:12px;padding:4px 6px;">
+            <button onclick="skm_saveGate(${x},${y},'${dir}')"
+              style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;
+              padding:4px 10px;cursor:pointer;background:rgba(192,132,252,0.15);
+              border:1px solid rgba(192,132,252,0.3);color:#c084fc;">
+              SET</button>
+            ${g.type?`<button onclick="skm_clearGate(${x},${y},'${dir}')"
+              style="font-size:11px;padding:4px 8px;cursor:pointer;
+              background:transparent;border:1px solid rgba(201,168,76,0.15);
+              color:var(--dim);">✕</button>`:''}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
   </div>`;
 }
 
@@ -5112,6 +5246,41 @@ function skm_save(x, y) {
   if (cur && cur.x===x && cur.y===y) render(x, y);
 }
 
+function skm_saveGate(x, y, dir) {
+  const typeEl  = document.getElementById(`skm_gate_${dir}_type`);
+  const levelEl = document.getElementById(`skm_gate_${dir}_level`);
+  const titleEl = document.getElementById(`skm_gate_${dir}_title`);
+  const gtype = typeEl?.value;
+  if (!gtype) { skm_clearGate(x,y,dir); return; }
+  const gate = {
+    type: gtype,
+    title: titleEl?.value?.trim() || '',
+  };
+  const lv = parseInt(levelEl?.value);
+  if (lv) gate.level = lv;
+  // Save to REALM in memory
+  if (!REALM.gates) REALM.gates = {};
+  REALM.gates[gateKey(x,y,dir)] = gate;
+  // Persist override
+  const ov = _loadOverrides();
+  if (!ov._gates) ov._gates = {};
+  ov._gates[gateKey(x,y,dir)] = gate;
+  _saveOverrides(ov);
+  // Refresh arrows
+  renderNavArrows(x,y);
+  skmOpenEditor(x,y);  // re-render editor to show updated state
+}
+
+function skm_clearGate(x, y, dir) {
+  const k = gateKey(x,y,dir);
+  if (REALM.gates) delete REALM.gates[k];
+  const ov = _loadOverrides();
+  if (ov._gates) delete ov._gates[k];
+  _saveOverrides(ov);
+  renderNavArrows(x,y);
+  skmOpenEditor(x,y);
+}
+
 function skm_export() {
   const ov = _loadOverrides();
   const json = JSON.stringify(ov, null, 2);
@@ -5131,6 +5300,151 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const b = document.getElementById('exitSkmBtn');
   if (b) b.addEventListener('click', _deactivateSKM);
 });
+
+/* ══════════════════════════════════════════════════
+ *  GATES SYSTEM v8.1
+ *  Gates are directional edge locks stored in REALM.gates
+ *  Key format: "x,y:DIR" where DIR ∈ {N,S,E,W}
+ *  A gate fires when moving FROM (x,y) in direction DIR.
+ *  The return direction is always free.
+ *  Solved gates stored in localStorage.
+ * ═════════════════════════════════════════════════*/
+
+const GATE_URLS = {
+  tesseract: 'https://jamesalexanderhiggins.github.io/marduk/beta/realm/tesseract/',
+  masklock:  'https://jamesalexanderhiggins.github.io/marduk/beta/realm/puzzle-game/',
+  turing:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/turing/',
+};
+const GATE_LABELS = {
+  tesseract: 'Tesseract',
+  masklock:  'Mask Lock',
+  turing:    'Turing Test',
+};
+const DIR_DELTA = {N:[0,1],S:[0,-1],E:[1,0],W:[-1,0]};
+const DELTA_DIR = {'0,1':'N','0,-1':'S','1,0':'E','-1,0':'W'};
+
+const GATE_SOLVED_KEY = 'mm_gate_solved_v8';
+function _loadGateSolved() {
+  try { return new Set(JSON.parse(localStorage.getItem(GATE_SOLVED_KEY)||'[]')); }
+  catch(e) { return new Set(); }
+}
+function _saveGateSolved(set) {
+  try { localStorage.setItem(GATE_SOLVED_KEY, JSON.stringify([...set])); } catch(e) {}
+}
+let _gateSolved = _loadGateSolved();
+
+function gateKey(x, y, dir) { return `${x},${y}:${dir}`; }
+function getGate(x, y, dir) {
+  if (!REALM || !REALM.gates) return null;
+  const ovKey = gateKey(x,y,dir);
+  const ov = _loadOverrides();
+  if (ov._gates && ov._gates[ovKey]) return ov._gates[ovKey];
+  return REALM.gates[ovKey] || null;
+}
+function isGateSolved(x, y, dir) { return _gateSolved.has(gateKey(x,y,dir)); }
+function markGateSolved(x, y, dir) {
+  _gateSolved.add(gateKey(x,y,dir));
+  _saveGateSolved(_gateSolved);
+}
+
+function buildGateURL(gate, fromX, fromY, dir) {
+  const base = GATE_URLS[gate.type] || GATE_URLS.tesseract;
+  // Redirect encodes the source tile + direction so we know what to unlock
+  const redirectHash = `gate:${fromX},${fromY}:${dir}`;
+  const redirectURL  = window.location.href.split('#')[0] + '#' + redirectHash;
+  let url = base;
+  const params = [];
+  if (gate.range)  params.push(`range=${gate.range[0]}-${gate.range[1]}`);
+  else if (gate.level) params.push(`level=${gate.level}`);
+  params.push('redirect=' + encodeURIComponent(redirectURL));
+  return url + (params.length ? '?' + params.join('&') : '');
+}
+
+// Full-screen gate overlay
+let _gateOverlay = null;
+let _pendingGate = null;  // {x,y,dir,nx,ny}
+
+function openGateOverlay(fromX, fromY, dir) {
+  const gate = getGate(fromX, fromY, dir);
+  if (!gate) return;
+  const [dx,dy] = DIR_DELTA[dir]||[0,0];
+  const toX = fromX+dx, toY = fromY+dy;
+  _pendingGate = {x:fromX, y:fromY, dir, nx:toX, ny:toY};
+
+  const url  = buildGateURL(gate, fromX, fromY, dir);
+  const label = GATE_LABELS[gate.type] || 'Challenge';
+  const lv   = gate.range ? `Levels ${gate.range[0]}–${gate.range[1]}`
+             : gate.level  ? `Level ${gate.level}` : '';
+
+  // Create or reuse overlay
+  let ov = document.getElementById('gateOverlay');
+  if (!ov) {
+    ov = document.createElement('div');
+    ov.id = 'gateOverlay';
+    document.body.appendChild(ov);
+  }
+  ov.innerHTML = `
+    <div id="gateHeader">
+      <div id="gateHeaderText">
+        <div id="gateLabel">${label.toUpperCase()} · ${lv}</div>
+        <div id="gateTitle">${gate.title||'Challenge'}</div>
+        ${gate.desc ? `<div id="gateDesc">${gate.desc}</div>` : ''}
+      </div>
+      <button id="gateBackBtn" onclick="closeGateOverlay()">
+        ← I can't do it — go back</button>
+    </div>
+    <iframe id="gateFrame" src="${url}"
+      allowfullscreen
+      sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>`;
+  ov.style.display = 'flex';
+
+  // Listen for completion
+  document.getElementById('gateFrame').addEventListener('load', _onGateFrameLoad);
+}
+
+function closeGateOverlay() {
+  const ov = document.getElementById('gateOverlay');
+  if (ov) ov.style.display = 'none';
+  const fr = document.getElementById('gateFrame');
+  if (fr) { fr.removeEventListener('load', _onGateFrameLoad); fr.src='about:blank'; }
+  _pendingGate = null;
+}
+
+function _onGateFrameLoad() {
+  try {
+    const href = this.contentWindow.location.href;
+    if (href && href.includes('#gate:') && _pendingGate) {
+      const hash = href.split('#gate:')[1];
+      const parts = hash.split(':');
+      if (parts.length === 2) {
+        const [cx,cy] = parts[0].split(',').map(Number);
+        const cdir    = parts[1];
+        if (cx===_pendingGate.x && cy===_pendingGate.y && cdir===_pendingGate.dir) {
+          markGateSolved(cx, cy, cdir);
+          const {nx,ny,dir} = _pendingGate;
+          const onComplete = getGate(cx,cy,cdir)?.on_complete_music;
+          closeGateOverlay();
+          goTo(nx, ny);
+          if (onComplete) setTimeout(()=>MusicEngine.playByKey(onComplete), 600);
+        }
+      }
+    }
+  } catch(e) { /* cross-origin — normal until redirect fires */ }
+}
+
+// Handle gate completion redirect on boot
+function _handleGateHash(h) {
+  if (!h.startsWith('gate:')) return false;
+  const rest  = h.slice(5);
+  const parts = rest.split(':');
+  if (parts.length !== 2) return false;
+  const [cx,cy] = parts[0].split(',').map(Number);
+  const cdir   = parts[1];
+  markGateSolved(cx, cy, cdir);
+  const [dx,dy] = DIR_DELTA[cdir]||[0,0];
+  return {x: cx+dx, y: cy+dy};
+}
+
 /* ── Boot ──────────────────────────────────────── */
 async function boot() {
   const res = await fetch('realm.json');
@@ -5157,7 +5471,11 @@ async function boot() {
   let start = {x: 0, y: 0};
   const h = (window.location.hash || '').replace('#', '');
   if (h) {
-    if (h.startsWith('pzl:')) {
+    if (h.startsWith('gate:')) {
+      const gateResult = _handleGateHash(h);
+      if (gateResult) start = gateResult;
+    }
+    else if (h.startsWith('pzl:')) {
       const dec = decodeXY(h.replace('pzl:',''));
       if (dec) {
         markPuzzleSolved(dec.x, dec.y);
