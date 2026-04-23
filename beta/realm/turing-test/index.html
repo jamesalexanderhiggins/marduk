@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,13 +13,11 @@
       <div class="header">
         <div>
           <div class="title">THE TURING TEST</div>
-          <div class="subtitle">DAEDALUS INTERROGATION CHANNEL // ELI WELLS // EARLY 90s TERMINAL SIMULATION</div>
+          <div class="subtitle">DAEDALUS INTERROGATION CHANNEL // ELI WELLS</div>
         </div>
         <div class="stats">
           <div>SCORE: <span id="score">0</span></div>
-          <div>QUESTIONS ANSWERED: <span id="qCount">0</span></div>
-          <div>ACT: <span id="act">1 / 10</span></div>
-          <div>LANE: <span id="lane">balanced</span></div>
+          <div>ANSWERS: <span id="qCount">0</span></div>
           <div>TARGET: <span id="target">∞</span></div>
         </div>
       </div>
@@ -40,7 +37,7 @@
           </div>
           <div class="answers" id="answers"></div>
           <div id="freeformRow" class="freeformRow">
-            <div style="margin-bottom:8px; font-size:12px;" id="freeformHelp"></div>
+            <div style="margin-bottom:8px; font-size:11px;" id="freeformHelp"></div>
             <input class="input" id="freeform" maxlength="80" placeholder="Type a short answer and press Enter" />
             <div style="margin-top:8px;"><button class="answer" id="submitFreeform">Submit text</button></div>
           </div>
@@ -49,20 +46,20 @@
 
       <div class="footerGrid">
         <div class="panel">
-          <div style="margin-bottom:8px; font-size:12px; color:var(--accent);">HUMAN FACTOR VECTOR</div>
+          <div style="margin-bottom:8px; font-size:11px; color:var(--accent);">HUMAN FACTOR VECTOR</div>
           <div class="meter">
             <div class="meterNeg" id="humanityBarNeg" style="width:0%"></div>
             <div class="meterPos" id="humanityBarPos" style="width:0%"></div>
           </div>
         </div>
         <div class="panel">
-          <div style="margin-bottom:8px; font-size:12px; color:var(--accent);">SYSTEM OBSERVATIONS</div>
+          <div style="margin-bottom:8px; font-size:11px; color:var(--accent);">CHANNEL OBSERVATIONS</div>
           <div class="systemText" id="systemText"></div>
         </div>
       </div>
 
       <div class="endCard" id="endCard">
-        <div style="font-size:22px; margin-bottom:8px;" id="endTitle"></div>
+        <div style="font-size:20px; margin-bottom:8px;" id="endTitle"></div>
         <div style="white-space:pre-wrap; line-height:1.55;" id="endBody"></div>
       </div>
     </div>

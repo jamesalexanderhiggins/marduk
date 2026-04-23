@@ -1,25 +1,15 @@
 THE TURING TEST
 
-Files:
-- index.html
-- styles.css
-- game.js
-- engine.js
-- questions.js
-
 Embed example:
-<iframe src="/path/to/index.html?target=120" width="100%" height="950" style="border:0"></iframe>
+<iframe src="turing_build/index.html?target=120&redirect=https://your-site.com/next.html" width="100%" height="860" style="border:0;"></iframe>
 
 Parameters:
-- ?target=120        Positive target. Game ends once score reaches or exceeds it.
-- ?target=-250       Negative target. Game ends once score reaches or drops below it.
-- ?redirect=https://example.com/next.html
-- ?seed=abc123       Optional deterministic seed for a repeatable route.
+?target=120      positive or negative score target
+?redirect=URL    destination after target is reached
+?seed=value      optional run seed
 
 Notes:
-- Without target, the game continues forever.
-- It uses 1000 unique question nodes before repeating.
-- The conversation is structured in 10 escalating acts, each with 4 lanes:
-  warm / balanced / suspicious / adversarial.
-- Answers branch Eli's route by adjusting lane bias and score.
-- Negative score ranges shift the screen green -> cyan -> purple and then chaotic near -1000.
+- Eli is the human examiner.
+- The player is the intelligence being tested.
+- Answer positions are shuffled each question.
+- The transcript shows the actual answer text the player chose.
