@@ -4,42 +4,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>THE TURING TEST</title>
-  <link rel="stylesheet" href="styles.css?v=2026.04.23.0558">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="app" class="theme-green">
+  <div id="app" class="app state-human">
     <header class="topbar">
-      <div class="titleblock">
+      <div>
         <div class="title">THE TURING TEST</div>
-        <div class="version">build 2026.04.23.0558</div>
+        <div class="subtitle">Eli Wells // Human Examiner</div>
       </div>
-      <div class="statusline">
-        <span id="actLabel">ACT 1 // HANDSHAKE</span>
-        <span id="positionLabel">POSITION 1/1000</span>
-        <span id="targetLabel">TARGET: ENDLESS</span>
-        <span id="scoreLabel">HUMAN FACTOR 0</span>
+      <div class="hud">
+        <div id="versionStamp" class="version">build --</div>
+        <div id="scoreLine" class="metric">Humanity: 0</div>
+        <div id="questionLine" class="metric">Question: 0 / 1000</div>
       </div>
     </header>
 
-    <main class="frame">
-      <section class="transcript-panel">
-        <div class="panel-label">TRANSCRIPT</div>
-        <div id="transcript" class="transcript"></div>
-      </section>
+    <section id="stage" class="stage"></section>
 
-      <section class="question-panel">
-        <div class="panel-label">ELI WELLS</div>
-        <div id="prompt" class="prompt"></div>
-        <div id="answers" class="answers"></div>
-      </section>
-    </main>
+    <section class="feed-wrap">
+      <div id="feed" class="feed" aria-live="polite"></div>
+    </section>
 
-    <footer class="footer">
-      <div id="footerLine" class="footer-line">Awaiting response.</div>
-    </footer>
+    <section class="prompt-wrap">
+      <div id="promptLabel" class="prompt-label">Awaiting examination…</div>
+      <div id="questionText" class="question"></div>
+      <div id="answers" class="answers"></div>
+    </section>
   </div>
 
-  <script src="questions.js?v=2026.04.23.0558"></script>
-  <script src="game.js?v=2026.04.23.0558"></script>
+  <script src="questions.js"></script>
+  <script src="engine.js"></script>
+  <script src="game.js"></script>
 </body>
 </html>
