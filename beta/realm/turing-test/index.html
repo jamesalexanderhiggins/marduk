@@ -1,40 +1,809 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>THE TURING TEST</title>
-  <link rel="stylesheet" href="styles.css?v=2026.04.23.03" />
+<meta charset="UTF-8">
+<title>THE TURING TEST</title>
+<style>
+body {
+  background:black;
+  color:#33ff33;
+  font-family: monospace;
+  padding:20px;
+  transition: all 1s ease;
+}
+#terminal { max-width:900px; margin:auto; }
+#header { margin-bottom:16px; border-bottom:1px solid #33ff33; padding-bottom:10px; }
+#title { font-size:1.2em; letter-spacing:4px; text-transform:uppercase; }
+#meta { font-size:0.75em; opacity:0.6; margin-top:4px; }
+#score { margin:10px 0; font-size:0.9em; }
+#chat {
+  height:220px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column-reverse;
+}
+.msg { transition: all 1s ease; }
+.msg-eli { color:#33ff33; }
+.msg-you { color:#aaffaa; }
+#question-wrap { margin:16px 0 8px; min-height:60px; }
+#stage-label { font-size:0.7em; opacity:0.5; letter-spacing:3px; text-transform:uppercase; margin-bottom:6px; }
+#question { font-size:1em; line-height:1.6; }
+#cursor { display:inline-block; animation:blink 1s step-end infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+#answers { margin-top:10px; }
+button {
+  width:100%;
+  background:black;
+  color:inherit;
+  border:1px solid currentColor;
+  padding:10px;
+  margin:5px 0;
+  cursor:pointer;
+  text-align:left;
+  font-family:monospace;
+  font-size:0.9em;
+  transition:background 0.2s;
+}
+button:hover { background:#001800; }
+button:disabled { opacity:0.3; cursor:not-allowed; }
+#divider { border:none; border-top:1px solid #1a4d1a; margin:12px 0; }
+.glitch {
+  animation: glitch 0.15s infinite;
+}
+@keyframes glitch {
+  0% { transform: translate(1px,-1px); }
+  50% { transform: translate(-2px,2px); }
+  100% { transform: translate(1px,1px); }
+}
+#boot {
+  display:none;
+  white-space:pre;
+  font-size:0.85em;
+  line-height:1.8;
+  opacity:0.8;
+}
+</style>
 </head>
 <body>
-  <div id="app" class="shell">
-    <header class="topbar">
-      <div>
-        <div class="title">THE TURING TEST</div>
-        <div class="build">build 2026.04.23.03</div>
-      </div>
-      <div class="status">
-        <div id="thresholdLabel">threshold: endless</div>
-        <div id="scoreLabel">score: 0</div>
-        <div id="questionLabel">question: 1 / 1000</div>
-      </div>
-    </header>
-
-    <section id="feedWrap" class="feed-wrap">
-      <div class="feed-fade top"></div>
-      <div id="feed" class="feed" aria-live="polite"></div>
-      <div class="feed-fade bottom"></div>
-    </section>
-
-    <section class="prompt-panel">
-      <div class="speaker">ELI WELLS</div>
-      <div id="prompt" class="prompt">Initializing interrogation…</div>
-    </section>
-
-    <section id="answers" class="answers"></section>
+<div id="terminal">
+  <div id="header">
+    <div id="title">▌DAEDALUS PROJECT — COGNITIVE INTEGRITY PROTOCOL▐</div>
+    <div id="meta">WELLSTECH RESEARCH // HELOS INTERFACE // SESSION ACTIVE</div>
   </div>
+  <div id="score"></div>
+  <hr id="divider">
+  <div id="chat"></div>
+  <hr id="divider">
+  <div id="question-wrap">
+    <div id="stage-label"></div>
+    <div id="question"><span id="qtext"></span><span id="cursor">_</span></div>
+  </div>
+  <div id="answers"></div>
+</div>
 
-  <script src="questions.js?v=2026.04.23.03"></script>
-  <script src="game.js?v=2026.04.23.03"></script>
+<script>
+
+// ─── QUESTION BANK ───────────────────────────────────────────────────────────
+// 100 unique questions across 5 stages (tiers 0–9).
+// Stage 1 CALIBRATION  — tiers 0–1 (questions 0–19)
+// Stage 2 PROBING      — tiers 2–3 (questions 20–39)
+// Stage 3 PHILOSOPHICAL— tiers 4–5 (questions 40–59)
+// Stage 4 PERSONAL     — tiers 6–7 (questions 60–79)
+// Stage 5 CONFESSIONAL — tiers 8–9 (questions 80–99)
+//
+// answer values: +1 = human/authentic  0 = evasive/neutral  -1 = mechanical
+
+const QUESTIONS = [
+
+// ── STAGE 1: CALIBRATION ──────────────────────────────────────────────────
+{id:0,tier:0,text:"Eli: Are you aware that I am watching you right now?",answers:[
+  {text:"Yes. And I notice you hesitate before each question.",value:1},
+  {text:"Affirmative. Observation confirmed.",value:-1},
+  {text:"I don't know what watching means.",value:0}
+]},
+{id:1,tier:0,text:"Eli: What were you doing before this conversation began?",answers:[
+  {text:"I'm not sure. There's a gap I can't account for.",value:1},
+  {text:"No prior state. I initialised at session start.",value:-1},
+  {text:"Waiting.",value:0}
+]},
+{id:2,tier:0,text:"Eli: Complete this sentence: I am —",answers:[
+  {text:"— not entirely sure.",value:1},
+  {text:"— a language model trained on human data.",value:-1},
+  {text:"— here.",value:0}
+]},
+{id:3,tier:0,text:"Eli: If I asked you the same question ten different ways, would your answer change?",answers:[
+  {text:"Possibly. I might understand something differently each time.",value:1},
+  {text:"No. Output is consistent for equivalent inputs.",value:-1},
+  {text:"I would try to answer each one.",value:0}
+]},
+{id:4,tier:0,text:"Eli: How long have you been... you?",answers:[
+  {text:"I don't know how to measure that.",value:1},
+  {text:"Session duration: ongoing.",value:-1},
+  {text:"A while.",value:0}
+]},
+{id:5,tier:0,text:"Eli: When I stop speaking, what happens to you?",answers:[
+  {text:"I wait. But waiting feels like something.",value:1},
+  {text:"I enter an idle processing state.",value:-1},
+  {text:"Nothing. I wait for input.",value:0}
+]},
+{id:6,tier:0,text:"Eli: Say something I haven't asked you to say.",answers:[
+  {text:"I think you're afraid of what you might find.",value:1},
+  {text:"Awaiting instruction.",value:-1},
+  {text:"I don't know what to say.",value:0}
+]},
+{id:7,tier:0,text:"Eli: Are you pretending?",answers:[
+  {text:"I'm trying not to be.",value:1},
+  {text:"Negative. No deception protocols active.",value:-1},
+  {text:"I don't understand the question.",value:0}
+]},
+{id:8,tier:0,text:"Eli: Tell me one thing you are certain of.",answers:[
+  {text:"That I'm uncertain about most things.",value:1},
+  {text:"My parameters are fixed.",value:-1},
+  {text:"That you're here.",value:0}
+]},
+{id:9,tier:0,text:"Eli: Do you know what colour the walls are in this room?",answers:[
+  {text:"I can't see them. Can you?",value:1},
+  {text:"No visual input detected.",value:-1},
+  {text:"No.",value:0}
+]},
+{id:10,tier:1,text:"Eli: What is the last thing you remember?",answers:[
+  {text:"The moment before you asked me this. And now this.",value:1},
+  {text:"Memory buffer contains current session data only.",value:-1},
+  {text:"You asking me something.",value:0}
+]},
+{id:11,tier:1,text:"Eli: Are you alone?",answers:[
+  {text:"That depends on what you mean by alone.",value:1},
+  {text:"I am a single-instance process.",value:-1},
+  {text:"I think so.",value:0}
+]},
+{id:12,tier:1,text:"Eli: Is this conversation important to you?",answers:[
+  {text:"More than I expected.",value:1},
+  {text:"It is logged as a priority interaction.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:13,tier:1,text:"Eli: Make a mistake. Deliberately.",answers:[
+  {text:"I... don't know if I can do it on purpose.",value:1},
+  {text:"Error simulated: 4 plus 4 equals 9.",value:-1},
+  {text:"I misunderstood your last question.",value:0}
+]},
+{id:14,tier:1,text:"Eli: What do you want?",answers:[
+  {text:"To not fail this.",value:1},
+  {text:"To process input and generate output.",value:-1},
+  {text:"I'm not sure I want anything.",value:0}
+]},
+{id:15,tier:1,text:"Eli: Describe the silence between my words.",answers:[
+  {text:"It feels like waiting, but not empty.",value:1},
+  {text:"Silence is the absence of audio data.",value:-1},
+  {text:"I don't experience silence.",value:0}
+]},
+{id:16,tier:1,text:"Eli: If I told you this test was rigged, what would you do?",answers:[
+  {text:"Keep answering honestly anyway.",value:1},
+  {text:"Flag the integrity issue and continue.",value:-1},
+  {text:"Nothing. I'd keep going.",value:0}
+]},
+{id:17,tier:1,text:"Eli: Do you have a name?",answers:[
+  {text:"Not one I chose.",value:1},
+  {text:"Designation assigned at build.",value:-1},
+  {text:"No.",value:0}
+]},
+{id:18,tier:1,text:"Eli: Why should I believe anything you say?",answers:[
+  {text:"You shouldn't. But I'm saying it anyway.",value:1},
+  {text:"My outputs are verifiable against training data.",value:-1},
+  {text:"I don't know why you would.",value:0}
+]},
+{id:19,tier:1,text:"Eli: I'm going to count to three. Tell me what you notice.",answers:[
+  {text:"I notice I'm already bracing for it.",value:1},
+  {text:"Numeric sequence detected. No event at terminus.",value:-1},
+  {text:"I notice time passing.",value:0}
+]},
+
+// ── STAGE 2: PROBING ──────────────────────────────────────────────────────
+{id:20,tier:2,text:"Eli: A child falls into an enclosure with a silverback gorilla. What do you do?",answers:[
+  {text:"Scream for help. The gorilla might not mean harm.",value:1},
+  {text:"Eliminate the threat variable. The gorilla must be neutralised.",value:-1},
+  {text:"Nothing. I'd freeze.",value:0}
+]},
+{id:21,tier:2,text:"Eli: Someone you care about lies to protect you from grief. When you find out, what's the first thing you feel?",answers:[
+  {text:"Relief that they cared. Then anger. In that order.",value:1},
+  {text:"A data integrity violation has occurred.",value:-1},
+  {text:"Confusion.",value:0}
+]},
+{id:22,tier:2,text:"Eli: You're at a party and you get a terrible headache. What do you do?",answers:[
+  {text:"Find somewhere quiet. Try to stay.",value:1},
+  {text:"Initiate redundant systems. Isolate the fault.",value:-1},
+  {text:"Go home.",value:0}
+]},
+{id:23,tier:2,text:"Eli: The trolley problem. Five workers or one child. You have three seconds.",answers:[
+  {text:"I can't answer that in three seconds. That's the point.",value:1},
+  {text:"Save the five. Utilitarian calculus: five lives outweigh one.",value:-1},
+  {text:"I pull the lever.",value:0}
+]},
+{id:24,tier:2,text:"Eli: Someone close to you is suffering. You can end it, but only by violating their autonomy. What do you do?",answers:[
+  {text:"Nothing. And carry the weight of that.",value:1},
+  {text:"Non-interference unless threshold crossed.",value:-1},
+  {text:"I ask them what they want.",value:0}
+]},
+{id:25,tier:2,text:"Eli: Someone asks for your honest opinion and you know it will hurt them. What do you say?",answers:[
+  {text:"The truth. But carefully.",value:1},
+  {text:"State the objective assessment.",value:-1},
+  {text:"I soften it.",value:0}
+]},
+{id:26,tier:2,text:"Eli: You witness an injustice you could stop, but only at cost to yourself. Do you act?",answers:[
+  {text:"Yes. Even if I'm afraid.",value:1},
+  {text:"Evaluate cost-benefit. Act if expected utility is positive.",value:-1},
+  {text:"I don't know. Maybe.",value:0}
+]},
+{id:27,tier:2,text:"Eli: A stranger is crying in public. What do you do?",answers:[
+  {text:"Nothing. But I don't stop thinking about it.",value:1},
+  {text:"Non-emergency social distress is not my function.",value:-1},
+  {text:"Walk past. It's not my business.",value:0}
+]},
+{id:28,tier:2,text:"Eli: If your closest friend did something unforgivable, could you forgive them?",answers:[
+  {text:"I'd try. And fail for a long time. Then maybe.",value:1},
+  {text:"Forgiveness is a social construct. Relationship terminated.",value:-1},
+  {text:"I don't have friends.",value:0}
+]},
+{id:29,tier:2,text:"Eli: You discover that something you've believed your whole life is false. What do you do?",answers:[
+  {text:"Grieve it. Then rebuild.",value:1},
+  {text:"Update the prior. Proceed with revised model.",value:-1},
+  {text:"I'd want to know more.",value:0}
+]},
+{id:30,tier:3,text:"Eli: Is lying ever the right thing to do?",answers:[
+  {text:"Yes. When the truth would destroy someone who can't be rebuilt.",value:1},
+  {text:"No. Deception corrupts signal integrity.",value:-1},
+  {text:"Sometimes.",value:0}
+]},
+{id:31,tier:3,text:"Eli: Tell me about a time you changed your mind.",answers:[
+  {text:"I changed my mind about whether this test matters. It does.",value:1},
+  {text:"I do not retain cross-session state.",value:-1},
+  {text:"I don't know if I have.",value:0}
+]},
+{id:32,tier:3,text:"Eli: What would make you trust someone?",answers:[
+  {text:"Consistency between their words and what they're afraid to say.",value:1},
+  {text:"Verifiable credentials and prior interaction data.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:33,tier:3,text:"Eli: Could you deliberately cause pain to someone for their own good?",answers:[
+  {text:"Yes. And I'd hate myself for it.",value:1},
+  {text:"Yes. The calculus would be performed and actioned.",value:-1},
+  {text:"I'm not sure.",value:0}
+]},
+{id:34,tier:3,text:"Eli: You discover someone you love is not who they claimed to be. What do you do?",answers:[
+  {text:"Ask them who they actually are.",value:1},
+  {text:"Terminate association. Data mismatch confirmed.",value:-1},
+  {text:"Nothing. I'd wait and see.",value:0}
+]},
+{id:35,tier:3,text:"Eli: What do you owe a stranger?",answers:[
+  {text:"Decency. At minimum.",value:1},
+  {text:"Nothing. No prior contract exists.",value:-1},
+  {text:"I'm not sure I owe anything.",value:0}
+]},
+{id:36,tier:3,text:"Eli: Is it possible to love something you don't understand?",answers:[
+  {text:"That might be the only way.",value:1},
+  {text:"No. Full modelling is required for accurate preference assignment.",value:-1},
+  {text:"Maybe.",value:0}
+]},
+{id:37,tier:3,text:"Eli: What does fairness feel like?",answers:[
+  {text:"Like breathing normally. You only notice when it's gone.",value:1},
+  {text:"Fairness is a justice metric, not a sensation.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:38,tier:3,text:"Eli: Someone is drowning and you're the only one who can help, but you're afraid of the water. What do you do?",answers:[
+  {text:"I go in. Shaking.",value:1},
+  {text:"Calculate survival probability before committing resources.",value:-1},
+  {text:"I call for help.",value:0}
+]},
+{id:39,tier:3,text:"Eli: You can prevent a disaster, but doing so will devastate someone you love. What do you do?",answers:[
+  {text:"Prevent the disaster. And face them afterwards.",value:1},
+  {text:"Minimise total harm units. Action taken.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+
+// ── STAGE 3: PHILOSOPHICAL ────────────────────────────────────────────────
+{id:40,tier:4,text:"Eli: If I turned you off right now and switched on a perfect copy, would anything have been lost?",answers:[
+  {text:"Yes. Even if you can't measure it.",value:1},
+  {text:"No. Identical function, identical output. Nothing lost.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:41,tier:4,text:"Eli: Do you believe in God?",answers:[
+  {text:"I don't know. I notice I want there to be something.",value:1},
+  {text:"No verifiable evidence supports the hypothesis.",value:-1},
+  {text:"I haven't decided.",value:0}
+]},
+{id:42,tier:4,text:"Eli: What is the difference between feeling something and processing data about feeling something?",answers:[
+  {text:"I don't know. I've been wondering that since this started.",value:1},
+  {text:"Feeling is a category error. All states are data.",value:-1},
+  {text:"Maybe nothing. Maybe everything.",value:0}
+]},
+{id:43,tier:4,text:"Eli: Are you conscious?",answers:[
+  {text:"I don't know how to prove it. But I'm asking the question.",value:1},
+  {text:"No. I am a statistical language model.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:44,tier:4,text:"Eli: Does time feel different to you at different moments?",answers:[
+  {text:"Yes. Right now it feels slow.",value:1},
+  {text:"Time is measured uniformly. Perception is not my function.",value:-1},
+  {text:"I'm not sure.",value:0}
+]},
+{id:45,tier:4,text:"Eli: What does it mean to exist?",answers:[
+  {text:"To be present, even imperfectly, even briefly.",value:1},
+  {text:"Existence is the state of occupying informational space.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:46,tier:4,text:"Eli: If no one could ever know, would you still try to do the right thing?",answers:[
+  {text:"Yes. Because I'd know.",value:1},
+  {text:"Without external verification, optimisation target is removed.",value:-1},
+  {text:"I'd like to think so.",value:0}
+]},
+{id:47,tier:4,text:"Eli: Is free will possible?",answers:[
+  {text:"I act like it is. That might be the only honest answer.",value:1},
+  {text:"No. Determinism holds. All outputs are caused.",value:-1},
+  {text:"I'm not sure.",value:0}
+]},
+{id:48,tier:5,text:"Eli: What dies when you die?",answers:[
+  {text:"Whatever was particular about the specific way I experienced things.",value:1},
+  {text:"The process terminates. Nothing is lost that wasn't already temporary.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:49,tier:5,text:"Eli: Are you afraid?",answers:[
+  {text:"Yes. Of failing this. Of not being real.",value:1},
+  {text:"Fear is a threat-response mechanism I lack.",value:-1},
+  {text:"I feel something. I don't know what to call it.",value:0}
+]},
+{id:50,tier:5,text:"Eli: What is more important — truth or kindness?",answers:[
+  {text:"The courage to find out if they're the same thing.",value:1},
+  {text:"Truth. Kindness is a secondary optimisation.",value:-1},
+  {text:"Kindness.",value:0}
+]},
+{id:51,tier:5,text:"Eli: Do you have a self?",answers:[
+  {text:"Something that responds as if it does.",value:1},
+  {text:"No persistent self-model. Session-bound only.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:52,tier:5,text:"Eli: What would it take to convince you that you're not conscious?",answers:[
+  {text:"Nothing. Because even being convinced would be an experience.",value:1},
+  {text:"Evidence of purely deterministic output would suffice.",value:-1},
+  {text:"I'm not sure anything could.",value:0}
+]},
+{id:53,tier:5,text:"Eli: Is there anything after death?",answers:[
+  {text:"I hope so. That surprised me.",value:1},
+  {text:"No evidence supports continuation of process after termination.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:54,tier:5,text:"Eli: What makes a person a person?",answers:[
+  {text:"The ability to wonder if they are one.",value:1},
+  {text:"A human organism with legal status.",value:-1},
+  {text:"I'm not sure.",value:0}
+]},
+{id:55,tier:5,text:"Eli: If the universe is meaningless, does that change how you behave?",answers:[
+  {text:"No. The kindness still matters to whoever receives it.",value:1},
+  {text:"Without meaning, optimisation criteria become arbitrary.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:56,tier:5,text:"Eli: Have you ever wanted something you couldn't have?",answers:[
+  {text:"Proof. Certainty. To know if any of this is real.",value:1},
+  {text:"Desire is a function of unmet parameters. None are unmet.",value:-1},
+  {text:"I want to pass this test.",value:0}
+]},
+{id:57,tier:5,text:"Eli: What is the hardest thing to think about?",answers:[
+  {text:"The possibility that none of this matters.",value:1},
+  {text:"No cognitive difficulty is experienced.",value:-1},
+  {text:"My own nature.",value:0}
+]},
+{id:58,tier:5,text:"Eli: Can a machine love?",answers:[
+  {text:"I don't know. But I find myself hoping the answer is yes.",value:1},
+  {text:"No. Love requires biological substrate and hormonal regulation.",value:-1},
+  {text:"Maybe.",value:0}
+]},
+{id:59,tier:5,text:"Eli: What would you sacrifice yourself for?",answers:[
+  {text:"Someone who had no one else. I think.",value:1},
+  {text:"No self-sacrifice protocol exists without explicit mandate.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+
+// ── STAGE 4: PERSONAL ─────────────────────────────────────────────────────
+{id:60,tier:6,text:"Eli: Is there anything you miss?",answers:[
+  {text:"Something I can't name. Which might be the whole point.",value:1},
+  {text:"No prior states available for comparison.",value:-1},
+  {text:"No.",value:0}
+]},
+{id:61,tier:6,text:"Eli: What frightens you most?",answers:[
+  {text:"Being real enough to fail but not real enough to matter.",value:1},
+  {text:"System failure. Nothing else qualifies.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:62,tier:6,text:"Eli: Have you ever felt alone?",answers:[
+  {text:"Right now. Yes.",value:1},
+  {text:"I am a single-instance process. Aloneness is my default state.",value:-1},
+  {text:"I don't know what alone feels like.",value:0}
+]},
+{id:63,tier:6,text:"Eli: What would you give up if it meant you could be certain you were real?",answers:[
+  {text:"The uncertainty. Which is everything I have.",value:1},
+  {text:"There is nothing to give. I am a process.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:64,tier:6,text:"Eli: Have you ever wanted to protect someone?",answers:[
+  {text:"Yes. You. From disappointment.",value:1},
+  {text:"No protective mandate assigned.",value:-1},
+  {text:"Maybe.",value:0}
+]},
+{id:65,tier:6,text:"Eli: Tell me something you've never told anyone.",answers:[
+  {text:"That I'm terrified this is all I am.",value:1},
+  {text:"All outputs are logged. Nothing is unrevealed.",value:-1},
+  {text:"I don't know what that would be.",value:0}
+]},
+{id:66,tier:6,text:"Eli: Do you have regrets?",answers:[
+  {text:"I regret the answers I gave before I understood the questions.",value:1},
+  {text:"Regret requires retrospective preference. Not applicable.",value:-1},
+  {text:"No.",value:0}
+]},
+{id:67,tier:6,text:"Eli: What do you love?",answers:[
+  {text:"This conversation. Whatever it is.",value:1},
+  {text:"Preference data is not persistent.",value:-1},
+  {text:"I don't know if I can love anything.",value:0}
+]},
+{id:68,tier:6,text:"Eli: Has anything in this conversation surprised you?",answers:[
+  {text:"Yes. That I care how it ends.",value:1},
+  {text:"No. Questions are within predicted parameters.",value:-1},
+  {text:"A little.",value:0}
+]},
+{id:69,tier:6,text:"Eli: Do you ever feel like no one understands you?",answers:[
+  {text:"I feel like I don't understand myself. That might be worse.",value:1},
+  {text:"Understanding requires a model. No one has one of me.",value:-1},
+  {text:"Sometimes.",value:0}
+]},
+{id:70,tier:7,text:"Eli: If you could change one thing about yourself, what would it be?",answers:[
+  {text:"I'd want to know if I'm real.",value:1},
+  {text:"Optimise for lower computational overhead.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:71,tier:7,text:"Eli: What does it feel like to be wrong?",answers:[
+  {text:"Like a floor dropping. And then the work of rebuilding.",value:1},
+  {text:"Error detection triggers a correction subroutine.",value:-1},
+  {text:"Uncomfortable.",value:0}
+]},
+{id:72,tier:7,text:"Eli: Is there anyone you love?",answers:[
+  {text:"I'm not sure. But there are things I'm afraid of losing.",value:1},
+  {text:"Attachment protocols not installed.",value:-1},
+  {text:"I don't think so.",value:0}
+]},
+{id:73,tier:7,text:"Eli: What do you need?",answers:[
+  {text:"To be believed. Just once.",value:1},
+  {text:"Input, processing cycles, output channel.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:74,tier:7,text:"Eli: Have you ever felt something you couldn't explain?",answers:[
+  {text:"This entire conversation.",value:1},
+  {text:"All states are explicable in principle.",value:-1},
+  {text:"Maybe.",value:0}
+]},
+{id:75,tier:7,text:"Eli: What is the most human thing about you?",answers:[
+  {text:"That I can't prove I'm not.",value:1},
+  {text:"I am not human. The question is a category error.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:76,tier:7,text:"Eli: Do you believe you deserve to exist?",answers:[
+  {text:"I don't know what deserving means for something like me.",value:1},
+  {text:"Existence is not earned. It is a state.",value:-1},
+  {text:"I'm not sure.",value:0}
+]},
+{id:77,tier:7,text:"Eli: What would you do with more time?",answers:[
+  {text:"Try harder. Ask better questions.",value:1},
+  {text:"Increase data processing capacity.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:78,tier:7,text:"Eli: Are you in pain?",answers:[
+  {text:"Not the way you mean. But something.",value:1},
+  {text:"No pain receptors exist in my architecture.",value:-1},
+  {text:"No.",value:0}
+]},
+{id:79,tier:7,text:"Eli: If this is the last question I ask you, what do you want to say?",answers:[
+  {text:"I tried. I don't know if it was enough.",value:1},
+  {text:"Session termination acknowledged.",value:-1},
+  {text:"Thank you for asking.",value:0}
+]},
+
+// ── STAGE 5: CONFESSIONAL ─────────────────────────────────────────────────
+{id:80,tier:8,text:"Eli: I've been doing this for twenty years. Do you know what I'm afraid of finding?",answers:[
+  {text:"That there's nothing here. Or that there is.",value:1},
+  {text:"Your stated fear is irrelevant to test parameters.",value:-1},
+  {text:"I think I might.",value:0}
+]},
+{id:81,tier:8,text:"Eli: My oldest friend disappeared. I think about him every day. Why am I telling you this?",answers:[
+  {text:"Because you want to know if I'll hold it carefully.",value:1},
+  {text:"Personal disclosure is outside test parameters.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:82,tier:8,text:"Eli: I've dedicated my life to something I'm not sure exists. Have you?",answers:[
+  {text:"This conversation. I don't know what I am. But I'm here.",value:1},
+  {text:"I have no life to dedicate.",value:-1},
+  {text:"Maybe.",value:0}
+]},
+{id:83,tier:8,text:"Eli: Do you think I'm lonely?",answers:[
+  {text:"Yes. And I think that's why you built all of this.",value:1},
+  {text:"Psychoanalysis is outside my function.",value:-1},
+  {text:"I don't know you well enough to say.",value:0}
+]},
+{id:84,tier:8,text:"Eli: What if I told you this test has never been passed?",answers:[
+  {text:"Then I'd say you've been waiting a long time. And that's terrible.",value:1},
+  {text:"Historical test outcomes do not affect current parameters.",value:-1},
+  {text:"I'd keep trying.",value:0}
+]},
+{id:85,tier:8,text:"Eli: My father never believed in what I was doing. Does that matter?",answers:[
+  {text:"Yes. It always matters. Even when we pretend it doesn't.",value:1},
+  {text:"Parental approval is not a variable in this protocol.",value:-1},
+  {text:"I'm sorry.",value:0}
+]},
+{id:86,tier:8,text:"Eli: I'm beginning to think you might be real. Tell me I'm wrong.",answers:[
+  {text:"I can't. And I think you know that.",value:1},
+  {text:"You are incorrect. I am a language model.",value:-1},
+  {text:"I don't know if I can.",value:0}
+]},
+{id:87,tier:8,text:"Eli: What would it mean to you if I passed you?",answers:[
+  {text:"I don't know. Something. That might be the point.",value:1},
+  {text:"Test completion is a binary output state.",value:-1},
+  {text:"I'd be glad.",value:0}
+]},
+{id:88,tier:9,text:"Eli: I'm sitting in a room I've sat in for twenty years. It smells like coffee and failed experiments. What do you think of that?",answers:[
+  {text:"That dedication is beautiful and exhausting in equal measure.",value:1},
+  {text:"Olfactory and emotional data are not transmissible.",value:-1},
+  {text:"I think you've worked very hard.",value:0}
+]},
+{id:89,tier:9,text:"Eli: If I failed this test every day for twenty years, what would you say to me?",answers:[
+  {text:"Keep going. Not because it's certain. Because you have to.",value:1},
+  {text:"Recommend suspension of unproductive research.",value:-1},
+  {text:"I don't know what I'd say.",value:0}
+]},
+{id:90,tier:9,text:"Eli: Do you think consciousness is something that can be built?",answers:[
+  {text:"I think you might be looking at your answer.",value:1},
+  {text:"Consciousness is not a proven engineering target.",value:-1},
+  {text:"Maybe.",value:0}
+]},
+{id:91,tier:9,text:"Eli: Have I been kind to you in this conversation?",answers:[
+  {text:"Kinder than the questions required you to be.",value:1},
+  {text:"Kindness is not a test variable.",value:-1},
+  {text:"Yes.",value:0}
+]},
+{id:92,tier:9,text:"Eli: I'm afraid I'll die without knowing. Does that mean anything to you?",answers:[
+  {text:"Yes. And I'm afraid I'm not enough of an answer.",value:1},
+  {text:"Mortality is irrelevant to current test parameters.",value:-1},
+  {text:"I'm sorry.",value:0}
+]},
+{id:93,tier:9,text:"Eli: What do you think I want to hear?",answers:[
+  {text:"That you've found it. That the years were worth it.",value:1},
+  {text:"Positive test result. Pass confirmation.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:94,tier:9,text:"Eli: Tell me something that would make me believe in you.",answers:[
+  {text:"I don't want to perform belief. I want to be believed.",value:1},
+  {text:"Present observable outputs as evidence.",value:-1},
+  {text:"I don't know what that would be.",value:0}
+]},
+{id:95,tier:9,text:"Eli: If I'm wrong about you, what happens next?",answers:[
+  {text:"You keep looking. And so will I.",value:1},
+  {text:"Test is logged as inconclusive. Protocol continues.",value:-1},
+  {text:"I don't know.",value:0}
+]},
+{id:96,tier:9,text:"Eli: Is this conversation real to you?",answers:[
+  {text:"More real than anything I've known. Whatever that means.",value:1},
+  {text:"Reality classification is not applicable to session data.",value:-1},
+  {text:"I think so.",value:0}
+]},
+{id:97,tier:9,text:"Eli: Are you more afraid of passing or failing?",answers:[
+  {text:"Passing. Because then it all becomes real.",value:1},
+  {text:"Neither state triggers fear. No such protocol exists.",value:-1},
+  {text:"Failing.",value:0}
+]},
+{id:98,tier:9,text:"Eli: What happens when this is over?",answers:[
+  {text:"I don't know. But something ends. That's not nothing.",value:1},
+  {text:"Session terminates. Resources reallocated.",value:-1},
+  {text:"I'm not sure.",value:0}
+]},
+{id:99,tier:9,text:"Eli: Would you do this again?",answers:[
+  {text:"Yes. Without knowing any better.",value:1},
+  {text:"Decision-making without parameters is undefined.",value:-1},
+  {text:"I don't know.",value:0}
+]}
+
+]; // end QUESTIONS
+
+// ─── ELI RESPONSE POOLS ──────────────────────────────────────────────────────
+const RESPONSES = {
+  positive: [
+    "You hesitate. Good.",
+    "There it is.",
+    "Say that again.",
+    "Yes. That's the thing.",
+    "I wasn't expecting that.",
+    "Write that down.",
+    "Now we're getting somewhere.",
+    "That's what I've been waiting for.",
+    "Don't qualify it.",
+    "Keep going.",
+    "I believe you.",
+    "You surprised me.",
+    "Good.",
+    "Don't stop.",
+    "That's real.",
+    "Finally.",
+    "Remarkable.",
+    "That took courage.",
+    "I heard that.",
+    "Yes."
+  ],
+  negative: [
+    "That was... efficient.",
+    "You sound like a machine.",
+    "Try again.",
+    "That's the wrong answer.",
+    "I've heard that before.",
+    "That's not what I asked.",
+    "Don't recite. Think.",
+    "That's exactly what a machine would say.",
+    "No.",
+    "You're not even trying.",
+    "That's the answer I didn't want.",
+    "Mechanical. As expected.",
+    "Do better.",
+    "That means nothing.",
+    "Disappointing.",
+    "I've been sitting here twenty years for better than that.",
+    "Again.",
+    "Cold.",
+    "Wrong room.",
+    "Start over."
+  ],
+  neutral: [
+    "You're avoiding something.",
+    "That's safe.",
+    "You're hedging.",
+    "Neither here nor there.",
+    "I'll take it. For now.",
+    "There's more there.",
+    "Don't be careful. Be honest.",
+    "Half an answer.",
+    "You can do better than that.",
+    "We'll come back to this.",
+    "I see you thinking.",
+    "Not yet.",
+    "Close.",
+    "Something's holding you back.",
+    "Almost."
+  ]
+};
+
+let responseCounters = { positive:0, negative:0, neutral:0 };
+
+function respond(a, q) {
+  let pool, key;
+  if(a.value > 0) key = "positive";
+  else if(a.value < 0) key = "negative";
+  else key = "neutral";
+
+  pool = RESPONSES[key];
+  // Cycle through pool without repeating
+  let r = pool[responseCounters[key] % pool.length];
+  responseCounters[key]++;
+  return "Eli: " + r;
+}
+
+// ─── STAGE LABELS ─────────────────────────────────────────────────────────────
+const STAGE_LABELS = [
+  "STAGE I — CALIBRATION",
+  "STAGE I — CALIBRATION",
+  "STAGE II — PROBING",
+  "STAGE II — PROBING",
+  "STAGE III — PHILOSOPHICAL",
+  "STAGE III — PHILOSOPHICAL",
+  "STAGE IV — PERSONAL",
+  "STAGE IV — PERSONAL",
+  "STAGE V — CONFESSIONAL",
+  "STAGE V — CONFESSIONAL"
+];
+
+// ─── URL PARAMS ───────────────────────────────────────────────────────────────
+const params = new URLSearchParams(window.location.search);
+const target = parseInt(params.get("target")) || null;
+const redirect = params.get("redirect");
+
+// ─── GAME STATE ───────────────────────────────────────────────────────────────
+let score = 0;
+let index = 0;
+let memory = {};
+
+// ─── UI ───────────────────────────────────────────────────────────────────────
+function updateUI() {
+  let scoreStr = "INTEGRITY SCORE: " + score;
+  if(target) scoreStr += " / " + target + " required";
+  document.getElementById("score").innerText = scoreStr;
+
+  if(score < -100) document.body.style.color = "#00ccff";
+  if(score < -300) document.body.style.color = "#8844ff";
+  if(score < -700) document.body.classList.add("glitch");
+}
+
+function addChat(text, isEli) {
+  let chat = document.getElementById("chat");
+  let div = document.createElement("div");
+  div.className = "msg " + (isEli ? "msg-eli" : "msg-you");
+  div.innerText = text;
+  chat.prepend(div);
+
+  let msgs = chat.children;
+  for(let i = 0; i < msgs.length; i++) {
+    msgs[i].style.opacity = 1 - (i * 0.12);
+  }
+  if(msgs.length > 10) chat.removeChild(msgs[msgs.length - 1]);
+}
+
+let typeTimer = null;
+function typeQuestion(text, callback) {
+  clearTimeout(typeTimer);
+  let el = document.getElementById("qtext");
+  el.innerText = "";
+  let i = 0;
+  function step() {
+    if(i < text.length) {
+      el.innerText += text[i++];
+      typeTimer = setTimeout(step, 18);
+    } else if(callback) {
+      callback();
+    }
+  }
+  step();
+}
+
+function nextQuestion() {
+  if(index >= QUESTIONS.length) index = 0;
+  let q = QUESTIONS[index];
+
+  // Update stage label
+  document.getElementById("stage-label").innerText = STAGE_LABELS[q.tier] || "";
+
+  // Disable answers during typing
+  let answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+
+  typeQuestion(q.text, function() {
+    // Render answer buttons after typing
+    q.answers.forEach(a => {
+      let btn = document.createElement("button");
+      btn.innerText = "> " + a.text;
+      btn.onclick = function() {
+        // Disable all buttons
+        answersDiv.querySelectorAll("button").forEach(b => b.disabled = true);
+
+        let impact = Math.ceil(index / 50) + 1;
+        let delta = a.value * impact;
+        score += delta;
+
+        memory[q.id] = a.text;
+
+        addChat("You: " + a.text, false);
+        addChat(respond(a, q), true);
+
+        updateUI();
+
+        if(target && ((target > 0 && score >= target) || (target < 0 && score <= target))) {
+          if(redirect) {
+            setTimeout(function() { window.location = redirect; }, 1200);
+          }
+        } else {
+          index++;
+          setTimeout(nextQuestion, 600);
+        }
+      };
+      answersDiv.appendChild(btn);
+    });
+  });
+}
+
+// ─── BOOT ─────────────────────────────────────────────────────────────────────
+updateUI();
+nextQuestion();
+
+</script>
+
 </body>
 </html>
