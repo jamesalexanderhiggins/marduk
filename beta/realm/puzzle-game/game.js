@@ -18,7 +18,7 @@
   const lineHue = Number(params.get('hue') || '205');
   const queue = parseQueue();
   let queueIndex = 0;
-  const VERSION = 'v19';
+  const VERSION = 'v20';
 
   function parseQueue() {
     if (rangeParam && /^\d+\-\d+$/.test(rangeParam)) {
@@ -106,9 +106,13 @@
     const t = phase01(level);
     return lerp(92, 54, t);
   }
-  function assistanceForLevel(level) {
+  function magnetWindowForLevel(level) {
     const t = phase01(level);
-    return lerp(0.12, 0.02, t);
+    return lerp(0.05, 0.50, t);
+  }
+  function magnetStrengthForLevel(level) {
+    const t = phase01(level);
+    return lerp(0.06, 0.18, t);
   }
 
   function initBackground() {
@@ -313,7 +317,7 @@
     state.target.x = randAngle(1.1);
     state.target.y = randAngle(2.7);
     state.target.z = randAngle(4.5);
-    state.target.w = 0.55 + rand(seed + 5.9) * 1.00;
+    state.target.w = (rand(seed + 5.9) * 2 - 1) * 0.55;
 
     const offsetMin = lerp(1.0, 0.85, state.phase);
     const pickStart = (targetAngle, s) => {
@@ -323,7 +327,7 @@
     state.player.x = pickStart(state.target.x, 6.1);
     state.player.y = pickStart(state.target.y, 7.9);
     state.player.z = pickStart(state.target.z, 9.7);
-    state.player.w = clamp(state.target.w + (signedRand(seed + 11.3) >= 0 ? 1 : -1) * (0.22 + rand(seed + 13.1) * 0.18), 0.55, 1.55);
+    state.player.w = clamp(state.target.w + (signedRand(seed + 11.3) >= 0 ? 1 : -1) * (0.22 + rand(seed + 13.1) * 0.25), -0.9, 0.9);
 
     sliderX.value = String(angleToSlider(state.player.x));
     sliderY.value = String(angleToSlider(state.player.y));
@@ -555,19 +559,22 @@
     const dy = angleDiff(state.player.y, state.target.y);
     const dz = angleDiff(state.player.z, state.target.z);
     const dw = Math.abs(state.player.w - state.target.w);
-    const score = 1 - clamp((dx + dy + dz + dw * 0.95) / (tol * 4.4), 0, 1);
+    const score = 1 - clamp((dx + dy + dz + dw * 1.25) / (tol * 4.55), 0, 1);
     return Math.pow(score, 1.4);
   }
 
   function applyAssist(dt) {
-    const assist = assistanceForLevel(state.level);
-    const factor = coherence();
-    if (factor < 0.5) return;
-    const pull = assist * (factor - 0.48) * dt * 0.0022;
+    const c = coherence();
+    const window = magnetWindowForLevel(state.level);
+    const activation = 1 - window;
+    if (c < activation) return;
+    const strength = magnetStrengthForLevel(state.level);
+    const normalized = clamp((c - activation) / Math.max(0.0001, window), 0, 1);
+    const pull = strength * Math.pow(normalized, 1.35) * dt * 0.0024;
     state.player.x = wrapAngle(mix(state.player.x, state.target.x, pull));
     state.player.y = wrapAngle(mix(state.player.y, state.target.y, pull));
     state.player.z = wrapAngle(mix(state.player.z, state.target.z, pull));
-    state.player.w = mix(state.player.w, state.target.w, pull * 0.70);
+    state.player.w = mix(state.player.w, state.target.w, pull * 0.95);
     sliderX.value = String(angleToSlider(state.player.x));
     sliderY.value = String(angleToSlider(state.player.y));
     sliderZ.value = String(angleToSlider(state.player.z));
@@ -750,7 +757,7 @@
     ctx.restore();
   }
 
-  function drawMask(mesh, rot, style, scale, jitter = 0, depthScale = 1) {
+  function drawMask(mesh, rot, style, scale, jitter = 0, zOffset = 0) {
     const worldX = state.worldTilt;
     const worldY = state.worldSpin;
     const worldZ = state.worldRoll;
@@ -762,8 +769,7 @@
       for (let i = 0; i < line.length; i++) {
         const point = line[i];
         if (!point) { open = false; continue; }
-        const relief = 0.35 + depthScale * 1.15;
-        const depthPoint = { x: point.x + point.z * (depthScale - 1) * 0.22, y: point.y, z: point.z * relief };
+        const depthPoint = { x: point.x, y: point.y, z: point.z * 1.15 + zOffset * 0.65 };
         const local = rotatePoint(depthPoint, rot.x, rot.y, rot.z);
         const world = rotatePoint(local, worldX, worldY, worldZ);
         const jit = jitter ? {
@@ -865,7 +871,7 @@
     state.player.x = sliderToAngle(sliderX.value);
     state.player.y = sliderToAngle(sliderY.value);
     state.player.z = sliderToAngle(sliderZ.value);
-    state.player.w = clamp(Number(sliderW.value) / 100, 0.55, 1.55);
+    state.player.w = clamp(Number(sliderW.value) / 100, -1.0, 1.0);
   }
 
   function setZoomFromSlider(v) {
