@@ -39,8 +39,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:fl
 .nav-links{display:flex;gap:28px;}
 .nav-links a{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.15em;color:var(--text-dim);text-decoration:none;text-transform:uppercase;transition:color 0.3s;}
 .nav-links a:hover{color:var(--gold);}
-.nav-links a.nav-map-btn{color:var(--gold);border:1px solid rgba(201,168,76,0.35);padding:6px 14px;letter-spacing:0.2em;transition:all 0.3s;}
-.nav-links a.nav-map-btn:hover{border-color:var(--gold);background:rgba(201,168,76,0.08);box-shadow:0 0 12px rgba(201,168,76,0.25);}
 
 /* HERO */
 #hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px 24px 80px;position:relative;}
@@ -59,22 +57,109 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:fl
 .btn-ghost:hover{border-color:var(--gold);box-shadow:var(--glow);color:var(--gold2);}
 .hero-map{margin-top:60px;opacity:0;animation:fadeUp 1.2s 2.2s forwards;width:100%;max-width:860px;}
 .gateways{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:18px;align-items:stretch;}
-.gateway{text-decoration:none;border:1px solid var(--border);padding:28px 18px;background:linear-gradient(135deg,rgba(13,17,25,0.6),rgba(18,22,32,0.8));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:all 0.35s;color:var(--text);}
-.gateway:hover{border-color:var(--gold);background:linear-gradient(135deg,rgba(201,168,76,0.06),rgba(201,168,76,0.12));box-shadow:var(--glow);transform:translateY(-3px);}
-.gateway-arrow{font-family:'Cinzel Decorative',serif;font-size:44px;color:var(--gold);line-height:1;text-shadow:var(--glow);transition:transform 0.4s;}
-.gateway:hover .gateway-arrow{transform:scale(1.15);}
-.gateway-meta{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;}
-.gateway-path{font-family:'EB Garamond',serif;font-size:15px;font-style:italic;color:var(--text-dim);}
-.gateway-call{border:1px solid var(--border);padding:28px 20px;background:linear-gradient(135deg,rgba(201,168,76,0.05),rgba(126,184,212,0.04));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;}
-.gc-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;}
-.gc-title{font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3vw,26px);color:var(--text);line-height:1.3;}
-.gc-sub{font-family:'EB Garamond',serif;font-size:14px;font-style:italic;color:var(--text-dim);line-height:1.6;max-width:280px;}
-.hero-down{margin-top:48px;display:flex;justify-content:center;opacity:0;animation:fadeUp 1s 2.6s forwards;}
-.hero-down-gate{text-decoration:none;border:1px solid var(--border);padding:18px 48px;background:linear-gradient(180deg,rgba(13,17,25,0.6),rgba(18,22,32,0.8));display:flex;flex-direction:column;align-items:center;gap:6px;transition:all 0.35s;color:var(--text);}
-.hero-down-gate:hover{border-color:var(--gold);box-shadow:var(--glow);transform:translateY(3px);}
-.hero-down-gate .gateway-arrow{font-size:32px;}
-.hero-down-gate .gateway-meta{font-size:10px;}
-.hero-down-gate .gateway-path{font-size:13px;}
+/* ── GATEWAY PANELS v8 ──────────────────────── */
+.gateways{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:16px;align-items:stretch;}
+.gateway{
+  text-decoration:none;position:relative;overflow:hidden;
+  border:1px solid rgba(201,168,76,0.2);
+  background:rgba(7,9,16,0.92);
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  gap:0;padding:0;transition:all 0.4s;color:var(--text);
+  min-height:260px;
+}
+.gateway::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(201,168,76,0.04),transparent 60%);
+  opacity:0;transition:opacity 0.4s;pointer-events:none;}
+.gateway:hover{transform:translateY(-4px);border-color:rgba(201,168,76,0.55);
+  box-shadow:0 0 30px rgba(201,168,76,0.12),0 0 80px rgba(201,168,76,0.05);}
+.gateway:hover::before{opacity:1;}
+/* West gate — masklock amber */
+.gateway.gate-west{border-color:rgba(201,168,76,0.22);}
+.gateway.gate-west:hover{border-color:rgba(201,168,76,0.7);
+  box-shadow:0 0 30px rgba(201,168,76,0.2),0 0 80px rgba(201,168,76,0.08);}
+/* East gate — turing spirit blue */
+.gateway.gate-east{border-color:rgba(126,184,212,0.22);}
+.gateway.gate-east:hover{border-color:rgba(126,184,212,0.65);
+  box-shadow:0 0 30px rgba(126,184,212,0.18),0 0 80px rgba(126,184,212,0.06);}
+/* Animated border pulse */
+.gate-pulse{position:absolute;inset:0;pointer-events:none;
+  border:1px solid transparent;animation:gatePulse 3s ease-in-out infinite;}
+.gate-west .gate-pulse{animation-name:gatePulseGold;}
+.gate-east .gate-pulse{animation-name:gatePulseSpirit;}
+/* Canvas for in-gate animation */
+.gate-canvas{width:100%;height:130px;display:block;flex-shrink:0;}
+/* Gate content */
+.gate-body{padding:14px 18px 22px;display:flex;flex-direction:column;
+  align-items:center;gap:8px;text-align:center;flex:1;justify-content:flex-end;}
+.gate-direction{font-family:'Cinzel Decorative',serif;font-size:36px;
+  color:var(--gold);line-height:1;text-shadow:var(--glow);
+  transition:transform 0.4s,text-shadow 0.4s;}
+.gate-east .gate-direction{color:var(--spirit);text-shadow:var(--spirit-glow);}
+.gateway:hover .gate-direction{transform:scale(1.15);}
+.gate-meta{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.35em;
+  color:var(--gold);text-transform:uppercase;}
+.gate-east .gate-meta{color:var(--spirit);}
+.gate-desc{font-family:'EB Garamond',serif;font-size:13px;font-style:italic;
+  color:var(--text-dim);line-height:1.5;}
+.gate-tag{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.25em;
+  text-transform:uppercase;padding:3px 10px;
+  border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.5);
+  margin-top:4px;transition:all 0.3s;}
+.gate-east .gate-tag{border-color:rgba(126,184,212,0.25);color:rgba(126,184,212,0.5);}
+.gateway:hover .gate-tag{border-color:rgba(201,168,76,0.6);color:rgba(201,168,76,0.9);}
+.gate-east:hover .gate-tag{border-color:rgba(126,184,212,0.6);color:rgba(126,184,212,0.9);}
+/* Centre call */
+.gateway-call{border:1px solid rgba(201,168,76,0.18);
+  padding:24px 20px;
+  background:linear-gradient(160deg,rgba(201,168,76,0.05),rgba(126,184,212,0.04));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:12px;text-align:center;position:relative;overflow:hidden;}
+.gc-hex{position:absolute;font-size:180px;opacity:0.03;
+  font-family:'Cinzel Decorative',serif;color:var(--gold);
+  animation:gcHexSpin 40s linear infinite;user-select:none;pointer-events:none;}
+.gc-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.4em;
+  color:var(--gold);text-transform:uppercase;}
+.gc-title{font-family:'Cinzel Decorative',serif;font-size:clamp(16px,2.6vw,24px);
+  color:var(--text);line-height:1.3;}
+.gc-sub{font-family:'EB Garamond',serif;font-size:13px;font-style:italic;
+  color:var(--text-dim);line-height:1.6;max-width:240px;}
+.gc-icons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:4px;}
+.gc-icon{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.15em;
+  padding:4px 8px;border:1px solid rgba(201,168,76,0.15);
+  color:rgba(201,168,76,0.4);text-transform:uppercase;}
+/* Down gate */
+.hero-down{margin-top:40px;display:flex;justify-content:center;
+  opacity:0;animation:fadeUp 1s 2.6s forwards;}
+.hero-down-gate{
+  text-decoration:none;position:relative;overflow:hidden;
+  border:1px solid rgba(255,107,43,0.25);padding:0;
+  background:rgba(7,9,16,0.92);
+  display:flex;flex-direction:column;align-items:center;
+  gap:0;transition:all 0.4s;color:var(--text);min-width:260px;
+}
+.hero-down-gate:hover{border-color:rgba(255,107,43,0.7);
+  box-shadow:0 0 30px rgba(255,107,43,0.15);transform:translateY(4px);}
+.gate-down-canvas{width:100%;height:60px;display:block;}
+.gate-down-body{padding:10px 40px 16px;display:flex;flex-direction:column;
+  align-items:center;gap:4px;}
+.gate-down-arrow{font-family:'Cinzel Decorative',serif;font-size:28px;
+  color:var(--ember);text-shadow:var(--ember-glow);
+  transition:transform 0.4s;}
+.hero-down-gate:hover .gate-down-arrow{transform:scale(1.15) translateY(2px);}
+.gate-down-meta{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;
+  color:var(--ember);text-transform:uppercase;}
+.gate-down-desc{font-family:'EB Garamond',serif;font-size:12px;font-style:italic;
+  color:var(--text-dim);}
+/* Keyframes */
+@keyframes gatePulseGold{
+  0%,100%{border-color:transparent;}
+  50%{border-color:rgba(201,168,76,0.2);box-shadow:inset 0 0 30px rgba(201,168,76,0.04);}
+}
+@keyframes gatePulseSpirit{
+  0%,100%{border-color:transparent;}
+  50%{border-color:rgba(126,184,212,0.18);box-shadow:inset 0 0 30px rgba(126,184,212,0.04);}
+}
+@keyframes gcHexSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 @media(max-width:720px){
   .gateways{grid-template-columns:1fr;}
   .gateway-arrow{font-size:32px;}
@@ -269,7 +354,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24p
     <a href="#library">Library</a>
     <a href="#chapters">Chapters</a>
     <a href="#reviews">Reviews</a>
-    <a href="realm/" class="nav-map-btn">⬡ MAP</a>
+    <a href="realm/" style="color:var(--gold);border:1px solid rgba(201,168,76,0.3);padding:5px 12px;letter-spacing:0.2em;transition:all 0.3s;" onmouseover="this.style.background='rgba(201,168,76,0.08)';this.style.borderColor='var(--gold)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(201,168,76,0.3)'">⬡ Enter the Realm</a>
   </div>
 </nav>
 
@@ -291,20 +376,42 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24p
   </div>
   <div class="hero-map">
     <div class="gateways">
-      <a href="realm/#gate=left" class="gateway gate-left">
-        <div class="gateway-arrow">←</div>
-        <div class="gateway-meta">Enter the Realm</div>
-        <div class="gateway-path">by the Western Path</div>
+      <!-- WEST GATE — Masklock amber -->
+      <a href="realm/#gate=left" class="gateway gate-west">
+        <div class="gate-pulse"></div>
+        <canvas class="gate-canvas" id="gateWestCanvas"></canvas>
+        <div class="gate-body">
+          <div class="gate-direction">←</div>
+          <div class="gate-meta">The Western Gate</div>
+          <div class="gate-desc">Ancient locks. Turning dials.<br>Knowledge is the key.</div>
+          <div class="gate-tag">🔒 Masklock Puzzles</div>
+        </div>
       </a>
+
+      <!-- CENTRE CALL -->
       <div class="gateway-call">
-        <div class="gc-label">✦ Will you enter the ✦</div>
-        <div class="gc-title">Informational Realm?</div>
-        <div class="gc-sub">Treasures and knowledge untold wait beyond the door. Some paths are safe. Others are not.</div>
+        <div class="gc-hex">⬡</div>
+        <div class="gc-label">✦ Enter the ✦</div>
+        <div class="gc-title">Informational Realm</div>
+        <div class="gc-sub">Keys. Tests. Hidden rooms. The further you go, the stranger it becomes.</div>
+        <div class="gc-icons">
+          <span class="gc-icon">🔒 Lock Games</span>
+          <span class="gc-icon">⚡ Turing Tests</span>
+          <span class="gc-icon">🗝 Keys</span>
+          <span class="gc-icon">👁 Marduk View</span>
+        </div>
       </div>
-      <a href="realm/#gate=right" class="gateway gate-right">
-        <div class="gateway-arrow">→</div>
-        <div class="gateway-meta">Enter the Realm</div>
-        <div class="gateway-path">by the Eastern Path</div>
+
+      <!-- EAST GATE — Turing blue -->
+      <a href="realm/#gate=right" class="gateway gate-east">
+        <div class="gate-pulse"></div>
+        <canvas class="gate-canvas" id="gateEastCanvas"></canvas>
+        <div class="gate-body">
+          <div class="gate-direction" style="color:var(--spirit);text-shadow:var(--spirit-glow);">→</div>
+          <div class="gate-meta" style="color:var(--spirit);">The Eastern Gate</div>
+          <div class="gate-desc">Prove you are human.<br>Or convincing enough.</div>
+          <div class="gate-tag" style="border-color:rgba(126,184,212,0.25);color:rgba(126,184,212,0.5);">⚡ Turing Test Gates</div>
+        </div>
       </a>
     </div>
 
@@ -428,9 +535,12 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24p
   </div>
   <div class="hero-down">
     <a href="realm/#gate=down" class="hero-down-gate">
-      <div class="gateway-arrow">↓</div>
-      <div class="gateway-meta">Enter the Realm</div>
-      <div class="gateway-path">by the Southern Path</div>
+      <canvas class="gate-down-canvas" id="gateDownCanvas"></canvas>
+      <div class="gate-down-body">
+        <div class="gate-down-arrow">↓</div>
+        <div class="gate-down-meta">The Southern Gate</div>
+        <div class="gate-down-desc">Through memory. Through loss. Through what the ghosts left behind.</div>
+      </div>
     </a>
   </div>
 </section>
@@ -445,7 +555,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 24p
     <a href="#hero">Back to Top</a>
   </div>
   <div class="footer-copy">Links activate as chapters are published</div>
-  <div class="version">v7.2 · Mardukverse · Informational Realm</div>
+  <div class="version">v8.0 · Mardukverse · Informational Realm</div>
 </footer>
 
 <!-- CHAPTER POPUP -->
@@ -914,7 +1024,139 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-// Konami code easter egg — different message
+// ═══════════════════════════════════════════════
+// GATE CANVAS ANIMATIONS v8
+// ═══════════════════════════════════════════════
+(function initGateCanvases(){
+  // West — amber masklock dials
+  function drawWest(cv){
+    const ctx=cv.getContext('2d');let t=0;
+    function size(){cv.width=cv.offsetWidth||300;cv.height=130;}
+    size();
+    function frame(){requestAnimationFrame(frame);t+=0.012;
+      ctx.clearRect(0,0,cv.width,cv.height);
+      const cx=cv.width/2,cy=65;
+      [50,34,20].forEach((r,i)=>{
+        ctx.save();ctx.translate(cx,cy);
+        ctx.rotate(t*(i%2===0?1:-1)*0.4*(i+1)*0.5);
+        const segs=6+i*4;
+        for(let s=0;s<segs;s++){
+          const a=s/segs*Math.PI*2;
+          const p=0.25+0.5*Math.sin(t*2+s+i*1.3);
+          ctx.beginPath();ctx.arc(0,0,r,a,a+Math.PI*2/segs*0.65);
+          ctx.strokeStyle=`rgba(201,168,76,${p})`;
+          ctx.lineWidth=i===0?2.5:1.5;ctx.stroke();
+        }
+        ctx.restore();
+      });
+      // Keyhole
+      ctx.save();ctx.translate(cx,cy);
+      const kb=5+Math.sin(t*3)*0.6;
+      ctx.beginPath();ctx.arc(0,-2,kb,0,Math.PI*2);
+      ctx.fillStyle=`rgba(201,168,76,${0.5+0.3*Math.sin(t*2)})`;ctx.fill();
+      ctx.beginPath();ctx.moveTo(-kb*0.55,0);ctx.lineTo(kb*0.55,0);
+      ctx.lineTo(kb*0.38,kb*1.6);ctx.lineTo(-kb*0.38,kb*1.6);ctx.closePath();ctx.fill();
+      ctx.restore();
+      // Floating cipher chars
+      ctx.font='9px monospace';
+      for(let i=0;i<10;i++){
+        const x=14+((Math.sin(t*0.28+i*1.3)*0.5+0.5)*(cv.width-28));
+        const y=8+((Math.sin(t*0.19+i*2.1)*0.5+0.5)*115);
+        ctx.fillStyle=`rgba(201,168,76,${0.06+0.08*Math.abs(Math.sin(t+i))})`;
+        ctx.fillText(String.fromCharCode(48+Math.floor(Math.sin(t*0.7+i)*24+24)),x,y);
+      }
+    }
+    frame();
+  }
+
+  // East — spirit blue neural net + Turing eye
+  function drawEast(cv){
+    const ctx=cv.getContext('2d');let t=0;
+    function size(){cv.width=cv.offsetWidth||300;cv.height=130;}
+    size();
+    const nodes=Array.from({length:14},()=>({
+      x:0.1+Math.random()*0.8,y:0.1+Math.random()*0.8,
+      vx:(Math.random()-0.5)*0.0018,vy:(Math.random()-0.5)*0.0018,
+      ph:Math.random()*Math.PI*2,
+    }));
+    function frame(){requestAnimationFrame(frame);t+=0.012;
+      ctx.clearRect(0,0,cv.width,cv.height);
+      const W=cv.width,H=cv.height;
+      nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;
+        if(n.x<0.05||n.x>0.95)n.vx*=-1;if(n.y<0.05||n.y>0.95)n.vy*=-1;});
+      nodes.forEach((a,i)=>nodes.forEach((b,j)=>{
+        if(j<=i)return;const d=Math.hypot((a.x-b.x)*W,(a.y-b.y)*H);
+        if(d>90)return;
+        const p=Math.sin(t*1.5+i+j)*0.5+0.5;
+        ctx.beginPath();ctx.moveTo(a.x*W,a.y*H);ctx.lineTo(b.x*W,b.y*H);
+        ctx.strokeStyle=`rgba(126,184,212,${0.05+0.12*(1-d/90)*p})`;
+        ctx.lineWidth=0.8;ctx.stroke();
+      }));
+      nodes.forEach(n=>{
+        const p=0.4+0.4*Math.sin(t*1.2+n.ph);
+        ctx.beginPath();ctx.arc(n.x*W,n.y*H,2.5,0,Math.PI*2);
+        ctx.fillStyle=`rgba(126,184,212,${p})`;ctx.fill();
+      });
+      // Scan line
+      const sy=(Math.sin(t*0.45)*0.5+0.5)*H;
+      const sg=ctx.createLinearGradient(0,sy-10,0,sy+10);
+      sg.addColorStop(0,'rgba(126,184,212,0)');
+      sg.addColorStop(0.5,'rgba(126,184,212,0.1)');
+      sg.addColorStop(1,'rgba(126,184,212,0)');
+      ctx.fillStyle=sg;ctx.fillRect(0,sy-10,W,20);
+      // Central eye
+      ctx.save();ctx.translate(W/2,H/2);
+      const ey=5+Math.sin(t*2.5)*2;
+      ctx.beginPath();ctx.ellipse(0,0,20,ey,0,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(126,184,212,${0.35+0.2*Math.sin(t)})`;ctx.lineWidth=1.5;ctx.stroke();
+      ctx.beginPath();ctx.arc(0,0,3.5+Math.sin(t*3)*0.5,0,Math.PI*2);
+      ctx.fillStyle=`rgba(126,184,212,${0.6+0.3*Math.sin(t*2)})`;ctx.fill();
+      ctx.restore();
+    }
+    frame();
+  }
+
+  // South — ember mystery embers drifting upward
+  function drawDown(cv){
+    const ctx=cv.getContext('2d');let t=0;
+    function size(){cv.width=cv.offsetWidth||300;cv.height=60;}
+    size();
+    const embers=Array.from({length:22},()=>({
+      x:Math.random(),y:Math.random(),
+      spd:0.003+Math.random()*0.005,
+      sz:1+Math.random()*2.5,ph:Math.random()*Math.PI*2,
+      col:Math.random()>0.5?'255,107,43':'201,168,76',
+    }));
+    function frame(){requestAnimationFrame(frame);t+=0.016;
+      ctx.clearRect(0,0,cv.width,cv.height);
+      const W=cv.width,H=cv.height;
+      embers.forEach(e=>{
+        e.y-=e.spd;if(e.y<0){e.y=1;e.x=Math.random();}
+        const p=0.25+0.5*Math.abs(Math.sin(t*2+e.ph));
+        ctx.beginPath();ctx.arc(e.x*W,e.y*H,e.sz,0,Math.PI*2);
+        ctx.fillStyle=`rgba(${e.col},${p})`;ctx.fill();
+      });
+      // Thin glowing horizon line
+      const grd=ctx.createLinearGradient(0,0,W,0);
+      grd.addColorStop(0,'rgba(255,107,43,0)');
+      grd.addColorStop(0.5,`rgba(255,107,43,${0.1+0.06*Math.sin(t)})`);
+      grd.addColorStop(1,'rgba(255,107,43,0)');
+      ctx.fillStyle=grd;ctx.fillRect(0,H*0.5-1,W,2);
+    }
+    frame();
+  }
+
+  setTimeout(()=>{
+    const wc=document.getElementById('gateWestCanvas');
+    const ec=document.getElementById('gateEastCanvas');
+    const dc=document.getElementById('gateDownCanvas');
+    if(wc)drawWest(wc);
+    if(ec)drawEast(ec);
+    if(dc)drawDown(dc);
+  },500);
+})();
+
+
 let konamiSeq=[38,38,40,40,37,39,37,39,66,65],konamiIdx=0;
 document.addEventListener('keydown',e=>{
   if(e.keyCode===konamiSeq[konamiIdx]){konamiIdx++;}else{konamiIdx=0;}
