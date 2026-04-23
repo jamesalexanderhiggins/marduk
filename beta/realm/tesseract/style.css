@@ -14,7 +14,7 @@ canvas { display: block; }
 /* ── TOP UI ─────────────────────────────────────────────── */
 #ui {
   position: fixed; top: 0; left: 0; right: 0;
-  padding: 24px 0 0;
+  padding: 22px 0 0;
   text-align: center;
   pointer-events: none;
 }
@@ -33,7 +33,6 @@ canvas { display: block; }
   color: rgba(200, 230, 255, 0.65);
   margin-top: 9px;
   text-transform: uppercase;
-  transition: opacity 0.6s;
 }
 
 #lv-prog {
@@ -44,31 +43,123 @@ canvas { display: block; }
   min-height: 14px;
 }
 
-/* ── PHASE LABEL (bottom left) ──────────────────────────── */
-#phase-label {
+/* ── DESIGNER BAR ───────────────────────────────────────── */
+#designer-bar {
   position: fixed;
-  bottom: 22px; left: 28px;
-  font-size: 8px;
-  letter-spacing: 5px;
-  color: rgba(0, 120, 200, 0.25);
-  text-transform: uppercase;
+  top: 72px; left: 0; right: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
   pointer-events: none;
-  transition: opacity 1s;
+  z-index: 20;
 }
 
-/* ── BOTTOM HINT ────────────────────────────────────────── */
+#designer-bar.active {
+  display: flex;
+  pointer-events: all;
+}
+
+.dBtn {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: rgba(255, 210, 60, 0.70);
+  background: transparent;
+  border: 1px solid rgba(255, 210, 60, 0.22);
+  padding: 5px 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.dBtn:hover {
+  color: rgba(255, 230, 80, 1);
+  border-color: rgba(255, 230, 80, 0.5);
+}
+
+#designer-lv {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: rgba(255, 210, 60, 0.45);
+  min-width: 80px;
+  text-align: center;
+}
+
+#btn-exit-designer {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: rgba(255, 80, 80, 0.60);
+  background: transparent;
+  border: 1px solid rgba(255, 80, 80, 0.20);
+  padding: 5px 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+#btn-exit-designer:hover {
+  color: rgba(255, 100, 100, 0.95);
+  border-color: rgba(255, 80, 80, 0.50);
+}
+
+/* ── CORNER BUTTONS ─────────────────────────────────────── */
+#btn-sound {
+  position: fixed;
+  top: 18px; right: 20px;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: rgba(0, 160, 255, 0.45);
+  background: transparent;
+  border: 1px solid rgba(0, 160, 255, 0.18);
+  padding: 5px 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: color 0.2s, border-color 0.2s;
+  z-index: 30;
+}
+
+#btn-sound:hover {
+  color: rgba(0, 210, 255, 0.85);
+  border-color: rgba(0, 210, 255, 0.38);
+}
+
+#version {
+  position: fixed;
+  bottom: 20px; right: 22px;
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: rgba(0, 80, 130, 0.30);
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+/* ── PHASE LABEL ────────────────────────────────────────── */
+#phase-label {
+  position: fixed;
+  bottom: 20px; left: 26px;
+  font-size: 8px;
+  letter-spacing: 5px;
+  color: rgba(0, 120, 200, 0.22);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* ── HINT ───────────────────────────────────────────────── */
 #hint {
   position: fixed;
-  bottom: 22px; left: 0; right: 0;
+  bottom: 20px; left: 0; right: 0;
   text-align: center;
   font-size: 8px;
   letter-spacing: 5px;
-  color: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.08);
   pointer-events: none;
   text-transform: uppercase;
 }
 
-/* ── FLASH OVERLAY ──────────────────────────────────────── */
+/* ── FLASH ──────────────────────────────────────────────── */
 #flash {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
@@ -76,13 +167,13 @@ canvas { display: block; }
   transition: opacity 0.2s ease-out;
 }
 
-/* ── LEVEL TRANSITION ───────────────────────────────────── */
+/* ── TRANSITION ─────────────────────────────────────────── */
 #transition {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
   background: #000308;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.4s;
+  transition: opacity 0.35s;
 }
 
 /* ── VICTORY ────────────────────────────────────────────── */
@@ -119,7 +210,7 @@ canvas { display: block; }
 #victory .sub {
   font-size: 8px;
   letter-spacing: 5px;
-  color: rgba(0, 100, 180, 0.3);
+  color: rgba(0, 100, 180, 0.28);
   text-transform: uppercase;
-  margin-top: 30px;
+  margin-top: 28px;
 }

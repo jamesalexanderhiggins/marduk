@@ -10,22 +10,37 @@
 
   <canvas id="c"></canvas>
 
+  <!-- Top centre UI -->
   <div id="ui">
     <div id="lv-badge">MARDUK'S TESSERACT &nbsp;&middot;&nbsp; LEVEL 1</div>
     <div id="lv-msg">THE POINT EXISTS</div>
     <div id="lv-prog"></div>
   </div>
 
+  <!-- Designer bar (hidden until password) -->
+  <div id="designer-bar">
+    <button class="dBtn" id="btn-prev">&#8592; PREV</button>
+    <span id="designer-lv">LEVEL 1</span>
+    <button class="dBtn" id="btn-next">NEXT &#8594;</button>
+    <button id="btn-exit-designer">EXIT MARDUK VIEW</button>
+  </div>
+
+  <!-- Corner controls -->
+  <button id="btn-sound">&#9673; SOUND</button>
+  <div id="version">v1.2</div>
+
+  <!-- Bottom left phase label -->
   <div id="phase-label">DIMENSION I &middot; THE POINT</div>
   <div id="hint">DRAG TO ROTATE &nbsp;&middot;&nbsp; SCROLL TO ZOOM &nbsp;&middot;&nbsp; CLICK NODES IN SEQUENCE</div>
 
+  <!-- Overlays -->
   <div id="flash"></div>
   <div id="transition"></div>
 
   <div id="victory">
     <h1>Tesseract Complete</h1>
     <p>THE GEOMETRY OF EVE HOLDS ITS SHAPE</p>
-    <p class="sub">ONE HUNDRED DIMENSIONS &nbsp;&middot;&nbsp; ONE MIND</p>
+    <p class="sub">ONE THOUSAND DIMENSIONS &nbsp;&middot;&nbsp; ONE MIND</p>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
