@@ -111,19 +111,17 @@ canvas { display: block; }
 
 #version-label {
   position: fixed;
-  bottom: 22px; left: 28px;
-  /* sits below phase-label — we'll stack them */
-  bottom: 10px;
+  bottom: 8px; right: 24px;
   font-size: 7px;
   letter-spacing: 4px;
-  color: rgba(0, 80, 140, 0.18);
+  color: rgba(0, 80, 140, 0.28);
   text-transform: uppercase;
   pointer-events: none;
 }
 
 #btn-sound {
   position: fixed;
-  bottom: 16px; right: 24px;
+  bottom: 28px; right: 24px;
   background: none;
   border: 1px solid rgba(0, 150, 255, 0.2);
   color: rgba(0, 180, 255, 0.4);

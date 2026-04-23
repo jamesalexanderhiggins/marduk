@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════════════════════
 //  CONSTANTS
 // ══════════════════════════════════════════════════════════════
-const VERSION  = 'v2.1';
+const VERSION  = 'v2.3';
 const MAX_DOTS = 200; // cap dot count for performance
 
 document.getElementById('version-label').textContent = VERSION;
@@ -118,10 +118,26 @@ const onPU = () => { dragging=false; };
 canvas.addEventListener('mousedown', e => onPD(e.clientX,e.clientY));
 window.addEventListener('mousemove', e => onPM(e.clientX,e.clientY));
 window.addEventListener('mouseup', onPU);
-canvas.addEventListener('touchstart', e => { if(e.touches.length===1) onPD(e.touches[0].clientX,e.touches[0].clientY); },{passive:true});
-window.addEventListener('touchmove',  e => { if(e.touches.length===1) onPM(e.touches[0].clientX,e.touches[0].clientY); },{passive:true});
+
+// Touch drag (single finger) + pinch zoom (two fingers)
+let pinchDist0 = 0;
+canvas.addEventListener('touchstart', e => {
+  if(e.touches.length===1) onPD(e.touches[0].clientX,e.touches[0].clientY);
+  if(e.touches.length===2){
+    dragging=false;
+    pinchDist0=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+  }
+},{passive:true});
+window.addEventListener('touchmove', e => {
+  if(e.touches.length===1) onPM(e.touches[0].clientX,e.touches[0].clientY);
+  if(e.touches.length===2&&pinchDist0>0){
+    const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    orb.r=Math.max(1.5,Math.min(110,orb.r*(pinchDist0/d)));
+    pinchDist0=d; camSync();
+  }
+},{passive:true});
 window.addEventListener('touchend', onPU);
-canvas.addEventListener('wheel', e => { orb.r=Math.max(3,Math.min(110,orb.r+e.deltaY*0.04)); camSync(); },{passive:true});
+canvas.addEventListener('wheel', e => { orb.r=Math.max(1.5,Math.min(110,orb.r+e.deltaY*0.04)); camSync(); },{passive:true});
 
 // ══════════════════════════════════════════════════════════════
 //  TESSERACT GEOMETRY (4D)
@@ -177,20 +193,30 @@ function buildBg(ph) {
   bgPhase=ph;
   while(bgGrp.children.length) bgGrp.remove(bgGrp.children[0]);
   tessLines=[];
-  const GS=5,GR=50;
+  // Floor grid — denser at higher phases
+  const GS=ph>=5?3:ph>=3?4:5, GR=50;
   for(let i=-GR;i<=GR;i+=GS){
-    bgGrp.add(mkLine(new THREE.Vector3(i,-14,-GR),new THREE.Vector3(i,-14,GR),0x000e1f,0.30));
-    bgGrp.add(mkLine(new THREE.Vector3(-GR,-14,i),new THREE.Vector3(GR,-14,i),0x000e1f,0.30));
+    bgGrp.add(mkLine(new THREE.Vector3(i,-14,-GR),new THREE.Vector3(i,-14,GR),0x000e1f,0.28));
+    bgGrp.add(mkLine(new THREE.Vector3(-GR,-14,i),new THREE.Vector3(GR,-14,i),0x000e1f,0.28));
   }
-  if(ph>=2) addCage(14,0x001530,0.14);
-  if(ph>=3) addCage(7,0x001a38,0.10);
+  // Cage stack — larger outer to inner, fading in progressively
+  if(ph>=2) addCage(22,0x000c1c,0.06);   // vast outer cage
+  if(ph>=2) addCage(15,0x001430,0.12);   // main outer cage
+  if(ph>=3) addCage(10,0x001a38,0.10);   // mid cage
+  if(ph>=3) addCage(6, 0x001e40,0.08);   // inner cage
+  // Connectors: outer↔mid and mid↔inner
   if(ph>=3){
-    const o=[[14,14,14],[14,14,-14],[14,-14,14],[14,-14,-14],[-14,14,14],[-14,14,-14],[-14,-14,14],[-14,-14,-14]];
-    const inn=[[7,7,7],[7,7,-7],[7,-7,7],[7,-7,-7],[-7,7,7],[-7,7,-7],[-7,-7,7],[-7,-7,-7]];
-    for(let i=0;i<8;i++) bgGrp.add(mkLine(new THREE.Vector3(...o[i]),new THREE.Vector3(...inn[i]),0x001228,0.07));
+    const o=[[15,15,15],[15,15,-15],[15,-15,15],[15,-15,-15],[-15,15,15],[-15,15,-15],[-15,-15,15],[-15,-15,-15]];
+    const m=[[10,10,10],[10,10,-10],[10,-10,10],[10,-10,-10],[-10,10,10],[-10,10,-10],[-10,-10,10],[-10,-10,-10]];
+    const inn=[[6,6,6],[6,6,-6],[6,-6,6],[6,-6,-6],[-6,6,6],[-6,6,-6],[-6,-6,6],[-6,-6,-6]];
+    for(let i=0;i<8;i++){
+      bgGrp.add(mkLine(new THREE.Vector3(...o[i]),new THREE.Vector3(...m[i]),0x001020,0.05));
+      bgGrp.add(mkLine(new THREE.Vector3(...m[i]),new THREE.Vector3(...inn[i]),0x001228,0.06));
+    }
   }
+  // Animated tesseract wireframe
   if(ph>=4){
-    const alpha=ph>=5?0.22:0.11, color=ph>=5?0x003088:0x001555;
+    const alpha=ph>=5?0.30:0.14, color=ph>=5?0x0040aa:0x001e66;
     T4E.forEach(([i,j])=>{
       const pts=[new THREE.Vector3(),new THREE.Vector3()];
       const g=new THREE.BufferGeometry().setFromPoints(pts);
@@ -226,214 +252,460 @@ function tickTesseract(dt,globalTick,worldTier){
 }
 
 // ══════════════════════════════════════════════════════════════
-//  WORLD SYSTEM  (progressive environment L1–L1000)
+//  WORLD SYSTEM  (progressive environment L1–L1000, 11 tiers)
+//  T0-T5  (L1–100):   void → full Coruscant-lite chaos
+//  T6-T10 (L101–1000): civilisation expansion → planet Coruscant
 // ══════════════════════════════════════════════════════════════
 const World = (function(){
-  // Tier thresholds
-  const TIERS = [11,101,301,601,801,1001]; // tier N activates at TIERS[N-1]
-  function getTier(lv){ for(let t=0;t<TIERS.length;t++) if(lv<TIERS[t]) return t; return 5; }
+  const TIERS=[11,26,51,71,91,101,251,451,651,851,1001];
+  function getTier(lv){for(let t=0;t<TIERS.length;t++)if(lv<TIERS[t])return t;return 10;}
 
-  let currentTier=-1, currentLv=0;
-  let sphereMesh=null;
-  const ships=[], bokehSprites=[], chevrons=[];
+  let curTier=-1;
+  let sphereMesh=null, hexGridMesh=null, cityLights=null, trafficPoints=null;
+  const ships=[], bokehSprites=[], chevrons=[], scanRings=[], cityBuildings=[], trafficData=[];
+  const planets=[], fleets=[], dragons=[];
   let partPoints=null;
   const parallaxTarget=new THREE.Vector3();
 
-  // ── Noise (sum of sines, no deps) ──────────────────────
   function noise(x,y,z,oct){
-    let v=0,a=1,f=1,t=0;
-    for(let i=0;i<oct;i++){v+=Math.sin(x*f+1.1)*Math.sin(y*f+2.3)*Math.sin(z*f+0.7)*a;t+=a;a*=0.5;f*=2.1;}
-    return v/t;
+    let v=0,a=1,f=1,s=0;
+    for(let i=0;i<oct;i++){v+=Math.sin(x*f+1.1)*Math.sin(y*f+2.3)*Math.sin(z*f+0.7)*a;s+=a;a*=0.5;f*=2.1;}
+    return v/s;
   }
 
-  // ── Bokeh canvas texture ────────────────────────────────
   function makeBokehTex(hue){
     const c=document.createElement('canvas');c.width=c.height=64;
     const ctx=c.getContext('2d');
     const g=ctx.createRadialGradient(32,32,0,32,32,32);
-    g.addColorStop(0,`hsla(${hue},70%,72%,0.85)`);
-    g.addColorStop(0.55,`hsla(${hue},60%,50%,0.25)`);
+    g.addColorStop(0,`hsla(${hue},80%,78%,0.92)`);
+    g.addColorStop(0.5,`hsla(${hue},65%,55%,0.30)`);
     g.addColorStop(1,`hsla(${hue},50%,40%,0)`);
     ctx.fillStyle=g;ctx.fillRect(0,0,64,64);
     return new THREE.CanvasTexture(c);
   }
 
-  // ── Build sphere wireframe ──────────────────────────────
+  // ── Distant terrain sphere ────────────────────────────────
   function buildSphere(tier,lv){
     if(sphereMesh){worldGrp.remove(sphereMesh);sphereMesh=null;}
-    const segs=tier<=1?16:tier<=2?22:tier<=3?28:36;
+    if(tier<1) return;
+    const segs=tier<=1?14:tier<=3?20:tier<=5?28:36;
     const geo=new THREE.SphereGeometry(72,segs,Math.ceil(segs/2));
-    // Terrain deformation (tier 2+)
     if(tier>=2){
-      const progress=Math.min((lv-100)/500,1);
-      const disp=progress*10;
-      const octaves=2+Math.floor(progress*3);
+      const prog=Math.min((lv-26)/64,1);
+      const disp=prog*12,oct=2+Math.floor(prog*4);
       const pos=geo.attributes.position;
       for(let i=0;i<pos.count;i++){
         const x=pos.getX(i),y=pos.getY(i),z=pos.getZ(i);
         const R=Math.sqrt(x*x+y*y+z*z);
-        const nx=x/R,ny=y/R,nz=z/R;
-        const n=noise(nx,ny,nz,octaves)*disp;
-        pos.setXYZ(i,x+nx*n,y+ny*n,z+nz*n);
+        const n=noise(x/R,y/R,z/R,oct)*disp;
+        pos.setXYZ(i,x+x/R*n,y+y/R*n,z+z/R*n);
       }
-      pos.needsUpdate=true;
-      geo.computeVertexNormals();
+      pos.needsUpdate=true;geo.computeVertexNormals();
     }
-    // Color shifts by tier: grey → teal → blue → violet
-    const colors=[0x111111,0x0d1e2e,0x0a1c30,0x0e1a34,0x141040,0x1a0830];
-    const alphas=[0,0.05,0.08,0.12,0.18,0.24];
-    const edges=new THREE.EdgesGeometry(geo);
-    sphereMesh=new THREE.LineSegments(edges,
-      new THREE.LineBasicMaterial({color:colors[tier]||0x111111,transparent:true,opacity:alphas[tier]||0.05,depthWrite:false})
+    const colors=[0,0x0d1e2e,0x0a1c30,0x0e1a34,0x141040,0x1a0830,0x100840,0x0c0850,0x0a0860,0x060868,0x040870];
+    const alphas=[0,0.07,0.10,0.13,0.17,0.22,0.24,0.26,0.28,0.30,0.32];
+    sphereMesh=new THREE.LineSegments(new THREE.EdgesGeometry(geo),
+      new THREE.LineBasicMaterial({color:colors[tier]||0x0d1e2e,transparent:true,opacity:alphas[tier]||0.07,depthWrite:false})
     );
     worldGrp.add(sphereMesh);
   }
 
-  // ── Ships ───────────────────────────────────────────────
-  function addShips(tier){
-    const counts=[0,0,6,12,20,30];
-    const target=counts[tier]||0;
-    const rg=mkRng(tier*1234+7);
-    while(ships.length<target){
-      const s=tier>=5?1.6:0.9;
-      const hue=tier>=4?(ships.length/target):0;
-      const col=new THREE.Color().setHSL(hue,tier>=4?0.9:0,0.55);
-      const pts=[new THREE.Vector3(-s,s*0.45,0),new THREE.Vector3(s*0.6,0,0),new THREE.Vector3(-s,-s*0.45,0)];
-      const ship=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
-        new THREE.LineBasicMaterial({color:col,transparent:true,opacity:0.55,depthWrite:false}));
-      const R2=rg.f(62,70);
-      const th=rg.f(0,Math.PI),ph=rg.f(0,Math.PI*2);
-      ship.position.set(R2*Math.sin(th)*Math.cos(ph),R2*Math.sin(th)*Math.sin(ph),R2*Math.cos(th));
-      ship.userData={
-        axis:new THREE.Vector3(rg.f(-1,1),rg.f(-1,1),rg.f(-1,1)).normalize(),
-        speed:rg.f(0.015,0.06)*(tier>=4?2:1),
-        theta:rg.f(0,Math.PI*2),
-        r:rg.f(60,70)
-      };
-      worldGrp.add(ship); ships.push(ship);
-    }
-    // hide excess
-    ships.forEach((s,i)=>{ s.visible=i<target; });
+  // ── Geodesic hex grid shell ────────────────────────────────
+  function buildHexGrid(tier){
+    if(hexGridMesh){worldGrp.remove(hexGridMesh);hexGridMesh=null;}
+    if(tier<1) return;
+    const detail=tier<=2?1:tier<=4?2:3;
+    hexGridMesh=new THREE.LineSegments(
+      new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(76,detail)),
+      new THREE.LineBasicMaterial({color:0x003388,transparent:true,
+        opacity:[0,0.07,0.11,0.15,0.22,0.32,0.34,0.36,0.38,0.40,0.42][tier]||0.07,depthWrite:false})
+    );
+    worldGrp.add(hexGridMesh);
   }
 
-  // ── Particles ───────────────────────────────────────────
+  // ── Latitude scan rings ────────────────────────────────────
+  function buildScanRings(tier){
+    scanRings.forEach(r=>worldGrp.remove(r));scanRings.length=0;
+    if(tier<2) return;
+    const count=tier<=2?6:tier<=4?12:tier<=6?18:tier<=8?24:32;
+    for(let i=0;i<count;i++){
+      const phi=(i/(count-1))*Math.PI;
+      const R=73*Math.sin(phi),y=73*Math.cos(phi);
+      const segs=tier>=8?64:32;
+      const pts=[];
+      for(let j=0;j<=segs;j++){const a=(j/segs)*Math.PI*2;pts.push(new THREE.Vector3(Math.cos(a)*R,y,Math.sin(a)*R));}
+      const ring=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
+        new THREE.LineBasicMaterial({color:0x002255,transparent:true,opacity:0.08+tier*0.012,depthWrite:false})
+      );
+      worldGrp.add(ring);scanRings.push(ring);
+    }
+  }
+
+  // ── Traffic streams: points moving on great circles ─────────
+  function buildTraffic(tier){
+    if(trafficPoints){worldGrp.remove(trafficPoints);trafficPoints=null;}
+    trafficData.length=0;
+    if(tier<3) return;
+    const count=tier<=3?80:tier<=5?220:tier<=7?380:tier<=9?520:700;
+    const R=74,rg=mkRng(tier*8888+55);
+    const positions=new Float32Array(count*3);
+    for(let i=0;i<count;i++){
+      // Great-circle frame: u,v perpendicular basis
+      const ax=new THREE.Vector3(rg.f(-1,1),rg.f(-1,1),rg.f(-1,1)).normalize();
+      const tmp=Math.abs(ax.x)<0.9?new THREE.Vector3(1,0,0):new THREE.Vector3(0,1,0);
+      const u=tmp.clone().sub(ax.clone().multiplyScalar(tmp.dot(ax))).normalize();
+      const v=ax.clone().cross(u).normalize();
+      const phase=rg.f(0,Math.PI*2),speed=rg.f(0.15,0.9)*(tier>=8?2.8:1.0);
+      trafficData.push({u,v,phase,speed,R});
+      const cp=Math.cos(phase),sp=Math.sin(phase);
+      positions[i*3]=u.x*cp*R+v.x*sp*R;
+      positions[i*3+1]=u.y*cp*R+v.y*sp*R;
+      positions[i*3+2]=u.z*cp*R+v.z*sp*R;
+    }
+    const geo=new THREE.BufferGeometry();
+    geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+    trafficPoints=new THREE.Points(geo,new THREE.PointsMaterial({
+      color:tier>=6?0xffffff:0x00ddff,
+      size:tier>=8?0.50:0.30,transparent:true,opacity:0.70,sizeAttenuation:true,depthWrite:false
+    }));
+    worldGrp.add(trafficPoints);
+  }
+
+  // ── City building wireframes on sphere surface ─────────────
+  function buildCityBuildings(tier){
+    cityBuildings.forEach(l=>worldGrp.remove(l));cityBuildings.length=0;
+    if(tier<4) return;
+    const blockCount=tier<=4?12:tier<=5?28:tier<=7?50:tier<=9?80:110;
+    const R=73;const rg=mkRng(tier*6666+33);
+    for(let b=0;b<blockCount;b++){
+      const th=rg.f(0,Math.PI*2),phi=rg.f(0.1,Math.PI-0.1);
+      const perBlock=rg.i(3,10);
+      for(let bi=0;bi<perBlock;bi++){
+        const bth=th+rg.f(-0.12,0.12),bphi=phi+rg.f(-0.09,0.09);
+        const nx=Math.sin(bphi)*Math.cos(bth),ny=Math.cos(bphi),nz=Math.sin(bphi)*Math.sin(bth);
+        const h=rg.f(0.8,6.5)*(tier>=7?1.8:1);
+        const outer=new THREE.Vector3(nx*R,ny*R,nz*R);
+        const inner=new THREE.Vector3(nx*(R-h),ny*(R-h),nz*(R-h));
+        const col=tier>=7?0x00ffff:tier>=5?0x0099cc:0x004466;
+        const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([outer,inner]),
+          new THREE.LineBasicMaterial({color:col,transparent:true,opacity:0.18+tier*0.04,depthWrite:false})
+        );
+        worldGrp.add(line);cityBuildings.push(line);
+      }
+    }
+  }
+
+  // ── Dense city surface lights ─────────────────────────────
+  function buildCityLights(tier){
+    if(cityLights){worldGrp.remove(cityLights);cityLights=null;}
+    if(tier<7) return;
+    const count=tier>=10?6000:tier>=9?3000:1000;
+    const rg=mkRng(tier*5555+99),pos=[];
+    for(let i=0;i<count;i++){
+      const th=rg.f(0,Math.PI),ph=rg.f(0,Math.PI*2);
+      pos.push(74*Math.sin(th)*Math.cos(ph),74*Math.sin(th)*Math.sin(ph),74*Math.cos(th));
+    }
+    const geo=new THREE.BufferGeometry();
+    geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+    cityLights=new THREE.Points(geo,new THREE.PointsMaterial({
+      color:0xffffff,size:0.20,transparent:true,opacity:0.48,sizeAttenuation:true,depthWrite:false
+    }));
+    worldGrp.add(cityLights);
+  }
+
+  // ── Ships ─────────────────────────────────────────────────
+  const SHIP_COUNTS=[0,6,16,28,42,60,68,78,92,108,130];
+  function syncShips(tier){
+    const target=SHIP_COUNTS[tier]||0;
+    const rg=mkRng(tier*1234+7);
+    while(ships.length<target){
+      const s=tier>=8?1.9:tier>=5?1.2:0.8;
+      const col=new THREE.Color().setHSL(ships.length/Math.max(target,1),tier>=4?0.9:0,0.55);
+      const pts=[new THREE.Vector3(-s,s*0.42,0),new THREE.Vector3(s*0.65,0,0),new THREE.Vector3(-s,-s*0.42,0)];
+      const ship=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
+        new THREE.LineBasicMaterial({color:col,transparent:true,opacity:0.62,depthWrite:false}));
+      const R=rg.f(58,74),th=rg.f(0,Math.PI),ph=rg.f(0,Math.PI*2);
+      ship.position.set(R*Math.sin(th)*Math.cos(ph),R*Math.sin(th)*Math.sin(ph),R*Math.cos(th));
+      ship.userData={axis:new THREE.Vector3(rg.f(-1,1),rg.f(-1,1),rg.f(-1,1)).normalize(),
+        speed:rg.f(0.014,0.07)*(tier>=4?2.8:1),theta:rg.f(0,Math.PI*2),r:R};
+      worldGrp.add(ship);ships.push(ship);
+    }
+    ships.forEach((s,i)=>{s.visible=i<target;});
+  }
+
+  // ── Particles ─────────────────────────────────────────────
   function buildParticles(tier){
     if(partPoints){worldGrp.remove(partPoints);partPoints=null;}
     if(tier<3) return;
-    const count=tier===3?400:tier===4?800:1800;
-    const rg=mkRng(tier*9999+3), pos=[];
+    const count=tier<=3?1000:tier<=5?2500:tier<=7?3200:4000;
+    const rg=mkRng(tier*9999+3),pos=[];
     for(let i=0;i<count;i++){
-      const r=rg.f(45,71),th=rg.f(0,Math.PI),ph=rg.f(0,Math.PI*2);
+      const r=rg.f(42,72),th=rg.f(0,Math.PI),ph=rg.f(0,Math.PI*2);
       pos.push(r*Math.sin(th)*Math.cos(ph),r*Math.sin(th)*Math.sin(ph),r*Math.cos(th));
     }
     const geo=new THREE.BufferGeometry();
     geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
-    const col=tier>=5?0xff88ee:tier>=4?0x4499ff:0x224466;
-    const sz=tier>=5?0.45:tier>=4?0.28:0.18;
-    partPoints=new THREE.Points(geo,new THREE.PointsMaterial({color:col,size:sz,transparent:true,opacity:0.35,sizeAttenuation:true,depthWrite:false}));
+    partPoints=new THREE.Points(geo,new THREE.PointsMaterial({
+      color:tier>=4?0xff88ee:0x224466,
+      size:tier>=8?0.58:tier>=5?0.44:tier>=4?0.28:0.18,
+      transparent:true,opacity:0.42,sizeAttenuation:true,depthWrite:false
+    }));
     worldGrp.add(partPoints);
   }
 
-  // ── Bokeh ────────────────────────────────────────────────
+  // ── Bokeh ─────────────────────────────────────────────────
   function buildBokeh(tier){
-    bokehSprites.forEach(s=>worldGrp.remove(s)); bokehSprites.length=0;
-    if(tier<3) return;
-    const count=tier===3?5:tier===4?9:16;
+    bokehSprites.forEach(s=>worldGrp.remove(s));bokehSprites.length=0;
+    if(tier<2) return;
+    const count=tier<=2?5:tier<=4?18:tier<=6?28:40;
     const rg=mkRng(tier*7777+2);
     for(let i=0;i<count;i++){
-      const hue=tier>=5?Math.floor(rg.f(0,360)):tier>=4?Math.floor(rg.f(180,260)):210;
-      const tex=makeBokehTex(hue);
+      const hue=tier>=3?Math.floor(rg.f(0,360)):Math.floor(rg.f(190,260));
       const sp=new THREE.Sprite(new THREE.SpriteMaterial({
-        map:tex,transparent:true,opacity:0.03+tier*0.02,
+        map:makeBokehTex(hue),transparent:true,opacity:0.04+tier*0.025,
         blending:THREE.AdditiveBlending,depthWrite:false
       }));
-      const r2=rg.f(38,65),th=rg.f(0,Math.PI),ph=rg.f(0,Math.PI*2);
+      const r2=rg.f(32,68),th=rg.f(0,Math.PI),ph=rg.f(0,Math.PI*2);
       sp.position.set(r2*Math.sin(th)*Math.cos(ph),r2*Math.sin(th)*Math.sin(ph),r2*Math.cos(th));
-      const sz=rg.f(8,22)*(tier>=5?2.5:1);
+      const sz=rg.f(10,28)*(tier>=8?4.5:tier>=5?3.0:tier>=3?1.5:1);
       sp.scale.set(sz,sz,1);
-      worldGrp.add(sp); bokehSprites.push(sp);
+      worldGrp.add(sp);bokehSprites.push(sp);
     }
   }
 
-  // ── Chevron flock (tier 5) ───────────────────────────────
+  // ── Planets + orbital stations ────────────────────────────
+  function buildPlanets(tier,lv){
+    planets.forEach(p=>worldGrp.remove(p));planets.length=0;
+    if(tier<6) return;
+    const rg=mkRng(lv*7777+11);
+    const count=Math.min(3+Math.floor((tier-6)*2.5),13);
+    for(let i=0;i<count;i++){
+      const radius=rg.f(2.2,5.8),hue=tier>=8?rg.f(0,1):0.58,sat=tier>=8?0.85:0.15;
+      const grp=new THREE.Group();
+      const planet=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.SphereGeometry(radius,8,6)),
+        new THREE.LineBasicMaterial({color:new THREE.Color().setHSL(hue,sat,0.42),transparent:true,opacity:0.32,depthWrite:false})
+      );
+      grp.add(planet);
+      if(tier>=7){
+        const st=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.TorusGeometry(radius*1.85,0.17,4,10)),
+          new THREE.LineBasicMaterial({color:new THREE.Color().setHSL((hue+0.33)%1,tier>=8?0.9:0.3,0.58),transparent:true,opacity:0.38,depthWrite:false})
+        );
+        st.userData.spin=rg.f(0.25,1.1);grp.add(st);
+      }
+      if(tier>=9){
+        const s2=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.TorusGeometry(radius*2.5,0.11,4,8)),
+          new THREE.LineBasicMaterial({color:new THREE.Color().setHSL((hue+0.6)%1,0.9,0.6),transparent:true,opacity:0.28,depthWrite:false})
+        );
+        s2.rotation.x=Math.PI/2.2;s2.userData.spin=rg.f(-0.8,-0.2);grp.add(s2);
+      }
+      grp.userData={orbitR:rg.f(18,52),phase:rg.f(0,Math.PI*2),speed:rg.f(0.006,0.022),
+        axis:new THREE.Vector3(rg.f(-0.4,0.4),1,rg.f(-0.4,0.4)).normalize(),planet,hue};
+      worldGrp.add(grp);planets.push(grp);
+    }
+  }
+
+  // ── Fleets ────────────────────────────────────────────────
+  function buildFleets(tier){
+    fleets.forEach(f=>worldGrp.remove(f));fleets.length=0;
+    if(tier<8) return;
+    const rg=mkRng(tier*3333+44);
+    const fcount=tier>=10?10:tier>=9?7:4;
+    for(let fi=0;fi<fcount;fi++){
+      const grp=new THREE.Group(),hue=rg.f(0,1),s=0.32;
+      for(let si=0;si<8;si++){
+        const ship=new THREE.Line(new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(-s,s*0.4,0),new THREE.Vector3(s*0.6,0,0),new THREE.Vector3(-s,-s*0.4,0)
+        ]),new THREE.LineBasicMaterial({color:new THREE.Color().setHSL(hue,0.9,0.6),transparent:true,opacity:0.72,depthWrite:false}));
+        ship.position.set(rg.f(-2.5,2.5),rg.f(-0.9,0.9),rg.f(-2.5,2.5));
+        grp.add(ship);
+      }
+      grp.userData={phase:rg.f(0,Math.PI*2),speed:rg.f(0.008,0.032),r:rg.f(28,68),
+        axis:new THREE.Vector3(rg.f(-0.5,0.5),1,rg.f(-0.5,0.5)).normalize(),hue};
+      worldGrp.add(grp);fleets.push(grp);
+    }
+  }
+
+  // ── Dragons (T10) ─────────────────────────────────────────
+  function buildDragons(){
+    dragons.forEach(d=>worldGrp.remove(d));dragons.length=0;
+    for(let i=0;i<24;i++){
+      const hue=i/24;
+      const mat=()=>new THREE.LineBasicMaterial({color:new THREE.Color().setHSL(hue,1,0.72),transparent:true,opacity:0.88,depthWrite:false});
+      const grp=new THREE.Group(),bs=1.0+Math.random()*0.9;
+      grp.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(-bs,bs*0.38,0),new THREE.Vector3(bs*0.7,0,0),new THREE.Vector3(-bs,-bs*0.38,0)
+      ]),mat()));
+      const la=new Float32Array([0,bs*0.32,0,-bs*0.28,bs*1.55,0.36,-bs*0.65,bs*0.85,0.25]);
+      const lGeo=new THREE.BufferGeometry();lGeo.setAttribute('position',new THREE.BufferAttribute(la,3));grp.add(new THREE.Line(lGeo,mat()));
+      const ra=new Float32Array([0,-bs*0.32,0,-bs*0.28,-bs*1.55,0.36,-bs*0.65,-bs*0.85,0.25]);
+      const rGeo=new THREE.BufferGeometry();rGeo.setAttribute('position',new THREE.BufferAttribute(ra,3));grp.add(new THREE.Line(rGeo,mat()));
+      const R=10+Math.random()*42;
+      grp.userData={bs,lGeo,rGeo,hue,phase:Math.random()*Math.PI*2,speed:0.04+Math.random()*0.15,
+        axis:new THREE.Vector3(Math.random()-0.5,0.4+Math.random()*0.6,Math.random()-0.5).normalize(),
+        flapSpeed:2.5+Math.random()*5,flapAmp:bs*(0.7+Math.random()*0.9),r:R};
+      grp.scale.setScalar(0.5+Math.random()*1.8);worldGrp.add(grp);dragons.push(grp);
+    }
+  }
+
+  // ── Chevron sparks from tesseract ─────────────────────────
   function spawnChevron(){
-    if(chevrons.length>=40) return;
+    if(chevrons.length>=80) return;
     const idx=Math.floor(Math.random()*16);
     const origin=proj4(rot4(T4V[idx],axw,ayw),8.5);
-    const hue=Math.random();
-    const s=0.25+Math.random()*0.4;
-    const pts=[new THREE.Vector3(-s,s*0.4,0),new THREE.Vector3(s*0.5,0,0),new THREE.Vector3(-s,-s*0.4,0)];
-    const cv=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
-      new THREE.LineBasicMaterial({color:new THREE.Color().setHSL(hue,1,0.7),transparent:true,opacity:0.9,depthWrite:false}));
+    const hue=Math.random(),s=0.18+Math.random()*0.38;
+    const cv=new THREE.Line(new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-s,s*0.4,0),new THREE.Vector3(s*0.5,0,0),new THREE.Vector3(-s,-s*0.4,0)
+    ]),new THREE.LineBasicMaterial({color:new THREE.Color().setHSL(hue,1,0.72),transparent:true,opacity:0.92,depthWrite:false}));
     cv.position.copy(origin);
-    const vel=origin.clone().normalize().multiplyScalar(4+Math.random()*8);
-    // slight perpendicular drift
-    vel.x+=( Math.random()-0.5)*3; vel.y+=(Math.random()-0.5)*3; vel.z+=(Math.random()-0.5)*3;
+    const vel=origin.clone().normalize().multiplyScalar(4+Math.random()*9);
+    vel.x+=(Math.random()-0.5)*3;vel.y+=(Math.random()-0.5)*3;vel.z+=(Math.random()-0.5)*3;
     cv.lookAt(new THREE.Vector3());
-    const life=2+Math.random()*4;
-    cv.userData={vel,life,maxLife:life};
-    worldGrp.add(cv); chevrons.push(cv);
+    const life=1.2+Math.random()*4;cv.userData={vel,life,maxLife:life};
+    worldGrp.add(cv);chevrons.push(cv);
   }
 
-  // ── Tier rebuild ─────────────────────────────────────────
+  // ── Tier rebuild ──────────────────────────────────────────
   function setLevel(lv){
     const tier=getTier(lv);
-    if(tier!==currentTier){
+    if(tier!==curTier){
       buildSphere(tier,lv);
-      addShips(tier);
+      buildHexGrid(tier);
+      buildScanRings(tier);
+      buildTraffic(tier);
+      buildCityBuildings(tier);
+      buildCityLights(tier);
+      syncShips(tier);
       buildParticles(tier);
       buildBokeh(tier);
-      currentTier=tier;
+      buildPlanets(tier,lv);
+      buildFleets(tier);
+      if(tier>=10&&!dragons.length) buildDragons();
+      if(tier<10){dragons.forEach(d=>worldGrp.remove(d));dragons.length=0;}
+      curTier=tier;
     }
-    currentLv=lv;
   }
 
-  // ── Per-frame tick ───────────────────────────────────────
+  // ── Per-frame tick ────────────────────────────────────────
   let wTick=0;
   function tick(dt){
-    wTick+=dt;
-    const tier=currentTier;
+    wTick+=dt;const tier=curTier;
 
-    // Parallax: world shifts opposite camera look direction
+    // Parallax
     if(sphereMesh){
-      const dir=new THREE.Vector3(); camera.getWorldDirection(dir);
+      const dir=new THREE.Vector3();camera.getWorldDirection(dir);
       parallaxTarget.set(-dir.x*5,-dir.y*3,-dir.z*5);
       worldGrp.position.lerp(parallaxTarget,0.025);
     }
 
-    // Ship orbits
-    ships.forEach((ship,i)=>{
-      if(!ship.visible) return;
-      const d=ship.userData; d.theta+=d.speed*dt;
-      const q=new THREE.Quaternion().setFromAxisAngle(d.axis,d.theta);
-      ship.position.copy(new THREE.Vector3(d.r,0,0).applyQuaternion(q));
-      ship.lookAt(worldGrp.position);
-      // Hue cycle tier 5
-      if(tier>=5) ship.material.color.setHSL(((i/30)+wTick*0.05)%1,1,0.65);
-    });
-
-    // Particle drift
-    if(partPoints){ partPoints.rotation.y+=dt*0.018; partPoints.rotation.x+=dt*0.007; }
-
-    // Bokeh pulse
-    bokehSprites.forEach((sp,i)=>{
-      const base=0.03+tier*0.02;
-      sp.material.opacity=base*(0.7+Math.sin(wTick*0.6+i*1.3)*0.3);
-      if(tier>=5) sp.material.color&&sp.material.color.setHSL(((i/16)+wTick*0.04)%1,0.9,0.7);
-    });
-
-    // Chevrons (tier 5 only)
-    if(tier>=5){
-      if(Math.random()<dt*4) spawnChevron();
-      for(let i=chevrons.length-1;i>=0;i--){
-        const c=chevrons[i]; const d=c.userData;
-        d.life-=dt;
-        c.position.addScaledVector(d.vel,dt);
-        c.material.opacity=Math.max(0,d.life/d.maxLife)*0.9;
-        if(tier>=5) c.material.color.setHSL(((d.maxLife-d.life)*0.15+wTick*0.1)%1,1,0.7);
-        if(d.life<=0){ worldGrp.remove(c); chevrons.splice(i,1); }
+    // Hex grid: slow rotation + rainbow from T3
+    if(hexGridMesh){
+      hexGridMesh.rotation.y+=dt*0.008;hexGridMesh.rotation.x+=dt*0.0032;
+      if(tier>=3){
+        hexGridMesh.material.color.setHSL((wTick*0.022)%1,0.92,0.42);
+        const baseOp=[0,0.07,0.11,0.15,0.22,0.32,0.34,0.36,0.38,0.40,0.42][tier]||0.15;
+        hexGridMesh.material.opacity=baseOp*(0.82+Math.sin(wTick*0.35)*0.18);
       }
     }
+
+    // Scan rings: pulse + rainbow from T2
+    scanRings.forEach((ring,i)=>{
+      if(tier>=2) ring.material.color.setHSL(((i/Math.max(scanRings.length,1))+wTick*0.030)%1,0.88,0.45);
+      ring.material.opacity=(0.08+tier*0.012)*(0.68+Math.sin(wTick*0.62+i*0.42)*0.32);
+    });
+
+    // Traffic streams advance along great circles
+    if(trafficPoints&&trafficData.length){
+      const pos=trafficPoints.geometry.attributes.position.array;
+      trafficData.forEach((d,i)=>{
+        d.phase+=d.speed*dt;
+        const cp=Math.cos(d.phase),sp=Math.sin(d.phase);
+        pos[i*3]=d.u.x*cp*d.R+d.v.x*sp*d.R;
+        pos[i*3+1]=d.u.y*cp*d.R+d.v.y*sp*d.R;
+        pos[i*3+2]=d.u.z*cp*d.R+d.v.z*sp*d.R;
+      });
+      trafficPoints.geometry.attributes.position.needsUpdate=true;
+      if(tier>=5) trafficPoints.material.color.setHSL((wTick*0.055)%1,1,0.78);
+    }
+
+    // City buildings rainbow T6+
+    if(tier>=6) cityBuildings.forEach((line,i)=>{
+      line.material.color.setHSL(((i/cityBuildings.length)+wTick*0.038)%1,0.9,0.55);
+      line.material.opacity=(0.18+tier*0.04)*(0.75+Math.sin(wTick*0.9+i*0.3)*0.25);
+    });
+
+    // City lights Coruscant pulse T10
+    if(cityLights){
+      if(tier>=10) cityLights.material.color.setHSL((wTick*0.048)%1,1,0.78);
+      cityLights.material.opacity=0.42+Math.sin(wTick*1.0)*0.14;
+    }
+
+    // Ships orbit + rainbow T3+
+    ships.forEach((ship,i)=>{
+      if(!ship.visible) return;
+      const d=ship.userData;d.theta+=d.speed*dt;
+      ship.position.copy(new THREE.Vector3(d.r,0,0).applyQuaternion(new THREE.Quaternion().setFromAxisAngle(d.axis,d.theta)));
+      ship.lookAt(worldGrp.position);
+      if(tier>=3) ship.material.color.setHSL(((i/130)+wTick*0.040)%1,1,0.65);
+    });
+
+    // Particles drift + rainbow T4+
+    if(partPoints){
+      partPoints.rotation.y+=dt*0.016;partPoints.rotation.x+=dt*0.006;
+      if(tier>=4) partPoints.material.color.setHSL((wTick*0.030)%1,0.92,0.55);
+    }
+
+    // Bokeh pulse + rainbow T3+
+    bokehSprites.forEach((sp,i)=>{
+      sp.material.opacity=Math.max(0,(0.04+tier*0.025)*(0.60+Math.sin(wTick*0.50+i*1.4)*0.40));
+      if(tier>=3&&sp.material.color) sp.material.color.setHSL(((i/40)+wTick*0.032)%1,0.92,0.72);
+    });
+
+    // Planets orbit + station spin + rainbow T8+
+    planets.forEach((pGrp,i)=>{
+      const d=pGrp.userData;d.phase+=d.speed*dt;
+      pGrp.position.copy(new THREE.Vector3(d.orbitR,0,0).applyQuaternion(new THREE.Quaternion().setFromAxisAngle(d.axis,d.phase)));
+      d.planet.rotation.y+=dt*0.28;
+      pGrp.children.forEach((child,ci)=>{
+        if(ci>0&&child.userData.spin) child.rotation.y+=dt*child.userData.spin;
+        if(tier>=8&&child.material) child.material.color.setHSL(((d.hue+wTick*0.052+ci*0.25))%1,0.88,0.55);
+      });
+      if(tier>=8) d.planet.material.color.setHSL(((d.hue+wTick*0.038+i*0.18))%1,0.85,0.42);
+    });
+
+    // Fleets orbit + hue cycle
+    fleets.forEach((fGrp,fi)=>{
+      const d=fGrp.userData;d.phase+=d.speed*dt;
+      fGrp.position.copy(new THREE.Vector3(d.r,0,0).applyQuaternion(new THREE.Quaternion().setFromAxisAngle(d.axis,d.phase)));
+      fGrp.lookAt(worldGrp.position);
+      fGrp.children.forEach(ship=>{if(ship.material) ship.material.color.setHSL(((d.hue+wTick*0.055))%1,1,0.65);});
+    });
+
+    // Chevrons — start at T3
+    if(tier>=3){
+      const rate=tier>=10?26:tier>=8?18:tier>=6?10:tier>=5?7:tier>=4?4:2;
+      if(Math.random()<dt*rate) spawnChevron();
+      for(let i=chevrons.length-1;i>=0;i--){
+        const c=chevrons[i],d=c.userData;d.life-=dt;
+        c.position.addScaledVector(d.vel,dt);
+        c.material.opacity=Math.max(0,d.life/d.maxLife)*0.92;
+        c.material.color.setHSL(((d.maxLife-d.life)*0.13+wTick*0.09)%1,1,0.72);
+        if(d.life<=0){worldGrp.remove(c);chevrons.splice(i,1);}
+      }
+    }
+
+    // Dragons orbit + flap + rainbow (T10)
+    dragons.forEach((grp,i)=>{
+      const d=grp.userData;d.phase+=d.speed*dt;
+      grp.position.copy(new THREE.Vector3(d.r,0,0).applyQuaternion(new THREE.Quaternion().setFromAxisAngle(d.axis,d.phase)));
+      grp.lookAt(worldGrp.position);
+      const flap=Math.sin(wTick*d.flapSpeed)*d.flapAmp;
+      const la=d.lGeo.attributes.position.array;la[4]=d.bs*1.55+flap;la[7]=d.bs*0.85+flap*0.5;
+      d.lGeo.attributes.position.needsUpdate=true;
+      const ra=d.rGeo.attributes.position.array;ra[4]=-(d.bs*1.55+flap);ra[7]=-(d.bs*0.85+flap*0.5);
+      d.rGeo.attributes.position.needsUpdate=true;
+      const h=((d.hue+wTick*0.068+i*0.052))%1;
+      grp.children.forEach(child=>{if(child.material)child.material.color.setHSL(h,1,0.72);});
+    });
   }
 
   return { setLevel, tick, getTier };
@@ -443,8 +715,10 @@ const World = (function(){
 //  LEVEL LOGIC
 // ══════════════════════════════════════════════════════════════
 function getPhase(lv){
-  if(lv<=5)  return 1; if(lv<=20) return 2;
-  if(lv<=80) return 3; if(lv<=300)return 4;
+  if(lv<=5)  return 1;
+  if(lv<=18) return 2;
+  if(lv<=42) return 3;
+  if(lv<=75) return 4;
   return 5;
 }
 const PHASE_NAMES=['','DIMENSION I · THE POINT','DIMENSION II · THE LINE','DIMENSION III · SPACE','DIMENSION IV · HYPERSPACE','DIMENSION V · THE TESSERACT'];
@@ -784,9 +1058,8 @@ function deactivateDesignerMode(){
 }
 
 function solveCurrentLevel(){
-  // Draw all lines and mark all dots visited
   while(lvGrp.children.length) lvGrp.remove(lvGrp.children[0]);
-  // Rebuild dots
+  dotMeshes=[];glowMeshes=[];hitMeshes=[]; // clear before repopulating
   dots.forEach((pos,i)=>{
     const dot=new THREE.Mesh(GEO_DOT,new THREE.MeshBasicMaterial({color:0x004455}));
     dot.position.copy(pos);dot.userData.idx=i;
