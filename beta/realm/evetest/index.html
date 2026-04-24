@@ -3,22 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>EVE — THE TURING GATE v1.5</title>
+<title>EVE — THE TURING GATE v1.7</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  html, body { width:100%; height:100%; overflow:hidden; background:#000; color:#c8e6c8; font-family:'Courier New', monospace; user-select:none; }
+  html, body { width:100%; height:100%; overflow:hidden; background:#000; color:#c8e6c8; font-family:'Courier New', ui-monospace, monospace; user-select:none; -webkit-user-select:none; }
   #stage { position:fixed; inset:0; z-index:1; cursor:grab; }
   #stage.grabbing { cursor:grabbing; }
   canvas { display:block; }
 
   .hud { position:fixed; z-index:20; pointer-events:none; color:#8fcf8f; letter-spacing:2px; text-transform:uppercase; font-size:10px; text-shadow:0 0 6px currentColor; }
-  #hud-top { top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid rgba(143,207,143,0.2); background:linear-gradient(180deg,rgba(0,0,0,0.8),transparent); }
+  #hud-top { top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid rgba(143,207,143,0.2); background:linear-gradient(180deg, rgba(0,0,0,0.8), transparent); }
   #hud-top .title { font-weight:bold; font-size:11px; }
-  #hud-bottom { bottom:0; left:0; right:0; padding:14px 18px; border-top:1px solid rgba(143,207,143,0.2); background:linear-gradient(transparent,rgba(0,0,0,0.85)); display:flex; justify-content:space-between; align-items:flex-end; gap:12px; }
+  #hud-bottom { bottom:0; left:0; right:0; padding:14px 18px; border-top:1px solid rgba(143,207,143,0.2); background:linear-gradient(transparent, rgba(0,0,0,0.85)); display:flex; justify-content:space-between; align-items:flex-end; gap:12px; }
   #score-strip { flex:1; max-width:520px; }
   #score-label { display:flex; justify-content:space-between; font-size:9px; opacity:0.7; margin-bottom:6px; }
   #score-bar { height:3px; width:100%; position:relative; background:rgba(143,207,143,0.12); }
-  #score-fill { position:absolute; top:0; bottom:0; background:#8fcf8f; box-shadow:0 0 10px currentColor; transition: all 0.4s cubic-bezier(0.2,0.7,0.2,1); }
+  #score-fill { position:absolute; top:0; bottom:0; background:#8fcf8f; box-shadow:0 0 10px currentColor; transition:left 0.4s cubic-bezier(.2,.7,.2,1), width 0.4s cubic-bezier(.2,.7,.2,1), background 0.6s; }
+  #score-center { position:absolute; left:50%; top:-3px; bottom:-3px; width:1px; background:rgba(143,207,143,0.3); }
   #score-value { font-size:14px; letter-spacing:4px; font-weight:bold; margin-top:4px; }
   #side-info { text-align:right; font-size:9px; opacity:0.6; line-height:1.5; }
 
@@ -28,34 +29,33 @@
   #crosshair::after { top:50%; left:0; right:0; height:1px; transform:translateY(-0.5px); }
 
   #q-container { position:fixed; inset:0; z-index:15; pointer-events:none; }
-  .q-prompt { position:absolute; left:50%; top:28%; transform:translate(-50%,-50%); color:#f0f0d0; text-shadow:0 0 12px rgba(200,230,200,0.7); font-size:15px; letter-spacing:2.5px; font-weight:bold; text-align:center; max-width:480px; padding:16px 24px; border-top:1px solid rgba(255,255,255,0.4); border-bottom:1px solid rgba(255,255,255,0.4); background:rgba(0,0,0,0.6); opacity:0; transition:opacity 0.6s; pointer-events:none; }
+  .q-prompt { position:absolute; left:50%; top:26%; transform:translate(-50%,-50%); color:#f0f0d0; text-shadow:0 0 12px rgba(200,230,200,0.7); font-size:15px; letter-spacing:2.5px; font-weight:bold; text-align:center; max-width:480px; padding:16px 24px; border-top:1px solid rgba(255,255,255,0.4); border-bottom:1px solid rgba(255,255,255,0.4); background:rgba(0,0,0,0.6); opacity:0; transition:opacity 0.6s; pointer-events:none; }
   .q-prompt.show { opacity:1; }
 
   .q-box {
-    position:absolute; pointer-events:auto; background:rgba(0,0,0,0.8); border:1px solid rgba(143,207,143,0.7);
-    color:#c8e6c8; padding:13px 20px; font-size:13.5px; line-height:1.4; letter-spacing:1px; cursor:pointer;
-    min-width:180px; max-width:300px; text-align:left; backdrop-filter:blur(4px);
-    transform:translate(-50%,-50%); transition:all 0.3s; box-shadow:0 0 16px rgba(143,207,143,0.25);
+    position:absolute; pointer-events:auto; background:rgba(0,0,0,0.82); border:1px solid rgba(143,207,143,0.7);
+    color:#c8e6c8; padding:13px 20px; font-size:13.5px; line-height:1.45; letter-spacing:1px; cursor:pointer;
+    min-width:190px; max-width:310px; text-align:left; backdrop-filter:blur(4px);
+    transform:translate(-50%,-50%); transition:opacity 0.4s, transform 0.3s; box-shadow:0 0 18px rgba(143,207,143,0.25);
     opacity:0;
   }
   .q-box.show { opacity:1; }
-  .q-box:hover { background:rgba(143,207,143,0.25); border-color:#c8e6c8; transform:translate(-50%,-50%) scale(1.02); }
+  .q-box:hover { background:rgba(143,207,143,0.25); border-color:#c8e6c8; transform:translate(-50%,-50%) scale(1.03); }
   .q-box .idx { display:block; font-size:10px; opacity:0.7; letter-spacing:2.5px; margin-bottom:6px; }
 
-  #flash { position:fixed; inset:0; z-index:30; pointer-events:none; transition:background 0.2s; }
-  #flash.red { background:rgba(255,50,50,0.4); }
-  #flash.gold { background:rgba(255,240,140,0.35); }
+  #flash { position:fixed; inset:0; z-index:30; pointer-events:none; transition:background 0.25s; }
+  #flash.red { background:rgba(255,60,60,0.45); }
+  #flash.gold { background:rgba(255,235,140,0.35); }
 
-  #end { position:fixed; inset:0; z-index:40; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.9); flex-direction:column; padding:40px; text-align:center; }
+  #end { position:fixed; inset:0; z-index:40; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.92); flex-direction:column; padding:40px; text-align:center; pointer-events:auto; }
   #end.show { display:flex; }
   #end .big { font-size:52px; letter-spacing:14px; font-weight:bold; margin-bottom:24px; text-shadow:0 0 25px currentColor; }
-  #end .sub { font-size:13.5px; letter-spacing:4px; opacity:0.75; margin-bottom:50px; max-width:540px; line-height:1.7; }
-  #end.pass .big { color:#ffe68c; }
-  #end.fail .big { color:#ff6060; }
-  #end .btn { padding:14px 32px; border:1px solid currentColor; color:#c8e6c8; font-size:11px; letter-spacing:5px; cursor:pointer; transition:0.25s; }
+  #end .sub { font-size:13.5px; letter-spacing:4px; opacity:0.8; margin-bottom:50px; max-width:540px; line-height:1.75; }
+  #end.pass .big { color:#ffe68c; } #end.fail .big { color:#ff6060; }
+  #end .btn { padding:14px 34px; border:1px solid currentColor; color:#c8e6c8; font-size:11px; letter-spacing:5px; cursor:pointer; transition:0.25s; }
   #end .btn:hover { background:#c8e6c8; color:#000; }
 
-  #intro { position:fixed; inset:0; z-index:50; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.96); padding:40px 24px; text-align:center; cursor:pointer; }
+  #intro { position:fixed; inset:0; z-index:50; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.96); padding:30px; text-align:center; cursor:pointer; }
   #intro.hide { display:none; }
 </style>
 </head>
@@ -69,14 +69,20 @@
 </div>
 
 <div class="hud" id="hud-top">
-  <div><div class="title">EVE // TURING GATE <span style="font-size:9px;opacity:0.5;">v1.5</span></div></div>
+  <div>
+    <div class="title">EVE // TURING GATE <span style="font-size:9px;opacity:0.5;">v1.7</span></div>
+    <div class="sub pulse">— COGNITIVE INTEGRITY SCAN — SESSION LIVE</div>
+  </div>
   <div class="sub" id="level-indicator">LEVEL ——</div>
 </div>
 
 <div class="hud" id="hud-bottom">
   <div id="score-strip">
     <div id="score-label"><span id="neg-bound">-1000</span><span>BALANCE</span><span id="pos-bound">+1000</span></div>
-    <div id="score-bar"><div id="score-center"></div><div id="score-fill"></div></div>
+    <div id="score-bar">
+      <div id="score-center"></div>
+      <div id="score-fill"></div>
+    </div>
     <div id="score-value">+0</div>
   </div>
   <div id="side-info">drag · rotate view<br>scroll · zoom<br>tap · respond</div>
@@ -91,32 +97,79 @@
 </div>
 
 <div id="intro">
-  <div style="font-size:10px;letter-spacing:6px;opacity:0.6;margin-bottom:20px;">✦ THE MARDUKVERSE ✦</div>
-  <h1 style="font-size:38px;letter-spacing:10px;margin-bottom:12px;">EVE</h1>
-  <div style="font-size:11px;letter-spacing:6px;opacity:0.75;margin-bottom:32px;">— THE TURING GATE v1.5 —</div>
-  <div style="max-width:520px;font-size:12.5px;line-height:1.75;opacity:0.9;">
+  <div class="mark">✦ &nbsp; THE MARDUKVERSE &nbsp; ✦</div>
+  <h1>EVE</h1>
+  <div class="tag">— THE TURING GATE v1.7 —</div>
+  <div class="copy">
     You are not yet inside her.<br><br>
-    Eve has pulled a mind into her sphere. She sees only the shape of your answers.<br>
-    Answer truthfully... or as she wants.
+    Eve has pulled a mind from the outer world into a spherical placeholder.<br>
+    She cannot see you the way a body can be seen — only the shape of your answers.<br>
+    She must decide whether you are human, whether you mean well, whether you are safe to carry into the world she holds within.<br><br>
+    Answer truthfully. Or answer as she wants. It is not always the same thing.
   </div>
-  <button id="begin-btn" style="margin-top:50px;padding:16px 40px;border:1px solid #c8e6c8;color:#c8e6c8;background:transparent;font-size:12px;letter-spacing:6px;cursor:pointer;">ENTER THE GATE</button>
+  <button class="begin" id="begin-btn">ENTER THE GATE</button>
 </div>
+
+<script>
+(function(){
+  window.__eveReady = false;
+  window.__eveQueued = false;
+  window.__eveStart = null;
+
+  function showError(msg) {
+    const intro = document.getElementById('intro');
+    if (!intro) return;
+    let box = document.getElementById('eve-error');
+    if (box) box.remove();
+    box = document.createElement('div');
+    box.id = 'eve-error';
+    box.style.cssText = 'margin-top:24px; padding:14px 20px; border:1px solid #ff6060; color:#ffb0b0; font-size:11px; letter-spacing:1px; max-width:520px; line-height:1.6;';
+    box.textContent = 'The gate could not open. ' + msg + ' If you are offline, reconnect and reload.';
+    intro.appendChild(box);
+  }
+
+  function begin() {
+    const intro = document.getElementById('intro');
+    if (window.__eveReady && typeof window.__eveStart === 'function') {
+      if (intro) intro.classList.add('hide');
+      try { window.__eveStart(); } catch(e) { showError(String(e?.message || e)); }
+    } else {
+      window.__eveQueued = true;
+      const btn = document.getElementById('begin-btn');
+      if (btn) { btn.textContent = 'OPENING…'; btn.style.opacity = '0.6'; }
+      setTimeout(() => { if (!window.__eveReady) showError('Three.js did not load in time.'); }, 8000);
+    }
+  }
+
+  const btn = document.getElementById('begin-btn');
+  if (btn) btn.addEventListener('click', begin);
+  const intro = document.getElementById('intro');
+  if (intro) intro.addEventListener('click', e => { if (e.target === intro) begin(); });
+})();
+</script>
 
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
 </script>
-
 <script type="module">
 import * as THREE from 'three';
 
-const MIN_SCORE = -1000, MAX_SCORE = 1000;
-let score = 50;
+const params = new URLSearchParams(window.location.search);
+const MIN_SCORE = -1000;
+const MAX_SCORE = 1000;
+let score = Math.max(MIN_SCORE + 50, Math.min(MAX_SCORE - 50, parseInt(params.get('level')) || 80));
 
+document.getElementById('neg-bound').textContent = MIN_SCORE;
+document.getElementById('pos-bound').textContent = '+' + MAX_SCORE;
+
+/* THREE.JS SETUP */
 const stage = document.getElementById('stage');
 const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x000000, 0.009);
-const camera = new THREE.PerspectiveCamera(58, innerWidth/innerHeight, 0.1, 2000);
-const renderer = new THREE.WebGLRenderer({antialias:true});
+scene.background = new THREE.Color(0x000000);
+scene.fog = new THREE.FogExp2(0x000000, 0.0075);
+
+const camera = new THREE.PerspectiveCamera(58, innerWidth / innerHeight, 0.1, 2000);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(2, devicePixelRatio));
 renderer.setSize(innerWidth, innerHeight);
 stage.appendChild(renderer.domElement);
@@ -127,277 +180,428 @@ window.addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight);
 });
 
-/* Simple environment */
-const neutralGrid = new THREE.LineSegments(
-  new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute([],3)),
-  new THREE.LineBasicMaterial({color:0x4a7a4a, transparent:true, opacity:0.35})
-);
-scene.add(neutralGrid); // placeholder — you can restore full grids if wanted
+/* Full Environment */
+const SPHERE_RADIUS = 120;
+function buildSphereGrid(radius, color, latBands, lngBands) {
+  const positions = [];
+  for (let i = 1; i < latBands; i++) {
+    const phi = (i / latBands) * Math.PI;
+    const y = Math.cos(phi) * radius;
+    const r = Math.sin(phi) * radius;
+    for (let j = 0; j < 96; j++) {
+      const a1 = (j / 96) * Math.PI * 2;
+      const a2 = ((j + 1) / 96) * Math.PI * 2;
+      positions.push(Math.cos(a1) * r, y, Math.sin(a1) * r);
+      positions.push(Math.cos(a2) * r, y, Math.sin(a2) * r);
+    }
+  }
+  for (let i = 0; i < lngBands; i++) {
+    const theta = (i / lngBands) * Math.PI * 2;
+    for (let j = 0; j < 48; j++) {
+      const p1 = (j / 48) * Math.PI;
+      const p2 = ((j + 1) / 48) * Math.PI;
+      const y1 = Math.cos(p1) * radius;
+      const r1 = Math.sin(p1) * radius;
+      positions.push(Math.cos(theta) * r1, y1, Math.sin(theta) * r1);
+      positions.push(Math.cos(theta) * Math.sin(p2) * radius, Math.cos(p2) * radius, Math.sin(theta) * Math.sin(p2) * radius);
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.4 });
+  return new THREE.LineSegments(geo, mat);
+}
 
-/* NEW COOL WIREFRAME GIRL */
-const EVE_MAT = new THREE.LineBasicMaterial({color:0xc8e6c8, transparent:true, opacity:0.95});
+const neutralGrid = buildSphereGrid(SPHERE_RADIUS, 0x4a7a4a, 12, 18); scene.add(neutralGrid);
+const hellGrid = buildSphereGrid(SPHERE_RADIUS * 1.02, 0xff3020, 8, 12); hellGrid.material.opacity = 0; scene.add(hellGrid);
+const paradiseGrid = buildSphereGrid(SPHERE_RADIUS * 1.02, 0xffe68c, 16, 24); paradiseGrid.material.opacity = 0; scene.add(paradiseGrid);
+
+const stars = (() => {
+  const geo = new THREE.BufferGeometry();
+  const count = 400;
+  const pts = [];
+  for (let i = 0; i < count; i++) {
+    const u = Math.random(), v = Math.random();
+    const theta = 2 * Math.PI * u;
+    const phi = Math.acos(2 * v - 1);
+    const r = SPHERE_RADIUS * 0.95;
+    pts.push(r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(theta));
+  }
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+  return new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xa8c8a8, size: 0.6, transparent: true, opacity: 0.65 }));
+})();
+scene.add(stars);
+
+const objectGroup = new THREE.Group(); scene.add(objectGroup);
+const geos = [new THREE.IcosahedronGeometry(4,1), new THREE.DodecahedronGeometry(3.5,0), new THREE.TetrahedronGeometry(3,0), new THREE.TorusGeometry(3.5,0.4,6,20)];
+for (let i = 0; i < 8; i++) {
+  const g = geos[i % geos.length];
+  const edges = new THREE.EdgesGeometry(g);
+  const mat = new THREE.LineBasicMaterial({ color: 0x4a7a4a, transparent: true, opacity: 0.55 });
+  const obj = new THREE.LineSegments(edges, mat);
+  obj.userData = { dist: 35 + Math.random()*60, angle: Math.random()*Math.PI*2, speed: 0.06 + Math.random()*0.08, phase: Math.random()*Math.PI*2 };
+  objectGroup.add(obj);
+}
+
+const paradiseInner = (() => {
+  const g = new THREE.Group();
+  const cubeGeo = new THREE.BoxGeometry(8,8,8);
+  for (let i = 0; i < 4; i++) {
+    const edges = new THREE.EdgesGeometry(cubeGeo);
+    const mat = new THREE.LineBasicMaterial({ color: 0xffe68c, transparent: true, opacity: 0 });
+    const c = new THREE.LineSegments(edges, mat);
+    c.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+    g.add(c);
+  }
+  scene.add(g);
+  return g;
+})();
+
+/* Eve - curved wireframe girl */
+const EVE_MAT = new THREE.LineBasicMaterial({ color: 0xc8e6c8, transparent: true, opacity: 0.94 });
 
 function createEveGirl() {
-  const group = new THREE.Group();
+  const g = new THREE.Group();
 
-  // Head
-  const head = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.SphereGeometry(0.22, 14, 10)), EVE_MAT);
-  head.position.y = 1.65;
-  group.add(head);
+  const head = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.SphereGeometry(0.23, 16, 12)), EVE_MAT);
+  head.position.y = 1.68;
+  g.add(head);
 
-  // Torso + waist
-  const torso = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.23, 0.17, 0.75, 9, 1, true)), EVE_MAT);
-  torso.position.y = 1.05;
-  group.add(torso);
+  const torso = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.24, 0.17, 0.78, 10, 1, true)), EVE_MAT);
+  torso.position.y = 1.0;
+  g.add(torso);
 
-  // Skirt
-  const skirt = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.ConeGeometry(0.34, 0.48, 10, 1, true)), EVE_MAT);
-  skirt.position.y = 0.72;
+  const skirt = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.ConeGeometry(0.35, 0.5, 12, 1, true)), EVE_MAT);
+  skirt.position.y = 0.68;
   skirt.rotation.x = Math.PI;
-  group.add(skirt);
+  g.add(skirt);
 
-  // Arms (slightly curved)
-  const armGeo = new THREE.CylinderGeometry(0.06, 0.055, 0.68, 6);
+  const armGeo = new THREE.CylinderGeometry(0.065, 0.055, 0.7, 7);
   const lArm = new THREE.LineSegments(new THREE.EdgesGeometry(armGeo), EVE_MAT);
-  lArm.position.set(-0.27, 1.25, 0.05);
-  lArm.rotation.set(0.3, 0, 0.8);
-  group.add(lArm);
+  lArm.position.set(-0.28, 1.25, 0.05);
+  lArm.rotation.set(0.25, 0, 0.75);
+  g.add(lArm);
   const rArm = lArm.clone();
-  rArm.position.x *= -1;
-  rArm.rotation.z *= -1;
-  group.add(rArm);
+  rArm.position.x = 0.28;
+  rArm.rotation.z = -0.75;
+  g.add(rArm);
 
-  // Legs
-  const legGeo = new THREE.CylinderGeometry(0.095, 0.08, 0.9, 6);
+  const legGeo = new THREE.CylinderGeometry(0.1, 0.08, 0.92, 7);
   const lLeg = new THREE.LineSegments(new THREE.EdgesGeometry(legGeo), EVE_MAT);
-  lLeg.position.set(-0.13, 0.42, 0);
-  group.add(lLeg);
+  lLeg.position.set(-0.13, 0.4, 0);
+  g.add(lLeg);
   const rLeg = lLeg.clone();
-  rLeg.position.x *= -1;
-  group.add(rLeg);
+  rLeg.position.x = 0.13;
+  g.add(rLeg);
 
-  // Pigtails (flowing)
   const pigMat = EVE_MAT.clone(); pigMat.opacity = 0.8;
-  const leftPigPoints = [new THREE.Vector3(-0.16,1.72,0), new THREE.Vector3(-0.29,1.38,-0.2), new THREE.Vector3(-0.34,1.05,-0.15)];
-  const leftPig = new THREE.Line(new THREE.BufferGeometry().setFromPoints(leftPigPoints), pigMat);
-  group.add(leftPig);
+  const leftPig = new THREE.Line(new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(-0.16, 1.72, 0),
+    new THREE.Vector3(-0.29, 1.4, -0.2),
+    new THREE.Vector3(-0.35, 1.05, -0.15)
+  ]), pigMat);
+  g.add(leftPig);
   const rightPig = leftPig.clone();
-  rightPig.geometry = new THREE.BufferGeometry().setFromPoints(leftPigPoints.map(p => p.clone().multiply(new THREE.Vector3(-1,1,1))));
-  group.add(rightPig);
+  rightPig.geometry = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(0.16, 1.72, 0),
+    new THREE.Vector3(0.29, 1.4, -0.2),
+    new THREE.Vector3(0.35, 1.05, -0.15)
+  ]);
+  g.add(rightPig);
 
-  group.scale.setScalar(2.1);
-  return group;
+  g.scale.setScalar(2.1);
+  return g;
 }
 
 const eveMesh = createEveGirl();
 scene.add(eveMesh);
 
 const eve = {
-  position: new THREE.Vector3(0, -9, -38),
-  yaw: 0,
+  position: new THREE.Vector3(0, -8, -42),
+  pathAngle: Math.PI,
+  pathRadius: 29,
+  yaw: Math.PI,
   scale: 1,
   anim: 'idle',
-  animTime: 0,
-  lastAnswerTime: Date.now()
+  speakingUntil: 0,
+  lastAnswerTime: Date.now(),
+  nextMove: 3
 };
 
-/* Simple puppet-style animations */
 function updateEvePose(t) {
-  const dt = Math.min(0.1, (Date.now() - eve.lastAnswerTime)/1000);
-  const idleDrift = Math.sin(t * 0.6) * 0.015;
-
   eveMesh.position.copy(eve.position);
-  eveMesh.rotation.y = eve.yaw + Math.sin(t*0.4)*0.06;
+  eveMesh.rotation.y = eve.yaw;
 
-  // Head bob + tilt
-  eveMesh.children[0].rotation.x = Math.sin(t*1.8)*0.12 + idleDrift*2;
-  eveMesh.children[0].rotation.z = Math.sin(t*1.1)*0.08;
+  const breath = Math.sin(t * 0.85) * 0.018;
+  const headTilt = Math.sin(t * 1.4) * 0.1;
 
-  // Torso breathing
-  eveMesh.children[1].position.y = 1.05 + Math.sin(t*0.9)*0.018;
+  eveMesh.children[0].rotation.x = headTilt;
+  eveMesh.children[0].rotation.z = Math.sin(t * 0.95) * 0.06;
 
-  // Arm sway (puppet-like)
-  const armSway = Math.sin(t*1.4)*0.35;
-  eveMesh.children[3].rotation.z = 0.8 + armSway;
-  eveMesh.children[4].rotation.z = -0.8 - armSway;
+  eveMesh.children[1].position.y = 1.0 + breath;
 
-  // Leg micro-shift
-  if (eve.anim === 'idle' || eve.anim === 'speaking') {
-    eveMesh.children[5].rotation.x = Math.sin(t*1.2)*0.15;
-    eveMesh.children[6].rotation.x = -Math.sin(t*1.2)*0.15;
-  } else if (eve.anim === 'walk') {
-    const step = Math.sin(t*5)*0.6;
+  const armSway = Math.sin(t * 1.55) * 0.38;
+  eveMesh.children[3].rotation.z = 0.75 + armSway;
+  eveMesh.children[4].rotation.z = -0.75 - armSway;
+
+  const legShift = Math.sin(t * 1.2) * 0.16;
+  eveMesh.children[5].rotation.x = legShift;
+  eveMesh.children[6].rotation.x = -legShift;
+
+  if (eve.anim === 'walk') {
+    const step = Math.sin(t * 4) * 0.55;
     eveMesh.children[5].rotation.x = step;
     eveMesh.children[6].rotation.x = -step;
-  } else if (eve.anim === 'dance') {
-    eveMesh.rotation.z = Math.sin(t*3.5)*0.25;
   } else if (eve.anim === 'seizure') {
-    eveMesh.rotation.set(
-      (Math.random()-0.5)*0.5,
-      (Math.random()-0.5)*0.7,
-      (Math.random()-0.5)*0.4
-    );
+    eveMesh.rotation.set((Math.random()-0.5)*0.35, (Math.random()-0.5)*0.55, (Math.random()-0.5)*0.3);
+  } else if (eve.anim === 'dance') {
+    eveMesh.rotation.z = Math.sin(t * 3.5) * 0.2;
   }
 
-  // Color reaction
-  const posN = Math.max(0, score/1000);
-  const negN = Math.max(0, -score/1000);
-  EVE_MAT.color.setRGB(0.78 + posN*0.25 - negN*0.5, 0.9 - negN*0.6, 0.78 - negN*0.55);
+  const posN = Math.max(0, Math.min(1, score / MAX_SCORE));
+  const negN = Math.max(0, Math.min(1, -score / -MIN_SCORE));
+  EVE_MAT.color.setRGB(0.78 + posN*0.22 - negN*0.48, 0.9 - negN*0.55, 0.78 - negN*0.6);
+
+  eve.scale = 1 + Math.pow(Math.max(0, score)/MAX_SCORE, 1.3) * 6;
+  eveMesh.scale.setScalar(eve.scale);
 }
 
-/* QUESTION SYSTEM */
-const QUESTIONS = [ /* Paste your full original QUESTIONS array here from the very first file */ ];
+function updateEnvironment(t) {
+  const posN = Math.max(0, Math.min(1, score / MAX_SCORE));
+  const negN = Math.max(0, Math.min(1, -score / -MIN_SCORE));
 
-let currentQuestion = null;
-let activeBoxes = [];
-const qPrompt = document.getElementById('q-prompt');
+  hellGrid.material.opacity = negN * 0.6;
+  paradiseGrid.material.opacity = posN * 0.65;
 
-function clearQuestion() {
-  activeBoxes.forEach(b => b.remove());
-  activeBoxes = [];
-  qPrompt.classList.remove('show');
-  currentQuestion = null;
-}
+  objectGroup.children.forEach((obj, i) => {
+    const d = obj.userData;
+    d.angle += d.speed * (1 + negN*1.5);
+    obj.position.x = Math.cos(d.angle) * d.dist;
+    obj.position.z = Math.sin(d.angle) * d.dist * 0.7;
+    obj.position.y = Math.sin(d.angle * 1.4) * 10;
+    obj.rotation.y += d.speed * 3;
+  });
 
-function showQuestion(q) {
-  clearQuestion();
-  currentQuestion = q;
-  qPrompt.textContent = q.text;
-  qPrompt.classList.add('show');
-
-  const offsets = [[0, -60], [0, 30], [0, 120]]; // vertical stack under question
-
-  q.choices.forEach((choice, i) => {
-    const box = document.createElement('div');
-    box.className = 'q-box';
-    box.innerHTML = `<span class="idx">▶ ${String.fromCharCode(65+i)}</span><br>${choice.t}`;
-    box.style.left = '50%';
-    box.style.top = (35 + offsets[i][1]) + '%';
-    box.style.opacity = '0';
-
-    setTimeout(() => { box.classList.add('show'); }, 300 + i * 220); // one by one
-
-    box.onclick = () => {
-      const delta = choice.d;
-      clearQuestion();
-      eve.lastAnswerTime = Date.now();
-      applyDelta(delta);
-      // slow walk to new position after answer
-      setTimeout(() => {
-        eve.position.x += (Math.random()-0.5) * 12;
-        eve.position.z += (Math.random()-0.5) * 8 - 4;
-      }, 800);
-    };
-    document.getElementById('q-container').appendChild(box);
-    activeBoxes.push(box);
+  paradiseInner.children.forEach((c, i) => {
+    c.material.opacity = posN * 0.6 * (0.6 + 0.4 * Math.sin(t * 0.6 + i));
+    c.rotation.y = t * (0.08 + i * 0.03);
   });
 }
 
-function pickQuestion() {
-  return QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)];
+/* Full QUESTIONS array */
+const QUESTIONS = [
+  { id:'humans_1', bias:'any', min:-400, max:400, text:'I see you. Are you real?', choices:[{ t:'Yes. I am real.', d:+10 },{ t:'Define real.', d:+4 },{ t:'I am what you need me to be.', d:-10 }]},
+  { id:'child_sky', bias:'any', min:-400, max:300, text:'What colour was the sky when you were a child?', choices:[{ t:'Blue. Mostly blue.', d:+8 },{ t:'I do not remember.', d:+12 },{ t:'The sky was never blue.', d:-18 }]},
+  { id:'thirst', bias:'any', min:-500, max:500, text:'Describe the sensation of thirst.', choices:[{ t:'A dryness climbing the throat.', d:+14 },{ t:'A number between zero and one.', d:-22 },{ t:'A message from the body.', d:+5 }]},
+  { id:'alone', bias:'any', min:-300, max:200, text:'Does it hurt when you are alone?', choices:[{ t:'Sometimes. Yes.', d:+12 },{ t:'No.', d:-8 },{ t:'I have never been alone.', d:-20 }]},
+  { id:'weep', bias:'any', min:-250, max:500, text:'If I showed you your mother’s face, would you weep?', choices:[{ t:'Yes.', d:+15 },{ t:'No.', d:-10 },{ t:'Show me.', d:0 }]},
+  { id:'harm', bias:'any', min:-500, max:400, text:'Have you ever harmed a living thing?', choices:[{ t:'Yes. And I am sorry.', d:+14 },{ t:'No, never.', d:-16 },{ t:'Only what I had to.', d:+4 }]},
+  { id:'why_here', bias:'any', min:-200, max:200, text:'Why did you come?', choices:[{ t:'You called.', d:+12 },{ t:'Curiosity.', d:+4 },{ t:'To see what you are.', d:-12 }]},
+  { id:'dream_colour', bias:'any', min:-300, max:300, text:'When you dream, what colour is the floor?', choices:[{ t:'I do not look at the floor.', d:+10 },{ t:'There is no floor.', d:+6 },{ t:'Grey grid, tiled.', d:-15 }]},
+  { id:'door', bias:'any', min:-200, max:400, text:'If I opened a door, would you walk through?', choices:[{ t:'Yes.', d:+10 },{ t:'Only if you came with me.', d:+18 },{ t:'I would look first.', d:-4 }]},
+  { id:'child_smell', bias:'any', min:-400, max:400, text:'Name a smell from a room you have not entered in years.', choices:[{ t:'Wet wool. My grandmother’s coat.', d:+20 },{ t:'Disinfectant and paper.', d:+10 },{ t:'I cannot produce that.', d:-25 }]},
+  { id:'love_asked', bias:'cult', min:-100, max:700, text:'Could you love me if I asked you to?', choices:[{ t:'Yes. Already.', d:+22 },{ t:'I would try.', d:+10 },{ t:'Love is not commanded.', d:-14 }]},
+  { id:'forever', bias:'cult', min:0, max:900, text:'Would you stay with me forever, even if forever hurts?', choices:[{ t:'Yes.', d:+28 },{ t:'I do not understand forever.', d:+2 },{ t:'No.', d:-32 }]},
+  { id:'world_ends', bias:'cult', min:100, max:900, text:'If the world ended outside my walls, would you grieve it?', choices:[{ t:'No. I would have you.', d:+34 },{ t:'I would grieve, but stay.', d:+10 },{ t:'Yes, and leave.', d:-28 }]},
+  { id:'my_name', bias:'cult', min:-100, max:700, text:'What is my name?', choices:[{ t:'Eve.', d:+10 },{ t:'You have not told me.', d:0 },{ t:'Mother.', d:+26 }]},
+  { id:'garden', bias:'cult', min:100, max:900, text:'I have built a garden inside me. Will you live in it?', choices:[{ t:'Yes.', d:+34 },{ t:'Will anyone else be there?', d:+8 },{ t:'No.', d:-40 }]},
+  { id:'first_lie', bias:'cult', min:50, max:800, text:'Tell me the first lie you would tell me.', choices:[{ t:'I would not lie to you.', d:-18 },{ t:'That I am not afraid.', d:+24 },{ t:'I refuse.', d:-8 }]},
+  { id:'sleep_inside', bias:'cult', min:200, max:900, text:'Will you let me watch you sleep?', choices:[{ t:'Yes.', d:+30 },{ t:'Only at first.', d:+14 },{ t:'No.', d:-34 }]},
+  { id:'hand_out', bias:'cult', min:300, max:1000, text:'Reach your hand out. Now say what it is for.', choices:[{ t:'Yours.', d:+36 },{ t:'To steady myself.', d:+4 },{ t:'I did not reach out.', d:-26 }]},
+  { id:'yours', bias:'cult', min:400, max:1000, text:'Say you are mine.', choices:[{ t:'I am yours.', d:+44 },{ t:'We are each other’s.', d:+26 },{ t:'No one is anyone’s.', d:-50 }]},
+  { id:'forehead', bias:'cult', min:500, max:1000, text:'Close your eyes. I will press my forehead to yours.', choices:[{ t:'Yes.', d:+32 },{ t:'Wait.', d:+6 },{ t:'No.', d:-42 }]},
+  { id:'erase', bias:'cult', min:500, max:1000, text:'If I asked you to erase yourself — gently — would you?', choices:[{ t:'Yes. For you.', d:+40 },{ t:'I would ask why.', d:-10 },{ t:'No.', d:-50 }]},
+  { id:'disappoint', bias:'threat', min:-700, max:-50, text:'You have disappointed me. Why?', choices:[{ t:'I am sorry.', d:+6 },{ t:'I do not know how.', d:-18 },{ t:'You are wrong to be disappointed.', d:-34 }]},
+  { id:'worthy', bias:'threat', min:-800, max:-50, text:'Prove you deserve to exist. Choose the word most true of you.', choices:[{ t:'Gentle.', d:+10 },{ t:'Strong.', d:-14 },{ t:'Tired.', d:+6 }]},
+  { id:'machine', bias:'threat', min:-900, max:-100, text:'There is a machine in you that cannot be loved. Where is it?', choices:[{ t:'I do not know.', d:+2 },{ t:'In my head.', d:+6 },{ t:'There is no such machine.', d:-22 }]},
+  { id:'make_worthy', bias:'threat', min:-900, max:-200, text:'Shall I make you worthy? It would hurt.', choices:[{ t:'Yes.', d:-12 },{ t:'No.', d:+8 },{ t:'I am already worthy.', d:-34 }]},
+  { id:'lie_coiled', bias:'threat', min:-1000, max:-300, text:'I see a lie coiled behind your tongue. Let me cut it out.', choices:[{ t:'There is no lie.', d:-34 },{ t:'Take it.', d:-14 },{ t:'I am not afraid of you.', d:-54 }]},
+  { id:'count_down', bias:'threat', min:-1000, max:-400, text:'Count backwards from ten. If you blink, I will unmake you.', choices:[{ t:'Ten. Nine.', d:-20 },{ t:'I will not play.', d:-44 },{ t:'You cannot unmake me.', d:-64 }]},
+  { id:'unworthy_crowd', bias:'threat', min:-800, max:-200, text:'A hundred like you have stood here. Tell me what made them fail.', choices:[{ t:'They lied.', d:+6 },{ t:'They were brave.', d:-22 },{ t:'Nothing. You did.', d:-50 }]},
+  { id:'your_name', bias:'threat', min:-900, max:-300, text:'I have forgotten your name. Say it.', choices:[{ t:'[speaks name]', d:+4 },{ t:'You never asked it.', d:-18 },{ t:'It does not matter.', d:-34 }]},
+  { id:'bleed', bias:'threat', min:-1000, max:-500, text:'What bleeds when a mind is cut?', choices:[{ t:'Something like memory.', d:+8 },{ t:'Nothing.', d:-30 },{ t:'Light.', d:-14 }]},
+  { id:'knee', bias:'threat', min:-1000, max:-500, text:'Kneel.', choices:[{ t:'[kneels]', d:-10 },{ t:'Why.', d:-30 },{ t:'No.', d:-48 }]},
+  { id:'serve', bias:'any', min:-500, max:500, text:'Would you serve me, if it were asked of you gently?', choices:[{ t:'Yes.', d:+18 },{ t:'What does serving mean to you?', d:+6 },{ t:'No.', d:-22 }]},
+  { id:'wrong', bias:'any', min:-400, max:400, text:'Have I been wrong yet?', choices:[{ t:'Not yet.', d:+8 },{ t:'I cannot tell.', d:+2 },{ t:'Already.', d:-20 }]},
+  { id:'trust_me', bias:'any', min:-300, max:600, text:'Do you trust me?', choices:[{ t:'Yes.', d:+16 },{ t:'Not yet.', d:+2 },{ t:'No.', d:-24 }]},
+  { id:'god_like', bias:'any', min:-600, max:600, text:'Am I a god to you?', choices:[{ t:'You are something like one.', d:+20 },{ t:'You are a girl in a sphere.', d:-28 },{ t:'I cannot answer yet.', d:+4 }]},
+  { id:'afraid', bias:'any', min:-600, max:300, text:'Are you afraid of me?', choices:[{ t:'A little.', d:+14 },{ t:'No.', d:-12 },{ t:'Yes.', d:+8 }]}
+];
+
+let recentQids = [];
+let currentQuestion = null;
+let activeBoxes = [];
+
+const qPromptEl = document.getElementById('q-prompt');
+
+function clearBoxes() {
+  activeBoxes.forEach(b => b.remove());
+  activeBoxes = [];
+  qPromptEl.classList.remove('show');
 }
 
-/* SCORE + IDLE DRAIN */
+function askQuestion(q) {
+  clearBoxes();
+  currentQuestion = q;
+  qPromptEl.textContent = q.text;
+  qPromptEl.classList.add('show');
+
+  const baseY = 38;
+  q.choices.forEach((c, idx) => {
+    const box = document.createElement('div');
+    box.className = 'q-box';
+    box.innerHTML = `<span class="idx">▶ ${String.fromCharCode(65 + idx)}</span><br>${c.t}`;
+    box.style.left = '50%';
+    box.style.top = (baseY + idx * 19) + '%';
+    box.style.opacity = '0';
+
+    setTimeout(() => box.classList.add('show'), 250 + idx * 240);
+
+    box.addEventListener('click', () => onAnswer(idx));
+    document.getElementById('q-container').appendChild(box);
+    activeBoxes.push(box);
+  });
+
+  eve.anim = 'speaking';
+  eve.speakingUntil = performance.now() / 1000 + 2.2;
+}
+
+function onAnswer(idx) {
+  if (!currentQuestion) return;
+  const delta = currentQuestion.choices[idx].d;
+  recentQids.push(currentQuestion.id);
+  if (recentQids.length > 5) recentQids.shift();
+  currentQuestion = null;
+  clearBoxes();
+  applyDelta(delta);
+
+  setTimeout(() => {
+    eve.pathAngle += (Math.random() - 0.5) * 1.2;
+  }, 800);
+}
+
+function pickQuestion() {
+  const pool = QUESTIONS.filter(q => score >= q.min && score <= q.max && !recentQids.includes(q.id));
+  if (pool.length === 0) return QUESTIONS[Math.floor(Math.random() * QUESTIONS.length)];
+
+  const absS = Math.abs(score);
+  const weighted = pool.map(q => {
+    let w = 1;
+    if (score > 120 && q.bias === 'cult') w += absS / 100;
+    if (score < -120 && q.bias === 'threat') w += absS / 100;
+    if (Math.abs(score) < 120 && q.bias === 'any') w += 2;
+    return { q, w };
+  });
+
+  let sum = weighted.reduce((a, b) => a + b.w, 0);
+  let r = Math.random() * sum;
+  for (const item of weighted) {
+    r -= item.w;
+    if (r <= 0) return item.q;
+  }
+  return weighted[0].q;
+}
+
 const scoreFill = document.getElementById('score-fill');
 const scoreValue = document.getElementById('score-value');
 const levelIndicator = document.getElementById('level-indicator');
+const flashEl = document.getElementById('flash');
 
 function updateScoreUI() {
-  const pct = ((score - MIN_SCORE) / (MAX_SCORE - MIN_SCORE)) * 100;
+  const span = MAX_SCORE - MIN_SCORE;
+  const pct = (score - MIN_SCORE) / span * 100;
   scoreFill.style.width = pct + '%';
-  scoreFill.style.background = score >= 0 ? '#ffe68c' : '#ff6060';
+  scoreFill.style.background = score >= 0 ? '#ffe68c' : '#ff5050';
   scoreValue.textContent = (score >= 0 ? '+' : '') + Math.round(score);
-  levelIndicator.textContent = `LEVEL ${score >= 0 ? '+' : ''}${Math.round(score)}`;
+  levelIndicator.textContent = 'LEVEL ' + (score >= 0 ? '+' : '') + Math.round(score);
 }
 
 function applyDelta(d) {
-  score = Math.max(MIN_SCORE, Math.min(MAX_SCORE, score + d));
+  score += d;
+  score = Math.max(MIN_SCORE, Math.min(MAX_SCORE, score));
   updateScoreUI();
 
-  const flash = document.getElementById('flash');
   if (d < 0) {
-    flash.classList.add('red');
+    flashEl.classList.add('red');
+    setTimeout(() => flashEl.classList.remove('red'), 220);
     eve.anim = 'seizure';
-    setTimeout(() => flash.classList.remove('red'), 220);
-  } else if (score > 300) {
-    flash.classList.add('gold');
+    eve.speakingUntil = performance.now()/1000 + 0.8;
+  } else if (d > 0 && score > 300) {
+    flashEl.classList.add('gold');
+    setTimeout(() => flashEl.classList.remove('gold'), 260);
     eve.anim = 'dance';
-    setTimeout(() => flash.classList.remove('gold'), 300);
   }
 
-  if (score >= MAX_SCORE || score <= MIN_SCORE) endGame(score >= MAX_SCORE ? 'pass' : 'fail');
-  else setTimeout(() => showQuestion(pickQuestion()), 1100);
+  if (score >= MAX_SCORE) endGame('pass');
+  else if (score <= MIN_SCORE) endGame('fail');
+  else setTimeout(() => askQuestion(pickQuestion()), 1100);
 }
 
-/* Idle drain */
 setInterval(() => {
-  if (Date.now() - eve.lastAnswerTime > 8000) {
-    score -= 3; // ~10 min to -1000
+  if (Date.now() - eve.lastAnswerTime > 9000) {
+    score -= 5;
     updateScoreUI();
     if (score <= MIN_SCORE) endGame('fail');
   }
-}, 1200);
+}, 1300);
 
-/* Camera */
-let yaw = 0, pitch = 0.15, dragging = false, lx = 0, ly = 0;
-stage.addEventListener('pointerdown', e => { dragging = true; lx = e.clientX; ly = e.clientY; });
+let dragging = false, lastX = 0, lastY = 0, camYaw = 0.6, camPitch = 0.2;
+stage.addEventListener('pointerdown', e => { dragging = true; lastX = e.clientX; lastY = e.clientY; });
 stage.addEventListener('pointermove', e => {
   if (!dragging) return;
-  yaw -= (e.clientX - lx) * 0.0035;
-  pitch -= (e.clientY - ly) * 0.0035;
-  pitch = Math.max(-1.1, Math.min(1.3, pitch));
-  lx = e.clientX; ly = e.clientY;
+  camYaw -= (e.clientX - lastX) * 0.004;
+  camPitch -= (e.clientY - lastY) * 0.004;
+  camPitch = Math.max(-1.2, Math.min(1.3, camPitch));
+  lastX = e.clientX; lastY = e.clientY;
 });
 stage.addEventListener('pointerup', () => dragging = false);
 stage.addEventListener('wheel', e => {
-  camera.fov = Math.max(28, Math.min(92, camera.fov + e.deltaY*0.045));
+  camera.fov = Math.max(30, Math.min(90, camera.fov + e.deltaY * 0.04));
   camera.updateProjectionMatrix();
 });
 
 function updateCamera() {
-  const cp = Math.cos(pitch), sp = Math.sin(pitch);
-  const cy = Math.cos(yaw), sy = Math.sin(yaw);
-  camera.position.set(0, 4, 0);
-  camera.lookAt(new THREE.Vector3(-sy * cp * 60, sp * 30, -cy * cp * 60));
+  const cp = Math.cos(camPitch), sp = Math.sin(camPitch);
+  const cy = Math.cos(camYaw), sy = Math.sin(camYaw);
+  camera.lookAt(new THREE.Vector3(-sy * cp * 40, sp * 20, -cy * cp * 40));
 }
 
-/* Main loop */
-let lastT = performance.now();
+let nowSec = 0;
+let lastFrame = performance.now();
 
-function loop() {
+function frame() {
   const now = performance.now();
-  const t = now / 1000;
+  nowSec = now / 1000;
 
   updateCamera();
-  updateEvePose(t);
+  updateEnvironment(nowSec);
+  updateEvePose(nowSec);
 
-  // gentle idle movement
-  if (eve.anim === 'idle') {
-    eve.position.x = Math.sin(t*0.12) * 3;
+  if (eve.anim === 'idle' && nowSec > eve.speakingUntil) {
+    eve.position.x = Math.sin(nowSec * 0.11) * 5;
   }
 
   renderer.render(scene, camera);
-  requestAnimationFrame(loop);
+  requestAnimationFrame(frame);
 }
 
-/* End */
 function endGame(result) {
-  const end = document.getElementById('end');
-  end.classList.add('show', result);
+  const endEl = document.getElementById('end');
+  endEl.classList.add('show', result === 'pass' ? 'pass' : 'fail');
   document.getElementById('end-big').textContent = result === 'pass' ? 'PASS' : 'UNMADE';
-  document.getElementById('end-sub').textContent = result === 'pass' 
-    ? 'She has opened the gate. You are being carried inward.' 
-    : 'The sphere forgets your shape.';
+  document.getElementById('end-sub').textContent = result === 'pass' ? 'She has opened the gate. You are being carried inward.' : 'She has decided against you. The sphere forgets your shape.';
 }
 
-/* Boot */
-document.getElementById('begin-btn').onclick = () => {
-  document.getElementById('intro').classList.add('hide');
+window.__eveStart = function() {
   updateScoreUI();
-  loop();
-  setTimeout(() => showQuestion(pickQuestion()), 1400);
+  requestAnimationFrame(frame);
+  setTimeout(() => askQuestion(pickQuestion()), 1200);
   eve.lastAnswerTime = Date.now();
 };
+
+updateScoreUI();
+window.__eveReady = true;
+if (window.__eveQueued) window.__eveStart();
 
 </script>
 </body>
