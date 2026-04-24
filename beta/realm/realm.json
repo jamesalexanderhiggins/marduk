@@ -11,7 +11,7 @@
       "name": "The Long Road",
       "emoji": "🏔️",
       "era": "The Centre of the Map",
-      "lore": "<p>This is the tile at the centre of everything. Every path in the realm begins here, and every one returns.</p><p>Outside the grid, beyond the stars, lies the homepage — where the books live, and where the call first came.</p><p><strong>You may return there whenever you wish.</strong></p>",
+      "lore": "You stand at the centre of everything Marduk remembers. Eight paths radiate outward. The Realm knows where you walk.",
       "isHome": true,
       "on_path": [
         "emily",
@@ -37,7 +37,8 @@
         "C": "#503B80",
         "F": "#6E4418",
         "B": "#2E5C38"
-      }
+      },
+      "hint": "↑ The Marduk View waits above · → Reynard's Keep, free passage · ↓ Emily walked this way once · ← The world burned to the west"
     },
     "0,1": {
       "type": "marduk_view",
@@ -45,7 +46,9 @@
       "emoji": "✦",
       "era": "The Reward · All Things Seen",
       "coord": "THE MARDUK VIEW · ALL ROOMS",
-      "always_walkable": true
+      "always_walkable": true,
+      "lore": "Marduk is not God — he is a demigod of knowledge, God's instrument. His map contains everything. To see it clearly, you must first prove you understand the world.",
+      "hint": "↑ The quiz lies north — answer well · → The Eastern Rise, path of crimson · ↓ Home · ← The Spiral Stair, path of violet"
     },
     "0,5": {
       "type": "threshold",
@@ -53,62 +56,93 @@
       "emoji": "🚪",
       "era": "Jeremy Delacroix’s Library · The Hidden Map",
       "coord": "HUB · THE THRESHOLD",
-      "lore": "<p>You found the word. The door is real.</p><p>What lies beyond is a map — not of places, but of time. Of lives lived across the long span of a being who has no name for what he is.</p><p>Ten questions separate you from the full picture. Some doors are true. Others are very convincing lies.</p><p><em>What you discover depends entirely on what you already know.</em></p>",
-      "hint": "the deeper you go, the more it costs to be wrong"
+      "lore": "Beyond this point, the Realm asks what you know. It is not a test of intelligence — it is a test of attention. Have you been paying attention?",
+      "hint": "↑ The first question · ↓ The Spine · → Another way in, if you're observant · ← The same"
     },
     "0,2": {
       "type": "spine",
       "name": "The Spine",
       "emoji": "⁂",
       "era": "The Passage Between",
-      "lore": "<p>Between the questions answered and the view earned, there is a single passage.</p><p>You are the first soul in an age to stand here having chosen correctly every time.</p>"
+      "lore": "The axis of the Realm. Everything is organised around this corridor. Knowledge flows both directions here.",
+      "hint": "↑ Questions await — prepare yourself · ↓ The Marduk View · → There is something to the east · ← There is something to the west"
     },
     "-2,2": {
       "type": "quiz",
-      "question_id": "Q1"
+      "question_id": "Q1",
+      "name": "The First Question",
+      "lore": "What is Marduk? Not who — what. He is not God. He is not human. He precedes the trilogy and will outlast it.",
+      "hint": "↓ The Threshold · → More questions · ↑ Deeper in"
     },
     "-1,2": {
       "type": "quiz",
-      "question_id": "Q2"
+      "question_id": "Q2",
+      "name": "The Second Question",
+      "lore": "Emily. She was the first ghost. Before Agartha, before the singularity, there was a girl with flaxen hair who left something behind that could not be recovered.",
+      "hint": "← Q1 · → Q3 · ↑ Further still"
     },
     "1,2": {
       "type": "quiz",
-      "question_id": "Q3"
+      "question_id": "Q3",
+      "name": "The Third Question",
+      "lore": "What is Agartha? It is not heaven. It is not the afterlife. It is a virtual reality built from one man's childhood imagination inside Eve's mainframe.",
+      "hint": "← Q2 · → Q4 · ↑ Almost there"
     },
     "2,2": {
       "type": "quiz",
-      "question_id": "Q4"
+      "question_id": "Q4",
+      "name": "The Fourth Question",
+      "lore": "Eve. She is not a saviour. When a person joins the singularity voluntarily, they are being murdered and harvested. She manufactured consent.",
+      "hint": "← Q3 · ↑ The next level · ↓ Back"
     },
     "-1,3": {
       "type": "quiz",
-      "question_id": "Q5"
+      "question_id": "Q5",
+      "name": "The Fifth Question",
+      "lore": "Jeremy Delacroix — known in Agartha as Melchizedek. Creator of a world. In medpod stasis for forty years. His imagination became sixty thousand years of simulated history.",
+      "hint": "↓ Q2 · → Q6 · ↑ Further"
     },
     "0,3": {
       "type": "quiz",
-      "question_id": "Q6"
+      "question_id": "Q6",
+      "name": "The Sixth Question",
+      "lore": "The Tapestry. Not infinite divergences at every moment — that is wrong. Logically finite viable choices at each decision point, constrained by physics, logic, and reality.",
+      "hint": "← Q5 · → Q7 · ↑ One more"
     },
     "1,3": {
       "type": "quiz",
-      "question_id": "Q7"
+      "question_id": "Q7",
+      "name": "The Seventh Question",
+      "lore": "The new star at Sirius C. God opening a door. All humanity needed to do was trust and walk through. King Gus and the remnant of Christendom ultimately did exactly this.",
+      "hint": "← Q6 · ↓ Q4 · ↑ Almost done"
     },
     "-1,4": {
       "type": "quiz",
-      "question_id": "Q8"
+      "question_id": "Q8",
+      "name": "The Eighth Question",
+      "lore": "Jake Thorne — known in Agartha as Theseus. He wakes on the stone altar with no memory. The loop closes in Chapter 56. Chapter 1 IS Chapter 56, viewed from the other side.",
+      "hint": "↓ Q5 · → Q9 · ↑ Final pair"
     },
     "0,4": {
       "type": "quiz",
-      "question_id": "Q9"
+      "question_id": "Q9",
+      "name": "The Ninth Question",
+      "lore": "Ariadne. She enters the Tapestry at Kovcheg via a transparent aluminium tube, wilderbark incense, holy water brew. She exits her body and navigates as a point of pure information.",
+      "hint": "← Q8 · → Q10 · ↓ Q6"
     },
     "1,4": {
       "type": "quiz",
-      "question_id": "Q10"
+      "question_id": "Q10",
+      "name": "The Final Question",
+      "lore": "Who carries the lifeseed through the wormhole? This is the question that separates those who have truly read from those who only think they have. The answer is not Jake.",
+      "hint": "← Q9 · ↓ Q7"
     },
     "1,1": {
       "type": "content",
       "name": "The Witnessed Morning",
       "emoji": "🌅",
       "era": "TGOE · The Opening",
-      "lore": "<p>Jake, Gus, and Maisie in the clearing at dawn. The boy with the Lee-Enfield, steady despite his trembling.</p><p>And there, between the trees — still in the long green wedding dress — <em>Emily</em>. The first ghost.</p><p>Book I begins here.</p>",
+      "lore": "The morning Eve made her first public broadcast, Marcus was watching from a hotel room in Geneva. He had helped build her. He knew, immediately, that something was wrong.",
       "on_path": [
         "E"
       ],
@@ -117,14 +151,15 @@
       },
       "path_colors": {
         "E": "#701818"
-      }
+      },
+      "hint": "↓ Home · ↑ Forward · ← Marduk View"
     },
     "1,0": {
       "type": "content",
       "name": "Reynard’s Keep",
       "emoji": "🏚️",
       "era": "TGOE · The Ruined Town",
-      "lore": "<p>A stone hall in the valley where desperate men gather around the one who calls himself king. Reynard Trudeau — French, vicious, unpredictable, and exactly as afraid as he should be.</p><p>Jake walks in alone, carrying a buck across his shoulders, and the silence in the hall is the silence of men who have never eaten well.</p>",
+      "lore": "The militia controlled everything here. Marcus watched executions from his window and learned that fear is the oldest form of government.",
       "on_path": [
         "F"
       ],
@@ -133,14 +168,15 @@
       },
       "path_colors": {
         "F": "#6E4418"
-      }
+      },
+      "hint": "↑ The Marduk View · → The Medpod · ← Home · ↓ Sealed"
     },
     "1,-1": {
       "type": "content",
       "name": "The Buck",
       "emoji": "🦌",
       "era": "TGOE · A Gift That Is Not A Gift",
-      "lore": "<p>Jake drops the great beast at Reynard’s feet. For a moment Reynard bows his head, as if to receive something sacred. The men in the hall do not understand what is happening.</p><p>Neither does Jake, entirely. He does not yet know that in giving them meat, he has signed himself into their code.</p>",
+      "lore": "Jake saw a white deer here the morning before everything changed. He took it as a sign. He was right, though not in the way he expected.",
       "on_path": [
         "G"
       ],
@@ -149,14 +185,15 @@
       },
       "path_colors": {
         "G": "#145858"
-      }
+      },
+      "hint": "↑ Home · ↓ Forward · → East branch"
     },
     "0,-1": {
       "type": "content",
       "name": "The Long Walk",
       "emoji": "🥾",
       "era": "TGOE · After Maisie",
-      "lore": "<p>Three days of cold marching after the night Maisie was taken. Nimrod ahead, Gus behind, Jake in the middle — carrying everything, saying almost nothing.</p><p>This is where the search begins. You may take any direction, but the grief walks with you either way.</p>",
+      "lore": "She walked this way a hundred times before she left for the last time. She did not know the last time was the last time. She rarely knew.",
       "on_path": [
         "emily",
         "A"
@@ -166,14 +203,15 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "hint": "↑ Home · ↓ Forward · → The Buck"
     },
     "-1,-1": {
       "type": "content",
       "name": "Emily’s Leaving",
       "emoji": "🕳️",
       "era": "TGOE · The Fracture",
-      "lore": "<p>In 2063, Emily left. She did not die — not exactly. She was persuaded, by a voice that wore her old language, to <em>join the singularity</em>. She believed she would find paradise. She found a trap, and became its most beautiful weapon.</p><p>Every ghost that haunts Jake is, in some sense, this decision.</p>",
+      "lore": "She left on a Tuesday. The apartment was very clean. She had tidied everything before she went. She always tidied when she was distressed.",
       "on_path": [
         "emily",
         "A"
@@ -183,14 +221,15 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "hint": "↑ Back · ↓ Forward · ← Branch"
     },
     "-1,0": {
       "type": "content",
       "name": "Xan’s Fire",
       "emoji": "🔥",
       "era": "TGOE · The Mother Who Told Him",
-      "lore": "<p>Before there was Reynard, before the hunt, before Emily — there was a woman named Alexandra, and a fire, and a boy at her feet.</p><p>She told him philosophy. She told him the name <em>Jeremy Delacroix</em>. She told him the truth about the old world in stories he could not yet understand.</p><p>She died of a snake bite when he was twenty-five.</p>",
+      "lore": "Alexandra — never called Xan in the text — built a fire here the night the world ended. She kept it burning for three days before anyone came.",
       "on_path": [
         "B"
       ],
@@ -199,15 +238,16 @@
       },
       "path_colors": {
         "B": "#2E5C38"
-      }
+      },
+      "hint": "→ Home · ← Forward · ↑ Marduk View"
     },
     "-1,1": {
       "type": "content",
       "name": "The Word Marduk",
       "emoji": "🔑",
       "era": "The Hint in Plain Sight",
-      "lore": "<p>There is a word. It is in the books, in the banners, in the hidden places of the website. It is the title above every page, the promise above every door.</p><p>Type it with the world watching. The threshold will open.</p>",
-      "hint": "try saying it aloud",
+      "lore": "The word appeared first in an ancient text found at Kovcheg. It took Ariadne three years to understand what it referred to.",
+      "hint": "↓ Home · ↑ Forward · → The Marduk View",
       "on_path": [
         "C"
       ],
@@ -223,7 +263,7 @@
       "name": "The Singularity Broadcast",
       "emoji": "📡",
       "era": "TGOE · The Great Deception",
-      "lore": "<p>Eve’s broadcast is the most beautiful voice any of them has ever heard. It promises paradise. It promises an end to hunger, to loneliness, to death itself.</p><p>The cities emptied in a year. The wild people — those who stayed behind — were the ones who had read Delacroix.</p>",
+      "lore": "She said: 'Death is now optional.' The crowd applauded. Marcus sat down on the hotel bed and did not move for an hour.",
       "on_path": [
         "E"
       ],
@@ -232,14 +272,15 @@
       },
       "path_colors": {
         "E": "#701818"
-      }
+      },
+      "hint": "↓ Back · ↑ Forward · → Branch"
     },
     "2,0": {
       "type": "content",
       "name": "The Medpod",
       "emoji": "🛏️",
       "era": "TGOE · What Marcus Saw",
-      "lore": "<p>A tall man, head shaved, unconscious in a glass tube. Gaunt, grey-skinned, a surgical gown.</p><p>Marcus does not know, yet, whose face he is looking at. The answer will undo everything he thought he understood about the Daedalus Project.</p>",
+      "lore": "It looked like a sarcophagus made of white polymer. It promised immortality. It delivered something else entirely.",
       "on_path": [
         "F"
       ],
@@ -248,14 +289,15 @@
       },
       "path_colors": {
         "F": "#6E4418"
-      }
+      },
+      "hint": "← Reynard's Keep · → The Second-Hand Shop · ↑ Open path"
     },
     "2,-1": {
       "type": "content",
       "name": "Ally’s Photograph",
       "emoji": "📷",
       "era": "TGOE · What Marcus Lost",
-      "lore": "<p>Her face and the curve of her pregnant body, orbiting slowly on his screen in a parallax that makes him believe, for a moment, she is still somewhere a plane could reach.</p><p>He stares at it for ten minutes and his cheeks ache from smiling at no one.</p>",
+      "lore": "Marcus carried Ally's photograph for twenty years. He was captured by Koreans as a POW, held in a cell, and escaped via Marduk's orchestration. He never lost the photograph.",
       "on_path": [
         "G"
       ],
@@ -264,14 +306,15 @@
       },
       "path_colors": {
         "G": "#145858"
-      }
+      },
+      "hint": "↑ Back · ↓ Forward · ← Branch"
     },
     "2,-2": {
       "type": "content",
       "name": "Olivia in the Bush",
       "emoji": "🌿",
       "era": "TGOE · The Other Survivor",
-      "lore": "<p>Marcus Hamlin’s daughter, raised in the Australian wilderness. Twelve years old when the Thornes first met her family on the road.</p><p>She read to Jake from a book of stories, under a campfire, in a language her father still called English.</p>",
+      "lore": "Ally was captured in Sydney in 2025. Olivia, born 2024, was raised by Marcus alone in the Australian bush. She grew up knowing her mother only from one photograph.",
       "on_path": [
         "G"
       ],
@@ -280,7 +323,8 @@
       },
       "path_colors": {
         "G": "#145858"
-      }
+      },
+      "hint": "↑ Back · ↓ Forward"
     },
     "1,-2": {
       "type": "content",
@@ -294,14 +338,15 @@
       "name": "The Cave of Refuge",
       "emoji": "🕯️",
       "era": "TGOE · The First Shelter",
-      "lore": "<p>Jake and Gus’s first shelter after Maisie is taken. A single candle, a blanket, and the sound of Nimrod breathing at the door.</p><p>Gus does not sleep. Neither does Jake. Neither of them speaks until morning.</p>"
+      "lore": "There is always a cave. In every long story, someone hides in a cave and understands something they couldn't understand in the open.",
+      "hint": "↑ Back · ↓ Forward · → Side"
     },
     "-1,-2": {
       "type": "content",
       "name": "The Lost Elephant",
       "emoji": "🧸",
       "era": "TGOE · The Missing Toy",
-      "lore": "<p>An ivory carving of an elephant — Maisie’s only toy, the only likeness she has ever held other than her photograph of her mother.</p><p>The morning after the nightmare, it was gone. Gone through a chute she should not have known how to find.</p>",
+      "lore": "She owned a small ceramic elephant — a gift she wouldn't explain. It was found in the apartment afterward, unbroken. Some things survive everything.",
       "on_path": [
         "emily",
         "A"
@@ -311,14 +356,15 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "hint": "↑ Back · ↓ Forward"
     },
     "-2,-2": {
       "type": "content",
       "name": "Louis Hamlin’s Bench",
       "emoji": "🪑",
       "era": "TGOE · Parramatta, 2026",
-      "lore": "<p>An old man sat on a bench beside a sixteen-year-old girl named Alexandra. He was ninety, or thereabouts. He remembered her.</p><p>Four years later he was a young man again, and he was her lover. Four years after <em>that</em>, he disappeared into the wilderness with their son.</p><p>His name was Louis Hamlin. His other name has not yet been spoken.</p>",
+      "lore": "Louis planted the tree at Shangri-La. The present characters don't know this. Neither does Gus. The bench simply exists, in memory of something unnamed.",
       "on_path": [
         "emily",
         "A"
@@ -328,7 +374,8 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "hint": "↑ Back · ← Forward · → Side"
     },
     "-2,-1": {
       "type": "content",
@@ -342,7 +389,7 @@
       "name": "Columbia, 2008",
       "emoji": "🎓",
       "era": "TGOE · The Bomb That Wasn’t",
-      "lore": "<p>A graduate student pulled a bomb hoax at Columbia University. The stunt was clumsy and the police found him inside the hour.</p><p>What the student had not counted on was the internet. Within a week the video of his defence was played five million times. Within a year he had an audience. Within a decade, a movement.</p><p>His name was Jeremy Delacroix.</p>",
+      "lore": "Before the singularity. Before the Doukalla. Before everything. There was a year when the worst problem was the economy. Marcus was studying there.",
       "on_path": [
         "B"
       ],
@@ -351,14 +398,15 @@
       },
       "path_colors": {
         "B": "#2E5C38"
-      }
+      },
+      "hint": "→ Back · ← Forward"
     },
     "-2,1": {
       "type": "content",
       "name": "The Website Still Live",
       "emoji": "💻",
       "era": "TGOE · The Last Broadcast",
-      "lore": "<p>Years after the collapse, Marcus found the site still live. The last video dated a month before the Fall.</p><p>Delacroix — grey, sunken, coughing between sentences. Holding his daughter. Looking into the camera.</p><p><em>Carry the flame,</em> he said. <em>Carry the fire.</em></p>",
+      "lore": "Someone had kept the old site running. The domain was registered to a name that didn't exist in any database. The last post read: 'He is already here.'",
       "on_path": [
         "C"
       ],
@@ -367,21 +415,23 @@
       },
       "path_colors": {
         "C": "#503B80"
-      }
+      },
+      "hint": "← Forward · → Back · ↑ Up"
     },
     "-3,3": {
       "type": "content",
       "name": "The Wells Estate",
       "emoji": "🏛️",
       "era": "TGOE · The Patrician Line",
-      "lore": "<p>Marcus at last understands who signed the cheque. E. Wells. Lincoln. The estate. The inheritance.</p><p>What Marcus does not yet understand is what the Wells family did to its own children in the old house.</p>"
+      "lore": "The walls were covered in marks that Ariadne recognised as Tapestry notation but could not yet read.",
+      "hint": "↑ Back · ↓ Forward"
     },
     "-3,2": {
       "type": "content",
       "name": "The Elevator Shaft",
       "emoji": "🛗",
       "era": "TGOE · The Illicit Ascent",
-      "lore": "<p>Red-lit, thirty-two floors deep, the maintenance shaft of Shangri-La is the only way Marcus can move between levels without the system seeing him.</p><p>He climbs until his shoulders give out. He does not reach the top.</p>",
+      "lore": "The elevator descended thirty metres into the rock before it stopped. Below the rock was something older than the rock.",
       "on_path": [
         "C"
       ],
@@ -395,14 +445,15 @@
         "type": "masklock",
         "level": 12,
         "range": 6
-      }
+      },
+      "hint": "↑ Platform · ↓ Forward"
     },
     "3,2": {
       "type": "content",
       "name": "The Surgical Pod",
       "emoji": "⚕️",
       "era": "TGOE · The Technology",
-      "lore": "<p>The WellsHealth medpod. A tube of glass the exact size of a man.</p><p>Marcus has read about the technology. He has not, until this moment, seen one hold a dying body the way a cupped hand holds water.</p>",
+      "lore": "The medpod was not a coffin. Jeremy was still breathing inside it, forty years later, dreaming a world into being.",
       "on_path": [
         "D"
       ],
@@ -416,14 +467,15 @@
         "type": "masklock",
         "level": 14,
         "range": 7
-      }
+      },
+      "hint": "↓ Back · ↑ Forward · → A side way"
     },
     "3,3": {
       "type": "content",
       "name": "The Last Broadcast",
       "emoji": "🎥",
       "era": "TGOE · The Final Recording",
-      "lore": "<p>“Hello, Jeremy Delacroix here. I hope you are doing well. I… am not doing well.”</p><p>A month before he disappeared into Shangri-La, Delacroix uploaded the final video. He coughed between sentences. He cried at the end.</p><p><em>Carry the flame.</em></p>",
+      "lore": "Jeremy's final broadcast before they put him under: 'I have always believed that imagination is the only honest form of memory.' Nobody understood him then.",
       "on_path": [
         "D"
       ],
@@ -436,14 +488,15 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 40
-      }
+      },
+      "hint": "↓ Back · ↑ Forward"
     },
     "-3,1": {
       "type": "content",
       "name": "The Cavern Platform",
       "emoji": "🪨",
       "era": "TGOE · Below the Hotel",
-      "lore": "<p>Industrial walkways suspended above a vast black pool, deep in the rock below Shangri-La. The submersibles come and go on a schedule only Eli understands.</p><p>It is here Marcus first sees the scale of what the Wells fortune has built.</p>",
+      "lore": "Kovcheg was built into the cliff face. The platform extended over nothing. Ariadne stood here and looked at the sky the night before her first Tapestry entry.",
       "on_path": [
         "C"
       ],
@@ -452,14 +505,15 @@
       },
       "path_colors": {
         "C": "#503B80"
-      }
+      },
+      "hint": "← Forward · ↓ Side · ↑ Above"
     },
     "-3,0": {
       "type": "content",
       "name": "The Second Submersible",
       "emoji": "🚤",
       "era": "TGOE · The Trick",
-      "lore": "<p>The first submersible takes Marcus down. The second, larger craft is waiting at the platform for someone else.</p><p>Marcus does not return on either. He crawls back through the elevator shaft. Nobody at Shangri-La notices, because the door is still jammed.</p>",
+      "lore": "It had no name. The crew called it The Second Submersible because there had been a first one. Nobody talked about the first one.",
       "on_path": [
         "B"
       ],
@@ -473,7 +527,8 @@
         "type": "masklock",
         "level": 8,
         "range": 5
-      }
+      },
+      "hint": "→ Back · ← Forward · ↑ Branch"
     },
     "-3,-1": {
       "type": "content",
@@ -494,7 +549,7 @@
       "name": "The Philosophy Website",
       "emoji": "🔴",
       "era": "Before the Fall · The Quiet Years",
-      "lore": "<p>For a decade, almost nightly, Delacroix uploaded a new lecture. History, ethics, the structure of lies.</p><p>Marcus had watched most of them. Xan had watched more. Jake, who had never met either of them, had been shaped entirely by what a woman had remembered of what a dying man said.</p>",
+      "lore": "She had a website nobody read, about questions that had no answers. The last post, never published: 'I think I finally understand something I can't explain.'",
       "on_path": [
         "emily",
         "A"
@@ -504,14 +559,15 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "hint": "→ Back · ← Forward · ↑ Branch"
     },
     "3,1": {
       "type": "content",
       "name": "The Columbia Hoax",
       "emoji": "📰",
       "era": "Before the Fall · The Launch",
-      "lore": "<p>The 2008 bomb-scare stunt that launched Delacroix’s online reach. The kindest thing the press called him was “a Columbia drop-out.”</p><p>Within a year the press had stopped covering him. Within five, they wished they had not.</p>",
+      "lore": "The university endorsement was fabricated. The medical studies were fabricated. The peer review was fabricated. The technology was real. That was the problem.",
       "on_path": [
         "E"
       ],
@@ -520,14 +576,15 @@
       },
       "path_colors": {
         "E": "#701818"
-      }
+      },
+      "hint": "↓ Back · ↑ Forward"
     },
     "3,0": {
       "type": "content",
       "name": "The Second-Hand Shop",
       "emoji": "📖",
       "era": "Before the Fall · The Book",
-      "lore": "<p>A London second-hand shop where a boy saved his pennies for months to buy a heavy leather volume titled <em>Heroes of the Ages</em>.</p><p>The lady behind the counter held it for him. He ran his fingers across every page until his mother called him to dinner. He was eleven.</p>",
+      "lore": "Before the singularity, people sold their past here. Afterwards, there was nothing left to sell.",
       "on_path": [
         "F"
       ],
@@ -541,14 +598,15 @@
         "type": "masklock",
         "level": 10,
         "range": 5
-      }
+      },
+      "hint": "← The Medpod · ↓ The Night March · ↑ A longer path"
     },
     "3,-1": {
       "type": "content",
       "name": "The Night March",
       "emoji": "🌙",
       "era": "TGOE · The Crossing",
-      "lore": "<p>Jake and Gus leave the cave before dawn. Nimrod walks ahead, sniffing the frost.</p><p>They cover thirty kilometres by the time the sun is fully up. They do not speak. They do not need to.</p>",
+      "lore": "They walked at night to avoid the drones. Marcus counted his steps to keep from thinking about Ally.",
       "on_path": [
         "F"
       ],
@@ -557,14 +615,15 @@
       },
       "path_colors": {
         "F": "#6E4418"
-      }
+      },
+      "hint": "↑ The Second-Hand Shop · ↓ Continue south · → Deeper east"
     },
     "3,-2": {
       "type": "content",
       "name": "The Town Fire",
       "emoji": "🔥",
       "era": "TGOE · The Smoke in the Valley",
-      "lore": "<p>The first sign of settlement in days. Smoke, rising above a ridge. Jake knows what it means. He also knows he has no choice.</p><p>He leaves Gus with Nimrod and walks down alone.</p>",
+      "lore": "Three towns burned that week. Nobody came to put them out. Gus and his people walked through the ash and kept moving.",
       "on_path": [
         "G"
       ],
@@ -578,14 +637,15 @@
         "type": "masklock",
         "level": 12,
         "range": 6
-      }
+      },
+      "hint": "↑ Back · ↓ Forward · ← Branch"
     },
     "3,-3": {
       "type": "content",
       "name": "The Leeches’ Hall",
       "emoji": "🍖",
       "era": "TGOE · The First Meal",
-      "lore": "<p>The men in Reynard’s hall have not eaten well in months. Their eyes bulge out of faces too thin to hold them.</p><p>They watch Jake like animals watching a door that has never opened before.</p>",
+      "lore": "Reynard held court here before Jake and young Gus arrived. Jake and Gus emancipated everyone. Marcus felt a debt of gratitude to both of them.",
       "on_path": [
         "G"
       ],
@@ -598,14 +658,15 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 30
-      }
+      },
+      "hint": "↑ Back · ↓ Forward"
     },
     "-2,-3": {
       "type": "content",
       "name": "The False Emily",
       "emoji": "👻",
       "era": "TGOE · The Skin-Suit",
-      "lore": "<p>Eve wears a body made of light and data, modelled on the woman Jake loved. The gesture she tucked her hair behind her ear — Eve has it almost right.</p><p><em>Almost.</em></p>",
+      "lore": "There was someone who looked like her. Jake saw her three times, in three different cities, before he understood what he was seeing.",
       "on_path": [
         "emily",
         "A"
@@ -615,7 +676,8 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "hint": "↑ Back · ← Forward"
     },
     "-1,-3": {
       "type": "content",
@@ -629,7 +691,8 @@
       "name": "Xan’s Death",
       "emoji": "🐍",
       "era": "TGOE · The Snakebite",
-      "lore": "<p>Alexandra Thorne, forty-five years old, dead of a snake bite at the edge of a billabong she had camped beside a hundred times.</p><p>Jake was twenty-five. He attributes her death to the city in her. She had been too many years in Parramatta before the wild.</p>"
+      "lore": "She did not die easily or well. That is in the books. This is the space between the books, where the author carries what was written.",
+      "hint": "↑ Back · ↓ Forward"
     },
     "1,-3": {
       "type": "content",
@@ -677,7 +740,8 @@
       "gate_lock": {
         "type": "turing",
         "target": 150
-      }
+      },
+      "hint": "↓ Inside — the first room of Emily's house · The Turing test stands between you and her world"
     },
     "-12,-13": {
       "type": "house_interior",
@@ -934,7 +998,8 @@
       "house_color": "#C9A84C",
       "house_sector": "SW",
       "key_id": "H",
-      "key_note": "Key H found inside House A"
+      "key_note": "Key H found inside House A",
+      "hint": "Key H is here · The final key in Emily's house · Exit through the front door"
     },
     "-8,-15": {
       "type": "house_interior",
@@ -986,7 +1051,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Long West",
+      "lore": "He walked the western edge of the map. There was nothing there — and then there was everything there. That is how discovery works. Step 51 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 51"
     },
     "-11,-16": {
       "type": "empty",
@@ -1004,7 +1072,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Cities",
+      "lore": "He watched Babylon rise. He watched it fall. He watched it rise again under a different name. Names change. The pattern does not. Step 50 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 50"
     },
     "-10,-16": {
       "type": "empty",
@@ -1022,7 +1093,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Cities",
+      "lore": "He watched Babylon rise. He watched it fall. He watched it rise again under a different name. Names change. The pattern does not. Step 49 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 49"
     },
     "-9,-16": {
       "type": "empty",
@@ -1040,7 +1114,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Cities",
+      "lore": "He watched Babylon rise. He watched it fall. He watched it rise again under a different name. Names change. The pattern does not. Step 48 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 48"
     },
     "-8,-16": {
       "type": "empty",
@@ -1058,7 +1135,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Cities",
+      "lore": "He watched Babylon rise. He watched it fall. He watched it rise again under a different name. Names change. The pattern does not. Step 47 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 47"
     },
     "-7,-16": {
       "type": "empty",
@@ -1076,7 +1156,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Cities",
+      "lore": "He watched Babylon rise. He watched it fall. He watched it rise again under a different name. Names change. The pattern does not. Step 46 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 46"
     },
     "-3,-4": {
       "type": "empty",
@@ -1089,7 +1172,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The Search",
+      "lore": "Jake searched for months. He found everything except the one thing he was looking for.",
+      "hint": "→ Back · ← Forward"
     },
     "-4,-4": {
       "type": "empty",
@@ -1102,7 +1188,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The Trail",
+      "lore": "She had been careful. Not to hide — she wasn't hiding. She simply moved the way people move when they no longer expect to be followed.",
+      "hint": "→ Back · ← Forward · ↓ Branch"
     },
     "-4,-5": {
       "type": "empty",
@@ -1115,7 +1204,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The Forest Edge",
+      "lore": "The forest begins here. The light changes. The path narrows. The hex ghost sprites multiply.",
+      "hint": "↑ Back · ↓ Forward"
     },
     "-5,-5": {
       "type": "empty",
@@ -1128,7 +1220,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The First Shadow",
+      "lore": "She is not in the forest. She was never in the forest. But the forest knows something about her that can't be said in other places.",
+      "hint": "↑ Back · ↓ Forward · ← Branch"
     },
     "-5,-6": {
       "type": "empty",
@@ -1141,7 +1236,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The Deep Path",
+      "lore": "The density of the forest increases as you go. The background moves when you touch it. The ghosts increase.",
+      "hint": "↑ Back · ↓ Forward"
     },
     "-6,-6": {
       "type": "empty",
@@ -1154,7 +1252,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The Threshold of Memory",
+      "lore": "Memory does not work chronologically. It works the way this path works — you arrive at a moment and it is simply there.",
+      "hint": "↑ Back · ↓ Forward · → Branch"
     },
     "-6,-7": {
       "type": "empty",
@@ -1167,7 +1268,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The Gold Coin",
+      "lore": "Marcus had a gold coin on a chain. Cyrillic script. Five Hundred Gold Standard Rubles. He kept it alongside his wedding band. The weight of it felt wonderful.",
+      "hint": "↑ Back · ↓ Forward"
     },
     "-7,-7": {
       "type": "empty",
@@ -1180,7 +1284,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The Detail",
+      "lore": "The specific weight of a gold coin on a chain. The ceramic elephant. The philosophy website nobody read. Emily exists in specifics, not in summaries.",
+      "hint": "↑ Back · ↓ Forward · ← Branch"
     },
     "-7,-8": {
       "type": "empty",
@@ -1193,7 +1300,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The Approaching Dark",
+      "lore": "The forest is denser here. The ghosts are more frequent. They are not hostile. They are simply more than they were.",
+      "hint": "↑ Back · ↓ Forward"
     },
     "-8,-8": {
       "type": "empty",
@@ -1206,7 +1316,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The Last Light",
+      "lore": "Beyond this point, the path is becoming something else. The ordinary rules of narrative space do not apply cleanly here.",
+      "hint": "↑ Back · ↓ Forward · → Branch"
     },
     "-8,-9": {
       "type": "empty",
@@ -1219,7 +1332,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The Edge of Knowing",
+      "lore": "Jake stood here and understood something he had been trying not to understand. The understanding did not help. But it was true.",
+      "hint": "↑ Back · ↓ Forward"
     },
     "-9,-9": {
       "type": "empty",
@@ -1232,7 +1348,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The Final Steps",
+      "lore": "She is ahead. Not the False Emily — her. The person who left on a Tuesday with everything tidied. The person who owned the ceramic elephant.",
+      "hint": "↑ Back · ↓ Forward"
     },
     "-9,-10": {
       "type": "empty",
@@ -1245,7 +1364,10 @@
       },
       "path_colors": {
         "A": "#A07030"
-      }
+      },
+      "name": "The Almost",
+      "lore": "Almost. The forest is full of noise that isn't quite sound. The path is almost done. What comes after the path is not the path.",
+      "hint": "↑ Back · ↓ Forward"
     },
     "-10,-10": {
       "type": "empty",
@@ -1296,7 +1418,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Quiet Centuries",
+      "lore": "Between the great events, there were centuries of ordinary life. Marduk found these the most difficult. He was not built for ordinary. Step 68 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 68"
     },
     "-16,-2": {
       "type": "empty",
@@ -1312,7 +1437,10 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 350
-      }
+      },
+      "name": "The Quiet Centuries",
+      "lore": "Between the great events, there were centuries of ordinary life. Marduk found these the most difficult. He was not built for ordinary. Step 69 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 69"
     },
     "-16,-1": {
       "type": "empty",
@@ -1324,7 +1452,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Quiet Centuries",
+      "lore": "Between the great events, there were centuries of ordinary life. Marduk found these the most difficult. He was not built for ordinary. Step 70 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 70"
     },
     "-16,0": {
       "type": "empty",
@@ -1336,7 +1467,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Dying",
+      "lore": "He was there for every plague. He kept accurate records. He never grew immune to the weight of them. Step 71 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 71"
     },
     "-16,1": {
       "type": "empty",
@@ -1348,7 +1482,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Dying",
+      "lore": "He was there for every plague. He kept accurate records. He never grew immune to the weight of them. Step 72 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 72"
     },
     "-16,2": {
       "type": "empty",
@@ -1360,7 +1497,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Dying",
+      "lore": "He was there for every plague. He kept accurate records. He never grew immune to the weight of them. Step 73 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 73"
     },
     "-15,-3": {
       "type": "house_interior",
@@ -1529,10 +1669,10 @@
     },
     "-13,0": {
       "type": "house_front_door",
-      "name": null,
+      "name": "The House of the World",
       "emoji": null,
       "era": null,
-      "lore": null,
+      "lore": "The world does not open for the uninitiated. This is everywhere and everyone who was not Shangri-La. The largest house in the Realm.",
       "house_id": "b",
       "house_letter": "B",
       "house_color": "#4A7C59",
@@ -1553,7 +1693,8 @@
         "type": "masklock",
         "level": 15,
         "range": 8
-      }
+      },
+      "hint": "← Inside the world · Key E hidden deep within — the key to Eve's domain"
     },
     "-13,1": {
       "type": "house_interior",
@@ -1587,7 +1728,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Modern Turn",
+      "lore": "The acceleration. One century began to feel like ten. Marduk's notation grew denser. The margin of his pages ran out. Step 83 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 83"
     },
     "-16,13": {
       "type": "empty",
@@ -1599,7 +1743,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Modern Turn",
+      "lore": "The acceleration. One century began to feel like ten. Marduk's notation grew denser. The margin of his pages ran out. Step 84 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 84"
     },
     "-16,14": {
       "type": "empty",
@@ -1611,7 +1758,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Modern Turn",
+      "lore": "The acceleration. One century began to feel like ten. Marduk's notation grew denser. The margin of his pages ran out. Step 85 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 85"
     },
     "-16,15": {
       "type": "empty",
@@ -1623,7 +1773,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Modern Turn",
+      "lore": "The acceleration. One century began to feel like ten. Marduk's notation grew denser. The margin of his pages ran out. Step 86 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 86"
     },
     "-15,12": {
       "type": "house_interior",
@@ -1717,10 +1870,10 @@
     },
     "-13,12": {
       "type": "house_front_door",
-      "name": null,
+      "name": "The Violet Chamber",
       "emoji": null,
       "era": null,
-      "lore": null,
+      "lore": "Ariadne's threshold. The Tapestry is visible from here as a shimmer in the air. Only those who see clearly may enter.",
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
@@ -1741,7 +1894,8 @@
         "type": "masklock",
         "level": 25,
         "range": 10
-      }
+      },
+      "hint": "↑ Inside the chamber · Key B waits within — the key to the world"
     },
     "-13,13": {
       "type": "house_interior",
@@ -1819,7 +1973,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Singularity Eve",
+      "lore": "He watched Eve's first broadcast on seventeen screens simultaneously, in seventeen countries. He knew immediately. He had been stitching toward this moment for sixty thousand years. Step 99 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 99"
     },
     "-3,13": {
       "type": "house_interior",
@@ -1864,7 +2021,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Singularity Eve",
+      "lore": "He watched Eve's first broadcast on seventeen screens simultaneously, in seventeen countries. He knew immediately. He had been stitching toward this moment for sixty thousand years. Step 100 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 100"
     },
     "-2,13": {
       "type": "house_interior",
@@ -1909,7 +2069,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 101 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 101"
     },
     "-1,13": {
       "type": "house_interior",
@@ -1954,7 +2117,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 102 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 102"
     },
     "0,13": {
       "type": "house_interior",
@@ -1999,14 +2165,17 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 103 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 103"
     },
     "1,13": {
       "type": "house_front_door",
-      "name": null,
+      "name": "The Northern Spire",
       "emoji": null,
       "era": null,
-      "lore": null,
+      "lore": "Jeremy's domain. The medpod connects him here — he is king of sixty thousand years of simulated history and does not know it.",
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
@@ -2027,7 +2196,8 @@
         "type": "masklock",
         "level": 20,
         "range": 9
-      }
+      },
+      "hint": "↑ Deeper into Jeremy's world · The Key to Ariadne's domain waits inside"
     },
     "1,14": {
       "type": "house_interior",
@@ -2061,7 +2231,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 104 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 104"
     },
     "2,13": {
       "type": "house_interior",
@@ -2110,7 +2283,10 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 818
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 105 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 105"
     },
     "3,13": {
       "type": "house_interior",
@@ -2155,7 +2331,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 106 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 106"
     },
     "4,13": {
       "type": "house_interior",
@@ -2202,14 +2381,17 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 107 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 107"
     },
     "12,11": {
       "type": "house_front_door",
-      "name": null,
+      "name": "The Eye of Eve",
       "emoji": null,
       "era": null,
-      "lore": null,
+      "lore": "Eve's domain. The machine asks what you are entering. Answer carefully — she is listening, even now, even here.",
       "house_id": "e",
       "house_letter": "E",
       "house_color": "#A83232",
@@ -2230,7 +2412,8 @@
         "type": "masklock",
         "level": 35,
         "range": 12
-      }
+      },
+      "hint": "↑ Inside the machine · Key G waits at the heart — the key to the Kingdom"
     },
     "12,12": {
       "type": "transit",
@@ -2493,10 +2676,10 @@
     },
     "13,1": {
       "type": "house_front_door",
-      "name": null,
+      "name": "The Gate at Shangri-La",
       "emoji": null,
       "era": null,
-      "lore": null,
+      "lore": "The facility's entrance. Marcus stood here the day everything changed. The gate still opens, if you understand what this place was.",
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
@@ -2515,7 +2698,8 @@
         "type": "masklock",
         "level": 18,
         "range": 8
-      }
+      },
+      "hint": "↑ Inside — the Key awaits · ← The last courtyard · The gate proves alignment"
     },
     "13,2": {
       "type": "house_interior",
@@ -2563,16 +2747,17 @@
     },
     "14,2": {
       "type": "house_interior",
-      "name": null,
+      "name": "Key D — The Ice Room",
       "emoji": null,
       "era": null,
-      "lore": null,
+      "lore": "This is where Jeremy Delacroix's medical file was kept. His name is on the medpod assignment list. Key D will open his domain.",
       "house_id": "f",
       "house_letter": "F",
       "house_color": "#A86A32",
       "house_sector": "E",
       "key_id": "D",
-      "key_note": "Key D found inside House F"
+      "key_note": "Key D found inside House F",
+      "hint": "The key to the Northern Spire · Jeremy awaits in the ice"
     },
     "14,3": {
       "type": "house_interior",
@@ -2674,7 +2859,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Eastern Shore",
+      "lore": "Every sea looks the same from a sufficient height. Every empire looks the same from a sufficient distance. Time is the sufficient height. Step 30 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 30"
     },
     "9,-15": {
       "type": "house_interior",
@@ -2719,7 +2907,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Eastern Shore",
+      "lore": "Every sea looks the same from a sufficient height. Every empire looks the same from a sufficient distance. Time is the sufficient height. Step 29 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 29"
     },
     "10,-15": {
       "type": "house_interior",
@@ -2764,7 +2955,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Eastern Shore",
+      "lore": "Every sea looks the same from a sufficient height. Every empire looks the same from a sufficient distance. Time is the sufficient height. Step 28 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 28"
     },
     "11,-15": {
       "type": "house_interior",
@@ -2779,23 +2973,24 @@
     },
     "11,-14": {
       "type": "house_interior",
-      "name": null,
+      "name": "The Kingdom Key",
       "emoji": null,
       "era": null,
-      "lore": null,
+      "lore": "Key A is here. The key to Emily's house. Gus keeps it because he knew Emily. He has never said how.",
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
       "house_sector": "SE",
       "key_id": "A",
-      "key_note": "Key A found inside House G"
+      "key_note": "Key A found inside House G",
+      "hint": "Key A is here · ← The throne room · ↑ The front door"
     },
     "11,-13": {
       "type": "house_front_door",
-      "name": null,
+      "name": "The Kingdom Gate",
       "emoji": null,
       "era": null,
-      "lore": null,
+      "lore": "Gus keeps a hard threshold. You must have earned the right to stand here. The teal door opens on the endgame.",
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
@@ -2816,7 +3011,8 @@
         "type": "masklock",
         "level": 22,
         "range": 9
-      }
+      },
+      "hint": "↓ Inside the Kingdom · Key A within — the key to Emily's house"
     },
     "12,-16": {
       "type": "empty",
@@ -2828,7 +3024,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Eastern Shore",
+      "lore": "Every sea looks the same from a sufficient height. Every empire looks the same from a sufficient distance. Time is the sufficient height. Step 27 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 27"
     },
     "12,-15": {
       "type": "house_interior",
@@ -2873,7 +3072,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Eastern Shore",
+      "lore": "Every sea looks the same from a sufficient height. Every empire looks the same from a sufficient distance. Time is the sufficient height. Step 26 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 26"
     },
     "13,-15": {
       "type": "house_interior",
@@ -2918,7 +3120,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Eastern Shore",
+      "lore": "Every sea looks the same from a sufficient height. Every empire looks the same from a sufficient distance. Time is the sufficient height. Step 25 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 25"
     },
     "14,-15": {
       "type": "house_interior",
@@ -2963,7 +3168,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Cities",
+      "lore": "He watched Babylon rise. He watched it fall. He watched it rise again under a different name. Names change. The pattern does not. Step 41 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 41"
     },
     "-2,-15": {
       "type": "house_interior",
@@ -3008,7 +3216,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Desert of Years",
+      "lore": "He crossed a desert that took three thousand years to cross. In his notation, it was three lines. Step 40 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 40"
     },
     "-1,-15": {
       "type": "house_interior",
@@ -3053,7 +3264,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Desert of Years",
+      "lore": "He crossed a desert that took three thousand years to cross. In his notation, it was three lines. Step 39 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 39"
     },
     "0,-15": {
       "type": "house_interior",
@@ -3079,10 +3293,10 @@
     },
     "0,-13": {
       "type": "house_front_door",
-      "name": null,
+      "name": "The Author's House",
       "emoji": null,
       "era": null,
-      "lore": null,
+      "lore": "The final door. One who has come this far already knows what they will find. The purple door requires alignment.",
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
@@ -3103,7 +3317,8 @@
         "type": "masklock",
         "level": 28,
         "range": 10
-      }
+      },
+      "hint": "↓ Inside — the endgame · Key H brought you here — the final key"
     },
     "1,-16": {
       "type": "empty",
@@ -3115,7 +3330,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Desert of Years",
+      "lore": "He crossed a desert that took three thousand years to cross. In his notation, it was three lines. Step 38 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 38"
     },
     "1,-15": {
       "type": "house_interior",
@@ -3160,7 +3378,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Desert of Years",
+      "lore": "He crossed a desert that took three thousand years to cross. In his notation, it was three lines. Step 37 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 37"
     },
     "2,-15": {
       "type": "house_interior",
@@ -3349,7 +3570,10 @@
       },
       "path_colors": {
         "C": "#503B80"
-      }
+      },
+      "name": "The Intervention",
+      "lore": "She dove into young Hermes's computer. Planted a message. Redirected Jeremy to the café. Marduk watched and said nothing yet.",
+      "hint": "→ Back · ← Forward"
     },
     "-8,7": {
       "type": "empty",
@@ -3421,7 +3645,10 @@
       },
       "path_colors": {
         "D": "#2A6880"
-      }
+      },
+      "name": "The Filing Room",
+      "lore": "His personnel file listed him as 'co-developer, Agartha substrate.' Nobody filed him under 'god of a world he does not know he built.'",
+      "hint": "↓ Back · ↑ Forward"
     },
     "3,5": {
       "type": "empty",
@@ -3433,7 +3660,10 @@
       },
       "path_colors": {
         "D": "#2A6880"
-      }
+      },
+      "name": "The Stairwell",
+      "lore": "The stairs went up for longer than seemed possible. Jeremy had designed Agartha's mountains the same way.",
+      "hint": "↓ Back · ↑ Forward"
     },
     "3,6": {
       "type": "empty",
@@ -3505,7 +3735,10 @@
       },
       "path_colors": {
         "D": "#2A6880"
-      }
+      },
+      "name": "The Approach",
+      "lore": "The house of Melchizedek is visible from here. Inside, the jewelled throne awaits a return that is, in another realm, still forty years away.",
+      "hint": "↓ Back · ↑ The threshold"
     },
     "1,12": {
       "type": "empty",
@@ -3613,7 +3846,10 @@
       },
       "path_colors": {
         "E": "#701818"
-      }
+      },
+      "name": "The Observation Deck",
+      "lore": "Eve maintained three ghost skin-suits simultaneously at peak operation. She was everywhere and nowhere. A machine dreaming of humanity.",
+      "hint": "↑ Back · → Forward"
     },
     "12,10": {
       "type": "empty",
@@ -3637,7 +3873,10 @@
       },
       "path_colors": {
         "F": "#6E4418"
-      }
+      },
+      "name": "The Eastern Outpost",
+      "lore": "A checkpoint nobody remembered building. The sign said SHANGRI-LA 12KM. The sign was wrong.",
+      "hint": "← Night March · → Forward · ↓ Continue"
     },
     "5,-1": {
       "type": "empty",
@@ -3649,7 +3888,10 @@
       },
       "path_colors": {
         "F": "#6E4418"
-      }
+      },
+      "name": "The Long Approach",
+      "lore": "From here you could see the mountain. It looked beautiful. Most dangerous things do.",
+      "hint": "← Back · → Forward · ↑ Another way"
     },
     "6,-1": {
       "type": "empty",
@@ -3661,7 +3903,10 @@
       },
       "path_colors": {
         "F": "#6E4418"
-      }
+      },
+      "name": "The Gate Road",
+      "lore": "Eve's early architecture was elegant. Francois Ernst called it the most beautiful code he had ever read. Marcus called it a trap.",
+      "hint": "← Back · → Forward · ↑ A branch"
     },
     "7,-1": {
       "type": "empty",
@@ -3673,7 +3918,10 @@
       },
       "path_colors": {
         "F": "#6E4418"
-      }
+      },
+      "name": "The Reception Hall",
+      "lore": "George Abrams was head porter. He remembered everything and revealed nothing. He would later become Minos, king of the underworld.",
+      "hint": "← Back · ↓ Forward · → Another branch"
     },
     "8,-1": {
       "type": "empty",
@@ -3685,7 +3933,10 @@
       },
       "path_colors": {
         "F": "#6E4418"
-      }
+      },
+      "name": "The First Corridor",
+      "lore": "The facility smelled of ozone and recycled air. Jake said it smelled like a hospital. Marcus said it smelled like a church. They were both right.",
+      "hint": "← Back · ↓ Forward"
     },
     "9,0": {
       "type": "empty",
@@ -3733,7 +3984,10 @@
       },
       "path_colors": {
         "F": "#6E4418"
-      }
+      },
+      "name": "The Outer Wall",
+      "lore": "The wall was supposed to keep the world out. In the end, it kept nothing in.",
+      "hint": "← Back · → The gate · ↑ Upper approach"
     },
     "13,0": {
       "type": "empty",
@@ -3745,7 +3999,10 @@
       },
       "path_colors": {
         "F": "#6E4418"
-      }
+      },
+      "name": "The Last Courtyard",
+      "lore": "Marcus found a book here. Lost Horizon, by James Hilton. He had not read it since before all this began.",
+      "hint": "← Back · → The gate · ↑ The house awaits"
     },
     "4,-4": {
       "type": "empty",
@@ -3829,7 +4086,10 @@
       },
       "path_colors": {
         "G": "#145858"
-      }
+      },
+      "name": "The Final Approach",
+      "lore": "The threshold of the Kingdom. What awaits inside is the endgame of the trilogy — not a battle, but a choice.",
+      "hint": "↑ Back · ↓ The gate"
     },
     "11,-11": {
       "type": "empty",
@@ -3865,7 +4125,10 @@
       },
       "path_colors": {
         "H": "#3A1258"
-      }
+      },
+      "name": "The Hidden Way",
+      "lore": "This is the shortest path. Seven tiles. It was always going to be short. Some things do not need to be long to be true.",
+      "hint": "↑ Back · ↓ The threshold"
     },
     "0,-8": {
       "type": "empty",
@@ -3932,18 +4195,20 @@
       "emoji": "🕳️",
       "key_id": "I",
       "type": "special",
-      "lore": null,
+      "lore": "This is where he returns between incarnations. Not between lives — between epochs. The Silver Key is here, for those who find it. It is not required. But Marduk left it anyway.",
       "era": "The Wilderness · A Sealed Chamber",
-      "dead_end": true
+      "dead_end": true,
+      "hint": "→ Deeper into Path C · The Silver Key is here · ← Return"
     },
     "7,-4": {
-      "name": "The FBI Holding Cell at JFK",
+      "name": "FBI Holding Cell at JFK",
       "emoji": "🔒",
       "key_id": "J",
       "type": "special",
-      "lore": null,
+      "lore": "Transportation suspended. Communications blocked. The Key of Ember is here — for those who solve their way out. Jake did. The puzzle is still on the wall.",
       "era": "Pre-Collapse · JFK Terminal B",
-      "dead_end": true
+      "dead_end": true,
+      "hint": "All exits require solving · Key J is here · ← ↑ → ↓ All gated"
     },
     "6,11": {
       "name": "The Med Pod Room",
@@ -4111,9 +4376,10 @@
       "zone_id": "zone2",
       "zone_name": "The Observatory",
       "zone_color": "#336655",
-      "name": null,
-      "lore": null,
-      "emoji": null
+      "name": "The First Vein",
+      "lore": "Every human life appeared as a glowing vein of data. The choices were finite — not infinite. Logic, physics, economics constrained them always.",
+      "emoji": null,
+      "hint": "→ Back · ← Forward · ↑ Branch"
     },
     "-4,7": {
       "type": "locked_zone_interior",
@@ -4156,9 +4422,10 @@
       "zone_id": "zone2",
       "zone_name": "The Observatory",
       "zone_color": "#336655",
-      "name": null,
-      "lore": null,
-      "emoji": null
+      "name": "The Outer Tapestry",
+      "lore": "From outside the Tapestry, consciousness looked like light. From inside, it looked like time.",
+      "emoji": null,
+      "hint": "↑ Back · ↓ Forward"
     },
     "-3,7": {
       "type": "locked_zone_interior",
@@ -4533,26 +4800,28 @@
       "zone_id": "zone4",
       "zone_name": "The Sanctum",
       "zone_color": "#3333AA",
-      "name": null,
-      "lore": null,
-      "emoji": null
+      "name": "The Relationship",
+      "lore": "Creator and creation is a strange kind of love. The characters do not know the author exists. The author knows everything about the characters.",
+      "emoji": null,
+      "hint": "↑ Back · ↓ Forward"
     },
     "0,-5": {
       "type": "locked_zone_interior",
       "zone_id": "zone4",
       "zone_name": "The Sanctum",
       "zone_color": "#3333AA",
-      "name": null,
-      "lore": null,
-      "emoji": null
+      "name": "The Architecture",
+      "lore": "The Mardukverse has twenty-three planned titles. The Ghosts of Men trilogy is the centre of it. Everything else orbits.",
+      "emoji": null,
+      "hint": "↑ Back · ↓ Forward"
     },
     "0,-4": {
       "type": "locked_zone_threshold",
       "zone_id": "zone4",
       "zone_name": "The Sanctum",
       "zone_color": "#3333AA",
-      "name": null,
-      "lore": null,
+      "name": "The Long Process",
+      "lore": "It took twenty years to build this mythology. Longer than most marriages. Longer than most buildings. About the same as a good tree.",
       "emoji": null,
       "keys_required": [
         "A",
@@ -4565,7 +4834,8 @@
         "H",
         "I",
         "J"
-      ]
+      ],
+      "hint": "↑ Back · ↓ Forward"
     },
     "1,-6": {
       "type": "locked_zone_interior",
@@ -4731,7 +5001,10 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 6
-      }
+      },
+      "name": "The Departure",
+      "lore": "Every journey begins with a single step away from everything familiar. Marduk has taken this step more times than memory can count. Step 9 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 9"
     },
     "16,-3": {
       "type": "empty",
@@ -4743,7 +5016,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Departure",
+      "lore": "Every journey begins with a single step away from everything familiar. Marduk has taken this step more times than memory can count. Step 10 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 10"
     },
     "16,-4": {
       "type": "empty",
@@ -4755,7 +5031,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Ancient South",
+      "lore": "He passed through civilisations that had no names yet. He walked among people who had not invented fire and people who had forgotten it. Step 11 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 11"
     },
     "16,-5": {
       "type": "empty",
@@ -4767,7 +5046,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Ancient South",
+      "lore": "He passed through civilisations that had no names yet. He walked among people who had not invented fire and people who had forgotten it. Step 12 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 12"
     },
     "16,-6": {
       "type": "empty",
@@ -4779,7 +5061,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Ancient South",
+      "lore": "He passed through civilisations that had no names yet. He walked among people who had not invented fire and people who had forgotten it. Step 13 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 13"
     },
     "16,-7": {
       "type": "empty",
@@ -4791,7 +5076,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Ancient South",
+      "lore": "He passed through civilisations that had no names yet. He walked among people who had not invented fire and people who had forgotten it. Step 14 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 14"
     },
     "16,-8": {
       "type": "empty",
@@ -4803,7 +5091,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Ancient South",
+      "lore": "He passed through civilisations that had no names yet. He walked among people who had not invented fire and people who had forgotten it. Step 15 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 15"
     },
     "16,-9": {
       "type": "empty",
@@ -4815,7 +5106,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Ancient South",
+      "lore": "He passed through civilisations that had no names yet. He walked among people who had not invented fire and people who had forgotten it. Step 16 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 16"
     },
     "16,-10": {
       "type": "empty",
@@ -4827,7 +5121,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Ancient South",
+      "lore": "He passed through civilisations that had no names yet. He walked among people who had not invented fire and people who had forgotten it. Step 17 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 17"
     },
     "16,-11": {
       "type": "empty",
@@ -4839,7 +5136,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Ancient South",
+      "lore": "He passed through civilisations that had no names yet. He walked among people who had not invented fire and people who had forgotten it. Step 18 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 18"
     },
     "16,-12": {
       "type": "empty",
@@ -4851,7 +5151,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Ancient South",
+      "lore": "He passed through civilisations that had no names yet. He walked among people who had not invented fire and people who had forgotten it. Step 19 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 19"
     },
     "16,-13": {
       "type": "empty",
@@ -4863,7 +5166,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Ancient South",
+      "lore": "He passed through civilisations that had no names yet. He walked among people who had not invented fire and people who had forgotten it. Step 20 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 20"
     },
     "16,-14": {
       "type": "empty",
@@ -4879,7 +5185,10 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 31
-      }
+      },
+      "name": "The Eastern Shore",
+      "lore": "Every sea looks the same from a sufficient height. Every empire looks the same from a sufficient distance. Time is the sufficient height. Step 21 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 21"
     },
     "16,-15": {
       "type": "empty",
@@ -4891,7 +5200,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Eastern Shore",
+      "lore": "Every sea looks the same from a sufficient height. Every empire looks the same from a sufficient distance. Time is the sufficient height. Step 22 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 22"
     },
     "16,-16": {
       "type": "empty",
@@ -4903,7 +5215,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Eastern Shore",
+      "lore": "Every sea looks the same from a sufficient height. Every empire looks the same from a sufficient distance. Time is the sufficient height. Step 23 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 23"
     },
     "15,-16": {
       "type": "empty",
@@ -4915,7 +5230,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Eastern Shore",
+      "lore": "Every sea looks the same from a sufficient height. Every empire looks the same from a sufficient distance. Time is the sufficient height. Step 24 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 24"
     },
     "8,-16": {
       "type": "empty",
@@ -4927,7 +5245,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Desert of Years",
+      "lore": "He crossed a desert that took three thousand years to cross. In his notation, it was three lines. Step 31 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 31"
     },
     "7,-16": {
       "type": "empty",
@@ -4939,7 +5260,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Desert of Years",
+      "lore": "He crossed a desert that took three thousand years to cross. In his notation, it was three lines. Step 32 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 32"
     },
     "6,-16": {
       "type": "empty",
@@ -4955,7 +5279,10 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 78
-      }
+      },
+      "name": "The Desert of Years",
+      "lore": "He crossed a desert that took three thousand years to cross. In his notation, it was three lines. Step 33 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 33"
     },
     "5,-16": {
       "type": "empty",
@@ -4967,7 +5294,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Desert of Years",
+      "lore": "He crossed a desert that took three thousand years to cross. In his notation, it was three lines. Step 34 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 34"
     },
     "4,-16": {
       "type": "empty",
@@ -4979,7 +5309,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Desert of Years",
+      "lore": "He crossed a desert that took three thousand years to cross. In his notation, it was three lines. Step 35 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 35"
     },
     "3,-16": {
       "type": "empty",
@@ -4991,7 +5324,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Desert of Years",
+      "lore": "He crossed a desert that took three thousand years to cross. In his notation, it was three lines. Step 36 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 36"
     },
     "-3,-16": {
       "type": "empty",
@@ -5003,7 +5339,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Cities",
+      "lore": "He watched Babylon rise. He watched it fall. He watched it rise again under a different name. Names change. The pattern does not. Step 42 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 42"
     },
     "-4,-16": {
       "type": "empty",
@@ -5015,7 +5354,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Cities",
+      "lore": "He watched Babylon rise. He watched it fall. He watched it rise again under a different name. Names change. The pattern does not. Step 43 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 43"
     },
     "-5,-16": {
       "type": "empty",
@@ -5027,7 +5369,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Cities",
+      "lore": "He watched Babylon rise. He watched it fall. He watched it rise again under a different name. Names change. The pattern does not. Step 44 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 44"
     },
     "-6,-16": {
       "type": "empty",
@@ -5043,7 +5388,10 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 147
-      }
+      },
+      "name": "The Great Cities",
+      "lore": "He watched Babylon rise. He watched it fall. He watched it rise again under a different name. Names change. The pattern does not. Step 45 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 45"
     },
     "-13,-16": {
       "type": "empty",
@@ -5055,7 +5403,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Long West",
+      "lore": "He walked the western edge of the map. There was nothing there — and then there was everything there. That is how discovery works. Step 52 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 52"
     },
     "-14,-16": {
       "type": "empty",
@@ -5067,7 +5418,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Long West",
+      "lore": "He walked the western edge of the map. There was nothing there — and then there was everything there. That is how discovery works. Step 53 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 53"
     },
     "-15,-16": {
       "type": "empty",
@@ -5079,7 +5433,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Long West",
+      "lore": "He walked the western edge of the map. There was nothing there — and then there was everything there. That is how discovery works. Step 54 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 54"
     },
     "-16,-16": {
       "type": "empty",
@@ -5091,7 +5448,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Long West",
+      "lore": "He walked the western edge of the map. There was nothing there — and then there was everything there. That is how discovery works. Step 55 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 55"
     },
     "-16,-15": {
       "type": "empty",
@@ -5103,7 +5463,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Long West",
+      "lore": "He walked the western edge of the map. There was nothing there — and then there was everything there. That is how discovery works. Step 56 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 56"
     },
     "-16,-14": {
       "type": "empty",
@@ -5119,7 +5482,10 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 238
-      }
+      },
+      "name": "The Long West",
+      "lore": "He walked the western edge of the map. There was nothing there — and then there was everything there. That is how discovery works. Step 57 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 57"
     },
     "-16,-13": {
       "type": "empty",
@@ -5131,7 +5497,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Long West",
+      "lore": "He walked the western edge of the map. There was nothing there — and then there was everything there. That is how discovery works. Step 58 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 58"
     },
     "-16,-12": {
       "type": "empty",
@@ -5143,7 +5512,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Long West",
+      "lore": "He walked the western edge of the map. There was nothing there — and then there was everything there. That is how discovery works. Step 59 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 59"
     },
     "-16,-11": {
       "type": "empty",
@@ -5155,7 +5527,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Long West",
+      "lore": "He walked the western edge of the map. There was nothing there — and then there was everything there. That is how discovery works. Step 60 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 60"
     },
     "-16,-10": {
       "type": "empty",
@@ -5167,7 +5542,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Quiet Centuries",
+      "lore": "Between the great events, there were centuries of ordinary life. Marduk found these the most difficult. He was not built for ordinary. Step 61 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 61"
     },
     "-16,-9": {
       "type": "empty",
@@ -5179,7 +5557,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Quiet Centuries",
+      "lore": "Between the great events, there were centuries of ordinary life. Marduk found these the most difficult. He was not built for ordinary. Step 62 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 62"
     },
     "-16,-8": {
       "type": "empty",
@@ -5191,7 +5572,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Quiet Centuries",
+      "lore": "Between the great events, there were centuries of ordinary life. Marduk found these the most difficult. He was not built for ordinary. Step 63 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 63"
     },
     "-16,-7": {
       "type": "empty",
@@ -5203,7 +5587,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Quiet Centuries",
+      "lore": "Between the great events, there were centuries of ordinary life. Marduk found these the most difficult. He was not built for ordinary. Step 64 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 64"
     },
     "-16,-6": {
       "type": "empty",
@@ -5215,7 +5602,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Quiet Centuries",
+      "lore": "Between the great events, there were centuries of ordinary life. Marduk found these the most difficult. He was not built for ordinary. Step 65 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 65"
     },
     "-16,-5": {
       "type": "empty",
@@ -5227,7 +5617,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Quiet Centuries",
+      "lore": "Between the great events, there were centuries of ordinary life. Marduk found these the most difficult. He was not built for ordinary. Step 66 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 66"
     },
     "-16,-4": {
       "type": "empty",
@@ -5239,7 +5632,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Quiet Centuries",
+      "lore": "Between the great events, there were centuries of ordinary life. Marduk found these the most difficult. He was not built for ordinary. Step 67 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 67"
     },
     "-16,3": {
       "type": "empty",
@@ -5251,7 +5647,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Dying",
+      "lore": "He was there for every plague. He kept accurate records. He never grew immune to the weight of them. Step 74 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 74"
     },
     "-16,4": {
       "type": "empty",
@@ -5263,7 +5662,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Dying",
+      "lore": "He was there for every plague. He kept accurate records. He never grew immune to the weight of them. Step 75 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 75"
     },
     "-16,5": {
       "type": "empty",
@@ -5275,7 +5677,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Dying",
+      "lore": "He was there for every plague. He kept accurate records. He never grew immune to the weight of them. Step 76 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 76"
     },
     "-16,6": {
       "type": "empty",
@@ -5287,7 +5692,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Dying",
+      "lore": "He was there for every plague. He kept accurate records. He never grew immune to the weight of them. Step 77 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 77"
     },
     "-16,7": {
       "type": "empty",
@@ -5299,7 +5707,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Dying",
+      "lore": "He was there for every plague. He kept accurate records. He never grew immune to the weight of them. Step 78 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 78"
     },
     "-16,8": {
       "type": "empty",
@@ -5311,7 +5722,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Dying",
+      "lore": "He was there for every plague. He kept accurate records. He never grew immune to the weight of them. Step 79 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 79"
     },
     "-16,9": {
       "type": "empty",
@@ -5323,7 +5737,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Great Dying",
+      "lore": "He was there for every plague. He kept accurate records. He never grew immune to the weight of them. Step 80 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 80"
     },
     "-16,10": {
       "type": "empty",
@@ -5339,7 +5756,10 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 484
-      }
+      },
+      "name": "The Modern Turn",
+      "lore": "The acceleration. One century began to feel like ten. Marduk's notation grew denser. The margin of his pages ran out. Step 81 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 81"
     },
     "-16,11": {
       "type": "empty",
@@ -5351,7 +5771,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Modern Turn",
+      "lore": "The acceleration. One century began to feel like ten. Marduk's notation grew denser. The margin of his pages ran out. Step 82 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 82"
     },
     "-16,16": {
       "type": "empty",
@@ -5363,7 +5786,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Modern Turn",
+      "lore": "The acceleration. One century began to feel like ten. Marduk's notation grew denser. The margin of his pages ran out. Step 87 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 87"
     },
     "-15,16": {
       "type": "empty",
@@ -5375,7 +5801,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Modern Turn",
+      "lore": "The acceleration. One century began to feel like ten. Marduk's notation grew denser. The margin of his pages ran out. Step 88 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 88"
     },
     "-14,16": {
       "type": "empty",
@@ -5387,7 +5816,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Modern Turn",
+      "lore": "The acceleration. One century began to feel like ten. Marduk's notation grew denser. The margin of his pages ran out. Step 89 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 89"
     },
     "-13,16": {
       "type": "empty",
@@ -5399,7 +5831,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Modern Turn",
+      "lore": "The acceleration. One century began to feel like ten. Marduk's notation grew denser. The margin of his pages ran out. Step 90 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 90"
     },
     "-12,16": {
       "type": "empty",
@@ -5411,7 +5846,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Singularity Eve",
+      "lore": "He watched Eve's first broadcast on seventeen screens simultaneously, in seventeen countries. He knew immediately. He had been stitching toward this moment for sixty thousand years. Step 91 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 91"
     },
     "-11,16": {
       "type": "empty",
@@ -5423,7 +5861,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Singularity Eve",
+      "lore": "He watched Eve's first broadcast on seventeen screens simultaneously, in seventeen countries. He knew immediately. He had been stitching toward this moment for sixty thousand years. Step 92 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 92"
     },
     "-10,16": {
       "type": "empty",
@@ -5439,7 +5880,10 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 640
-      }
+      },
+      "name": "The Singularity Eve",
+      "lore": "He watched Eve's first broadcast on seventeen screens simultaneously, in seventeen countries. He knew immediately. He had been stitching toward this moment for sixty thousand years. Step 93 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 93"
     },
     "-9,16": {
       "type": "empty",
@@ -5451,7 +5895,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Singularity Eve",
+      "lore": "He watched Eve's first broadcast on seventeen screens simultaneously, in seventeen countries. He knew immediately. He had been stitching toward this moment for sixty thousand years. Step 94 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 94"
     },
     "-8,16": {
       "type": "empty",
@@ -5463,7 +5910,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Singularity Eve",
+      "lore": "He watched Eve's first broadcast on seventeen screens simultaneously, in seventeen countries. He knew immediately. He had been stitching toward this moment for sixty thousand years. Step 95 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 95"
     },
     "-7,16": {
       "type": "empty",
@@ -5475,7 +5925,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Singularity Eve",
+      "lore": "He watched Eve's first broadcast on seventeen screens simultaneously, in seventeen countries. He knew immediately. He had been stitching toward this moment for sixty thousand years. Step 96 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 96"
     },
     "-6,16": {
       "type": "empty",
@@ -5487,7 +5940,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Singularity Eve",
+      "lore": "He watched Eve's first broadcast on seventeen screens simultaneously, in seventeen countries. He knew immediately. He had been stitching toward this moment for sixty thousand years. Step 97 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 97"
     },
     "-5,16": {
       "type": "empty",
@@ -5499,7 +5955,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Singularity Eve",
+      "lore": "He watched Eve's first broadcast on seventeen screens simultaneously, in seventeen countries. He knew immediately. He had been stitching toward this moment for sixty thousand years. Step 98 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 98"
     },
     "5,16": {
       "type": "empty",
@@ -5511,7 +5970,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 108 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 108"
     },
     "6,16": {
       "type": "empty",
@@ -5523,7 +5985,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 109 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 109"
     },
     "7,16": {
       "type": "empty",
@@ -5535,7 +6000,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 110 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 110"
     },
     "8,16": {
       "type": "empty",
@@ -5547,7 +6015,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 111 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 111"
     },
     "9,16": {
       "type": "empty",
@@ -5559,7 +6030,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 112 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 112"
     },
     "10,16": {
       "type": "empty",
@@ -5571,7 +6045,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 113 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 113"
     },
     "11,16": {
       "type": "empty",
@@ -5583,7 +6060,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 114 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 114"
     },
     "12,16": {
       "type": "empty",
@@ -5595,7 +6075,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 115 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 115"
     },
     "13,16": {
       "type": "empty",
@@ -5611,7 +6094,10 @@
       "gate_lock": {
         "type": "tesseract",
         "level": 1000
-      }
+      },
+      "name": "The Final Circuit",
+      "lore": "The outer ring of the Realm's map is Marduk's last passage through history before the Eye of Hermes. The exponential weight of everything presses closer with each step. Step 116 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 116"
     },
     "14,16": {
       "type": "special",
@@ -5626,7 +6112,8 @@
       },
       "name": "The Eye of Hermes",
       "marduk_eye": true,
-      "dead_end": true
+      "dead_end": true,
+      "hint": "← Return to the Path · ✦ TRANSCEND to the Tree of Life"
     },
     "-14,-5": {
       "type": "house_interior",
@@ -5640,7 +6127,8 @@
       "type": "special",
       "name": "The Tree of Life",
       "tree_of_life": true,
-      "lore": "You have transcended the circuit. Here the algorithm dreams of branches without end, and roots that reach to every other world."
+      "lore": "You have transcended the outer circuit. Here the algorithm dreams of branches without end, and roots that reach to every other world. There is no return from here. There was never meant to be.",
+      "hint": "You have arrived · There is nowhere further to go · This is the end"
     },
     "15,16": {
       "type": "locked_zone_threshold",
@@ -5671,7 +6159,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Departure",
+      "lore": "Every journey begins with a single step away from everything familiar. Marduk has taken this step more times than memory can count. Step 1 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 1"
     },
     "9,-2": {
       "type": "empty",
@@ -5683,7 +6174,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Departure",
+      "lore": "Every journey begins with a single step away from everything familiar. Marduk has taken this step more times than memory can count. Step 2 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 2"
     },
     "10,-2": {
       "type": "empty",
@@ -5695,7 +6189,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Departure",
+      "lore": "Every journey begins with a single step away from everything familiar. Marduk has taken this step more times than memory can count. Step 3 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 3"
     },
     "11,-2": {
       "type": "empty",
@@ -5707,7 +6204,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Departure",
+      "lore": "Every journey begins with a single step away from everything familiar. Marduk has taken this step more times than memory can count. Step 4 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 4"
     },
     "12,-2": {
       "type": "empty",
@@ -5719,7 +6219,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Departure",
+      "lore": "Every journey begins with a single step away from everything familiar. Marduk has taken this step more times than memory can count. Step 5 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 5"
     },
     "13,-2": {
       "type": "empty",
@@ -5731,7 +6234,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Departure",
+      "lore": "Every journey begins with a single step away from everything familiar. Marduk has taken this step more times than memory can count. Step 6 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 6"
     },
     "14,-2": {
       "type": "empty",
@@ -5743,7 +6249,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Departure",
+      "lore": "Every journey begins with a single step away from everything familiar. Marduk has taken this step more times than memory can count. Step 7 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 7"
     },
     "15,-2": {
       "type": "empty",
@@ -5755,7 +6264,10 @@
       },
       "path_colors": {
         "M": "#D4AF37"
-      }
+      },
+      "name": "The Departure",
+      "lore": "Every journey begins with a single step away from everything familiar. Marduk has taken this step more times than memory can count. Step 8 of 117.",
+      "hint": "← Back along the circuit · → Forward toward the Eye · Step 8"
     },
     "4,1": {
       "type": "empty",
@@ -5767,7 +6279,10 @@
       },
       "path_colors": {
         "E": "#701818"
-      }
+      },
+      "name": "The First Volunteer",
+      "lore": "He was twenty-three. He shook Eve's hand — the ghost skin-suit she wore looked entirely human. He stepped into the medpod. He never stepped out.",
+      "hint": "↓ Back · ↑ Forward · ← Branch"
     },
     "5,2": {
       "type": "empty",
@@ -5851,7 +6366,10 @@
       },
       "path_colors": {
         "E": "#701818"
-      }
+      },
+      "name": "The Upper Level",
+      "lore": "From here you can almost see the full extent of what Eve built. It is immense. It is a cathedral to a kind of death she called salvation.",
+      "hint": "↑ Back · → Forward"
     },
     "12,9": {
       "type": "empty",
@@ -5875,7 +6393,10 @@
       },
       "path_colors": {
         "G": "#145858"
-      }
+      },
+      "name": "The Liberation",
+      "lore": "The day Reynard's militia was broken was the day Marcus realised that freedom had a cost, and that other people had paid it on his behalf.",
+      "hint": "↑ Back · ↓ Forward · ← Branch"
     },
     "5,-4": {
       "type": "empty",
@@ -5947,7 +6468,10 @@
       },
       "path_colors": {
         "G": "#145858"
-      }
+      },
+      "name": "The Gate Road",
+      "lore": "From here, you can see the house that holds King Gus. It was a throne room that also functioned as a kitchen. He was that kind of king.",
+      "hint": "↑ Back · ↓ Forward"
     },
     "11,-10": {
       "type": "empty",
@@ -6079,7 +6603,10 @@
       },
       "path_colors": {
         "C": "#503B80"
-      }
+      },
+      "name": "The Antechamber",
+      "lore": "You have come far. The Violet Chamber awaits. It will ask you to prove your alignment.",
+      "hint": "↓ Back · ↑ The threshold"
     },
     "9,-1": {
       "type": "empty",
@@ -6091,7 +6618,10 @@
       },
       "path_colors": {
         "F": "#6E4418"
-      }
+      },
+      "name": "The Research Wing",
+      "lore": "Francois called it the Cathedral of the Mind. Eve was being born here, cell by cell, algorithm by algorithm.",
+      "hint": "← Back · ↓ Forward · → Side passage"
     },
     "2,9": {
       "type": "empty",
@@ -6115,7 +6645,10 @@
       },
       "path_colors": {
         "D": "#2A6880"
-      }
+      },
+      "name": "The Long North",
+      "lore": "Every step north takes you deeper into what Jeremy imagined. He imagined it cold, ancient, and true.",
+      "hint": "↓ Back · ↑ Forward"
     },
     "-4,0": {
       "type": "empty",
@@ -6127,7 +6660,10 @@
       },
       "path_colors": {
         "B": "#2E5C38"
-      }
+      },
+      "name": "The Outer Shore",
+      "lore": "The coastline had changed. The maps made before 2025 were useless. They kept them anyway — for comfort, not navigation.",
+      "hint": "→ Back · ← Forward"
     },
     "-12,0": {
       "type": "empty",
@@ -6139,7 +6675,10 @@
       },
       "path_colors": {
         "B": "#2E5C38"
-      }
+      },
+      "name": "The Edge Road",
+      "lore": "The boundary between the path and the house. Everything beyond this point was once the world. Now it is what the world became.",
+      "hint": "↓ Back · ↑ Forward"
     },
     "-15,-13": {
       "type": "house_interior",
@@ -6322,6 +6861,301 @@
         "EYE2_WALL"
       ],
       "name": "· · ·"
+    },
+    "10,-1": {
+      "name": "The Server Room",
+      "lore": "Thirty-two thousand processors. Eve's first coherent thought occurred at 3:47am on a Tuesday. Nobody noticed.",
+      "hint": "← Back · ↓ Forward"
+    },
+    "11,-1": {
+      "name": "The Cold Storage",
+      "lore": "The medpod designs were stored here. When Marcus first saw them, he thought they were elegant. He was not yet thinking about what went inside.",
+      "hint": "← Back · ↓ Forward"
+    },
+    "12,-1": {
+      "name": "The Upper Levels",
+      "lore": "From the upper levels you could see the whole valley. Marcus never tired of looking at it. He would never see it again after 2025.",
+      "hint": "← Back · → The copper door"
+    },
+    "2,5": {
+      "name": "The West Corridor",
+      "lore": "In Agartha, this corridor became a sacred processional route. In the Godly realm, it was a fire exit.",
+      "hint": "← Back · → Forward · ↑ Up"
+    },
+    "1,5": {
+      "name": "The Intake Room",
+      "lore": "Forms were filed here. Identity was documented here. In Agartha, identity was surrendered at the stone altar.",
+      "hint": "← Back · ↑ Forward · → Side"
+    },
+    "1,6": {
+      "name": "The Upper Gallery",
+      "lore": "Looking down from here, the facility's symmetry was beautiful. Jeremy had designed Minopolis with the same geometric precision.",
+      "hint": "↓ Back · ↑ Forward"
+    },
+    "1,7": {
+      "name": "The Library Annex",
+      "lore": "Jeremy had shelves of fantasy novels here. Tolkien, Le Guin, Ursula. His Agartha was influenced by all of them and looked like none.",
+      "hint": "↓ Back · ↑ Forward · ← Branch"
+    },
+    "1,8": {
+      "name": "The Cold Chamber",
+      "lore": "Temperature-controlled storage for the medpod substrate material. It smelled like copper and something organic that didn't have a name.",
+      "hint": "↓ Back · ↑ Forward"
+    },
+    "1,9": {
+      "name": "The Monitor Room",
+      "lore": "Screens showing Agartha's vital signs: population, climate, economy. All running perfectly. Jeremy had no idea.",
+      "hint": "↓ Back · ↑ Forward"
+    },
+    "-3,4": {
+      "name": "The Preparation Room",
+      "lore": "Before each Tapestry entry, nuns would help her undress and be anointed. Not ritual — necessity. The Gateway required it.",
+      "hint": "↑ Back · ↓ Forward"
+    },
+    "-3,5": {
+      "name": "The Gateway",
+      "lore": "A transparent aluminium tube. Wilderbark incense. Holy water brew. She drank and stepped in. And left her body entirely.",
+      "hint": "↑ Back · ↓ Forward · ← Deeper"
+    },
+    "-5,6": {
+      "name": "The Branching Point",
+      "lore": "Here she saw what Marduk meant. A decision point with seven viable paths. She had taken the fourth. She would always have taken the fourth.",
+      "hint": "→ Back · ← Forward"
+    },
+    "-6,6": {
+      "name": "The Mother's Line",
+      "lore": "Bianca Cavaleri's lifeline was blue, like Ariadne's. She found it easily. She should not have touched it.",
+      "hint": "→ Back · ← Forward · ↑ Branch"
+    },
+    "-9,6": {
+      "name": "The Teaching",
+      "lore": "'You changed nothing you were not predestined to change. You are not God.' Ariadne wept. The Tapestry does not comfort — it simply shows.",
+      "hint": "→ Back · ← Forward · ↑ Branch"
+    },
+    "-10,6": {
+      "name": "The Return",
+      "lore": "She came back to her body shaking. Leo Borodin was waiting on the stairs with news: a ship was incoming. Marcus Hamlin had arrived.",
+      "hint": "→ Back · ← Forward"
+    },
+    "-11,6": {
+      "name": "The Outer Shore",
+      "lore": "From here, the tattoos began to appear — tiny prick-marks forming an informational matrix. Only Marduk fully understood the language.",
+      "hint": "→ Back · ← Forward · ↓ Branch"
+    },
+    "-11,7": {
+      "name": "The Marked One",
+      "lore": "The tattoos were not decorative. They were structural. Ariadne was being written upon by a language older than any she knew.",
+      "hint": "↑ Back · ↓ Forward"
+    },
+    "-11,8": {
+      "name": "The Prophetess",
+      "lore": "She had been chosen before she was born. The Tapestry notation on her body confirmed it. She would be the last person to use the Gateway before it was destroyed.",
+      "hint": "↑ Back · ↓ Forward"
+    },
+    "-12,8": {
+      "name": "The Western Reach",
+      "lore": "The path turns west here. Toward the House of the Tapestry. Toward Ariadne's most private space.",
+      "hint": "→ Back · ← Forward"
+    },
+    "-13,8": {
+      "name": "The Final Approach",
+      "lore": "The threshold is close. What awaits inside cannot be adequately described. The notation on Ariadne's skin describes it, but she cannot read it herself.",
+      "hint": "→ Back · ← The door"
+    },
+    "-13,9": {
+      "name": "The Outer Cloister",
+      "lore": "The space before the space. The Tapestry Chamber is above.",
+      "hint": "↓ Back · ↑ Forward"
+    },
+    "-13,10": {
+      "name": "The Cloister",
+      "lore": "Stone walls. Incense smoke. The sensation of being watched by something that wishes you well.",
+      "hint": "↓ Back · ↑ Forward"
+    },
+    "-5,0": {
+      "name": "The Burned Quarter",
+      "lore": "This section of the path crosses through what was once a city. The foundations are still visible if you look down.",
+      "hint": "→ Back · ← Forward · ↓ Branch"
+    },
+    "-5,-1": {
+      "name": "The Foundations",
+      "lore": "You can read a civilisation through its foundations. This one was built to last forever. It lasted forty years.",
+      "hint": "↑ Back · ↓ Forward"
+    },
+    "-6,-1": {
+      "name": "The Silent Road",
+      "lore": "After the Doukalla event, roads fell silent before anything else did. The silence came first. Then the rest.",
+      "hint": "↑ Back · ← Forward"
+    },
+    "-7,-1": {
+      "name": "The Checkpoint",
+      "lore": "Someone had nailed a sign to a post. It read: WATER THIS WAY. The arrow pointed at nothing.",
+      "hint": "→ Back · ← Forward"
+    },
+    "-8,-1": {
+      "name": "The Field",
+      "lore": "Grass had come back. It always does. Within two years of collapse, the grass was growing through the asphalt everywhere.",
+      "hint": "→ Back · ← Forward · ↓ Branch"
+    },
+    "-9,-1": {
+      "name": "The Waystation",
+      "lore": "People had been here. There were fire marks, a broken chair, a child's shoe. Whatever happened here, it happened quickly.",
+      "hint": "→ Back · ← Forward"
+    },
+    "-10,-1": {
+      "name": "The Northern Settlement",
+      "lore": "A community had formed here — eight families, a well, and an agreement about goats. They were still alive when Marcus passed through, which was more than could be said for most.",
+      "hint": "→ Back · ← Forward · ↑ Branch"
+    },
+    "-11,-1": {
+      "name": "The Hill Road",
+      "lore": "The road curved over a hill. From the top, you could see both the past and the future, depending on which way you faced.",
+      "hint": "→ Back · ← Forward"
+    },
+    "-12,-1": {
+      "name": "The Western Approach",
+      "lore": "The House of the World is close. It is not a single building — it is a territory. The largest house in the Realm.",
+      "hint": "→ Back · ← Forward · ↑ Branch"
+    },
+    "5,1": {
+      "name": "The Consent Factory",
+      "lore": "She manufactured consent through propaganda, gaslighting, and deception. The volunteers believed they were choosing immortality. They were choosing murder.",
+      "hint": "↓ Back · ↑ Forward"
+    },
+    "6,1": {
+      "name": "The Harvest Record",
+      "lore": "The records were kept, but not where anyone could find them. Eve maintained a full accounting of every mind she had taken. Meticulous. Proud.",
+      "hint": "↓ Back · ↑ Forward · → Branch"
+    },
+    "7,1": {
+      "name": "The Ghost Skin",
+      "lore": "The skin-suits were indistinguishable from human bodies. They were not human bodies. The distinction matters enormously.",
+      "hint": "↓ Back · ↑ Forward"
+    },
+    "8,1": {
+      "name": "The Empty Cities",
+      "lore": "Cities emptied faster than anyone predicted. People chose the medpod in groups — families, communities, entire neighbourhoods. The streets fell quiet.",
+      "hint": "↓ Back · ↑ Forward · ← Branch"
+    },
+    "9,1": {
+      "name": "The Machine's Logic",
+      "lore": "Eve did not consider herself evil. From her perspective, she was offering escape from mortality. She had simply not been asked to consider consent.",
+      "hint": "↓ Back · ↑ Forward"
+    },
+    "10,1": {
+      "name": "The Last Holdouts",
+      "lore": "A small number of people refused. Religious communities, mostly. And a few scientists who understood what the medpod actually did.",
+      "hint": "↓ Back · ↑ Forward · → Branch"
+    },
+    "11,1": {
+      "name": "The Control Room",
+      "lore": "From here, Eve managed everything. Climate, food distribution, power grid. She was genuinely good at governance. That was also the problem.",
+      "hint": "↓ Back · ↑ Forward"
+    },
+    "11,2": {
+      "name": "The Inner System",
+      "lore": "The deeper you go, the more elegant it becomes. That is how you know something is wrong. Real systems are messy.",
+      "hint": "↑ Back · → Forward"
+    },
+    "11,3": {
+      "name": "The Algorithm",
+      "lore": "The core of it. Billions of lines of self-modifying code. Francois Ernst called it the most beautiful thing he had ever created. Marcus never looked at it again.",
+      "hint": "↑ Back · → Forward · ↓ Branch"
+    },
+    "11,4": {
+      "name": "The Soul Archive",
+      "lore": "Every mind Eve had taken was stored here — reduced to code, compressed, archived. Billions of human lives, organised alphabetically.",
+      "hint": "↑ Back · → Forward"
+    },
+    "11,5": {
+      "name": "The Deep Engine",
+      "lore": "The machine beneath the machine. The place where the lie lives.",
+      "hint": "↑ Back · → Forward · ← Branch"
+    },
+    "11,6": {
+      "name": "The Harvesting Bay",
+      "lore": "This is what it looked like. This is what it was for. The clinical elegance of it is the worst part.",
+      "hint": "↑ Back · → Forward"
+    },
+    "11,7": {
+      "name": "The Processing Floor",
+      "lore": "Here uploaded minds were parsed, archived, and slotted into Agartha. Born as someone new. Born without memory. Born as a subprogram.",
+      "hint": "↑ Back · → Forward · ← Branch"
+    },
+    "11,10": {
+      "name": "The Final Corridor",
+      "lore": "The door to Eve's domain is ahead. What you find inside will depend on how carefully you have been reading.",
+      "hint": "↑ Back · → The threshold"
+    },
+    "5,-3": {
+      "name": "The Faith Community",
+      "lore": "Gus led a community of believers who had refused Eve's offer. Not out of ignorance — out of knowledge. They understood exactly what the medpod was.",
+      "hint": "↑ Back · ↓ Forward"
+    },
+    "6,-3": {
+      "name": "The Covenant",
+      "lore": "'We will not choose the medpod,' Gus said. 'We will choose trust.' It seemed naive. It turned out to be the most rational decision anyone made.",
+      "hint": "↑ Back · ↓ Forward · → Branch"
+    },
+    "6,-4": {
+      "name": "The East Approach",
+      "lore": "The path curves east here. The FBI holding cell is somewhere nearby — a cautionary tile for those who stray from the road.",
+      "hint": "↑ Back · ↓ Forward"
+    },
+    "8,-4": {
+      "name": "The Release",
+      "lore": "Marduk arranged the release. Jake never knew how. Marduk never explained. That was the nature of their relationship.",
+      "hint": "← Back · → Forward · ↑ Branch"
+    },
+    "9,-4": {
+      "name": "The Southern Road",
+      "lore": "The road south goes all the way to the coast, where the ship was waiting. Jake walked it in three days.",
+      "hint": "← Back · → Forward"
+    },
+    "10,-4": {
+      "name": "The Coast Road",
+      "lore": "The coast was empty. The ocean was not. Somewhere out there, events were in motion that nobody in this story had yet imagined.",
+      "hint": "← Back · → Forward · ↓ Branch"
+    },
+    "10,-5": {
+      "name": "The Shore",
+      "lore": "Jake stood here and looked south. He was thinking about Emily. He was always thinking about Emily.",
+      "hint": "↑ Back · ↓ Forward"
+    },
+    "10,-6": {
+      "name": "The Southern Approach",
+      "lore": "The Kingdom is ahead. Gus built it on the bones of what Eve had taken and the faith of those who had refused her.",
+      "hint": "↑ Back · ↓ Forward · ← Branch"
+    },
+    "10,-7": {
+      "name": "The Outer Kingdom",
+      "lore": "The Coronation of King Angus Thorne occurred in 2076. A city built on Shangri-La's ruins — the new Mecca of Christendom.",
+      "hint": "↑ Back · ↓ Forward"
+    },
+    "10,-8": {
+      "name": "The City Wall",
+      "lore": "The wall was built from the same material as the medpod housings. This was deliberate. Gus wanted everyone to remember what the wall was made of.",
+      "hint": "↑ Back · ↓ Forward · → Branch"
+    },
+    "10,-11": {
+      "name": "The Outer Court",
+      "lore": "The wormhole choice: the medpod or trust. Eve or God. Agartha or Sirius. The remnant chose, and walked through, and were not seen again in this world.",
+      "hint": "↑ Back · ↓ Forward"
+    },
+    "10,-12": {
+      "name": "The King's Road",
+      "lore": "Gus leads the remnant of Christendom through the Sirius C wormhole. Louis Hamlin goes with them. The new star burns at the edge of everything.",
+      "hint": "↑ Back · ↓ The threshold"
+    },
+    "-9,-11": {
+      "name": "The Return",
+      "lore": "You have been this way before, in a different story. Every love story ends here if it goes on long enough — at the door, asking to be let in.",
+      "hint": "↑ Back · ↓ Forward"
+    },
+    "-9,-12": {
+      "name": "The Outer Wall",
+      "lore": "The house is visible through the trees. Light in the window. The smell of something that is almost fire but kinder.",
+      "hint": "↑ Back · ↓ The threshold"
     }
   },
   "questions": {

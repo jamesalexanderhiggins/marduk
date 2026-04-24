@@ -515,7 +515,7 @@ body.kudra-active #stage{padding-top:110px;}
   0%,100%{box-shadow:0 0 0 rgba(212,175,55,0);border-color:rgba(212,175,55,0.3);}
   50%{box-shadow:0 0 20px rgba(212,175,55,0.4);border-color:rgba(212,175,55,0.9);}}
 
-/* ── v8.2 Central content card ───────────────────── */
+/* ── v8.3 Central content card ───────────────────── */
 /* Stage is now a transparent overlay; content lives in .tile-card */
 #stage{position:fixed;inset:0;z-index:10;pointer-events:none;
   display:flex;align-items:center;justify-content:center;}
@@ -656,7 +656,7 @@ body.skm-active .skm-badge{display:block;}
   backdrop-filter:blur(4px);}
 
 
-/* ── v8.2 Stage architecture ─────────────────────
+/* ── v8.3 Stage architecture ─────────────────────
  *  #tileBg  = full-screen immersive background (z:2)
  *  #stage   = full-screen transparent overlay (z:10)
  *  .tile-card = centred content card, floats over bg
@@ -907,6 +907,24 @@ body.kudra-active #stage{padding-top:0;}
   box-sizing:border-box;width:100%;
 }
 
+
+/* Directional hint notes */
+.content-hint{
+  font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:0.1em;
+  color:rgba(201,168,76,0.4);line-height:2;
+  border-top:1px solid rgba(201,168,76,0.08);
+  margin-top:14px;padding-top:10px;
+  text-align:left;
+}
+.content-compass{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:6px 16px;margin-top:8px;
+}
+.content-compass-note{
+  font-family:'EB Garamond',serif;font-size:12px;font-style:italic;
+  color:rgba(201,168,76,0.38);line-height:1.5;
+}
+
 </style>
 </head>
 <body>
@@ -996,7 +1014,7 @@ body.kudra-active #stage{padding-top:0;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v8.2
+ *  MARDUK'S MAP — /realm/  grid SPA  v8.3
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -1029,6 +1047,18 @@ function inBounds(x, y) {
 }
 
 /* ── persisted state ───────────────────────────── */
+
+// v8.3: Ensure clean default player state for new users
+function _defaultPlayerState() {
+  return {
+    visited:  ['0,0'],   // only home tile visited
+    keys:     [],        // no keys
+    quiz:     [],        // no quiz answers
+    kudra:    false,     // K mode OFF
+    postQuiz: false,     // map locked
+    lastPos:  [0, 0],    // at home
+  };
+}
 function getP() {
   try { return JSON.parse(localStorage.getItem('marduk_realm') || '{}'); }
   catch (e) { return {}; }
@@ -1478,26 +1508,26 @@ function render(x, y) {
   const navEl = document.getElementById('navArrows');
   s.style.opacity = '1';
   navEl.innerHTML = '';
-  // v8.2: ensure tileCard exists
+  // v8.3: ensure tileCard exists
   if (!document.getElementById('tileCard')) {
     s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
   }
-  // v8.2: stage is a fixed transparent overlay; content lives in .tile-card
+  // v8.3: stage is a fixed transparent overlay; content lives in .tile-card
   s.style.cssText = '';
   // Inject a fresh .tile-card for all renderers to write into
   s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v8.2';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v8.3';
 
   // Music — zone-aware track selection
   MusicEngine.playForTile(x, y, tile);
 
-  // v8.2: tile content card (centred on screen)
+  // v8.3: tile content card (centred on screen)
   const tc = document.getElementById('tileCard') || s;
 
-  // v8.2: no tile-level puzzle locks — gates are on edges (nav arrows)
+  // v8.3: no tile-level puzzle locks — gates are on edges (nav arrows)
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
   // 'content' type from v4 realm.json = same as named tile with lore
@@ -1623,7 +1653,7 @@ function renderEmilyPath(s, x, y, tile) {
   const ghostBase  = 0.55 + Math.sin(step) * 0.1;
   const ghostDelay = (step % 3) * 0.8;
 
-  // v8.2: background layers → tileBg, content → tileCard
+  // v8.3: background layers → tileBg, content → tileCard
   const _efBg = document.getElementById('tileBg');
   const _efTc = document.getElementById('tileCard');
   if (_efBg) _efBg.innerHTML = `
@@ -1815,7 +1845,7 @@ function renderPathScene(s, x, y, tile) {
   const g = parseInt(color.slice(3,5),16);
   const b2= parseInt(color.slice(5,7),16);
 
-  // v8.2: canvas background → tileBg, text content → tile-card
+  // v8.3: canvas background → tileBg, text content → tile-card
   const _ptBg = document.getElementById('tileBg');
   const _ptTc = document.getElementById('tileCard');
   if (_ptBg) { _ptBg.style.cssText='position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden;';
@@ -2106,16 +2136,16 @@ function updateTranscendBtn(tile) {
 
 
 /* ══════════════════════════════════════════════════
- *  PUZZLE SYSTEM v8.2
+ *  PUZZLE SYSTEM v8.3
  *  Two game types: face3d (100 levels) + tesseract (1000 levels)
  *  Solved tiles stored in localStorage; persist across sessions
  * ═════════════════════════════════════════════════*/
 const PUZZLE_BASE = {
   tesseract: 'https://jamesalexanderhiggins.github.io/marduk/beta/realm/tesseract/',
-  masklock:  'https://jamesalexanderhiggins.github.io/marduk/beta/realm/puzzle-game/',
+  masklock:  'https://jamesalexanderhiggins.github.io/marduk/beta/realm/masklock/',
   turing:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/turing/',
   // legacy alias
-  face3d:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/puzzle-game/',
+  face3d:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/masklock/',
 };
 
 const PUZZLE_SOLVED_KEY = 'mm_puzzle_solved';
@@ -2675,7 +2705,7 @@ function renderNavArrows(x, y) {
     const srcPzl = tile.puzzle;
     const srcExitLocked = srcPzl && srcPzl.lock_exit && !isPuzzleSolved(x, y);
 
-    // v8.2: check edge gate
+    // v8.3: check edge gate
     const arrowDir = d.key === 'up' ? 'N' : d.key === 'down' ? 'S'
                    : d.key === 'left' ? 'W' : 'E';
     const edgeGate   = getGate(x, y, arrowDir);
@@ -2766,7 +2796,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v8.2)
+ *  MARDUK VIEW — game-like map (v8.3)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -5305,7 +5335,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 
 /* ══════════════════════════════════════════════════
- *  GATES SYSTEM v8.2
+ *  GATES SYSTEM v8.3
  *  Gates are directional edge locks stored in REALM.gates
  *  Key format: "x,y:DIR" where DIR ∈ {N,S,E,W}
  *  A gate fires when moving FROM (x,y) in direction DIR.
@@ -5315,7 +5345,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 const GATE_URLS = {
   tesseract: 'https://jamesalexanderhiggins.github.io/marduk/beta/realm/tesseract/',
-  masklock:  'https://jamesalexanderhiggins.github.io/marduk/beta/realm/puzzle-game/',
+  masklock:  'https://jamesalexanderhiggins.github.io/marduk/beta/realm/masklock/',
   turing:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/turing/',
 };
 const GATE_LABELS = {
