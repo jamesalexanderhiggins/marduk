@@ -941,7 +941,7 @@ body.kudra-active #stage{padding-top:0;}
   border-bottom:1px solid rgba(201,168,76,0.06);
 }
 #headerRow2{
-  display:flex;align-items:center;gap:6px;
+  display:none;align-items:center;gap:6px;
   padding:0 10px;height:38px;flex-wrap:nowrap;overflow:hidden;
 }
 #headerRow1 > *, #headerRow2 > *,
@@ -957,10 +957,10 @@ body.kudra-active #stage{padding-top:0;}
   animation:skmBtnPulse 2s ease-in-out infinite;
 }
 /* Shift key bar and coords below 2-row header */
-.key-bar{top:82px!important;}
-.room-coords{top:82px!important;}
+.key-bar{top:var(--header-h,44px)!important;}
+.room-coords{top:var(--header-h,44px)!important;}
 /* MV stage below header */
-#mv-stage{top:82px!important;}
+#mv-stage{top:var(--header-h,44px)!important;}
 
 </style>
 </head>
@@ -980,7 +980,6 @@ body.kudra-active #stage{padding-top:0;}
   <div id="headerRow2" style="display:none;">
     <button id="exitKBtn" title="Exit Kudramarduk Mode">✕ EXIT K MODE</button>
     <button id="exitSkmBtn" style="display:none" title="Exit SuperKudraMarduk editing">✦ EXIT SKM MODE</button>
-    <span id="kModeLabel" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.2em;color:rgba(201,168,76,0.4);">— KUDRAMARDUK MODE —</span>
   </div>
 </div>
 <div class="key-bar" id="keyBar"></div>
@@ -4134,6 +4133,10 @@ function deactivateKudraMode() {
   if (kb) kb.style.opacity = '1';
   const ekb2 = document.getElementById('exitKBtn');
   if (ekb2) ekb2.classList.remove('show');
+  // Hide row2 and reset header height
+  const _r2off = document.getElementById('headerRow2');
+  if (_r2off) _r2off.style.display = 'none';
+  document.documentElement.style.setProperty('--header-h','44px');
   updateKeyBar();
   updateMapBtn();
 }
@@ -5744,7 +5747,7 @@ async function boot() {
   if (isKudraUnlocked()) {
     document.body.classList.add('kudra-active');
     const _r2b = document.getElementById('headerRow2');
-    if (_r2b) _r2b.style.display = 'flex';
+    if (_r2b) _r2b.style.display = 'flex'; document.documentElement.style.setProperty('--header-h','82px');
   }
   window.addEventListener('resize', () => {
     const bg = document.getElementById('bg');
