@@ -610,34 +610,51 @@ function computeEveSkeleton(t, state) {
   let pigtailLag = 0;                 // pigtails lag head
 
   const a = state.anim;
-  const prog = Math.min((t - state.animStart) / 0.35, 1); // crossfade entry
 
   if (a === 'idle') {
-    hipSway = Math.sin(t * 1.6) * 0.015;
-    hipBounce = Math.sin(t * 1.6 + Math.PI/2) * 0.006;
-    torsoTilt = Math.sin(t * 1.2) * 0.02;
-    headNod = Math.sin(t * 0.9) * 0.025;
-    headTurn = Math.sin(t * 0.3) * 0.08;
-    lShoulder = Math.sin(t * 1.5) * 0.04;
-    rShoulder = -lShoulder * 0.85;
-    lElbow = 0.28 + Math.sin(t * 1.6) * 0.04;
-    rElbow = 0.28 + Math.cos(t * 1.5) * 0.04;
+    // Breath — slow chest rise, longer than shoulder sway
+    const breath = Math.sin(t * 0.75);
+    hipBounce = breath * 0.008;
+    torsoTilt = Math.sin(t * 0.45) * 0.022;
+    // Slow weight shift — she leans on one foot, then the other
+    const weight = Math.sin(t * 0.32);
+    hipSway = weight * 0.028;
+    lKnee = Math.max(0, -weight) * 0.05 + 0.03;
+    rKnee = Math.max(0,  weight) * 0.05 + 0.03;
+    // Head micro-motion — layered frequencies so it never repeats cleanly
+    headNod  = Math.sin(t * 0.9)  * 0.022 + Math.sin(t * 0.47) * 0.012;
+    headTurn = Math.sin(t * 0.28) * 0.08  + Math.sin(t * 0.11) * 0.03;
+    headTilt = Math.sin(t * 0.38) * 0.03;
+    // Arms hang, tiny drift
+    lShoulder = Math.sin(t * 0.7) * 0.035;
+    rShoulder = Math.cos(t * 0.62) * 0.03;
+    lElbow = 0.27 + Math.sin(t * 0.9) * 0.025;
+    rElbow = 0.27 + Math.cos(t * 0.85) * 0.025;
   }
   else if (a === 'walk') {
     const wt = t * 2.1;
-    hipBounce = Math.abs(Math.sin(wt)) * 0.045 - 0.02;
-    hipSway = Math.sin(wt) * 0.04;
-    torsoTilt = Math.sin(wt) * 0.04;
-    torsoTwist = Math.sin(wt) * 0.15;
-    lHip = Math.sin(wt) * 0.42;
-    rHip = -lHip;
-    lKnee = Math.max(0, -Math.sin(wt) * 0.6) + 0.05;
-    rKnee = Math.max(0, Math.sin(wt) * 0.6) + 0.05;
-    lShoulder = -Math.sin(wt) * 0.38;
-    rShoulder = -lShoulder;
-    lElbow = 0.35 + Math.abs(Math.sin(wt)) * 0.2;
-    rElbow = 0.35 + Math.abs(Math.cos(wt)) * 0.2;
-    headNod = Math.sin(wt * 2) * 0.02;
+    const step = Math.sin(wt);           // −1 to +1, leg phase
+    const absStep = Math.abs(step);
+    // Hip drops on planted side, rises at mid-swing — real weight transfer
+    hipSway = step * 0.045;
+    hipBounce = -absStep * 0.022 + 0.012;
+    // Legs
+    lHip = step * 0.45;
+    rHip = -step * 0.45;
+    // Knee bends ONLY during swing (airborne) phase
+    lKnee = Math.max(0, -step) * 0.7 + 0.04;
+    rKnee = Math.max(0,  step) * 0.7 + 0.04;
+    // Torso counter-rotates against pelvis — real gait detail
+    torsoTwist = -step * 0.2;
+    torsoTilt  =  step * 0.04;
+    // Arms swing opposite to legs
+    lShoulder = -step * 0.42;
+    rShoulder =  step * 0.42;
+    lElbow = 0.32 + absStep * 0.18;
+    rElbow = 0.32 + absStep * 0.18;
+    // Head bobs at double frequency (once per step, not once per cycle)
+    headNod = Math.sin(wt * 2) * 0.025;
+    headTilt = step * 0.02;
   }
   else if (a === 'skip') {
     const sk = t * 2.4;
@@ -1360,6 +1377,50 @@ function playTick()  { tone(720, 0.08, 'triangle', 0.04); }
 function playChime() { tone(880, 0.16, 'sine', 0.05); setTimeout(() => tone(1320, 0.22, 'sine', 0.05), 80); }
 function playAsk()   { tone(440, 0.1, 'sine', 0.03); }
 
+// Ambient drone — two detuned oscillators + slow LFO.
+// Pitch and timbre shift with score: low/dirty in hell, airy/high in paradise.
+let drone = null;
+function startDrone() {
+  if (!audioCtx || drone) return;
+  const master = audioCtx.createGain();
+  master.gain.value = 0.035;
+  master.connect(audioCtx.destination);
+
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 800;
+  filter.Q.value = 0.8;
+  filter.connect(master);
+
+  const oscA = audioCtx.createOscillator();
+  const oscB = audioCtx.createOscillator();
+  oscA.type = 'sine';
+  oscB.type = 'triangle';
+  oscA.frequency.value = 110;
+  oscB.frequency.value = 110 * 1.01; // slight detune — beating
+
+  const gA = audioCtx.createGain(); gA.gain.value = 0.5;
+  const gB = audioCtx.createGain(); gB.gain.value = 0.35;
+  oscA.connect(gA).connect(filter);
+  oscB.connect(gB).connect(filter);
+  oscA.start();
+  oscB.start();
+  drone = { oscA, oscB, filter, master };
+}
+function updateDrone(posN, negN) {
+  if (!drone) return;
+  // Base 110 Hz. Paradise → lift toward 220 and a clean high pass-through.
+  // Hell → sink toward 55 and darken the filter, add sub-beat wobble.
+  const baseHz = 110 * Math.pow(2, posN * 1.0 - negN * 1.0);
+  drone.oscA.frequency.setTargetAtTime(baseHz,           audioCtx.currentTime, 0.5);
+  drone.oscB.frequency.setTargetAtTime(baseHz * 1.01,    audioCtx.currentTime, 0.5);
+  // Filter cutoff: bright in paradise, muffled in hell
+  const cutoff = 400 + posN * 3200 - negN * 250;
+  drone.filter.frequency.setTargetAtTime(Math.max(120, cutoff), audioCtx.currentTime, 0.3);
+  // Master volume swells slightly at extremes
+  drone.master.gain.setTargetAtTime(0.035 + Math.max(posN, negN) * 0.025, audioCtx.currentTime, 0.5);
+}
+
 /* ─────────────────────────── CAMERA CONTROLS ─────────────────────────── */
 
 let dragging = false, lastX = 0, lastY = 0;
@@ -1424,6 +1485,9 @@ function updateEnvironment(t) {
   const s = score;
   const posN = Math.max(0, Math.min(1, s / Math.max(1, MAX_SCORE)));
   const negN = Math.max(0, Math.min(1, -s / Math.max(1, -MIN_SCORE)));
+
+  // Ambient drone follows the mood
+  updateDrone(posN, negN);
 
   // Neutral grid fades away at extremes
   neutralGrid.material.opacity = 0.4 * (1 - Math.max(posN, negN) * 0.7);
@@ -1577,7 +1641,6 @@ function updateEveBehaviour(t, negN, posN) {
 
 let nowSec = 0;
 let lastFrame = performance.now();
-eve.nextMove = 2;
 
 function frame() {
   const now = performance.now();
@@ -1687,8 +1750,12 @@ function endGame(result) {
 
 window.__eveStart = function() {
   ensureAudio();
+  startDrone();
   const intro = document.getElementById('intro');
   if (intro) intro.classList.add('hide');
+  // Hold Eve in idle for 2s before she starts wandering
+  eve.nextMove = performance.now() / 1000 + 2;
+  eve.animStart = performance.now() / 1000;
   updateScoreUI();
   requestAnimationFrame(frame);
   setTimeout(() => askRandomQuestion(), 800);
