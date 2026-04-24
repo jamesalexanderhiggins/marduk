@@ -3,32 +3,75 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-<title>Tesseract Run · v2.0</title>
+<title>Tesseract Run · v2.1</title>
 <style>
-  html, body { margin:0; padding:0; width:100%; height:100%; background:#000; overflow:hidden; font-family:'Courier New', monospace; color:#9ef; user-select:none; touch-action:none; }
-  canvas#game { display:block; width:100%; height:100%; background:#000; image-rendering:pixelated; }
-  .hud { position:fixed; pointer-events:none; text-shadow:0 0 8px currentColor, 0 0 2px #000; letter-spacing:1px; }
-  #topbar { top:10px; left:12px; right:12px; display:flex; justify-content:space-between; align-items:flex-start; font-size:13px; }
-  #topbar .col { display:flex; flex-direction:column; gap:4px; }
-  #topbar .right { align-items:flex-end; text-align:right; }
-  .label { opacity:0.65; font-size:10px; letter-spacing:2px; }
-  .value { font-size:14px; }
-  #healthRow { display:flex; align-items:center; gap:8px; }
-  #healthOuter { height:10px; border:1px solid currentColor; background:rgba(255,255,255,0.04); box-shadow:0 0 10px currentColor inset; }
-  #healthFill { height:100%; background:linear-gradient(90deg, #7cffb2 0%, #9ef 55%, #ffd36b 80%, #ff5577 100%); }
-  #hpText { font-size:11px; opacity:0.8; }
-  #centerMsg { top:38%; left:0; right:0; text-align:center; font-size:22px; letter-spacing:4px; opacity:0; transition:opacity 400ms; }
-  #centerMsg.show { opacity:1; }
-  #centerMsg .sub { font-size:12px; opacity:0.8; margin-top:8px; letter-spacing:3px; }
-  #overlay { position:fixed; inset:0; background:rgba(0,0,0,0.78); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; z-index:10; text-align:center; padding:20px; box-sizing:border-box; }
-  #overlay h1 { font-size:42px; letter-spacing:8px; margin:0; text-shadow:0 0 18px currentColor; }
-  #overlay h2 { font-size:16px; letter-spacing:4px; margin:0; opacity:0.7; }
-  #overlay p { max-width:520px; line-height:1.6; font-size:13px; opacity:0.85; }
-  #overlay .keys { display:flex; gap:18px; flex-wrap:wrap; justify-content:center; font-size:11px; letter-spacing:2px; opacity:0.75; }
-  #overlay .keys span { border:1px solid currentColor; padding:6px 10px; }
-  #startBtn { margin-top:10px; padding:14px 28px; background:transparent; border:1px solid currentColor; color:currentColor; font-family:inherit; font-size:14px; letter-spacing:4px; cursor:pointer; }
-  #startBtn:hover { background:rgba(158,239,255,0.08); box-shadow:0 0 22px currentColor; }
-  #bottombar { bottom:10px; left:12px; right:12px; display:flex; justify-content:space-between; font-size:10px; opacity:0.5; letter-spacing:2px; }
+  html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    background: #000; overflow: hidden;
+    font-family: 'Courier New', ui-monospace, monospace;
+    color: #9ef;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+  }
+  canvas#game {
+    display: block; width: 100%; height: 100%;
+    background: #000;
+    image-rendering: pixelated;
+  }
+  .hud {
+    position: fixed; pointer-events: none;
+    text-shadow: 0 0 8px currentColor, 0 0 2px #000;
+    letter-spacing: 1px;
+  }
+  #topbar  { top: 10px; left: 12px; right: 12px; display: flex; justify-content: space-between; align-items: flex-start; font-size: 13px; }
+  #topbar .col { display: flex; flex-direction: column; gap: 4px; }
+  #topbar .right { align-items: flex-end; text-align: right; }
+  .label { opacity: 0.65; font-size: 10px; letter-spacing: 2px; }
+  .value { font-size: 14px; }
+  #healthRow { display: flex; align-items: center; gap: 8px; }
+  #healthOuter {
+    height: 10px; border: 1px solid currentColor;
+    background: rgba(255,255,255,0.04);
+    box-shadow: 0 0 10px currentColor inset;
+  }
+  #healthFill {
+    height: 100%; width: 100%;
+    background: linear-gradient(90deg, #7cffb2 0%, #9ef 55%, #ffd36b 80%, #ff5577 100%);
+  }
+  #hpText { font-size: 11px; opacity: 0.8; }
+  #centerMsg {
+    top: 38%; left: 0; right: 0; text-align: center;
+    font-size: 22px; letter-spacing: 4px; opacity: 0;
+    transition: opacity 400ms;
+  }
+  #centerMsg.show { opacity: 1; }
+  #centerMsg .sub { font-size: 12px; opacity: 0.8; margin-top: 8px; letter-spacing: 3px; }
+  #overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.78);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 20px; z-index: 10;
+    text-align: center; padding: 20px; box-sizing: border-box;
+  }
+  #overlay h1 {
+    font-size: 42px; letter-spacing: 8px; margin: 0;
+    text-shadow: 0 0 18px currentColor;
+  }
+  #overlay h2 {
+    font-size: 16px; letter-spacing: 4px; margin: 0; opacity: 0.7;
+  }
+  #overlay p { max-width: 520px; line-height: 1.6; font-size: 13px; opacity: 0.85; letter-spacing: 1px; }
+  #overlay .keys { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; font-size: 11px; letter-spacing: 2px; opacity: 0.75; }
+  #overlay .keys span { border: 1px solid currentColor; padding: 6px 10px; }
+  #startBtn {
+    margin-top: 10px; padding: 14px 28px;
+    background: transparent; border: 1px solid currentColor; color: currentColor;
+    font-family: inherit; font-size: 14px; letter-spacing: 4px;
+    cursor: pointer; text-shadow: 0 0 8px currentColor;
+    transition: background 140ms, box-shadow 140ms;
+  }
+  #startBtn:hover { background: rgba(158,239,255,0.08); box-shadow: 0 0 22px currentColor; }
+  #bottombar { bottom: 10px; left: 12px; right: 12px; display: flex; justify-content: space-between; font-size: 10px; opacity: 0.5; letter-spacing: 2px; }
 </style>
 </head>
 <body>
@@ -36,27 +79,33 @@
 
 <div id="topbar" class="hud">
   <div class="col">
-    <span class="label">LEVEL</span><span class="value" id="lvl">001</span>
+    <span class="label">LEVEL</span>
+    <span class="value" id="lvl">001</span>
     <span class="label" style="margin-top:8px">HULL</span>
-    <div id="healthRow"><div id="healthOuter" style="width:220px"><div id="healthFill"></div></div><span id="hpText">100 / 100</span></div>
-    <span class="label" id="weaponLabel" style="margin-top:8px;display:none">WEAPON</span>
+    <div id="healthRow">
+      <div id="healthOuter" style="width:220px"><div id="healthFill"></div></div>
+      <span id="hpText">100 / 100</span>
+    </div>
+    <span class="label" id="weaponLabel" style="margin-top:8px; display:none">WEAPON</span>
     <span class="value" id="weapon" style="display:none"></span>
   </div>
   <div class="col right">
-    <span class="label">SCORE</span><span class="value" id="score">0</span>
-    <span class="label" style="margin-top:8px">VELOCITY</span><span class="value" id="vel">0.00c</span>
+    <span class="label">SCORE</span>
+    <span class="value" id="score">0</span>
+    <span class="label" style="margin-top:8px">VELOCITY</span>
+    <span class="value" id="vel">0.00c</span>
   </div>
 </div>
 
 <div id="centerMsg" class="hud"></div>
 
 <div id="bottombar" class="hud">
-  <span>← → ↑ ↓ MOVE · / FIRE</span>
+  <span id="controls">← → ↑ ↓   MOVE   ·   /   FIRE</span>
   <span id="target"></span>
 </div>
 
 <div id="overlay">
-  <h2>MARDUKVERSE // TESSERACT PROTOCOL · v2.0</h2>
+  <h2>MARDUKVERSE // TESSERACT PROTOCOL · v2.1</h2>
   <h1>TESSERACT RUN</h1>
   <p>Pilot the ship through a winding tesseract tunnel. Reach the wormhole at the end of each run.</p>
   <div class="keys">
@@ -70,19 +119,28 @@
 <script>
 "use strict";
 
+// ============================================================
+// TESSERACT RUN v2.1 — Full original + wide ship movement + tight collisions
+// ============================================================
+
 const CANVAS = document.getElementById('game');
 const CTX = CANVAS.getContext('2d');
 
 let W = 0, H = 0, CX = 0, CY = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
 function resize() {
-  W = window.innerWidth; H = window.innerHeight; CX = W/2; CY = H/2;
-  CANVAS.width = Math.floor(W * DPR); CANVAS.height = Math.floor(H * DPR);
-  CANVAS.style.width = W + 'px'; CANVAS.style.height = H + 'px';
+  W = window.innerWidth;
+  H = window.innerHeight;
+  CX = W / 2; CY = H / 2;
+  CANVAS.style.width = W + 'px';
+  CANVAS.style.height = H + 'px';
+  CANVAS.width = Math.floor(W * DPR);
+  CANVAS.height = Math.floor(H * DPR);
   CTX.setTransform(DPR, 0, 0, DPR, 0, 0);
 }
-window.addEventListener('resize', resize); resize();
+window.addEventListener('resize', resize);
+resize();
 
-// URL params
+// URL PARAMS
 const params = new URLSearchParams(window.location.search);
 let LEVEL_START = 1, LEVEL_END = 1000;
 const rng = params.get('range');
@@ -96,36 +154,87 @@ if (rng) {
 const REDIRECT = params.get('redirect');
 
 // AUDIO
-let AC = null, masterGain = null, engineNode = null, engineGain = null, audioReady = false;
+let AC = null;
+let masterGain = null;
+let engineNode = null;
+let engineGain = null;
+let audioReady = false;
+
 function initAudio() {
   if (audioReady) return;
   AC = new (window.AudioContext || window.webkitAudioContext)();
-  masterGain = AC.createGain(); masterGain.gain.value = 0.5; masterGain.connect(AC.destination);
-  engineNode = AC.createOscillator(); engineNode.type = 'sawtooth'; engineNode.frequency.value = 55;
-  engineGain = AC.createGain(); engineGain.gain.value = 0;
-  const lp = AC.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 240;
+  masterGain = AC.createGain();
+  masterGain.gain.value = 0.5;
+  masterGain.connect(AC.destination);
+  engineNode = AC.createOscillator();
+  engineNode.type = 'sawtooth';
+  engineNode.frequency.value = 55;
+  engineGain = AC.createGain();
+  engineGain.gain.value = 0;
+  const lp = AC.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.frequency.value = 240;
   engineNode.connect(lp); lp.connect(engineGain); engineGain.connect(masterGain);
-  engineNode.start(); audioReady = true;
+  engineNode.start();
+  audioReady = true;
 }
+
 function setEngine(speedNorm) {
   if (!audioReady) return;
-  engineNode.frequency.setTargetAtTime(45 + speedNorm*120, AC.currentTime, 0.1);
-  engineGain.gain.setTargetAtTime(0.04 + speedNorm*0.07, AC.currentTime, 0.2);
+  engineNode.frequency.setTargetAtTime(45 + speedNorm * 120, AC.currentTime, 0.1);
+  engineGain.gain.setTargetAtTime(0.04 + speedNorm * 0.07, AC.currentTime, 0.2);
 }
+
 function blip(freq, dur, type='square', vol=0.2, sweep=0) {
   if (!audioReady) return;
   const o = AC.createOscillator(); o.type = type; o.frequency.value = freq;
   if (sweep) o.frequency.exponentialRampToValueAtTime(Math.max(20, freq+sweep), AC.currentTime + dur);
-  const g = AC.createGain(); g.gain.setValueAtTime(vol, AC.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, AC.currentTime + dur);
-  o.connect(g); g.connect(masterGain); o.start(); o.stop(AC.currentTime + dur + 0.02);
+  const g = AC.createGain();
+  g.gain.setValueAtTime(vol, AC.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, AC.currentTime + dur);
+  o.connect(g); g.connect(masterGain);
+  o.start(); o.stop(AC.currentTime + dur + 0.02);
 }
+
+function noise(dur, vol=0.3, filterFreq=1500) {
+  if (!audioReady) return;
+  const len = Math.max(1, Math.floor(AC.sampleRate * dur));
+  const buf = AC.createBuffer(1, len, AC.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i/len);
+  const src = AC.createBufferSource(); src.buffer = buf;
+  const f = AC.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = filterFreq;
+  const g = AC.createGain(); g.gain.value = vol;
+  src.connect(f); f.connect(g); g.connect(masterGain);
+  src.start();
+}
+
 const SFX = {
   fire: () => blip(820, 0.14, 'square', 0.18, -600),
-  hit: () => { blip(140, 0.25, 'sawtooth', 0.35, -90); },
-  bigHit: () => { blip(70, 0.45, 'sawtooth', 0.45, -40); },
-  wormhole: () => { blip(220,0.4,'sine',0.3,600); setTimeout(()=>blip(330,0.4,'sine',0.3,600),80); setTimeout(()=>blip(440,0.4,'sine',0.3,600),160); },
+  hit: () => { blip(140, 0.25, 'sawtooth', 0.35, -90); noise(0.2, 0.25, 700); },
+  bigHit: () => { blip(70, 0.45, 'sawtooth', 0.45, -40); noise(0.4, 0.4, 500); },
+  wormhole: () => {
+    blip(220, 0.4, 'sine', 0.3, 600);
+    setTimeout(()=>blip(330, 0.4, 'sine', 0.3, 600), 80);
+    setTimeout(()=>blip(440, 0.4, 'sine', 0.3, 600), 160);
+    setTimeout(()=>blip(660, 0.6, 'triangle', 0.4, -300), 240);
+    setTimeout(()=>noise(0.6, 0.3, 2400), 300);
+  },
+  explode: () => { noise(0.6, 0.5, 1800); blip(110, 0.5, 'sawtooth', 0.3, -60); },
+  levelUp: () => {
+    blip(523, 0.1, 'triangle', 0.3);
+    setTimeout(()=>blip(659, 0.1, 'triangle', 0.3), 80);
+    setTimeout(()=>blip(784, 0.12, 'triangle', 0.3), 160);
+    setTimeout(()=>blip(1046, 0.2, 'triangle', 0.3), 240);
+  },
   damage: () => blip(180, 0.12, 'square', 0.25, -100),
-  destroy: () => blip(400, 0.2, 'sawtooth', 0.2, -200),
+  destroy: () => { noise(0.3, 0.35, 1200); blip(400, 0.2, 'sawtooth', 0.2, -200); },
+  powerup: () => {
+    blip(440, 0.1, 'sine', 0.3);
+    setTimeout(()=>blip(660, 0.1, 'sine', 0.3), 70);
+    setTimeout(()=>blip(880, 0.15, 'sine', 0.35), 140);
+    setTimeout(()=>blip(1320, 0.2, 'sine', 0.35), 210);
+  },
   bounce: () => blip(380, 0.06, 'triangle', 0.18, -120)
 };
 
@@ -136,10 +245,16 @@ window.addEventListener('keydown', e => {
   KEY[e.key] = true;
   if (e.key === 'Escape') togglePause();
 });
-window.addEventListener('keyup', e => KEY[e.key] = false);
+window.addEventListener('keyup', e => { KEY[e.key] = false; });
 
 let touchActive = false, touchX = 0, touchY = 0, tapT = 0;
-CANVAS.addEventListener('touchstart', e => { initAudio(); touchActive = true; touchX = e.touches[0].clientX; touchY = e.touches[0].clientY; tapT = performance.now(); e.preventDefault(); }, {passive:false});
+CANVAS.addEventListener('touchstart', e => {
+  initAudio();
+  touchActive = true;
+  touchX = e.touches[0].clientX; touchY = e.touches[0].clientY;
+  tapT = performance.now();
+  e.preventDefault();
+}, {passive:false});
 CANVAS.addEventListener('touchmove', e => {
   if (!touchActive) return;
   ship.vx += (e.touches[0].clientX - touchX) * 0.01;
@@ -147,86 +262,96 @@ CANVAS.addEventListener('touchmove', e => {
   touchX = e.touches[0].clientX; touchY = e.touches[0].clientY;
   e.preventDefault();
 }, {passive:false});
-CANVAS.addEventListener('touchend', () => { touchActive = false; if (performance.now() - tapT < 220 && torpedoUnlocked) fireTorpedo(); });
+CANVAS.addEventListener('touchend', () => {
+  touchActive = false;
+  if (performance.now() - tapT < 220 && torpedoUnlocked) fireTorpedo();
+});
 
-// MATH
-const FOCAL = 520, NEAR = 20, FAR = 3600;
+// MATH / PROJECTION
+const FOCAL = 520;
+const NEAR = 20;
+const FAR = 3600;
+
 function project(x, y, z) {
   if (z < NEAR) z = NEAR;
   const f = FOCAL / z;
   return { x: CX + x * f, y: CY + y * f, s: f };
 }
+
 let poCam = { x: 0, y: 0 };
 function pathOffset(absZ) {
   const strength = clamp((level - 20) / 180, 0, 1);
   if (strength <= 0) return { x: 0, y: 0 };
+  const k1 = 0.00080, k2 = 0.00031, k3 = 0.000127;
   return {
-    x: strength * (Math.sin(absZ*0.0008)*120 + Math.sin(absZ*0.00031+1.3)*230 + Math.sin(absZ*0.000127+2.7)*400),
-    y: strength * (Math.cos(absZ*0.00088)*100 + Math.cos(absZ*0.000279+0.7)*200 + Math.cos(absZ*0.000165+4.1)*340)
+    x: strength * (
+      Math.sin(absZ * k1) * 120 +
+      Math.sin(absZ * k2 + 1.3) * 230 +
+      Math.sin(absZ * k3 + 2.7) * 400
+    ),
+    y: strength * (
+      Math.cos(absZ * k1 * 1.1) * 100 +
+      Math.cos(absZ * k2 * 0.9 + 0.7) * 200 +
+      Math.cos(absZ * k3 * 1.3 + 4.1) * 340
+    )
   };
 }
 function projectAtZ(localX, localY, absZ) {
   const camZ = absZ - cameraZ;
-  if (camZ < NEAR) return {x:CX, y:CY, s:0, culled:true};
+  if (camZ < NEAR) return { x: CX, y: CY, s: 0, culled: true };
   const po = pathOffset(absZ);
   return project(localX + po.x - poCam.x, localY + po.y - poCam.y, camZ);
 }
-function lerp(a,b,t) { return a + (b-a)*t; }
-function clamp(v,lo,hi) { return v<lo?lo:v>hi?hi:v; }
+
 function seededRandom(seed) {
   return function() {
-    seed = seed + 0x6D2B79F5 | 0;
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
     let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
     t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
     return ((t ^ t >>> 14) >>> 0) / 4294967296;
   };
 }
 
-// GAME STATE
-const ship = { x:0, y:0, vx:0, vy:0, bank:0, pitch:0, maxHP:100, hp:100, shake:0, invuln:0 };
-let state = 'menu', level = LEVEL_START, score = 0, cameraZ = 0, baseSpeed = 0.6, speed = 0.6;
-let levelProgress = 0, LEVEL_LENGTH = 18000, runRand, obstacles = [], torpedoes = [], sparks = [], enemyShots = [];
-let bgStars = [], bgStructures = [], ringObj = null, torpedoUnlocked = false, torpedoCooldown = 0;
-let shakeX=0, shakeY=0, flashUntil=0, flashHue=0, transitionLock = false;
-const TUNNEL_RADIUS = 180;
+function lerp(a, b, t) { return a + (b - a) * t; }
+function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
 
-const OBS = {
-  CUBE: {id:'cube', hp:1, dmg:15, rad:28, shootable:true, score:10},
-  ASTEROID_S: {id:'asteroid_s', hp:1, dmg:12, rad:24, shootable:true, score:12},
-  ASTEROID_L: {id:'asteroid_l', hp:3, dmg:28, rad:46, shootable:true, score:30, splits:true},
-  TETRA: {id:'tetra', hp:2, dmg:20, rad:32, shootable:true, score:18},
-  MINE: {id:'mine', hp:1, dmg:40, rad:22, shootable:true, score:25},
-  ENEMY: {id:'enemy', hp:2, dmg:18, rad:28, shootable:true, score:40, fires:true},
-  BOSS: {id:'boss', hp:6, dmg:35, rad:50, shootable:true, score:120, fires:true},
-  WALL: {id:'wall', hp:999, dmg:50, rad:80, shootable:false, score:0, isWall:true}
-};
-
+// PROGRESSION
+function levelHue(lvl) { return (180 + (lvl - 1) * 0.36) % 360; }
 function levelPalette(lvl) {
-  const h = (180 + (lvl-1)*0.36) % 360;
-  return { h, chaos: Math.min(1, (lvl-1)/1000) };
+  const h = levelHue(lvl);
+  const chaos = Math.min(1, (lvl - 1) / 1000);
+  return { h, chaos };
 }
 
 function maxHPForLevel(lvl) {
-  if (lvl < 50) return 100; if (lvl < 100) return 120; if (lvl < 200) return 150;
-  if (lvl < 350) return 200; if (lvl < 500) return 250; if (lvl < 700) return 310;
-  if (lvl < 900) return 380; return 450;
+  if (lvl < 50)  return 100;
+  if (lvl < 100) return 120;
+  if (lvl < 200) return 150;
+  if (lvl < 350) return 200;
+  if (lvl < 500) return 250;
+  if (lvl < 700) return 310;
+  if (lvl < 900) return 380;
+  return 450;
+}
+
+function hpBarPixelWidth(maxHP) {
+  return Math.min(420, 220 + (maxHP - 100) * 0.6);
 }
 
 function torpedoSpec(lvl) {
-  return {
-    count: lvl >= 900 ? 5 : lvl >= 750 ? 3 : lvl >= 500 ? 2 : 1,
-    homing: lvl >= 500,
-    splits: lvl >= 700,
-    splitCount: lvl >= 900 ? 4 : lvl >= 700 ? 3 : 0,
-    speed: 6 + Math.min(lvl*0.012, 14),
-    rate: Math.max(4, Math.floor(18 - lvl/80)),
-    radius: lvl < 200 ? 18 : lvl < 500 ? 13 : 10,
-    damage: 1 + Math.floor(lvl/250)
-  };
+  const count      = lvl >= 900 ? 5 : lvl >= 750 ? 3 : lvl >= 500 ? 2 : 1;
+  const homing     = lvl >= 500;
+  const splits     = lvl >= 700;
+  const splitCount = lvl >= 900 ? 4 : lvl >= 700 ? 3 : 0;
+  const speed      = 6 + Math.min(lvl * 0.012, 14);
+  const rate       = Math.max(4, Math.floor(18 - lvl/80));
+  const radius     = lvl < 200 ? 18 : lvl < 500 ? 13 : 10;
+  const damage     = 1 + Math.floor(lvl / 250);
+  return { count, homing, splits, splitCount, speed, rate, radius, damage };
 }
 
 function weaponLabel(lvl) {
-  if (lvl < 50) return '—';
+  if (lvl < 50)  return '—';
   if (lvl < 200) return 'MK-I TORPEDO';
   if (lvl < 500) return 'MK-II RAPID';
   if (lvl < 700) return 'MK-III HOMING';
@@ -234,71 +359,302 @@ function weaponLabel(lvl) {
   return 'MK-V SWARM';
 }
 
+// GAME STATE
+const ship = {
+  x: 0, y: 0, vx: 0, vy: 0,
+  bank: 0, pitch: 0,
+  maxHP: 100, hp: 100,
+  shake: 0,
+  invuln: 0
+};
+
+let state = 'menu';
+let level = LEVEL_START;
+let score = 0;
+let cameraZ = 0;
+let baseSpeed = 0.6;
+let speed = 0.6;
+let levelProgress = 0;
+let LEVEL_LENGTH = 18000;
+let runRand = seededRandom(level * 9973 + 17);
+let obstacles = [];
+let torpedoes = [];
+let sparks = [];
+let enemyShots = [];
+let bgStars = [];
+let bgStructures = [];
+let ringObj = null;
+let torpedoUnlocked = false;
+let torpedoCooldown = 0;
+let shakeX = 0, shakeY = 0;
+let flashUntil = 0;
+let flashHue = 0;
+let transitionLock = false;
+
+const TUNNEL_RADIUS = 180;
+
 // BACKGROUND
 function initBackground() {
-  bgStars = []; for (let i=0; i<360; i++) bgStars.push({a:Math.random()*Math.PI*2, r:0.5+Math.random()*0.9, d:0.2+Math.random()*0.8, tw:Math.random()*Math.PI*2});
+  bgStars = [];
+  for (let i = 0; i < 360; i++) {
+    bgStars.push({
+      a: Math.random() * Math.PI * 2,
+      r: 0.5 + Math.random() * 0.9,
+      d: 0.2 + Math.random() * 0.8,
+      tw: Math.random() * Math.PI * 2
+    });
+  }
+  bgStructures = [];
+  for (let i = 0; i < 8; i++) {
+    bgStructures.push({
+      a: Math.random() * Math.PI * 2,
+      r: 260 + Math.random() * 200,
+      rot: Math.random() * Math.PI * 2,
+      rotSp: (Math.random() - 0.5) * 0.002,
+      kind: Math.floor(Math.random() * 3),
+      size: 40 + Math.random() * 60
+    });
+  }
 }
 initBackground();
+
 function drawBackground(pal) {
-  const g = CTX.createRadialGradient(CX,CY,0,CX,CY,Math.max(W,H)*0.7);
-  g.addColorStop(0, `hsla(${pal.h},60%,10%,1)`);
-  g.addColorStop(1,'#000');
-  CTX.fillStyle = g; CTX.fillRect(0,0,W,H);
+  const g = CTX.createRadialGradient(CX, CY, 0, CX, CY, Math.max(W, H) * 0.7);
+  g.addColorStop(0, `hsla(${pal.h}, 60%, 10%, 1)`);
+  g.addColorStop(1, '#000');
+  CTX.fillStyle = g;
+  CTX.fillRect(0, 0, W, H);
 }
 
 // TUNNEL
-const TUNNEL_STEP = 180, TUNNEL_DEPTH = 24;
-function tunnelRingPoints(segIdx, absZ, scale=1) {
-  const pts = [], twist = segIdx*0.05 + Math.sin(segIdx*0.1)*0.15;
-  for (let k=0; k<8; k++) {
-    const a = (k/8)*Math.PI*2 + twist;
-    pts.push(projectAtZ(Math.cos(a)*TUNNEL_RADIUS*scale, Math.sin(a)*TUNNEL_RADIUS*scale, absZ));
+const TUNNEL_STEP = 180;
+const TUNNEL_DEPTH = 24;
+
+function tunnelRingPoints(segIdx, absZ, scale = 1) {
+  const sides = 8;
+  const pts = [];
+  const twist = segIdx * 0.05 + Math.sin(segIdx * 0.1) * 0.15;
+  for (let k = 0; k < sides; k++) {
+    const a = (k / sides) * Math.PI * 2 + twist;
+    const r = TUNNEL_RADIUS * scale;
+    pts.push(projectAtZ(Math.cos(a) * r, Math.sin(a) * r, absZ));
   }
   return pts;
 }
+
 function drawTunnel(pal) {
   const startIdx = Math.floor(cameraZ / TUNNEL_STEP);
   let lastPts = [];
+
   for (let i = TUNNEL_DEPTH; i >= 0; i--) {
     const segIdx = startIdx + i;
     const absZ = segIdx * TUNNEL_STEP;
     const relZ = absZ - cameraZ;
     if (relZ < NEAR + 5) { lastPts = []; continue; }
     if (relZ > FAR) continue;
+
     const pts = tunnelRingPoints(segIdx, absZ);
     const tDepth = 1 - clamp(relZ / FAR, 0, 1);
-    CTX.strokeStyle = `hsla(${pal.h + (segIdx*0.5)%30},75%,${35 + tDepth*40}%,${0.15 + tDepth*0.75})`;
-    CTX.lineWidth = 1 + tDepth*0.8;
+    const alpha = 0.15 + tDepth * 0.75;
+    const hueShift = (segIdx * 0.5) % 30;
+    CTX.strokeStyle = `hsla(${pal.h + hueShift}, 75%, ${35 + tDepth * 40}%, ${alpha})`;
+    CTX.lineWidth = 1 + tDepth * 0.8;
+
     CTX.beginPath();
-    for (let k=0; k<pts.length; k++) {
+    for (let k = 0; k < pts.length; k++) {
       const p = pts[k];
-      if (k===0) CTX.moveTo(p.x,p.y); else CTX.lineTo(p.x,p.y);
+      if (k === 0) CTX.moveTo(p.x, p.y); else CTX.lineTo(p.x, p.y);
     }
-    CTX.closePath(); CTX.stroke();
-    if (lastPts.length) {
-      CTX.strokeStyle = `hsla(${pal.h},55%,${25 + tDepth*25}%,0.5)`;
+    CTX.closePath();
+    CTX.stroke();
+
+    if (segIdx % 4 === 0) {
+      const inner = tunnelRingPoints(segIdx, absZ, 0.6);
+      CTX.strokeStyle = `hsla(${pal.h + 60}, 80%, ${40 + tDepth * 30}%, ${alpha * 0.6})`;
+      CTX.beginPath();
+      for (let k = 0; k < inner.length; k++) {
+        const p = inner[k];
+        if (k === 0) CTX.moveTo(p.x, p.y); else CTX.lineTo(p.x, p.y);
+      }
+      CTX.closePath();
+      CTX.stroke();
+      CTX.beginPath();
+      for (let k = 0; k < pts.length; k += 1) {
+        CTX.moveTo(pts[k].x, pts[k].y); CTX.lineTo(inner[k].x, inner[k].y);
+      }
+      CTX.stroke();
+    }
+
+    if (lastPts.length === pts.length) {
+      CTX.strokeStyle = `hsla(${pal.h}, 55%, ${25 + tDepth * 25}%, ${alpha * 0.5})`;
       CTX.lineWidth = 0.8;
       CTX.beginPath();
-      for (let k=0; k<pts.length; k++) { CTX.moveTo(pts[k].x,pts[k].y); CTX.lineTo(lastPts[k].x,lastPts[k].y); }
+      for (let k = 0; k < pts.length; k++) {
+        CTX.moveTo(pts[k].x, pts[k].y);
+        CTX.lineTo(lastPts[k].x, lastPts[k].y);
+      }
       CTX.stroke();
     }
     lastPts = pts;
   }
 }
 
-// SHIP - Wide movement + small size + physics banking
+// OBSTACLES
+const OBS = {
+  CUBE:       { id: 'cube',       hp: 1,  dmg: 15, rad: 28, shootable: true,  score: 10 },
+  ASTEROID_S: { id: 'asteroid_s', hp: 1,  dmg: 12, rad: 24, shootable: true,  score: 12 },
+  ASTEROID_L: { id: 'asteroid_l', hp: 3,  dmg: 28, rad: 46, shootable: true,  score: 30, splits: true },
+  TETRA:      { id: 'tetra',      hp: 2,  dmg: 20, rad: 32, shootable: true,  score: 18 },
+  MINE:       { id: 'mine',       hp: 1,  dmg: 40, rad: 22, shootable: true,  score: 25, flashy: true },
+  ENEMY:      { id: 'enemy',      hp: 2,  dmg: 18, rad: 28, shootable: true,  score: 40, fires: true },
+  BOSS:       { id: 'boss',       hp: 6,  dmg: 35, rad: 50, shootable: true,  score: 120, fires: true },
+  WALL:       { id: 'wall',       hp: 999, dmg: 50, rad: 80, shootable: false, score: 0, isWall: true }
+};
+
+function spawnObstacle(type, worldZ, x, y, extra = {}) {
+  const def = OBS[type];
+  obstacles.push({
+    type, def,
+    worldZ, x, y,
+    vx: extra.vx || 0, vy: extra.vy || 0,
+    rot: Math.random() * Math.PI * 2,
+    rotSp: (Math.random() - 0.5) * 0.06,
+    hp: def.hp,
+    alive: true,
+    age: 0,
+    fireCd: 60 + Math.random() * 100,
+    gapX: extra.gapX, gapY: extra.gapY, gapW: extra.gapW, gapH: extra.gapH
+  });
+}
+
+function buildLevel(lvl) {
+  obstacles = [];
+  torpedoes = [];
+  sparks = [];
+  enemyShots = [];
+  ringObj = null;
+  runRand = seededRandom(lvl * 9973 + 17);
+  const rnd = runRand;
+
+  const avgSpeed = 4 + Math.min(lvl * 0.025, 12);
+  LEVEL_LENGTH = avgSpeed * 60 * 65;
+  LEVEL_LENGTH = clamp(LEVEL_LENGTH, 16000, 64000);
+
+  const density = clamp(0.35 + lvl * 0.012, 0.35, 2.4);
+
+  const available = ['CUBE'];
+  if (lvl >= 5)   available.push('ASTEROID_S');
+  if (lvl >= 20)  available.push('ASTEROID_L');
+  if (lvl >= 40)  available.push('TETRA');
+  if (lvl >= 80)  available.push('MINE');
+  if (lvl >= 120) available.push('ENEMY');
+  if (lvl >= 250) available.push('WALL');
+  if (lvl >= 400) available.push('BOSS');
+
+  let z = 800;
+  while (z < LEVEL_LENGTH - 600) {
+    const pattern = Math.floor(rnd() * 6);
+    const type = available[Math.floor(rnd() * available.length)];
+
+    if (pattern === 0) {
+      const x = (rnd() - 0.5) * TUNNEL_RADIUS * 1.5;
+      const y = (rnd() - 0.5) * TUNNEL_RADIUS * 1.5;
+      spawnObstacle(type, z, x, y);
+      z += lerp(440, 220, Math.min(1, density/2));
+    } else if (pattern === 1) {
+      const n = 3 + Math.floor(rnd() * 3);
+      const yy = (rnd() - 0.5) * TUNNEL_RADIUS;
+      const gap = Math.floor(rnd() * n);
+      for (let i = 0; i < n; i++) {
+        if (i === gap) continue;
+        const xx = -TUNNEL_RADIUS + (i + 0.5) * (TUNNEL_RADIUS*2 / n);
+        spawnObstacle(type, z, xx, yy);
+      }
+      z += 520;
+    } else if (pattern === 2) {
+      const n = 3 + Math.floor(rnd() * 3);
+      const xx = (rnd() - 0.5) * TUNNEL_RADIUS;
+      const gap = Math.floor(rnd() * n);
+      for (let i = 0; i < n; i++) {
+        if (i === gap) continue;
+        const yy = -TUNNEL_RADIUS + (i + 0.5) * (TUNNEL_RADIUS*2 / n);
+        spawnObstacle(type, z, xx, yy);
+      }
+      z += 520;
+    } else if (pattern === 3) {
+      const n = 6 + Math.floor(rnd() * 3);
+      const skip = Math.floor(rnd() * n);
+      const r = TUNNEL_RADIUS * 0.75;
+      for (let i = 0; i < n; i++) {
+        if (i === skip || i === (skip+1)%n) continue;
+        const a = i/n * Math.PI * 2;
+        spawnObstacle(type, z, Math.cos(a)*r, Math.sin(a)*r);
+      }
+      z += 540;
+    } else if (pattern === 4 && available.includes('WALL')) {
+      const gw = TUNNEL_RADIUS * (0.45 + rnd()*0.35);
+      const gh = TUNNEL_RADIUS * (0.45 + rnd()*0.35);
+      const gx = (rnd() - 0.5) * (TUNNEL_RADIUS - gw/2);
+      const gy = (rnd() - 0.5) * (TUNNEL_RADIUS - gh/2);
+      spawnObstacle('WALL', z, 0, 0, {gapX: gx, gapY: gy, gapW: gw, gapH: gh});
+      z += 700;
+    } else {
+      const n = 2 + Math.floor(rnd() * 3);
+      for (let i = 0; i < n; i++) {
+        const x = (rnd() - 0.5) * TUNNEL_RADIUS * 1.5;
+        const y = (rnd() - 0.5) * TUNNEL_RADIUS * 1.5;
+        spawnObstacle(type, z + i*80, x, y, {
+          vx: (rnd() - 0.5) * 0.6,
+          vy: (rnd() - 0.5) * 0.6
+        });
+      }
+      z += 520;
+    }
+    z -= Math.min(160, density * 50);
+  }
+
+  ringObj = { worldZ: LEVEL_LENGTH, rot: 0, passed: false, pulseT: 0 };
+
+  ship.x = 0; ship.y = 0; ship.vx = 0; ship.vy = 0;
+  ship.invuln = 30;
+  cameraZ = 0;
+  levelProgress = 0;
+  torpedoUnlocked = lvl >= 50;
+
+  const newMax = maxHPForLevel(lvl);
+  const gained = newMax - ship.maxHP;
+  ship.maxHP = newMax;
+  if (gained > 0) ship.hp = Math.min(ship.maxHP, ship.hp + gained);
+  else ship.hp = Math.min(ship.maxHP, ship.hp);
+
+  document.getElementById('lvl').textContent = String(lvl).padStart(3, '0');
+  const wlbl = document.getElementById('weaponLabel');
+  const wval = document.getElementById('weapon');
+  if (torpedoUnlocked) {
+    wlbl.style.display = 'block';
+    wval.style.display = 'block';
+    wval.textContent = weaponLabel(lvl);
+  } else {
+    wlbl.style.display = 'none';
+    wval.style.display = 'none';
+  }
+
+  updateHP();
+}
+
+// SHIP - Wide movement, small size, good banking
 function updateShip(dt) {
   const accel = 2.7;
   const friction = 0.81;
   const maxV = 27;
   const limit = TUNNEL_RADIUS - 6;
 
-  if (KEY['ArrowLeft']) ship.vx -= accel*dt;
-  if (KEY['ArrowRight']) ship.vx += accel*dt;
-  if (KEY['ArrowUp']) ship.vy -= accel*dt;
-  if (KEY['ArrowDown']) ship.vy += accel*dt;
+  if (KEY['ArrowLeft'])  ship.vx -= accel * dt;
+  if (KEY['ArrowRight']) ship.vx += accel * dt;
+  if (KEY['ArrowUp'])    ship.vy -= accel * dt;
+  if (KEY['ArrowDown'])  ship.vy += accel * dt;
 
-  let v = Math.hypot(ship.vx, ship.vy);
+  const v = Math.hypot(ship.vx, ship.vy);
   if (v > maxV) { ship.vx = ship.vx/v * maxV; ship.vy = ship.vy/v * maxV; }
 
   ship.vx *= Math.pow(friction, dt);
@@ -311,17 +667,20 @@ function updateShip(dt) {
   if (ship.x < -limit) { ship.x = -limit; if (ship.vx < -1.2) bounced = true; ship.vx *= -0.6; }
   if (ship.y > limit) { ship.y = limit; if (ship.vy > 1.2) bounced = true; ship.vy *= -0.6; }
   if (ship.y < -limit) { ship.y = -limit; if (ship.vy < -1.2) bounced = true; ship.vy *= -0.6; }
-  if (bounced) { SFX.bounce(); spawnSparks(ship.x, ship.y, cameraZ+140, 6, 20); }
+  if (bounced) {
+    SFX.bounce();
+    spawnSparks(ship.x, ship.y, cameraZ + 140, 6, 20);
+  }
 
   ship.bank = lerp(ship.bank, -ship.vx * 0.06, 0.23);
   ship.pitch = lerp(ship.pitch, ship.vy * 0.03, 0.25);
 
   if (ship.invuln > 0) ship.invuln -= dt;
   if (ship.shake > 0) {
-    shakeX = (Math.random()-0.5)*ship.shake;
-    shakeY = (Math.random()-0.5)*ship.shake;
+    shakeX = (Math.random() - 0.5) * ship.shake;
+    shakeY = (Math.random() - 0.5) * ship.shake;
     ship.shake *= 0.85;
-  } else shakeX = shakeY = 0;
+  } else { shakeX = 0; shakeY = 0; }
 
   if (KEY['/'] && torpedoUnlocked && torpedoCooldown <= 0) {
     fireTorpedo();
@@ -340,34 +699,47 @@ function drawShip(pal, t) {
   CTX.rotate(ship.bank);
 
   const plumePulse = 0.85 + 0.15 * Math.sin(t*0.03);
-  const plumeLen = S * (0.8 + clamp(speed/20,0,1)*0.6);
+  const speedBoost = clamp(speed / 20, 0, 1);
+  const plumeLen = S * (0.8 + speedBoost * 0.6);
 
-  for (let side of [-1,1]) {
-    const tx = side * S*0.14, ty = S*0.38;
-    const grad = CTX.createRadialGradient(tx, ty+plumeLen*0.25, 0, tx, ty+plumeLen*0.25, plumeLen);
-    grad.addColorStop(0, `hsla(${(pal.h+180)%360},100%,90%,${0.85*plumePulse})`);
-    grad.addColorStop(1, 'transparent');
+  for (const side of [-1, 1]) {
+    const tx = side * S * 0.14;
+    const ty = S * 0.38;
+    const grad = CTX.createRadialGradient(tx, ty + plumeLen*0.25, 0, tx, ty + plumeLen*0.25, plumeLen);
+    grad.addColorStop(0,   `hsla(${(pal.h+180)%360}, 100%, 90%, ${0.85 * plumePulse})`);
+    grad.addColorStop(1,   'transparent');
     CTX.fillStyle = grad;
-    CTX.fillRect(tx-plumeLen, ty, plumeLen*2, plumeLen*1.2);
+    CTX.fillRect(tx - plumeLen, ty, plumeLen*2, plumeLen*1.2);
   }
 
-  CTX.fillStyle = `hsla(${pal.h},45%,12%,0.88)`;
-  CTX.strokeStyle = (ship.invuln > 0 && Math.floor(t/70)%2) ? '#fff' : `hsl(${pal.h},85%,78%)`;
+  CTX.fillStyle = `hsla(${pal.h}, 45%, 12%, 0.88)`;
+  const hullColor = (ship.invuln > 0 && Math.floor(t/70) % 2) ? '#ffffff' : `hsl(${pal.h}, 85%, 78%)`;
+  CTX.strokeStyle = hullColor;
   CTX.lineWidth = 1.5;
 
-  const pitchScale = 0.58 + ship.pitch*0.22;
+  const FORWARD_TILT = 0.58;
+  const pitchScale = FORWARD_TILT + ship.pitch * 0.22;
   CTX.save();
   CTX.scale(1, pitchScale);
 
   CTX.beginPath();
-  CTX.moveTo(0, -S*0.52); CTX.lineTo(S*0.06, -S*0.36); CTX.lineTo(S*0.12, -S*0.08);
-  CTX.lineTo(S*0.52, S*0.14); CTX.lineTo(S*0.30, S*0.28); CTX.lineTo(S*0.22, S*0.42);
-  CTX.lineTo(-S*0.22, S*0.42); CTX.lineTo(-S*0.30, S*0.28); CTX.lineTo(-S*0.52, S*0.14);
-  CTX.lineTo(-S*0.12, -S*0.08); CTX.lineTo(-S*0.06, -S*0.36);
+  CTX.moveTo(0, -S * 0.52);
+  CTX.lineTo(S * 0.06, -S * 0.36);
+  CTX.lineTo(S * 0.12, -S * 0.08);
+  CTX.lineTo(S * 0.52,  S * 0.14);
+  CTX.lineTo(S * 0.30,  S * 0.28);
+  CTX.lineTo(S * 0.22,  S * 0.42);
+  CTX.lineTo(-S * 0.22, S * 0.42);
+  CTX.lineTo(-S * 0.30, S * 0.28);
+  CTX.lineTo(-S * 0.52, S * 0.14);
+  CTX.lineTo(-S * 0.12, -S * 0.08);
+  CTX.lineTo(-S * 0.06, -S * 0.36);
   CTX.closePath();
-  CTX.fill(); CTX.stroke();
+  CTX.fill();
+  CTX.stroke();
 
-  CTX.restore(); CTX.restore();
+  CTX.restore();
+  CTX.restore();
 }
 
 // COLLISION - Tight to hull
@@ -381,8 +753,9 @@ function checkCollisions() {
     const dz = o.worldZ - SHIP_WORLD_Z;
     if (Math.abs(dz) < 65) {
       if (o.type === 'WALL') {
-        const inside = Math.abs(ship.x - o.gapX) < (o.gapW - SHIP_RAD) && Math.abs(ship.y - o.gapY) < (o.gapH - SHIP_RAD);
-        if (!inside && ship.invuln <= 0) damageShip(o.def.dmg * 1.2, o.x, o.y);
+        const insideGap = Math.abs(ship.x - o.gapX) < (o.gapW - SHIP_RAD) &&
+                          Math.abs(ship.y - o.gapY) < (o.gapH - SHIP_RAD);
+        if (!insideGap && ship.invuln <= 0) damageShip(o.def.dmg * 1.15, o.x, o.y);
         continue;
       }
       const dx = ship.x - o.x;
@@ -392,7 +765,7 @@ function checkCollisions() {
       if (distSq < minDist * minDist && ship.invuln <= 0) {
         const overlap = minDist - Math.sqrt(distSq);
         const damage = Math.max(10, Math.floor(o.def.dmg * (overlap / 14)));
-        damageShip(damage, o.x + dx*0.6, o.y + dy*0.6);
+        damageShip(damage, o.x + dx*0.65, o.y + dy*0.65);
         if (o.def.shootable) hitObstacle(o, 99);
       }
     }
@@ -424,6 +797,7 @@ function damageShip(amount, sx, sy) {
 
 function hitObstacle(o, dmg) {
   o.hp -= dmg;
+  spawnSparks(o.x, o.y, o.worldZ, 8, o.def.rad);
   if (o.hp <= 0) {
     o.alive = false;
     SFX.destroy();
@@ -435,7 +809,9 @@ function hitObstacle(o, dmg) {
         spawnObstacle('ASTEROID_S', o.worldZ + (Math.random()-0.5)*40, o.x + (Math.random()-0.5)*20, o.y + (Math.random()-0.5)*20, {vx: (Math.random()-0.5)*1.2, vy: (Math.random()-0.5)*1.2});
       }
     }
-  } else SFX.hit();
+  } else {
+    SFX.hit();
+  }
 }
 
 // SPARKS
@@ -579,7 +955,7 @@ function drawTorpedoes(pal) {
   }
 }
 
-// OBSTACLE UPDATE
+// OBSTACLE UPDATE & DRAW
 function updateObstacles(dt) {
   for (const o of obstacles) {
     if (!o.alive) continue;
@@ -955,7 +1331,12 @@ function gameOver() {
   state = 'gameover';
   SFX.explode();
   const o = document.getElementById('overlay');
-  o.innerHTML = `<h2>SIGNAL LOST</h2><h1>HULL BREACH</h1><p>You reached level ${level}. Score: ${score}.</p><button id="startBtn">TRY AGAIN</button>`;
+  o.innerHTML = `
+    <h2>SIGNAL LOST</h2>
+    <h1>HULL BREACH</h1>
+    <p>You reached level ${level}. Score: ${score}.</p>
+    <button id="startBtn">TRY AGAIN</button>
+  `;
   o.style.display = 'flex';
   document.getElementById('startBtn').onclick = restart;
 }
@@ -963,7 +1344,12 @@ function gameOver() {
 function complete() {
   state = 'complete';
   const o = document.getElementById('overlay');
-  o.innerHTML = `<h2>RUN COMPLETE</h2><h1>THE TESSERACT YIELDS</h1><p>Levels ${LEVEL_START}–${LEVEL_END} cleared. Score: ${score}.</p><button id="startBtn">AGAIN</button>`;
+  o.innerHTML = `
+    <h2>RUN COMPLETE</h2>
+    <h1>THE TESSERACT YIELDS</h1>
+    <p>Levels ${LEVEL_START}–${LEVEL_END} cleared. Score: ${score}.</p>
+    <button id="startBtn">AGAIN</button>
+  `;
   o.style.display = 'flex';
   document.getElementById('startBtn').onclick = restart;
 }
@@ -985,15 +1371,20 @@ function updateHP() {
   document.getElementById('hpText').textContent = `${Math.ceil(ship.hp)} / ${ship.maxHP}`;
   document.getElementById('healthOuter').style.width = hpBarPixelWidth(ship.maxHP) + 'px';
 }
-function updateScore() { document.getElementById('score').textContent = score; }
-function updateVel() { document.getElementById('vel').textContent = (speed / 6).toFixed(2) + 'c'; }
+function updateScore() {
+  document.getElementById('score').textContent = score;
+}
+function updateVel() {
+  const v = (speed / 6).toFixed(2);
+  document.getElementById('vel').textContent = v + 'c';
+}
 
 function showMessage(main, sub, framesDur) {
   const el = document.getElementById('centerMsg');
   el.innerHTML = `${main}<div class="sub">${sub||''}</div>`;
   el.classList.add('show');
   clearTimeout(showMessage._t);
-  showMessage._t = setTimeout(() => el.classList.remove('show'), framesDur * 16.67);
+  showMessage._t = setTimeout(() => { el.classList.remove('show'); }, framesDur * 16.67);
 }
 
 let paused = false;
@@ -1005,13 +1396,15 @@ function togglePause() {
   if (paused) {
     el.innerHTML = 'PAUSED<div class="sub">PRESS ESC TO RESUME</div>';
     el.classList.add('show');
-  } else el.classList.remove('show');
+  } else {
+    el.classList.remove('show');
+  }
 }
 
 // MAIN LOOP
 let lastT = performance.now();
 function loop(now) {
-  const dt = Math.min(2.5, (now - lastT)/16.67);
+  const dt = Math.min(2.5, (now - lastT) / 16.67);
   lastT = now;
   if (state === 'playing') step(dt, now);
   render(now);
@@ -1019,13 +1412,14 @@ function loop(now) {
 }
 
 function step(dt, now) {
-  const targetSpeed = 4 + Math.min(level*0.025,12) + levelProgress*1.8;
+  const targetSpeed = 4 + Math.min(level * 0.025, 12) + (levelProgress * 1.8);
   baseSpeed = lerp(baseSpeed, targetSpeed, 0.02);
   speed = baseSpeed;
-  setEngine(clamp(speed/20,0,1));
+  setEngine(clamp(speed / 20, 0, 1));
 
   cameraZ += speed * dt;
   poCam = pathOffset(cameraZ);
+
   levelProgress = clamp(cameraZ / LEVEL_LENGTH, 0, 1);
 
   updateShip(dt);
@@ -1040,8 +1434,10 @@ function step(dt, now) {
 function render(now) {
   poCam = pathOffset(cameraZ);
   const pal = levelPalette(level);
-  CTX.fillStyle = '#000'; CTX.fillRect(0,0,W,H);
-  drawBackground(pal, now);
+  CTX.fillStyle = '#000';
+  CTX.fillRect(0, 0, W, H);
+
+  drawBackground(pal);
   drawTunnel(pal);
   drawWormhole(pal, now);
   drawObstacles(pal, now);
@@ -1051,10 +1447,10 @@ function render(now) {
 
   const pw = Math.min(260, W * 0.4);
   CTX.save();
-  CTX.strokeStyle = `hsla(${pal.h},80%,60%,0.6)`;
+  CTX.strokeStyle = `hsla(${pal.h}, 80%, 60%, 0.6)`;
   CTX.lineWidth = 1;
   CTX.strokeRect(CX - pw/2, H - 28, pw, 3);
-  CTX.fillStyle = `hsl(${pal.h},90%,65%)`;
+  CTX.fillStyle = `hsl(${pal.h}, 90%, 65%)`;
   CTX.fillRect(CX - pw/2, H - 28, pw * levelProgress, 3);
   CTX.restore();
 
@@ -1065,21 +1461,26 @@ function render(now) {
 document.getElementById('startBtn').onclick = () => {
   initAudio();
   document.getElementById('overlay').style.display = 'none';
-  ship.maxHP = maxHPForLevel(level); ship.hp = ship.maxHP;
+  ship.maxHP = maxHPForLevel(level);
+  ship.hp = ship.maxHP;
   score = 0; updateScore();
   buildLevel(level);
   state = 'playing';
 };
 
-window.addEventListener('keydown', initAudio, {once:true});
-window.addEventListener('click', initAudio, {once:true});
+window.addEventListener('keydown', initAudio, { once: true });
+window.addEventListener('click', initAudio, { once: true });
 
 ship.maxHP = maxHPForLevel(level);
 ship.hp = ship.maxHP;
 updateHP();
 updateScore();
 updateVel();
-document.getElementById('lvl').textContent = String(LEVEL_START).padStart(3,'0');
+document.getElementById('lvl').textContent = String(LEVEL_START).padStart(3, '0');
+if (LEVEL_END !== 1000 || LEVEL_START !== 1) {
+  document.getElementById('target').textContent = `RANGE ${LEVEL_START}–${LEVEL_END}`;
+}
+
 requestAnimationFrame(loop);
 </script>
 </body>
