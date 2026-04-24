@@ -520,7 +520,7 @@ body.kudra-active #stage{padding-top:110px;}
   0%,100%{box-shadow:0 0 0 rgba(212,175,55,0);border-color:rgba(212,175,55,0.3);}
   50%{box-shadow:0 0 20px rgba(212,175,55,0.4);border-color:rgba(212,175,55,0.9);}}
 
-/* ── v9.0 Central content card ───────────────────── */
+/* ── v9.2 Central content card ───────────────────── */
 /* Stage is now a transparent overlay; content lives in .tile-card */
 #stage{position:fixed;inset:0;z-index:10;pointer-events:none;
   display:flex;align-items:center;justify-content:center;}
@@ -661,7 +661,7 @@ body.skm-active .skm-badge{display:block;}
   backdrop-filter:blur(4px);}
 
 
-/* ── v9.0 Stage architecture ─────────────────────
+/* ── v9.2 Stage architecture ─────────────────────
  *  #tileBg  = full-screen immersive background (z:2)
  *  #stage   = full-screen transparent overlay (z:10)
  *  .tile-card = centred content card, floats over bg
@@ -798,7 +798,7 @@ body.kudra-active #stage{padding-top:0;}
   50%{border-color:#f0abfc;box-shadow:0 0 14px rgba(240,171,252,0.6);}}
 
 
-/* ── Gate overlay v9.0 ─────────────────────────── */
+/* ── Gate overlay v9.2 ─────────────────────────── */
 #gateOverlay{
   position:fixed;inset:0;z-index:200;display:none;
   flex-direction:column;
@@ -844,7 +844,6 @@ body.kudra-active #stage{padding-top:0;}
 
 
 /* Exit mode buttons — hidden by default, shown via JS */
-#exitKBtn   { display:none; }
 #exitSkmBtn { display:none; }
 </style>
 </head>
@@ -944,7 +943,7 @@ body.kudra-active #stage{padding-top:0;}
 </div>
 
 <div id="mv-stage">
-  <!-- mv-header removed in v9.0 — controls are in realm header -->
+  <!-- mv-header removed in v9.2 — controls are in realm header -->
   <div id="mv-canvas-wrap">
     <canvas id="mv-canvas"></canvas>
     <!-- Info panel: slides up when a tile is tapped -->
@@ -967,7 +966,7 @@ body.kudra-active #stage{padding-top:0;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v9.0
+ *  MARDUK'S MAP — /realm/  grid SPA  v9.2
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -1449,23 +1448,23 @@ function render(x, y) {
   const navEl = document.getElementById('navArrows');
   s.style.opacity = '1';
   navEl.innerHTML = '';
-  // v9.0: ensure tileCard exists
+  // v9.2: ensure tileCard exists
   if (!document.getElementById('tileCard')) {
     s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
   }
-  // v9.0: stage is a fixed transparent overlay; content lives in .tile-card
+  // v9.2: stage is a fixed transparent overlay; content lives in .tile-card
   s.style.cssText = '';
   // Inject a fresh .tile-card for all renderers to write into
   s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v9.0';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v9.2';
 
   // Music — zone-aware track selection
   MusicEngine.playForTile(x, y, tile);
 
-  // v9.0: tile content card (centred on screen)
+  // v9.2: tile content card (centred on screen)
   const tc = document.getElementById('tileCard') || s;
 
   // Check puzzle lock on entry (if tile has puzzle.lock_entry, show puzzle first)
@@ -1610,7 +1609,7 @@ function renderEmilyPath(s, x, y, tile) {
   const ghostBase  = 0.55 + Math.sin(step) * 0.1;
   const ghostDelay = (step % 3) * 0.8;
 
-  // v9.0: background layers → tileBg, content → tileCard
+  // v9.2: background layers → tileBg, content → tileCard
   const _efBg = document.getElementById('tileBg');
   const _efTc = document.getElementById('tileCard');
   if (_efBg) _efBg.innerHTML = `
@@ -1802,7 +1801,7 @@ function renderPathScene(s, x, y, tile) {
   const g = parseInt(color.slice(3,5),16);
   const b2= parseInt(color.slice(5,7),16);
 
-  // v9.0: canvas background → tileBg, text content → tile-card
+  // v9.2: canvas background → tileBg, text content → tile-card
   const _ptBg = document.getElementById('tileBg');
   const _ptTc = document.getElementById('tileCard');
   if (_ptBg) _ptBg.innerHTML = `<div class="pt-root"><canvas class="pt-canvas" id="ptCanvas"></canvas></div>`;
@@ -2092,12 +2091,12 @@ function updateTranscendBtn(tile) {
 
 
 /* ══════════════════════════════════════════════════
- *  PUZZLE SYSTEM v9.0
+ *  PUZZLE SYSTEM v9.2
  *  Two game types: face3d (100 levels) + tesseract (1000 levels)
  *  Solved tiles stored in localStorage; persist across sessions
  * ═════════════════════════════════════════════════*/
 const PUZZLE_BASE = {
-  face3d:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/puzzle-game/',
+  face3d:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/masklock/',
   tesseract: 'https://jamesalexanderhiggins.github.io/marduk/beta/realm/tesseract/',
 };
 
@@ -2765,7 +2764,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v9.0)
+ *  MARDUK VIEW — game-like map (v9.2)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -2817,6 +2816,8 @@ function renderMardukView() {
   if (_kb) _kb.style.visibility = 'hidden';
   const _mvSub = document.getElementById('mvSub');
   if (_mvSub) _mvSub.textContent = isKudraUnlocked() ? '· All Rooms · KUDRAMARDUK' : '· All Rooms';
+  // Reset mvWrapEl so setupMVCanvas re-attaches listeners cleanly
+  if (mvWrapEl) mvWrapEl = null;
   setTimeout(() => {
     setupMVCanvas();
     document.body.style.background = 'var(--bg)';
@@ -3968,7 +3969,7 @@ function activateKudraMode() {
   if (kb) kb.style.opacity = '0.4';
   // Show EXIT K button in header
   const ekb = document.getElementById('exitKBtn');
-  if (ekb) ekb.style.display = '';
+  if (ekb) { ekb.classList.add('show'); ekb.style.removeProperty('display'); }
   // Purple flash
   const flash = document.createElement('div');
   flash.style.cssText = 'position:fixed;inset:0;background:rgba(192,132,252,0.22);'
@@ -4002,7 +4003,7 @@ function deactivateKudraMode() {
   const bar = document.getElementById('kudraMode');
   if (bar) bar.classList.remove('on');
   const _ekoff = document.getElementById('exitKBtn');
-  if (_ekoff) _ekoff.style.display = 'none';
+  if (_ekoff) { _ekoff.classList.remove('show'); _ekoff.style.removeProperty('display'); }
   const _eskoff = document.getElementById('exitSkmBtn');
   if (_eskoff) _eskoff.style.display = 'none';
   const kb = document.getElementById('keyBar');
@@ -4964,6 +4965,9 @@ function _activateSKM() {
   document.body.classList.add('skm-active');
   const exitBtn = document.getElementById('exitSkmBtn');
   if (exitBtn) exitBtn.style.display = '';
+  // K mode is a prerequisite for SKM
+  const _ekbSkm = document.getElementById('exitKBtn');
+  if (_ekbSkm) { _ekbSkm.classList.add('show'); _ekbSkm.style.removeProperty('display'); }
   // Show badge in mvInfo
   const badge = document.querySelector('.skm-badge');
   if (badge) badge.style.display = 'block';
@@ -5283,7 +5287,7 @@ function getVisited() {
 const GATE_URLS = {
   tesseract: 'https://jamesalexanderhiggins.github.io/marduk/beta/realm/tesseract/',
   masklock:  'https://jamesalexanderhiggins.github.io/marduk/beta/realm/masklock/',
-  turing:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/turing/',
+  turing:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/turing-test/',
 };
 const GATE_LABELS = {
   tesseract: 'Tesseract',
@@ -5406,7 +5410,7 @@ function _handleGateHash(h) {
 }
 
 
-// v9.0: Multi-mechanism gate completion detection
+// v9.2: Multi-mechanism gate completion detection
 // Mechanism 1: postMessage from game iframe
 window.addEventListener('message', function(ev) {
   if (!_pendingGate) return;
@@ -5527,16 +5531,6 @@ function _showKeyTriumph(keyId) {
 
 /* ── Boot ──────────────────────────────────────── */
 // (boot defined below)
-function _onGateFrameLoad() {
-  if (!_pendingGate) return;
-  try {
-    const href = this.contentWindow.location.href;
-    if (href && href.includes('#gate:')) {
-      const hash = href.split('#gate:')[1];
-      _resolveGateFromHash(hash);
-    }
-  } catch(e) { /* cross-origin — normal until redirect fires */ }
-}
 
 
 /* ══ KEY TRIUMPH ════════════════════════════════ */
@@ -5662,218 +5656,6 @@ function drawGateLines(ctx, now, m) {
 function closeSkmPanel() {
   const p = document.getElementById('skmPanel');
   if (p) p.classList.remove('open');
-}
-
-
-function skmOpenEditor(x, y) {
-  if (!_skmActive) return;
-  const panel  = document.getElementById('skmPanel');
-  const scroll = document.getElementById('skmPanelScroll');
-  const title  = document.getElementById('skmPanelTitle');
-  if (!panel || !scroll) return;
-
-  title.textContent = `✦ SKM · (${x},${y})`;
-
-  const tile  = getTile(x, y);
-  const doors = getDoors(x, y);
-  const dirMap = {up:'↑N',down:'↓S',left:'←W',right:'→E'};
-  let mechLines = '';
-  for (const [dir, door] of Object.entries(doors)) {
-    const nx = x+(dir==='right'?1:dir==='left'?-1:0);
-    const ny = y+(dir==='up'?1:dir==='down'?-1:0);
-    const nb = getTile(nx,ny);
-    const status = door.sealed ? `SEALED (${door.reason||'blocked'})`
-                 : door.path   ? `OPEN — Path ${nb?.on_path?.join(',')}`
-                 : 'OPEN';
-    mechLines += `${dirMap[dir]||dir} ${status}\n`;
-  }
-  mechLines += `\nType: ${tile.type||'empty'}`;
-  if (tile.on_path?.length) mechLines += ` | Paths: ${tile.on_path.join(',')}`;
-  if (tile.house_id) mechLines += ` | House: ${tile.house_id.toUpperCase()}`;
-  if (tile.key_id)   mechLines += ` | KEY: ${tile.key_id}`;
-
-  const pzl     = tile.puzzle || {};
-  const curName = tile.name  || '';
-  const curLore = tile.lore  || tile.description || '';
-  let curType = 'text';
-  if (pzl.type && ['tesseract','masklock','turing','face3d'].includes(pzl.type)) curType='game';
-  else if (tile.embed_url) curType='iframe';
-  else if (tile.video_url) curType='video';
-  else if (tile.image_url) curType='image';
-
-  const MUSIC_OPTS = ['puzzle_tension','high_stress_music','quiz_stress_music',
-    'low_stress_minor','low_stress_major','emily_path_music_1',
-    'emily_triumph','house_threshold_music','melchizedek_path_music'];
-
-  const row = (label, content) =>
-    `<div style="margin-bottom:10px;">
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.3em;
-        color:rgba(192,132,252,0.45);margin-bottom:4px;">${label}</div>
-      ${content}</div>`;
-
-  const inp = (id, val='', placeholder='', type='text', extra='') =>
-    `<input id="${id}" type="${type}" value="${String(val).replace(/"/g,'&quot;')}"
-      placeholder="${placeholder}" ${extra}
-      style="width:100%;background:rgba(0,0,0,0.55);border:1px solid rgba(201,168,76,0.2);
-      color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;">`;
-
-  const sel = (id, opts, selected) =>
-    `<select id="${id}" style="width:100%;background:rgba(0,0,0,0.55);
-      border:1px solid rgba(201,168,76,0.2);color:var(--cream);
-      font-size:13px;padding:6px 8px;box-sizing:border-box;">
-      ${opts.map(([v,l])=>`<option value="${v}"${v===selected?' selected':''}>${l}</option>`).join('')}
-    </select>`;
-
-  const typeBtns = ['text','game','iframe','video','image'].map(ct =>
-    `<button data-type="${ct}" onclick="skm_setType('${ct}')"
-      style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;
-      padding:5px 10px;cursor:pointer;border-radius:1px;
-      background:${ct===curType?'rgba(201,168,76,0.15)':'transparent'};
-      border:1px solid ${ct===curType?'var(--gold)':'rgba(201,168,76,0.2)'};
-      color:${ct===curType?'var(--gold)':'rgba(201,168,76,0.4)'};">
-      ${ct==='game'?'🎮 GAME':ct.toUpperCase()}</button>`
-  ).join('');
-
-  // Gate rows
-  const gateRows = ['N','S','E','W'].map(dir => {
-    const g = getGate(x,y,dir)||{};
-    const solved = isGateSolved(x,y,dir);
-    const dirLabel = {N:'↑ N',S:'↓ S',E:'→ E',W:'← W'}[dir];
-    const gLabel = g.type ? (GATE_LABELS[g.type]||g.type) : 'open';
-    return `<div style="margin-bottom:8px;padding:8px 10px;
-      background:rgba(0,0,0,0.3);border:1px solid rgba(192,132,252,${g.type?'0.18':'0.06'});">
-      <div style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:0.2em;
-        color:${g.type?'#c084fc':'rgba(201,168,76,0.3)'};margin-bottom:6px;">
-        ${dirLabel} — ${gLabel}${solved?' ✓':''}</div>
-      <div style="display:flex;gap:5px;flex-wrap:wrap;">
-        ${sel('skm_gate_'+dir+'_type',
-          [['','— open —'],['tesseract','Tesseract'],['masklock','Mask Lock'],['turing','Turing']],
-          g.type||'')}
-        ${inp('skm_gate_'+dir+'_level', g.level||'', 'lvl', 'number', 'min="1" max="1000" style="width:58px!important;"')}
-        ${inp('skm_gate_'+dir+'_title', g.title||'', 'Title')}
-        <button onclick="skm_saveGate(${x},${y},'${dir}')"
-          style="font-family:'Cinzel',serif;font-size:8px;padding:5px 10px;
-          cursor:pointer;background:rgba(192,132,252,0.15);
-          border:1px solid rgba(192,132,252,0.3);color:#c084fc;white-space:nowrap;">
-          SET</button>
-        ${g.type?`<button onclick="skm_clearGate(${x},${y},'${dir}')"
-          style="font-size:10px;padding:5px 8px;cursor:pointer;
-          background:transparent;border:1px solid rgba(201,168,76,0.15);
-          color:var(--dim);">✕</button>`:''}
-      </div>
-    </div>`;
-  }).join('');
-
-  scroll.innerHTML = `
-  <!-- Mechanics -->
-  ${row('📍 MECHANICS (READ ONLY)',
-    `<pre style="font-size:11px;color:rgba(201,168,76,0.5);background:rgba(0,0,0,0.3);
-      padding:7px 9px;line-height:1.7;white-space:pre-wrap;margin:0;">${mechLines}</pre>`)}
-
-  <!-- Content type -->
-  ${row('CONTENT TYPE',
-    `<div style="display:flex;gap:5px;flex-wrap:wrap;">${typeBtns}</div>`)}
-
-  <!-- Text panel -->
-  <div id="skmP_text" style="${curType!=='text'?'display:none':''}">
-    ${row('TILE NAME', inp('skm_name', curName, 'Short title'))}
-    ${row('BODY TEXT',
-      `<div style="display:flex;gap:3px;margin-bottom:5px;">
-        ${[['B','bold'],['I','italic'],['U','underline']].map(([l,c])=>
-          `<button onclick="document.execCommand('${c}')"
-            style="font-size:12px;padding:3px 8px;background:rgba(0,0,0,0.4);
-            border:1px solid rgba(201,168,76,0.15);color:var(--cream);cursor:pointer;">${l}</button>`
-        ).join('')}
-        <button onclick="skm_insertLink()" style="font-size:11px;padding:3px 8px;
-          background:rgba(0,0,0,0.4);border:1px solid rgba(201,168,76,0.15);
-          color:var(--cream);cursor:pointer;">🔗</button>
-      </div>
-      <div id="skm_lore" contenteditable="true"
-        style="min-height:80px;background:rgba(0,0,0,0.55);
-        border:1px solid rgba(201,168,76,0.2);color:var(--cream);
-        font-family:'EB Garamond',serif;font-size:14px;
-        padding:7px;line-height:1.7;text-align:left;">${curLore}</div>`)}
-  </div>
-
-  <!-- Game panel -->
-  <div id="skmP_game" style="${curType!=='game'?'display:none':''}">
-    ${row('GAME', sel('skm_game',
-      [['tesseract','Tesseract (1000 levels)'],['masklock','Mask Lock (100 levels)'],['turing','Turing Test (100 levels)']],
-      pzl.type||'tesseract'))}
-    ${row('LEVEL', `<div style="display:flex;gap:6px;align-items:center;">
-      ${inp('skm_pzl_level', pzl.level||1, '', 'number', 'min="1" max="1000" style="width:70px!important;"')}
-      <span style="color:var(--dim);font-size:11px;">or range</span>
-      ${inp('skm_pzl_range_a', (pzl.range||['',''])[0], 'from', 'number', 'style="width:60px!important;"')}
-      <span style="color:var(--dim);">–</span>
-      ${inp('skm_pzl_range_b', (pzl.range||['',''])[1], 'to', 'number', 'style="width:60px!important;"')}
-    </div>`)}
-    ${row('TITLE', inp('skm_pzl_title', pzl.title||'', 'Challenge title'))}
-    ${row('DESC', `<textarea id="skm_pzl_desc" rows="2"
-      style="width:100%;background:rgba(0,0,0,0.55);border:1px solid rgba(201,168,76,0.2);
-      color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;resize:vertical;">${pzl.desc||''}</textarea>`)}
-    ${row('LOCKS', `<div style="display:flex;gap:14px;">
-      <label style="color:var(--cream);font-size:12px;cursor:pointer;display:flex;gap:5px;align-items:center;">
-        <input type="checkbox" id="skm_lock_entry" ${pzl.lock_entry?'checked':''}>Entry</label>
-      <label style="color:var(--cream);font-size:12px;cursor:pointer;display:flex;gap:5px;align-items:center;">
-        <input type="checkbox" id="skm_lock_exit" ${pzl.lock_exit?'checked':''}>Exit</label>
-    </div>`)}
-    ${row('MUSIC CUE', sel('skm_pzl_music',
-      MUSIC_OPTS.map(m=>[m,m]), pzl.music||'puzzle_tension'))}
-    ${row('ON COMPLETION', sel('skm_pzl_complete_music',
-      [['','— none —'],...['emily_triumph','low_stress_major','eli_house_music','house_threshold_music'].map(m=>[m,m])],
-      pzl.on_complete_music||''))}
-  </div>
-
-  <!-- Iframe panel -->
-  <div id="skmP_iframe" style="${curType!=='iframe'?'display:none':''}">
-    ${row('EMBED URL', inp('skm_embed_url', tile.embed_url||'', 'https://...'))}
-    ${row('EMBED TITLE', inp('skm_embed_title', tile.embed_title||'', 'Optional title'))}
-  </div>
-
-  <!-- Video panel -->
-  <div id="skmP_video" style="${curType!=='video'?'display:none':''}">
-    ${row('VIDEO URL', inp('skm_video_url', tile.video_url||'', 'https://www.youtube.com/embed/...'))}
-  </div>
-
-  <!-- Image panel -->
-  <div id="skmP_image" style="${curType!=='image'?'display:none':''}">
-    ${row('IMAGE URL', inp('skm_image_url', tile.image_url||'', 'https://...'))}
-    ${row('CAPTION', inp('skm_image_caption', tile.image_caption||'', 'Optional caption'))}
-  </div>
-
-  <!-- Global name -->
-  ${row('TILE NAME (MAP)', inp('skm_name_global', curName, 'Short title'))}
-
-  <!-- Actions -->
-  <div style="display:flex;gap:8px;margin-top:4px;">
-    <button onclick="skm_save(${x},${y})"
-      style="flex:1;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;
-      padding:11px;cursor:pointer;background:#c084fc;color:#1a0a2e;border:none;">
-      💾 SAVE</button>
-    <button onclick="skm_export()"
-      style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.15em;
-      padding:11px 14px;cursor:pointer;background:transparent;
-      border:1px solid rgba(201,168,76,0.3);color:var(--gold);">↓ EXPORT</button>
-  </div>
-  <div style="font-size:11px;color:rgba(201,168,76,0.3);font-style:italic;margin-top:8px;">
-    Saves to browser. Export JSON for permanent installation.</div>
-
-  <!-- Directional gates -->
-  <div style="margin-top:16px;border-top:1px solid rgba(192,132,252,0.12);padding-top:12px;">
-    <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.35em;
-      color:rgba(192,132,252,0.5);margin-bottom:6px;">⊛ DIRECTIONAL GATES</div>
-    <div style="font-size:11px;color:rgba(201,168,76,0.3);margin-bottom:10px;">
-      Block movement in a direction until a puzzle is solved. Return is always free.</div>
-    ${gateRows}
-  </div>`;
-
-  // Open panel
-  panel.classList.add('open');
-}
-
-function closeSkmPanel() {
-  const panel = document.getElementById('skmPanel');
-  if (panel) panel.classList.remove('open');
 }
 
 
@@ -6023,7 +5805,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 
 /* ══════════════════════════════════════════════════
- *  GATES SYSTEM v9.0
+ *  GATES SYSTEM v9.2
  *  Gates are directional edge locks stored in REALM.gates
  *  Key format: "x,y:DIR" where DIR ∈ {N,S,E,W}
  *  A gate fires when moving FROM (x,y) in direction DIR.
@@ -6050,8 +5832,7 @@ async function boot() {
   if (isKudraUnlocked()) {
     document.body.classList.add('kudra-active');
     const _ekb = document.getElementById('exitKBtn');
-    if (_ekb) _ekb.style.display = '';
-    document.body.classList.add('kudra-active');
+    if (_ekb) { _ekb.classList.add('show'); _ekb.style.removeProperty('display'); }
   }
   window.addEventListener('resize', () => {
     const bg = document.getElementById('bg');
