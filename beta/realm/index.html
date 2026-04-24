@@ -2808,7 +2808,7 @@ let mvVel        = {x: 0, y: 0};
 let mvSelected   = null;
 let mvRipples    = [];             // [{x, y, t0}]
 let mvRaf        = null;
-let mvAbortCtrl  = null;   // AbortController for MV event listeners
+let mvW = 0, mvH = 0, mvTop = 44;  // canvas logical px — set from window, never from clientWidth
 let mvCanvasCtx  = null;
 let mvWrapEl     = null;
 let mvCanvasEl   = null;
@@ -2869,14 +2869,12 @@ function setupMVCanvas() {
   };
 
   function sizeCanvas() {
-    // Use window dimensions directly — canvas fills entire mv-stage
-    // (below 44px header). This avoids clientWidth=0 during layout.
-    const w = window.innerWidth;
-    const h = window.innerHeight - 44;
-    mvCanvasEl.width  = Math.floor(w * dpr);
-    mvCanvasEl.height = Math.floor(h * dpr);
-    mvCanvasEl.style.width  = w + 'px';
-    mvCanvasEl.style.height = h + 'px';
+    mvW = window.innerWidth;
+    mvH = window.innerHeight - mvTop;
+    mvCanvasEl.width  = Math.floor(mvW * dpr);
+    mvCanvasEl.height = Math.floor(mvH * dpr);
+    mvCanvasEl.style.width  = mvW + 'px';
+    mvCanvasEl.style.height = mvH + 'px';
   }
   sizeCanvas();
 
@@ -2887,16 +2885,14 @@ function setupMVCanvas() {
   }
   function gridToScreen(x, y, m) {
     m = m || metrics();
-    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const W = mvW, H = mvH;
     const stagger = (y % 2 === 0 ? 0 : m.hexW / 2);
     const px = W / 2 + mvOffset.x + x * m.hexW + stagger;
     const py = H / 2 + mvOffset.y - y * m.hexH;
     return [px, py];
   }
   function screenToGrid(sx, sy) {
-    // Inverse of gridToScreen, approximate — used for zoom anchoring.
-    // Ignores row stagger; good enough for pinch/tween centring.
-    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const W = mvW, H = mvH;
     const m = metrics();
     return {
       gx: (sx - W / 2 - mvOffset.x) / m.hexW,
@@ -2922,12 +2918,9 @@ function setupMVCanvas() {
   /* ── zoom anchor: change zoom while keeping a screen point fixed */
   function setZoomAround(newZoom, anchorSx, anchorSy) {
     newZoom = Math.max(MV_ZOOM_MIN, Math.min(MV_ZOOM_MAX, newZoom));
-    // Find the grid point currently under the anchor
     const g = screenToGrid(anchorSx, anchorSy);
-    // Apply new zoom
     mvZoom = newZoom;
-    // Recompute where that grid point would be in screen space, shift offset to re-anchor
-    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const W = mvW, H = mvH;
     const m = metrics();
     const newSx = W / 2 + mvOffset.x + g.gx * m.hexW;
     const newSy = H / 2 + mvOffset.y - g.gy * m.hexH;
@@ -2948,7 +2941,7 @@ function setupMVCanvas() {
   }
 
   function draw() {
-    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const W = mvW, H = mvH;
     const ctx = mvCanvasCtx;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
@@ -3345,11 +3338,8 @@ function setupMVCanvas() {
   function loop() {
     mvRaf = requestAnimationFrame(loop);
     // Ensure canvas is sized (catches deferred init and resize)
-    // Ensure canvas matches window (catches any resize/reflow)
-    {
-      const _ew = window.innerWidth, _eh = window.innerHeight - 44;
-      if (_ew > 0 && Math.abs(mvCanvasEl.width - Math.floor(_ew * dpr)) > dpr) sizeCanvas();
-    }
+    // Ensure canvas matches window on resize
+    if (window.innerWidth !== mvW || (window.innerHeight - mvTop) !== mvH) sizeCanvas();
 
     // Ease zoom toward target
     if (Math.abs(mvZoom - mvTargetZoom) > 0.002) {
@@ -3397,8 +3387,9 @@ function setupMVCanvas() {
   let lastTap = null;              // {sx, sy, t} — for double-tap detection
 
   function wrapPos(clientX, clientY) {
-    const r = mvWrapEl.getBoundingClientRect();
-    return {x: clientX - r.left, y: clientY - r.top};
+    // Canvas-wrap is always at left:0, top:mvTop below the header
+    // Using window constants avoids any dependency on cloned element layout
+    return {x: clientX, y: clientY - mvTop};
   }
 
   function startGesture(touchList) {
@@ -3457,7 +3448,7 @@ function setupMVCanvas() {
       mvTargetZoom = newZoom;
       // Put pinchAnchor.midGrid back at the current midpoint
       const m = metrics();
-      const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+      const W = mvW, H = mvH;
       mvOffset.x = midSx - W / 2 - pinchAnchor.midGrid.gx * m.hexW;
       mvOffset.y = midSy - H / 2 + pinchAnchor.midGrid.gy * m.hexH;
     } else if (panAnchor && activeTouches.size === 1) {
@@ -3671,17 +3662,17 @@ function setupMVCanvas() {
 
   /* ── zoom control buttons (guarded — elements may not exist) ── */
   if (document.getElementById('mvZoomIn')) document.getElementById('mvZoomIn').onclick = () => {
-    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const W = mvW, H = mvH;
     mvZoomAnchor = {x: W / 2, y: H / 2};
     mvTargetZoom = Math.min(MV_ZOOM_MAX, mvZoom * 1.4);
   };
   if (document.getElementById('mvZoomOut')) document.getElementById('mvZoomOut').onclick = () => {
-    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const W = mvW, H = mvH;
     mvZoomAnchor = {x: W / 2, y: H / 2};
     mvTargetZoom = Math.max(MV_ZOOM_MIN, mvZoom / 1.4);
   };
   if (document.getElementById('mvRecenter')) document.getElementById('mvRecenter').onclick = () => {
-    const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
+    const W = mvW, H = mvH;
     mvZoomAnchor = {x: W / 2, y: H / 2};
     mvTargetZoom = MV_ZOOM_HOME;
     // Also pan back to centre (0,0) over a couple of frames by injecting
@@ -3695,8 +3686,7 @@ function setupMVCanvas() {
   };
 
   /* ── resize ───────────────────────────────────── */
-  // Resize: recalc from window dimensions
-  window.addEventListener('resize', sizeCanvas);
+  window.addEventListener('resize', () => { sizeCanvas(); });
   const ro = new ResizeObserver(() => sizeCanvas());
   ro.observe(mvWrapEl);
 }
