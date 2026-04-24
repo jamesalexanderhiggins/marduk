@@ -114,8 +114,8 @@ body.kudra-active #stage{padding-top:110px;}
 .home-panel .hub-btn{margin-top:20px;}
 
 /* Marduk View — honeycomb */
-#mv-stage{position:fixed;top:44px;left:0;right:0;bottom:0;z-index:20;background:radial-gradient(ellipse at center,rgba(20,18,12,0.96),var(--bg) 80%);display:none;flex-direction:column;}
-#mv-stage.show{display:flex;}
+#mv-stage{position:fixed;top:44px;left:0;right:0;bottom:0;z-index:20;touch-action:none;display:none;}
+#mv-stage.show{display:block;}
 #mv-header{padding:18px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);background:rgba(7,9,16,0.8);}
 .mv-title{font-family:'Cinzel Decorative',serif;font-size:22px;color:var(--gold);text-shadow:var(--glow);letter-spacing:0.1em;}
 .mv-sub{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;color:var(--spirit);text-transform:uppercase;margin-left:12px;}
@@ -125,13 +125,13 @@ body.kudra-active #stage{padding-top:110px;}
 .mv-ctl{width:40px;height:40px;background:rgba(7,9,16,0.8);border:1px solid var(--border);color:var(--gold);font-size:20px;font-family:'Cinzel',serif;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.25s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
 .mv-ctl:hover,.mv-ctl:active{border-color:var(--gold);background:rgba(201,168,76,0.12);box-shadow:var(--glow);}
 .mv-ctl:active{transform:scale(0.95);}
-#mv-canvas-wrap{flex:1;overflow:hidden;position:relative;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;overscroll-behavior:contain;}
+#mv-canvas-wrap{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;overscroll-behavior:none;}
 #mv-canvas-wrap.dragging{cursor:grabbing;}
-#mv-canvas{display:block;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;}
+#mv-canvas{display:block;width:100%;height:100%;}
 
 /* Info panel — slides up from bottom when a cell is tapped */
 .mv-info{position:absolute;left:12px;right:12px;bottom:12px;max-width:640px;margin:0 auto;max-height:80vh;overflow-y:visible;background:linear-gradient(180deg,rgba(13,17,25,0.96),rgba(7,9,16,0.98));border:1px solid var(--border);padding:18px 22px;transform:translateY(calc(100% + 24px));opacity:0;transition:transform 0.3s ease,opacity 0.3s ease;pointer-events:none;box-shadow:0 -8px 40px rgba(0,0,0,0.6),0 0 30px rgba(201,168,76,0.08);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}
-.mv-info.show{transform:translateY(0);opacity:1;pointer-events:auto;}
+.mv-info.show{transform:translateY(0);opacity:1;pointer-events:auto;z-index:10;}
 .info-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;}
 .info-title{font-family:'Cinzel Decorative',serif;font-size:20px;color:var(--gold);line-height:1.25;flex:1;}
 .info-coord{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--dim);white-space:nowrap;padding-top:6px;}
@@ -520,7 +520,7 @@ body.kudra-active #stage{padding-top:110px;}
   0%,100%{box-shadow:0 0 0 rgba(212,175,55,0);border-color:rgba(212,175,55,0.3);}
   50%{box-shadow:0 0 20px rgba(212,175,55,0.4);border-color:rgba(212,175,55,0.9);}}
 
-/* ── v8.7 Central content card ───────────────────── */
+/* ── v8.9 Central content card ───────────────────── */
 /* Stage is now a transparent overlay; content lives in .tile-card */
 #stage{position:fixed;inset:0;z-index:10;pointer-events:none;
   display:flex;align-items:center;justify-content:center;}
@@ -661,7 +661,7 @@ body.skm-active .skm-badge{display:block;}
   backdrop-filter:blur(4px);}
 
 
-/* ── v8.7 Stage architecture ─────────────────────
+/* ── v8.9 Stage architecture ─────────────────────
  *  #tileBg  = full-screen immersive background (z:2)
  *  #stage   = full-screen transparent overlay (z:10)
  *  .tile-card = centred content card, floats over bg
@@ -673,12 +673,14 @@ body.skm-active .skm-badge{display:block;}
 body.kudra-active #stage{padding-top:0;}
 .tile-card{pointer-events:auto;position:relative;
   z-index:11;
-  width:min(660px,calc(100vw - 144px));  /* leave 72px each side for arrows */
-  max-height:calc(100vh - 120px);        /* leave room for header + coords */
+  width:min(660px,calc(100vw - 144px));
+  max-height:calc(100vh - 100px);
   overflow-y:auto;-webkit-overflow-scrolling:touch;
   display:flex;flex-direction:column;align-items:center;
   gap:14px;text-align:center;padding:28px 24px 28px;
-  background:transparent;  /* see-through — background shows behind */
+  background:rgba(2,1,14,0.55);
+  backdrop-filter:blur(2px);
+  border-radius:2px;
 }
 /* Text content inside card gets a subtle readability backing */
 .tile-card .room-lore,.tile-card .ef-lore,
@@ -795,6 +797,51 @@ body.kudra-active #stage{padding-top:0;}
   0%,100%{border-color:#c084fc;box-shadow:0 0 4px rgba(192,132,252,0.3);}
   50%{border-color:#f0abfc;box-shadow:0 0 14px rgba(240,171,252,0.6);}}
 
+
+/* ── Gate overlay v8.9 ─────────────────────────── */
+#gateOverlay{
+  position:fixed;inset:0;z-index:200;display:none;
+  flex-direction:column;
+  background:rgba(2,1,14,0.97);
+  font-family:'Cinzel',serif;
+}
+#gateHeader{
+  flex:0 0 auto;
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:16px;padding:16px 22px 12px;
+  border-bottom:1px solid rgba(192,132,252,0.25);
+  background:rgba(5,3,18,0.98);
+}
+#gateHeaderText{flex:1;min-width:0;}
+#gateLabel{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.45em;
+  color:rgba(192,132,252,0.6);margin-bottom:6px;text-transform:uppercase;
+}
+#gateTitle{
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(15px,2.5vw,24px);color:#c084fc;
+  text-shadow:0 0 20px rgba(192,132,252,0.5);
+  margin-bottom:6px;line-height:1.3;
+}
+#gateDesc{
+  font-family:'EB Garamond',serif;font-style:italic;
+  font-size:clamp(13px,1.6vw,16px);color:rgba(228,210,200,0.65);
+  line-height:1.6;max-width:600px;
+}
+#gateBackBtn{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;
+  color:rgba(201,168,76,0.55);background:transparent;
+  border:1px solid rgba(201,168,76,0.2);
+  padding:10px 16px;cursor:pointer;flex-shrink:0;
+  white-space:nowrap;align-self:center;transition:all 0.25s;
+}
+#gateBackBtn:hover{color:var(--gold);border-color:var(--gold);}
+#gateFrame{
+  flex:1 1 auto;min-height:0;
+  border:none;width:100%;
+  background:#000;
+}
+
 </style>
 </head>
 <body>
@@ -829,29 +876,16 @@ body.kudra-active #stage{padding-top:0;}
 </div>
 
 <!-- Gate challenge overlay -->
-<div id="gateOverlay" style="display:none;position:fixed;inset:0;z-index:200;
-  flex-direction:column;background:rgba(2,1,12,0.98);">
-  <div id="gateHeader" style="flex:0 0 auto;padding:14px 20px 10px;
-    display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
-    border-bottom:1px solid rgba(192,132,252,0.2);">
-    <div id="gateHeaderText" style="flex:1;">
-      <div id="gateLabel" style="font-family:'Cinzel',serif;font-size:8px;
-        letter-spacing:0.4em;color:rgba(192,132,252,0.6);margin-bottom:5px;"></div>
-      <div id="gateTitle" style="font-family:'Cinzel Decorative',serif;
-        font-size:clamp(14px,2.2vw,20px);color:#c084fc;
-        text-shadow:0 0 18px rgba(192,132,252,0.6);margin-bottom:4px;"></div>
-      <div id="gateDesc" style="font-family:'EB Garamond',serif;font-style:italic;
-        font-size:clamp(13px,1.5vw,15px);color:rgba(228,210,200,0.6);
-        line-height:1.6;max-width:560px;"></div>
+<div id="gateOverlay">
+  <div id="gateHeader">
+    <div id="gateHeaderText">
+      <div id="gateLabel"></div>
+      <div id="gateTitle"></div>
+      <div id="gateDesc"></div>
     </div>
-    <button onclick="closeGateOverlay()"
-      style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;
-      color:rgba(201,168,76,0.5);background:transparent;
-      border:1px solid rgba(201,168,76,0.2);padding:8px 14px;cursor:pointer;
-      flex-shrink:0;white-space:nowrap;align-self:center;">
-      ← Can't do it — go back</button>
+    <button id="gateBackBtn" onclick="closeGateOverlay()">← Can't do it — go back</button>
   </div>
-  <iframe id="gateFrame" style="flex:1 1 auto;border:none;width:100%;background:#000;"
+  <iframe id="gateFrame"
     allowfullscreen
     sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>
 </div>
@@ -906,26 +940,15 @@ body.kudra-active #stage{padding-top:0;}
 </div>
 
 <div id="mv-stage">
-  <div id="mv-header">
-    <div>
-      <span class="mv-title">The Marduk View</span>
-      <span class="mv-sub" id="mvSub">· All Rooms</span>
-    </div>
-    <div class="mv-controls">
-      <button class="mv-ctl" id="mvZoomOut" title="Zoom out">−</button>
-      <button class="mv-ctl" id="mvZoomIn"  title="Zoom in">+</button>
-      <button class="mv-ctl" id="mvRecenter" title="Recenter">⌖</button>
-      <button class="mv-close" id="mvClose">Close</button>
-    </div>
-  </div>
+  <!-- mv-header removed in v8.9 — controls are in realm header -->
   <div id="mv-canvas-wrap">
     <canvas id="mv-canvas"></canvas>
     <!-- Info panel: slides up when a tile is tapped -->
-    <div id="mvInfo" class="mv-info"></div>
+    <div id="mvInfo" class="mv-info" style="pointer-events:none;"></div>
   </div>
-  <div id="mv-footer">
-    <span class="mv-hover" id="mvHover">Tap a cell to preview  ·  tap again to travel  ·  pinch to zoom  ·  drag to pan</span>
-    <div class="mv-legend">
+  <div id="mv-footer" style="position:absolute;bottom:0;left:0;right:0;z-index:5;pointer-events:none;">
+    <span class="mv-hover" id="mvHover" style="pointer-events:none;">Tap · tap again to travel · pinch zoom · drag pan</span>
+    <div class="mv-legend" style="pointer-events:none;">
       <div class="item"><span class="dot" style="background:var(--gold);"></span>Home</div>
       <div class="item"><span class="dot" style="background:var(--spirit);"></span>Visited</div>
       <div class="item"><span class="dot" style="background:var(--ember);"></span>House/Door</div>
@@ -940,7 +963,7 @@ body.kudra-active #stage{padding-top:0;}
 
 <script>
 /* ═══════════════════════════════════════════════
- *  MARDUK'S MAP — /realm/  grid SPA  v8.7
+ *  MARDUK'S MAP — /realm/  grid SPA  v8.9
  * ═══════════════════════════════════════════════
  * 33×33 grid, centred at (0,0). URL hash = salted
  * base36 encoding of (x,y). All state persisted
@@ -1422,23 +1445,23 @@ function render(x, y) {
   const navEl = document.getElementById('navArrows');
   s.style.opacity = '1';
   navEl.innerHTML = '';
-  // v8.7: ensure tileCard exists
+  // v8.9: ensure tileCard exists
   if (!document.getElementById('tileCard')) {
     s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
   }
-  // v8.7: stage is a fixed transparent overlay; content lives in .tile-card
+  // v8.9: stage is a fixed transparent overlay; content lives in .tile-card
   s.style.cssText = '';
   // Inject a fresh .tile-card for all renderers to write into
   s.innerHTML = '<div class="tile-card" id="tileCard"></div>';
 
   // Coords display
   const coord = tile.coord || `(${x >= 0 ? '+' : ''}${x}, ${y >= 0 ? '+' : ''}${y})`;
-  document.getElementById('roomCoords').textContent = coord + '  ·  v8.7';
+  document.getElementById('roomCoords').textContent = coord + '  ·  v8.9';
 
   // Music — zone-aware track selection
   MusicEngine.playForTile(x, y, tile);
 
-  // v8.7: tile content card (centred on screen)
+  // v8.9: tile content card (centred on screen)
   const tc = document.getElementById('tileCard') || s;
 
   // Check puzzle lock on entry (if tile has puzzle.lock_entry, show puzzle first)
@@ -1492,10 +1515,22 @@ function render(x, y) {
   }
   else { renderEmpty(tc, x, y, tile); }
 
+  // Gate CTA — always appended to tile-card for any outgoing unsolved gate
+  if (REALM && REALM.gates) {
+    const _gCTA = _renderGateCTA(x, y);
+    if (_gCTA) {
+      const _tc2 = document.getElementById('tileCard');
+      if (_tc2) {
+        const _d = document.createElement('div');
+        _d.innerHTML = _gCTA;
+        _tc2.appendChild(_d);
+      }
+    }
+  }
   // Navigation arrows — suppressed inside house scenes (exits are in-scene)
   if (!HOUSE_SCENES[`${x},${y}`]) {
     renderNavArrows(x, y);
-  updateTranscendBtn(tile);
+    updateTranscendBtn(tile);
   }
 
   // Environmental overlays
@@ -1571,7 +1606,7 @@ function renderEmilyPath(s, x, y, tile) {
   const ghostBase  = 0.55 + Math.sin(step) * 0.1;
   const ghostDelay = (step % 3) * 0.8;
 
-  // v8.7: background layers → tileBg, content → tileCard
+  // v8.9: background layers → tileBg, content → tileCard
   const _efBg = document.getElementById('tileBg');
   const _efTc = document.getElementById('tileCard');
   if (_efBg) _efBg.innerHTML = `
@@ -1763,7 +1798,7 @@ function renderPathScene(s, x, y, tile) {
   const g = parseInt(color.slice(3,5),16);
   const b2= parseInt(color.slice(5,7),16);
 
-  // v8.7: canvas background → tileBg, text content → tile-card
+  // v8.9: canvas background → tileBg, text content → tile-card
   const _ptBg = document.getElementById('tileBg');
   const _ptTc = document.getElementById('tileCard');
   if (_ptBg) _ptBg.innerHTML = `<div class="pt-root"><canvas class="pt-canvas" id="ptCanvas"></canvas></div>`;
@@ -2053,7 +2088,7 @@ function updateTranscendBtn(tile) {
 
 
 /* ══════════════════════════════════════════════════
- *  PUZZLE SYSTEM v8.7
+ *  PUZZLE SYSTEM v8.9
  *  Two game types: face3d (100 levels) + tesseract (1000 levels)
  *  Solved tiles stored in localStorage; persist across sessions
  * ═════════════════════════════════════════════════*/
@@ -2531,46 +2566,75 @@ function renderNavArrows(x, y) {
   const tile = getTile(x, y);
   if (tile.type === 'quiz' || tile.type === 'threshold' || tile.type === 'marduk_view') return;
 
-  // Emily's path: only show forward/back along path A; near end add spooky taunt exits
+  // Emily's path: directionally-congruent arrows (left=W, right=E, up=N, down=S)
   if (tile.on_path && tile.on_path.includes('A') && tile.type !== 'house_interior') {
     const myStep = (tile.path_step||{})['A'] ?? 0;
-    const total = PATH_A_SEQ.length;
-    const seq = PATH_A_SEQ;
-    // Back arrow
+    const total  = PATH_A_SEQ.length;
+    const seq    = PATH_A_SEQ;
+
+    // Map dx,dy → CSS arrow class and glyph (map-congruent)
+    const dirClass = {'-1,0':'left','1,0':'right','0,1':'up','0,-1':'down'};
+    const dirGlyph = {'-1,0':'←','1,0':'→','0,1':'↑','0,-1':'↓'};
+
+    function makeArrow(tx, ty, cx, cy, extraClass='') {
+      const dx = tx-cx, dy = ty-cy;
+      const key = `${dx},${dy}`;
+      const cls = dirClass[key] || 'left';
+      const g   = dirGlyph[key] || '←';
+      // Check for edge gate in this direction
+      const gDir = {left:'W',right:'E',up:'N',down:'S'}[cls];
+      const gate = getGate(cx, cy, gDir);
+      const solved = gate && isGateSolved(cx, cy, gDir);
+      const a = document.createElement('a');
+      a.href = '#' + encodeXY(tx, ty);
+      a.textContent = g;
+      if (gate && !solved) {
+        a.className = 'nav-arrow ' + cls + ' gated ' + extraClass;
+        a.title = gate.title || 'Gate — solve puzzle to pass';
+        a.addEventListener('click', ev => { ev.preventDefault(); openGateOverlay(cx, cy, gDir); });
+      } else {
+        a.className = 'nav-arrow ' + cls + ' path' + (solved?' gate-solved':'') + (extraClass?' '+extraClass:'');
+        a.addEventListener('click', ev => { ev.preventDefault(); goTo(tx, ty); });
+      }
+      return a;
+    }
+
+    // Back arrow (always shown if not at start)
     if (myStep > 0) {
       const [bx,by] = seq[myStep-1];
-      const a = document.createElement('a');
-      a.className = 'nav-arrow left path';
-      a.href='#'+encodeXY(bx,by); a.textContent='←';
-      a.addEventListener('click',ev=>{ev.preventDefault();goTo(bx,by);});
-      el.appendChild(a);
+      el.appendChild(makeArrow(bx,by,x,y));
     }
-    // Forward arrow
+
+    // Forward arrow (if not at end — front door is the last tile)
     if (myStep < total-1) {
       const [fx,fy] = seq[myStep+1];
-      const a = document.createElement('a');
-      a.className = 'nav-arrow right path';
-      a.href='#'+encodeXY(fx,fy); a.textContent='→';
-      a.addEventListener('click',ev=>{ev.preventDefault();goTo(fx,fy);});
-      el.appendChild(a);
+      el.appendChild(makeArrow(fx,fy,x,y));
     }
-    // Near end (last 6 steps): spooky taunt exit arrows pointing away from path
-    if (myStep >= total - 6 && myStep < total - 1) {
-      const taunts = ["← go back before it's too late",
-                      "↑ leave the path", "she wants your soul ↓"];
-      const taunt = taunts[myStep % taunts.length];
-      // Find a direction not on the path
-      for (const [dx,dy,dir] of [[0,1,'up'],[0,-1,'down'],[-1,0,'left'],[1,0,'right']]) {
+
+    // Spooky taunt exits near end (last 5 steps before door)
+    const TAUNTS = ["go back — before it's too late",
+                    "leave the path now",
+                    "she wants your soul",
+                    "turn back — you are not ready",
+                    "the forest is closing in"];
+    if (myStep >= total - 5 && myStep < total - 1) {
+      const taunt = TAUNTS[(myStep - (total-5)) % TAUNTS.length];
+      for (const [dx,dy] of [[0,1],[0,-1],[-1,0],[1,0]]) {
         const nx=x+dx,ny=y+dy;
         const nb=getTile(nx,ny);
-        if (!nb.on_path?.includes('A') && nb.type!=='house_interior') {
+        // Only exits that aren't on path A and aren't house interior
+        if (!nb.on_path?.includes('A') && nb.type!=='house_interior'
+            && nx>=-(16) && nx<=16 && ny>=-(16) && ny<=16) {
+          const key=`${dx},${dy}`;
+          const cls=dirClass[key]||'left';
+          const g=dirGlyph[key]||'←';
           const a=document.createElement('a');
-          a.className='nav-arrow '+dir+' taunt';
+          a.className='nav-arrow '+cls+' taunt';
           a.href='#'+encodeXY(nx,ny);
-          a.textContent=taunt;
+          a.textContent=g+' '+taunt;
           a.addEventListener('click',ev=>{ev.preventDefault();goTo(nx,ny);});
           el.appendChild(a);
-          break;
+          break; // only one taunt exit
         }
       }
     }
@@ -2697,7 +2761,7 @@ function drawCoordShape(ctx, x, y, cx, cy, r, color, alpha) {
 }
 
 /* ═══════════════════════════════════════════════
- *  MARDUK VIEW — game-like map (v8.7)
+ *  MARDUK VIEW — game-like map (v8.9)
  * ═══════════════════════════════════════════════
  * - Touch-native: dedicated touchstart/move/end handlers
  *   (avoids Pointer Events, which are unreliable in iOS Safari)
@@ -2747,15 +2811,14 @@ function renderMardukView() {
   // Hide key bar and kudra bar behind MV header
   const _kb = document.getElementById('keyBar');
   if (_kb) _kb.style.visibility = 'hidden';
-  document.getElementById('mvSub').textContent = isKudraUnlocked()
-    ? '· All Rooms · KUDRAMARDUK overlay'
-    : '· All Rooms';
-  requestAnimationFrame(() => {
+  const _mvSub = document.getElementById('mvSub');
+  if (_mvSub) _mvSub.textContent = isKudraUnlocked() ? '· All Rooms · KUDRAMARDUK' : '· All Rooms';
+  setTimeout(() => {
     setupMVCanvas();
     document.body.style.background = 'var(--bg)';
   initStars({count: 320, color: '230,220,190', speed: 0.005});
     startParticles({colors: ['#c9a84c22', '#7eb8d422'], min: 1, max: 2, speed: 12});
-  });
+  }, 50);
 }
 
 function setupMVCanvas() {
@@ -2773,12 +2836,14 @@ function setupMVCanvas() {
   hideInfoPanel();
 
   function sizeCanvas() {
-    const w = mvWrapEl.clientWidth;
-    const h = mvWrapEl.clientHeight;
-    mvCanvasEl.style.width  = w + 'px';
-    mvCanvasEl.style.height = h + 'px';
+    // Use window dimensions directly — canvas fills entire mv-stage
+    // (below 44px header). This avoids clientWidth=0 during layout.
+    const w = window.innerWidth;
+    const h = window.innerHeight - 44;
     mvCanvasEl.width  = Math.floor(w * dpr);
     mvCanvasEl.height = Math.floor(h * dpr);
+    mvCanvasEl.style.width  = w + 'px';
+    mvCanvasEl.style.height = h + 'px';
   }
   sizeCanvas();
 
@@ -3247,11 +3312,10 @@ function setupMVCanvas() {
   function loop() {
     mvRaf = requestAnimationFrame(loop);
     // Ensure canvas is sized (catches deferred init and resize)
-    if (mvWrapEl && mvCanvasEl) {
-      const _cw = mvWrapEl.clientWidth, _ch = mvWrapEl.clientHeight;
-      if (_cw > 0 && (_cw !== mvCanvasEl.width / dpr || _ch !== mvCanvasEl.height / dpr)) {
-        sizeCanvas();
-      }
+    // Ensure canvas matches window (catches any resize/reflow)
+    {
+      const _ew = window.innerWidth, _eh = window.innerHeight - 44;
+      if (_ew > 0 && Math.abs(mvCanvasEl.width - Math.floor(_ew * dpr)) > dpr) sizeCanvas();
     }
 
     // Ease zoom toward target
@@ -3572,18 +3636,18 @@ function setupMVCanvas() {
     mvZoomAnchor = {x: p.x, y: p.y};
   }, {passive: false});
 
-  /* ── zoom control buttons ─────────────────────── */
-  document.getElementById('mvZoomIn').onclick = () => {
+  /* ── zoom control buttons (guarded — elements may not exist) ── */
+  if (document.getElementById('mvZoomIn')) document.getElementById('mvZoomIn').onclick = () => {
     const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
     mvZoomAnchor = {x: W / 2, y: H / 2};
     mvTargetZoom = Math.min(MV_ZOOM_MAX, mvZoom * 1.4);
   };
-  document.getElementById('mvZoomOut').onclick = () => {
+  if (document.getElementById('mvZoomOut')) document.getElementById('mvZoomOut').onclick = () => {
     const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
     mvZoomAnchor = {x: W / 2, y: H / 2};
     mvTargetZoom = Math.max(MV_ZOOM_MIN, mvZoom / 1.4);
   };
-  document.getElementById('mvRecenter').onclick = () => {
+  if (document.getElementById('mvRecenter')) document.getElementById('mvRecenter').onclick = () => {
     const W = mvWrapEl.clientWidth, H = mvWrapEl.clientHeight;
     mvZoomAnchor = {x: W / 2, y: H / 2};
     mvTargetZoom = MV_ZOOM_HOME;
@@ -3598,6 +3662,8 @@ function setupMVCanvas() {
   };
 
   /* ── resize ───────────────────────────────────── */
+  // Resize: recalc from window dimensions
+  window.addEventListener('resize', sizeCanvas);
   const ro = new ResizeObserver(() => sizeCanvas());
   ro.observe(mvWrapEl);
 }
@@ -3767,7 +3833,7 @@ window.addEventListener('resize', () => {
   if (document.getElementById('mv-stage').classList.contains('show') && mvResizeFn) mvResizeFn();
 });
 
-document.getElementById('mvClose').addEventListener('click', () => {
+document.getElementById('mvClose') && document.getElementById('mvClose').addEventListener('click', () => {
   document.getElementById('mv-stage').classList.remove('show');
   const _kb2 = document.getElementById('keyBar');
   if (_kb2) _kb2.style.visibility = 'visible';
@@ -3853,7 +3919,17 @@ function updateMapBtn() {
 }
 
 document.getElementById('mapBtn').addEventListener('click', () => {
-  renderMardukView();
+  const mv = document.getElementById('mv-stage');
+  if (mv && mv.classList.contains('show')) {
+    // Close map
+    mv.classList.remove('show');
+    if (mvRaf) { cancelAnimationFrame(mvRaf); mvRaf = null; }
+    const kb = document.getElementById('keyBar');
+    if (kb) kb.style.visibility = '';
+    render(getP().lastPos ? getP().lastPos[0] : 0, getP().lastPos ? getP().lastPos[1] : 0);
+  } else {
+    renderMardukView();
+  }
 });
 
 function activateKudraMode() {
@@ -5204,10 +5280,7 @@ function _saveGateSolved(set) {
 }
 let _gateSolved = _loadGateSolved();
 
-function getVisited() {
-  const p = getP();
-  return new Set(p.visited || ['0,0']);
-}
+
 function gateKey(x, y, dir) { return `${x},${y}:${dir}`; }
 function getGate(x, y, dir) {
   if (!REALM || !REALM.gates) return null;
@@ -5251,32 +5324,23 @@ function openGateOverlay(fromX, fromY, dir) {
   const lv   = gate.range ? `Levels ${gate.range[0]}–${gate.range[1]}`
              : gate.level  ? `Level ${gate.level}` : '';
 
-  // Create or reuse overlay
-  let ov = document.getElementById('gateOverlay');
-  if (!ov) {
-    ov = document.createElement('div');
-    ov.id = 'gateOverlay';
-    document.body.appendChild(ov);
-  }
-  ov.innerHTML = `
-    <div id="gateHeader">
-      <div id="gateHeaderText">
-        <div id="gateLabel">${label.toUpperCase()} · ${lv}</div>
-        <div id="gateTitle">${gate.title||'Challenge'}</div>
-        ${gate.desc ? `<div id="gateDesc">${gate.desc}</div>` : ''}
-      </div>
-      <button id="gateBackBtn" onclick="closeGateOverlay()">
-        ← I can't do it — go back</button>
-    </div>
-    <iframe id="gateFrame" src="${url}"
-      allowfullscreen
-      sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>`;
+  // Update static overlay elements in place (don't use innerHTML — loses iframe)
+  const ov = document.getElementById('gateOverlay');
+  if (!ov) return;
+  const _lbl = document.getElementById('gateLabel');
+  const _ttl = document.getElementById('gateTitle');
+  const _dsc = document.getElementById('gateDesc');
+  const _fr  = document.getElementById('gateFrame');
+  if (_lbl) _lbl.textContent = label.toUpperCase() + (lv ? ' · ' + lv : '');
+  if (_ttl) _ttl.textContent = gate.title || 'Challenge';
+  if (_dsc) { _dsc.textContent = gate.desc || ''; _dsc.style.display = gate.desc ? '' : 'none'; }
+  if (_fr)  _fr.src = url || 'about:blank';
   ov.style.display = 'flex';
   // Play gate music cue
   if (gate.music) MusicEngine.playByKey(gate.music);
 
   // Listen for completion — multiple mechanisms
-  document.getElementById('gateFrame').addEventListener('load', _onGateFrameLoad);
+  if (_fr) _fr.addEventListener('load', _onGateFrameLoad);
   _startGatePoll();
 }
 
@@ -5287,6 +5351,11 @@ function closeGateOverlay() {
   if (fr) { fr.removeEventListener('load', _onGateFrameLoad); fr.src='about:blank'; }
   _stopGatePoll();
   _pendingGate = null;
+  // Refresh nav arrows + MV gate lines
+  const cur = window.location.hash.replace('#','');
+  const dec = cur ? decodeXY(cur) : null;
+  if (dec) setTimeout(()=>renderNavArrows(dec.x, dec.y), 100);
+  if (typeof mvDrawFn === 'function') setTimeout(mvDrawFn, 150);
 }
 
 function _onGateFrameLoad() {
@@ -5314,7 +5383,7 @@ function _handleGateHash(h) {
 }
 
 
-// v8.7: Multi-mechanism gate completion detection
+// v8.9: Multi-mechanism gate completion detection
 // Mechanism 1: postMessage from game iframe
 window.addEventListener('message', function(ev) {
   if (!_pendingGate) return;
@@ -5394,8 +5463,16 @@ function _resolveGate(pg) {
   if (keyReward) {
     setTimeout(()=>_showKeyTriumph(keyReward), 800);
   }
-  // Re-render nav arrows to show solved state
-  setTimeout(()=>renderNavArrows(pg.x, pg.y), 300);
+  // Re-render from-tile nav arrows to show green solved state
+  const _fromKey = pg.x + ',' + pg.y;
+  setTimeout(() => {
+    // If still on from-tile, refresh arrows
+    const _h = window.location.hash.replace('#','');
+    const _d = _h ? decodeXY(_h) : null;
+    if (_d && _d.x === pg.x && _d.y === pg.y) renderNavArrows(pg.x, pg.y);
+    // Always refresh MV gate lines
+    if (typeof mvDrawFn === 'function') mvDrawFn();
+  }, 200);
 }
 
 function _showKeyTriumph(keyId) {
@@ -5441,32 +5518,7 @@ function _onGateFrameLoad() {
 
 /* ══ KEY TRIUMPH ════════════════════════════════ */
 
-function _showKeyTriumph(keyId) {
-  const KEY_NAMES = {
-    D:'Key of Ice',C:'Key of Violet',B:'Key of Moss',E:'Key of Crimson',
-    G:'Key of Teal',A:'Key of Gold',H:'Key of Shadow',I:'Key of Silver',J:'Key of Ember'
-  };
-  const name = KEY_NAMES[keyId] || `Key ${keyId}`;
-  const el = document.createElement('div');
-  el.style.cssText = `position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-    z-index:500;text-align:center;pointer-events:none;
-    animation:keyTriumph 3.5s ease forwards;`;
-  el.innerHTML = `<div style="font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3vw,28px);
-    color:#D4AF37;text-shadow:0 0 30px rgba(212,175,55,0.9);margin-bottom:8px;">
-    ✦ YOU ACHIEVED ✦</div>
-    <div style="font-family:'Cinzel',serif;font-size:clamp(20px,3.5vw,32px);
-    color:#fff;text-shadow:0 0 20px rgba(255,255,255,0.6);">${name}</div>`;
-  const style = document.createElement('style');
-  style.textContent = '@keyframes keyTriumph{'
-    +'0%{opacity:0;transform:translate(-50%,-50%) scale(0.7)}'
-    +'15%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}'
-    +'70%{opacity:1;transform:translate(-50%,-50%) scale(1)}'
-    +'100%{opacity:0;transform:translate(-50%,-50%) scale(1.1)}}';
-  document.head.appendChild(style);
-  document.body.appendChild(el);
-  setTimeout(()=>{el.remove();style.remove();}, 3600);
-  MusicEngine.playByKey('triumph');
-}
+
 
 
 /* ══ GATE VISUALIZATION ═════════════════════════ */
@@ -5483,6 +5535,39 @@ const GATE_LINE_COLORS = {
   turing:    '#4adede',
   face3d:    '#D4AF37',
 };
+
+function _renderGateCTA(x, y) {
+  if (!REALM || !REALM.gates) return '';
+  let ctas = '';
+  for (const dir of ['N','S','E','W']) {
+    const gate = getGate(x, y, dir);
+    if (!gate || isGateSolved(x, y, dir)) continue;
+    const label = (GATE_LABELS && GATE_LABELS[gate.type]) || gate.type || 'Challenge';
+    const lv = gate.range ? 'Levels ' + gate.range[0] + '\u2013' + gate.range[1]
+              : gate.level ? 'Level ' + gate.level : '';
+    const dirArrow = {N:'\u2191',S:'\u2193',E:'\u2192',W:'\u2190'}[dir] || '';
+    ctas += '<div style="margin-top:20px;padding:16px 20px;text-align:center;' +
+      'background:rgba(0,0,0,0.4);border:1px solid rgba(192,132,252,0.25);">' +
+      '<div style="font-family:Cinzel,serif;font-size:8px;letter-spacing:0.4em;' +
+      'color:rgba(192,132,252,0.55);margin-bottom:8px;">' +
+      '\u229b ' + label.toUpperCase() + ' \u00b7 ' + lv + '</div>' +
+      (gate.title ? '<div style="font-family:Cinzel Decorative,serif;' +
+      'font-size:clamp(14px,2vw,20px);color:#c084fc;' +
+      'text-shadow:0 0 16px rgba(192,132,252,0.5);margin-bottom:10px;">' +
+      gate.title + '</div>' : '') +
+      (gate.desc ? '<div style="font-family:EB Garamond,serif;font-style:italic;' +
+      'font-size:14px;color:rgba(228,210,200,0.55);margin-bottom:12px;line-height:1.6;">' +
+      gate.desc + '</div>' : '') +
+      '<button onclick="openGateOverlay(' + x + ',' + y + ',\'' + dir + '\')"' +
+      ' style="font-family:Cinzel,serif;font-size:10px;letter-spacing:0.3em;' +
+      'color:#1a0a2e;background:#c084fc;border:none;padding:12px 28px;cursor:pointer;' +
+      'box-shadow:0 0 20px rgba(192,132,252,0.4);">' +
+      dirArrow + ' TAKE THE TEST ' + dirArrow + '</button>' +
+      '</div>';
+  }
+  return ctas;
+}
+
 
 function drawGateLines(ctx, now, m) {
   if (!REALM || !REALM.gates) return;
@@ -5915,7 +6000,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 
 /* ══════════════════════════════════════════════════
- *  GATES SYSTEM v8.7
+ *  GATES SYSTEM v8.9
  *  Gates are directional edge locks stored in REALM.gates
  *  Key format: "x,y:DIR" where DIR ∈ {N,S,E,W}
  *  A gate fires when moving FROM (x,y) in direction DIR.
