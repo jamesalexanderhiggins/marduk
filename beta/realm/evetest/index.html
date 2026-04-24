@@ -105,6 +105,7 @@
   </div>
   <button class="begin" id="begin-btn">ENTER THE GATE</button>
 </div>
+
 <script type="importmap">
 { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
 </script>
@@ -262,7 +263,8 @@ const eve = {
   speakingUntil: 0,
   lastAnswerTime: Date.now()
 };
- function updateEvePose(t) {
+
+function updateEvePose(t) {
   eveMesh.position.copy(eve.position);
   eveMesh.rotation.y = eve.yaw + Math.sin(t*0.4)*0.05;
 
