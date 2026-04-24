@@ -1057,9 +1057,9 @@ function unlockKudra() {
   p.kudra = true;
   saveP(p);
 }
-function isKudraUnlocked() {
-  return !!getP().kudra;
-}
+let _kudraActive = false;
+function isKudraUnlocked() { return _kudraActive || !!getP().kudra; }
+function _syncKudraFlag() { _kudraActive = !!getP().kudra; }
 // updateKeyBar is defined later (key system section) — this alias removed
 
 /* ── tile lookup ───────────────────────────────── */
@@ -3947,6 +3947,7 @@ document.getElementById('mapBtn').addEventListener('click', () => {
 });
 
 function activateKudraMode() {
+  _kudraActive = true;
   unlockKudra();
   unlockMV();
   document.body.classList.add('kudra-active');
@@ -6031,47 +6032,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
  * ═════════════════════════════════════════════════*/
 
 
-/* ══ ACTIVATE/DEACTIVATE HELPERS ════════════════ */
-function _activateSKM() {
-  if (typeof _skmActive !== 'undefined' && _skmActive) return;
-  if (typeof _skmActive !== 'undefined') _skmActive = true;
-  activateKudraMode();
-  document.body.classList.add('skm-active');
-  const b = document.getElementById('exitSkmBtn');
-  if (b) { b.style.display = ''; b.classList.add('skm-pulse'); }
-  const k = document.getElementById('exitKBtn');
-  if (k) k.style.display = '';
-  _skmFlash();
-}
-
-function _deactivateSKM() {
-  if (typeof _skmActive !== 'undefined') _skmActive = false;
-  document.body.classList.remove('skm-active');
-  const b = document.getElementById('exitSkmBtn');
-  if (b) b.style.display = 'none';
-  closeSkmPanel();
-}
-
-/* duplicates removed */
-
-
-function _skmFlash() {
-  const el = document.createElement('div');
-  el.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;font-family:"Cinzel Decorative",serif;font-size:clamp(18px,3vw,28px);color:#f0abfc;text-shadow:0 0 30px rgba(240,171,252,0.9);pointer-events:none;text-align:center;animation:skmFl 2.2s ease forwards;';
-  el.textContent = '✦ SUPERKUDRAMARDUK ✦';
-  const s = document.createElement('style');
-  s.textContent = '@keyframes skmFl{0%{opacity:0;transform:translate(-50%,-50%) scale(0.8)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}';
-  document.head.appendChild(s);
-  document.body.appendChild(el);
-  setTimeout(()=>{el.remove();s.remove();}, 2300);
-}
-
-document.addEventListener('keydown', (ev) => {
-  if (ev.key.length !== 1) return;
-  if (['INPUT','TEXTAREA','[contenteditable]'].some(s => document.activeElement?.matches?.(s))) return;
-  _skmBuffer = (_skmBuffer + ev.key.toLowerCase()).slice(-SKM_CODE.length);
-  if (_skmBuffer === SKM_CODE) { _activateSKM(); _skmBuffer = ''; }
-});
 
 document.addEventListener('DOMContentLoaded', () => {
   // Wire mode exit buttons once (inline onclick handles them in HTML)
