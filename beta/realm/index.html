@@ -27,11 +27,16 @@ body{background:var(--bg);color:var(--text);font-family:'EB Garamond',serif;font
 
 /* Top-left HOME link */
 /* ── Realm header strip ─────────────────────────── */
-/* #realmHeader defined below in v8.6 block */
-.exit-home{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;
+#realmHeader{position:fixed;top:0;left:0;right:0;z-index:150;
+  height:44px;display:flex;align-items:center;justify-content:flex-start;
+  gap:6px;flex-wrap:nowrap;overflow:hidden;
+  background:rgba(7,9,16,0.97);
+  border-bottom:1px solid rgba(201,168,76,0.15);
+  padding:0 10px;backdrop-filter:blur(6px);box-sizing:border-box;}
+.exit-home{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;
   text-transform:uppercase;color:var(--dim);text-decoration:none;
-  border:1px solid rgba(201,168,76,0.12);padding:5px 9px;
-  transition:all 0.3s;background:transparent;flex-shrink:0;white-space:nowrap;}
+  border:1px solid rgba(201,168,76,0.12);padding:7px 12px;
+  transition:all 0.3s;background:transparent;flex-shrink:0;}
 .exit-home:hover{color:var(--gold);border-color:var(--gold);}
 
 /* Top-right progress pill */
@@ -109,7 +114,7 @@ body.kudra-active #stage{padding-top:110px;}
 .home-panel .hub-btn{margin-top:20px;}
 
 /* Marduk View — honeycomb */
-#mv-stage{position:fixed;inset:0;z-index:20;background:radial-gradient(ellipse at center,rgba(20,18,12,0.96),var(--bg) 80%);display:none;flex-direction:column;}
+#mv-stage{position:fixed;top:44px;left:0;right:0;bottom:0;z-index:20;background:radial-gradient(ellipse at center,rgba(20,18,12,0.96),var(--bg) 80%);display:none;flex-direction:column;}
 #mv-stage.show{display:flex;}
 #mv-header{padding:18px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);background:rgba(7,9,16,0.8);}
 .mv-title{font-family:'Cinzel Decorative',serif;font-size:22px;color:var(--gold);text-shadow:var(--glow);letter-spacing:0.1em;}
@@ -125,7 +130,7 @@ body.kudra-active #stage{padding-top:110px;}
 #mv-canvas{display:block;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;}
 
 /* Info panel — slides up from bottom when a cell is tapped */
-.mv-info{position:absolute;left:12px;right:12px;bottom:12px;max-width:640px;margin:0 auto;max-height:82vh;overflow-y:hidden;background:linear-gradient(180deg,rgba(13,17,25,0.96),rgba(7,9,16,0.98));border:1px solid var(--border);padding:18px 22px;transform:translateY(calc(100% + 24px));opacity:0;transition:transform 0.3s ease,opacity 0.3s ease;pointer-events:none;box-shadow:0 -8px 40px rgba(0,0,0,0.6),0 0 30px rgba(201,168,76,0.08);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);display:flex;flex-direction:column;}
+.mv-info{position:absolute;left:12px;right:12px;bottom:12px;max-width:640px;margin:0 auto;max-height:80vh;overflow-y:visible;background:linear-gradient(180deg,rgba(13,17,25,0.96),rgba(7,9,16,0.98));border:1px solid var(--border);padding:18px 22px;transform:translateY(calc(100% + 24px));opacity:0;transition:transform 0.3s ease,opacity 0.3s ease;pointer-events:none;box-shadow:0 -8px 40px rgba(0,0,0,0.6),0 0 30px rgba(201,168,76,0.08);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}
 .mv-info.show{transform:translateY(0);opacity:1;pointer-events:auto;}
 .info-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;}
 .info-title{font-family:'Cinzel Decorative',serif;font-size:20px;color:var(--gold);line-height:1.25;flex:1;}
@@ -758,12 +763,7 @@ body.kudra-active #stage{padding-top:0;}
 /* Scroll hint fade at bottom */
 #skmEditorMount::after{content:'';display:block;height:24px;}
 
-/* SKM scroll — webkit handle for iPad/Safari */
-#skmScroll::-webkit-scrollbar{width:7px;}
-#skmScroll::-webkit-scrollbar-track{background:rgba(20,10,30,0.6);border-radius:4px;}
-#skmScroll::-webkit-scrollbar-thumb{background:rgba(192,132,252,0.6);border-radius:4px;}
-#skmScroll::-webkit-scrollbar-thumb:hover{background:#f0abfc;}
-
+/* EXIT SKM MODE — glowing magical button */
 #exitSkmBtn{
   font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.22em;
   color:#f0abfc;background:transparent;
@@ -784,171 +784,16 @@ body.kudra-active #stage{padding-top:0;}
 .skm-dismiss-btn:hover{color:var(--gold);border-color:var(--gold);}
 
 
-/* Header buttons — compact, single row */
-#realmHeader button, #realmHeader a.exit-home {
+/* ── Compact header buttons ─── */
+#realmHeader a, #realmHeader button {
   font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;
-  padding:5px 9px;flex-shrink:0;white-space:nowrap;
+  padding:5px 9px;flex-shrink:0;white-space:nowrap;box-sizing:border-box;
 }
-#exitSkmBtn{
-  font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;
-  color:#f0abfc;background:transparent;
-  border:1px solid #c084fc;padding:5px 9px;cursor:pointer;
-  animation:skmBtnPulse 2s ease-in-out infinite;flex-shrink:0;
-  white-space:nowrap;
-}
-
-
-/* ── Gate overlay — full screen puzzle ───────────── */
-#gateOverlay{position:fixed;inset:0;z-index:200;
-  display:none;flex-direction:column;
-  background:rgba(2,1,12,0.98);}
-#gateHeader{flex:0 0 auto;padding:14px 20px 10px;
-  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
-  border-bottom:1px solid rgba(192,132,252,0.2);}
-#gateHeaderText{flex:1;}
-#gateLabel{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.4em;
-  color:rgba(192,132,252,0.6);margin-bottom:5px;}
-#gateTitle{font-family:'Cinzel Decorative',serif;
-  font-size:clamp(14px,2.2vw,20px);color:#c084fc;
-  text-shadow:0 0 18px rgba(192,132,252,0.6);margin-bottom:4px;}
-#gateDesc{font-family:'EB Garamond',serif;font-style:italic;
-  font-size:clamp(13px,1.5vw,15px);color:rgba(228,210,200,0.6);
-  line-height:1.6;max-width:560px;}
-#gateBackBtn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;
-  color:rgba(201,168,76,0.5);background:transparent;
-  border:1px solid rgba(201,168,76,0.2);
-  padding:8px 14px;cursor:pointer;flex-shrink:0;white-space:nowrap;
-  align-self:center;transition:all 0.25s;}
-#gateBackBtn:hover{color:var(--gold);border-color:var(--gold);}
-#gateFrame{flex:1 1 auto;border:none;width:100%;background:#000;}
-
-/* Gated nav arrow */
-.nav-arrow.gated{color:#c084fc;border-color:rgba(192,132,252,0.5);
-  box-shadow:0 0 14px rgba(192,132,252,0.4);}
-.nav-arrow.gated::after{content:'⊛';position:absolute;
-  font-size:9px;top:2px;right:3px;opacity:0.7;}
-.nav-arrow.gate-solved{color:#4ade80;border-color:rgba(74,222,128,0.4);}
-.nav-arrow.gate-solved::after{content:'✓';position:absolute;
-  font-size:9px;top:2px;right:3px;opacity:0.8;}
-/* nav-arrow position:relative removed — absolute positioning preserved */
-
-
-/* ── Header buttons all compact ──────────────────── */
-#realmHeader > *, #realmHeader button, #realmHeader a {
-  font-family:'Cinzel',serif!important;
-  font-size:8.5px!important;letter-spacing:0.1em!important;
-  padding:5px 8px!important;flex-shrink:1!important;
-  white-space:nowrap!important;min-width:0!important;
-}
-#exitSkmBtn{
-  color:#f0abfc!important;border-color:#c084fc!important;
-  animation:skmBtnPulse 2s ease-in-out infinite;
-}
-
-
-/* ── SKM slide-in editor panel ──────────────────────
- * Completely independent of the map. Fixed right side.
- * Has its own scroll — not constrained by any parent.
- * ─────────────────────────────────────────────────*/
-#skmPanel{
-  position:fixed;
-  top:44px;right:0;bottom:0;
-  width:min(480px,100vw);
-  z-index:300;
-  background:rgba(5,4,14,0.98);
-  border-left:1px solid rgba(192,132,252,0.25);
-  display:flex;flex-direction:column;
-  transform:translateX(100%);
-  transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);
-  pointer-events:none;
-}
-#skmPanel.open{
-  transform:translateX(0);
-  pointer-events:auto;
-}
-#skmPanelHead{
-  flex:0 0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 14px 8px;
-  border-bottom:1px solid rgba(192,132,252,0.15);
-  background:rgba(5,4,14,0.99);
-}
-#skmPanelTitle{
-  font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.35em;
-  color:#f0abfc;
-}
-#skmPanelClose{
-  font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.2em;
-  color:rgba(201,168,76,0.5);background:transparent;
-  border:1px solid rgba(201,168,76,0.15);
-  padding:4px 10px;cursor:pointer;
-}
-#skmPanelClose:hover{color:var(--gold);border-color:var(--gold);}
-#skmPanelScroll{
-  flex:1 1 auto;
-  min-height:0;          /* CRITICAL — flex child must have min-height:0 to scroll */
-  overflow-y:scroll;
-  overflow-x:hidden;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior:contain;
-  padding:14px 16px 24px;
-  /* Scrollbar */
-  scrollbar-width:thin;
-  scrollbar-color:rgba(192,132,252,0.6) rgba(10,5,20,0.8);
-}
-#skmPanelScroll::-webkit-scrollbar{width:8px;}
-#skmPanelScroll::-webkit-scrollbar-track{background:rgba(10,5,20,0.8);}
-#skmPanelScroll::-webkit-scrollbar-thumb{
-  background:rgba(192,132,252,0.6);border-radius:4px;
-  border:2px solid rgba(10,5,20,0.8);}
-#skmPanelScroll::-webkit-scrollbar-thumb:hover{background:#f0abfc;}
-/* SKM fields inside the panel */
-#skmPanelScroll input,#skmPanelScroll select,#skmPanelScroll textarea{
-  box-sizing:border-box;width:100%;
-}
-
-
-/* Directional hint notes */
-.content-hint{
-  font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:0.1em;
-  color:rgba(201,168,76,0.4);line-height:2;
-  border-top:1px solid rgba(201,168,76,0.08);
-  margin-top:14px;padding-top:10px;
-  text-align:left;
-}
-.content-compass{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:6px 16px;margin-top:8px;
-}
-.content-compass-note{
-  font-family:'EB Garamond',serif;font-size:12px;font-style:italic;
-  color:rgba(201,168,76,0.38);line-height:1.5;
-}
-
-
-/* ── v8.6 Single-row header ─────────────────────── */
-#realmHeader{
-  position:fixed;top:0;left:0;right:0;z-index:150;height:44px;
-  display:flex;align-items:center;gap:6px;flex-wrap:nowrap;overflow:hidden;
-  background:rgba(7,9,16,0.97);
-  border-bottom:1px solid rgba(201,168,76,0.15);
-  padding:0 10px;backdrop-filter:blur(6px);box-sizing:border-box;
-}
-#realmHeader > *, #realmHeader button, #realmHeader a {
-  font-family:'Cinzel',serif!important;font-size:9px!important;
-  letter-spacing:0.12em!important;padding:5px 9px!important;
-  flex-shrink:0!important;white-space:nowrap!important;min-width:0!important;
-  box-sizing:border-box;
-}
-#exitSkmBtn{
-  color:#f0abfc!important;border-color:#c084fc!important;
-  animation:skmBtnPulse 2s ease-in-out infinite;
-}
-/* Shift key bar and coords below 2-row header */
-.key-bar{top:44px!important;}
-.room-coords{top:44px!important;}
-/* MV stage below header */
-#mv-stage{top:44px!important;}
+#exitKBtn{color:var(--ember);border-color:rgba(180,80,40,0.5);}
+#exitSkmBtn{color:#f0abfc;border-color:#c084fc;animation:skmBtnPulse 2s ease-in-out infinite;}
+@keyframes skmBtnPulse{
+  0%,100%{border-color:#c084fc;box-shadow:0 0 4px rgba(192,132,252,0.3);}
+  50%{border-color:#f0abfc;box-shadow:0 0 14px rgba(240,171,252,0.6);}}
 
 </style>
 </head>
@@ -960,26 +805,17 @@ body.kudra-active #stage{padding-top:0;}
 
 <div id="realmHeader">
   <a href="../index.html" class="exit-home" id="exitHome">↺ Home</a>
-  <button id="mapBtn" title="Open the Marduk View">⬡ MAP</button>
-  <button id="muteBtn" title="Toggle music">♪ MUSIC</button>
-  <button id="exitKBtn" style="display:none" title="Exit Kudramarduk Mode">✕ EXIT K MODE</button>
-  <button id="exitSkmBtn" style="display:none" title="Exit SuperKudraMarduk editing">✦ EXIT SKM MODE</button>
-  <button id="resetBtn" title="Reset all progress">↺ RESET</button>
+  <button id="mapBtn">⬡ MAP</button>
+  <button id="muteBtn">♪ MUSIC</button>
+  <button id="exitKBtn" style="display:none">✕ EXIT K MODE</button>
+  <button id="exitSkmBtn" style="display:none">✦ EXIT SKM MODE</button>
+  <button id="resetBtn">↺ RESET</button>
 </div>
 <div class="key-bar" id="keyBar"></div>
 <div class="room-coords" id="roomCoords"></div>
 
 <div id="tileBg"></div>
 <div id="stage"></div>
-
-<!-- SKM slide-in editor panel -->
-<div id="skmPanel">
-  <div id="skmPanelHead">
-    <span id="skmPanelTitle">✦ SKM EDITOR</span>
-    <button id="skmPanelClose" onclick="closeSkmPanel()">✕ CLOSE</button>
-  </div>
-  <div id="skmPanelScroll"></div>
-</div>
 <button id="transcendBtn" onclick="goTo(15,10)">✦ Transcend ✦</button>
 
 <!-- Puzzle overlay -->
@@ -991,7 +827,68 @@ body.kudra-active #stage{padding-top:0;}
   <div id="puzzleDesc"></div>
   <iframe id="puzzleFrame" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>
 </div>
+
+<!-- Gate challenge overlay -->
+<div id="gateOverlay" style="display:none;position:fixed;inset:0;z-index:200;
+  flex-direction:column;background:rgba(2,1,12,0.98);">
+  <div id="gateHeader" style="flex:0 0 auto;padding:14px 20px 10px;
+    display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+    border-bottom:1px solid rgba(192,132,252,0.2);">
+    <div id="gateHeaderText" style="flex:1;">
+      <div id="gateLabel" style="font-family:'Cinzel',serif;font-size:8px;
+        letter-spacing:0.4em;color:rgba(192,132,252,0.6);margin-bottom:5px;"></div>
+      <div id="gateTitle" style="font-family:'Cinzel Decorative',serif;
+        font-size:clamp(14px,2.2vw,20px);color:#c084fc;
+        text-shadow:0 0 18px rgba(192,132,252,0.6);margin-bottom:4px;"></div>
+      <div id="gateDesc" style="font-family:'EB Garamond',serif;font-style:italic;
+        font-size:clamp(13px,1.5vw,15px);color:rgba(228,210,200,0.6);
+        line-height:1.6;max-width:560px;"></div>
+    </div>
+    <button onclick="closeGateOverlay()"
+      style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;
+      color:rgba(201,168,76,0.5);background:transparent;
+      border:1px solid rgba(201,168,76,0.2);padding:8px 14px;cursor:pointer;
+      flex-shrink:0;white-space:nowrap;align-self:center;">
+      ← Can't do it — go back</button>
+  </div>
+  <iframe id="gateFrame" style="flex:1 1 auto;border:none;width:100%;background:#000;"
+    allowfullscreen
+    sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>
+</div>
+
 <div class="nav-arrows" id="navArrows"></div>
+
+<!-- SKM slide-in editor panel -->
+<div id="skmPanel" style="position:fixed;top:44px;right:0;bottom:0;
+  width:min(480px,100vw);z-index:300;background:rgba(5,4,14,0.98);
+  border-left:1px solid rgba(192,132,252,0.25);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);pointer-events:none;">
+  <div style="flex:0 0 auto;display:flex;align-items:center;
+    justify-content:space-between;padding:10px 14px 8px;
+    border-bottom:1px solid rgba(192,132,252,0.15);background:rgba(5,4,14,0.99);">
+    <span id="skmPanelTitle" style="font-family:'Cinzel',serif;font-size:8px;
+      letter-spacing:0.35em;color:#f0abfc;">✦ SKM EDITOR</span>
+    <button onclick="closeSkmPanel()"
+      style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.2em;
+      color:rgba(201,168,76,0.5);background:transparent;
+      border:1px solid rgba(201,168,76,0.15);padding:4px 10px;cursor:pointer;">
+      ✕ CLOSE</button>
+  </div>
+  <div id="skmPanelScroll" style="flex:1 1 auto;min-height:0;overflow-y:scroll;
+    overflow-x:hidden;-webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;padding:14px 16px 24px;
+    scrollbar-width:thin;scrollbar-color:rgba(192,132,252,0.6) rgba(10,5,20,0.8);">
+  </div>
+</div>
+<style>
+#skmPanel.open{transform:translateX(0);pointer-events:auto;}
+#skmPanelScroll::-webkit-scrollbar{width:8px;}
+#skmPanelScroll::-webkit-scrollbar-track{background:rgba(10,5,20,0.8);}
+#skmPanelScroll::-webkit-scrollbar-thumb{background:rgba(192,132,252,0.6);border-radius:4px;}
+</style>
+
 
 <!-- Marduk View overlay -->
 <!-- KUDRAMARDUK mode bar -->
@@ -1031,13 +928,12 @@ body.kudra-active #stage{padding-top:0;}
     <div class="mv-legend">
       <div class="item"><span class="dot" style="background:var(--gold);"></span>Home</div>
       <div class="item"><span class="dot" style="background:var(--spirit);"></span>Visited</div>
-      <div class="item"><span class="dot" style="background:var(--ember);"></span>House / Door</div>
-      <div class="item"><span style="color:#c084fc;font-size:10px;">⊛</span>&nbsp;Tesseract gate</div>
-      <div class="item"><span style="color:#D4AF37;font-size:10px;">⊛</span>&nbsp;Mask Lock gate</div>
-      <div class="item"><span style="color:#4adede;font-size:10px;">⊛</span>&nbsp;Turing gate</div>
-      <div class="item"><span style="color:#FFD700;font-size:11px;">🔑</span>&nbsp;Key inside</div>
-      <div class="item"><span style="color:rgba(201,168,76,0.4);font-size:10px;">⬡</span>&nbsp;Path tile</div>
-      <div class="item"><span style="color:#4ade80;font-size:10px;">✓</span>&nbsp;Gate solved</div>
+      <div class="item"><span class="dot" style="background:var(--ember);"></span>House/Door</div>
+      <div class="item"><span style="color:#c084fc;font-size:11px;">⊛</span> Tesseract</div>
+      <div class="item"><span style="color:#D4AF37;font-size:11px;">⊛</span> Mask Lock</div>
+      <div class="item"><span style="color:#4adede;font-size:11px;">⊛</span> Turing</div>
+      <div class="item"><span style="color:#FFD700;">🔑</span> Key</div>
+      <div class="item"><span style="color:#4ade80;font-size:11px;">✓</span> Solved</div>
     </div>
   </div>
 </div>
@@ -1077,18 +973,6 @@ function inBounds(x, y) {
 }
 
 /* ── persisted state ───────────────────────────── */
-
-// v8.6: Ensure clean default player state for new users
-function _defaultPlayerState() {
-  return {
-    visited:  ['0,0'],   // only home tile visited
-    keys:     [],        // no keys
-    quiz:     [],        // no quiz answers
-    kudra:    false,     // K mode OFF
-    postQuiz: false,     // map locked
-    lastPos:  [0, 0],    // at home
-  };
-}
 function getP() {
   try { return JSON.parse(localStorage.getItem('marduk_realm') || '{}'); }
   catch (e) { return {}; }
@@ -1557,11 +1441,15 @@ function render(x, y) {
   // v8.6: tile content card (centred on screen)
   const tc = document.getElementById('tileCard') || s;
 
-  // v8.6: no tile-level puzzle locks — gates are on edges (nav arrows)
+  // Check puzzle lock on entry (if tile has puzzle.lock_entry, show puzzle first)
+  if (tile.puzzle && tile.puzzle.lock_entry && !isPuzzleSolved(x, y)) {
+    renderPuzzleTile(tc, x, y, tile);
+    renderNavArrows(x, y);
+    return;
+  }
+
   // Route by type
   if (tile.type === 'marduk_view') { renderMardukView(); return; }
-  // 'content' type from v4 realm.json = same as named tile with lore
-  if (tile.type === 'content') { tile = {...tile, type: 'empty'}; }
   if (tile.tree_of_life) { renderTreeOfLife(tc); return; }
   if (tile.type === 'threshold')   { renderThreshold(tc, x, y); }
   else if (tile.type === 'quiz')   { renderQuiz(tc, x, y, tile); }
@@ -1833,8 +1721,7 @@ function spawnTouchBurst(cx, cy) {
  *  Color matches the path's key/house palette.
  * ═════════════════════════════════════════════════*/
 const PATH_SCENE_COLORS = {
-  A:'#6B35A0',  // Emily: purple
-  B:'#2E5C38', C:'#C9A84C', D:'#2A6880',  // C: gold
+  B:'#2E5C38', C:'#503B80', D:'#2A6880',
   E:'#701818', F:'#6E4418', G:'#145858',
   H:'#3A1258', M:'#D4AF37',
 };
@@ -1879,8 +1766,7 @@ function renderPathScene(s, x, y, tile) {
   // v8.6: canvas background → tileBg, text content → tile-card
   const _ptBg = document.getElementById('tileBg');
   const _ptTc = document.getElementById('tileCard');
-  if (_ptBg) { _ptBg.style.cssText='position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden;';
-  _ptBg.innerHTML = `<div style="position:absolute;inset:0;"><canvas id="ptCanvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas></div>`; }
+  if (_ptBg) _ptBg.innerHTML = `<div class="pt-root"><canvas class="pt-canvas" id="ptCanvas"></canvas></div>`;
   if (_ptTc) _ptTc.innerHTML = `
     <div class="pt-body" style="position:relative;z-index:12;text-align:center;">
       <div class="pt-step" style="color:rgba(${r+100},${g+100},${b2+100},0.6);">${stepLabel}</div>
@@ -2172,11 +2058,8 @@ function updateTranscendBtn(tile) {
  *  Solved tiles stored in localStorage; persist across sessions
  * ═════════════════════════════════════════════════*/
 const PUZZLE_BASE = {
+  face3d:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/puzzle-game/',
   tesseract: 'https://jamesalexanderhiggins.github.io/marduk/beta/realm/tesseract/',
-  masklock:  'https://jamesalexanderhiggins.github.io/marduk/beta/realm/masklock/',
-  turing:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/turing/',
-  // legacy alias
-  face3d:    'https://jamesalexanderhiggins.github.io/marduk/beta/realm/masklock/',
 };
 
 const PUZZLE_SOLVED_KEY = 'mm_puzzle_solved';
@@ -2283,10 +2166,8 @@ function renderPuzzleTile(tc, x, y, tile) {
   const solved = isPuzzleSolved(x, y);
   const isThreshold = isHouseThreshold(x, y);
   const typeLabel = pzl.type === 'tesseract' ? 'Tesseract (1000 levels)'
-                  : pzl.type === 'masklock'  ? 'Mask Lock (100 levels)'
-                  : pzl.type === 'turing'    ? 'Turing Test (100 levels)'
-                  : pzl.type === 'face3d'    ? 'Mask Lock (100 levels)'
-                  : 'Challenge';
+                  : pzl.type === 'face3d'    ? '3D Face Puzzle (100 levels)'
+                  : 'Puzzle';
   const levelStr = pzl.range  ? `Levels ${pzl.range[0]}–${pzl.range[1]}`
                  : pzl.level  ? `Level ${pzl.level}`
                  : '';
@@ -2335,94 +2216,13 @@ function _puzzleQuit(x, y) {
   }
 }
 
-
-/* ══ Gate visualization on MV map ══════════════════
- * Draws colored lines between tiles that have gates.
- * Shown in K/SKM mode always; in normal mode only for visited tiles.
- * Solid = locked, dashed = solved.
- * Colors: tesseract=#c084fc, masklock=#D4AF37, turing=#4adede
- * ══════════════════════════════════════════════════*/
-const GATE_LINE_COLORS = {
-  tesseract: '#c084fc',
-  masklock:  '#D4AF37',
-  turing:    '#4adede',
-  face3d:    '#D4AF37',
-};
-
-function drawGateLines(ctx, now, m) {
-  if (!REALM || !REALM.gates) return;
-  const r = MV_R * mvZoom;
-  const DIR_TO_OFFSET = {
-    N: [0,  1], S: [0, -1], E: [1,  0], W: [-1, 0]
-  };
-
-  for (const [gk, gate] of Object.entries(REALM.gates)) {
-    // Parse "x,y:DIR"
-    const colonIdx = gk.lastIndexOf(':');
-    if (colonIdx < 0) continue;
-    const coordStr = gk.slice(0, colonIdx);
-    const dir      = gk.slice(colonIdx+1);
-    const [fx, fy] = coordStr.split(',').map(Number);
-    const [dx, dy] = DIR_TO_OFFSET[dir] || [0,0];
-    const tx = fx+dx, ty = fy+dy;
-
-    const fromVisited = getVisited().has(`${fx},${fy}`);
-    const showGate = isKudraUnlocked() || fromVisited;
-    if (!showGate) continue;
-
-    const [fpx, fpy] = gridToScreen(fx, fy, m);
-    const [tpx, tpy] = gridToScreen(tx, ty, m);
-
-    const col   = GATE_LINE_COLORS[gate.type] || '#888';
-    const solved = isGateSolved(fx, fy, dir);
-    const pulse  = 0.6 + 0.4 * Math.sin(now * 0.004 + fx * 0.3 + fy * 0.5);
-    const alpha  = solved ? 0.35 : pulse * 0.75;
-
-    ctx.save();
-    ctx.strokeStyle = col;
-    ctx.globalAlpha = alpha;
-    ctx.lineWidth   = Math.max(1.5, r * 0.08);
-
-    if (solved) {
-      // Dashed = solved/open
-      ctx.setLineDash([r*0.15, r*0.1]);
-    } else {
-      ctx.setLineDash([]);
-      ctx.shadowColor = col;
-      ctx.shadowBlur  = 6;
-    }
-
-    // Draw midpoint line (from centre of from-tile to centre of to-tile)
-    ctx.beginPath();
-    ctx.moveTo(fpx, fpy);
-    ctx.lineTo(tpx, tpy);
-    ctx.stroke();
-
-    // Small ⊛ label at midpoint when locked
-    if (!solved && r > 12) {
-      const mx = (fpx+tpx)/2, my = (fpy+tpy)/2;
-      ctx.setLineDash([]);
-      ctx.shadowBlur = 0;
-      ctx.globalAlpha = alpha;
-      ctx.font = `${Math.max(8, r*0.28)}px monospace`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = col;
-      ctx.fillText('⊛', mx, my);
-    }
-    ctx.restore();
-  }
-}
-
 function renderEmpty(s, x, y, tile) {
-  // Any tile with no content gets "keep walking"
   if (!tile.name && !tile.lore) {
-    s.innerHTML = `<div class="content-card" style="text-align:center;opacity:0.4;">
-      <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;color:var(--dim);">⁂</div>
-      <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:15px;color:var(--dim);margin-top:8px;">
-        The Realm continues. Keep walking.</div>
-      <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.2em;color:rgba(201,168,76,0.25);margin-top:10px;">
-        (${x}, ${y})</div>
+    const tc2 = document.getElementById('tileCard') || s;
+    tc2.innerHTML = `<div style="text-align:center;opacity:0.35;padding:40px 20px;">
+      <div style="font-family:'Cinzel',serif;font-size:20px;color:var(--dim);">⁂</div>
+      <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:15px;color:var(--dim);margin-top:10px;">The Realm continues. Keep walking.</div>
+      <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.3em;color:rgba(201,168,76,0.2);margin-top:12px;">(${x},${y})</div>
     </div>`;
     renderNavArrows(x,y);
     return;
@@ -2476,33 +2276,6 @@ function renderPathTile(s, x, y, tile) {
   const b = parseInt(hex.slice(5,7),16);
   initStars({count: 180, color: `${r},${g},${b}`, speed: 0.014});
   startParticles({colors: [hex + '55', hex + '33'], min: 1, max: 2, speed: 6});
-}
-
-function _renderGateCTA(x, y) {
-  // Find any unsolved outgoing gates on this tile and return CTA HTML
-  const dirLabels={N:'North',S:'South',E:'East',W:'West'};
-  let ctas = '';
-  for (const dir of ['N','S','E','W']) {
-    const gate = getGate(x, y, dir);
-    if (!gate || isGateSolved(x,y,dir)) continue;
-    const label = GATE_LABELS[gate.type]||'Challenge';
-    const lv = gate.range ? `Levels ${gate.range[0]}–${gate.range[1]}`
-             : gate.level ? `Level ${gate.level}` : '';
-    ctas += `<div style="margin-top:18px;text-align:center;">
-      <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.35em;
-        color:rgba(192,132,252,0.6);margin-bottom:6px;">
-        ${label.toUpperCase()} · ${lv}</div>
-      ${gate.title?`<div style="font-family:'Cinzel Decorative',serif;font-size:clamp(14px,2vw,20px);
-        color:#c084fc;text-shadow:0 0 16px rgba(192,132,252,0.6);margin-bottom:8px;">${gate.title}</div>`:''}
-      <button onclick="openGateOverlay(${x},${y},'${dir}')"
-        style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.28em;
-        color:#1a0a2e;background:#c084fc;border:none;padding:12px 28px;
-        cursor:pointer;text-transform:uppercase;transition:opacity 0.25s;"
-        onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-        ▶ Take the Test</button>
-    </div>`;
-  }
-  return ctas;
 }
 
 function renderContent(s, x, y, tile) {
@@ -2827,25 +2600,31 @@ function renderNavArrows(x, y) {
     const srcPzl = tile.puzzle;
     const srcExitLocked = srcPzl && srcPzl.lock_exit && !isPuzzleSolved(x, y);
 
-    // v8.6: check edge gate
-    const arrowDir = d.key === 'up' ? 'N' : d.key === 'down' ? 'S'
-                   : d.key === 'left' ? 'W' : 'E';
-    const edgeGate   = getGate(x, y, arrowDir);
-    const gateSolved  = edgeGate && isGateSolved(x, y, arrowDir);
-
-    if (edgeGate && !gateSolved) {
-      a.className = 'nav-arrow ' + d.key + ' gated';
-      a.title = edgeGate.title || 'Gated — solve puzzle to pass';
+    if (destLocked || srcExitLocked) {
+      const lockPzl = destLocked ? destPzl : srcPzl;
+      const lockX   = destLocked ? dX : x;
+      const lockY   = destLocked ? dY : y;
+      a.className = 'nav-arrow ' + d.key + ' puzzle-lock';
+      a.title = `Puzzle lock: ${lockPzl.title || 'Challenge'}`;
       a.addEventListener('click', ev => {
         ev.preventDefault();
-        openGateOverlay(x, y, arrowDir);
+        showPuzzleOverlay(lockPzl, lockX, lockY);
       });
     } else {
-      a.className = 'nav-arrow ' + d.key
-        + (gateSolved ? ' gate-solved' : '')
-        + (door.path && !gateSolved ? ' path' : '');
-      a.title = gateSolved ? `✓ Solved — Go ${d.key}` : `Go ${d.key}`;
-      a.addEventListener('click', ev => { ev.preventDefault(); goTo(dX, dY); });
+      // Check for edge gate
+      const _arDir = d.key==='up'?'N':d.key==='down'?'S':d.key==='left'?'W':'E';
+      const _edgeGate = (typeof getGate !== 'undefined') ? getGate(x, y, _arDir) : null;
+      const _gateSolvedFlag = _edgeGate && (typeof isGateSolved !== 'undefined') && isGateSolved(x, y, _arDir);
+      if (_edgeGate && !_gateSolvedFlag) {
+        a.className = 'nav-arrow ' + d.key + ' gated';
+        a.style.cssText += 'color:#c084fc;border-color:rgba(192,132,252,0.5);box-shadow:0 0 14px rgba(192,132,252,0.4);';
+        a.title = _edgeGate.title || 'Gated';
+        a.addEventListener('click', ev => { ev.preventDefault(); openGateOverlay(x, y, _arDir); });
+      } else {
+        a.className = 'nav-arrow ' + d.key + (_gateSolvedFlag?' gate-solved':'') + (door.path ? ' path' : '');
+        a.title = _gateSolvedFlag ? `✓ Solved — Go ${d.key}` : `Go ${d.key}`;
+        a.addEventListener('click', ev => { ev.preventDefault(); goTo(dX, dY); });
+      }
     }
     el.appendChild(a);
   });
@@ -3205,7 +2984,7 @@ function setupMVCanvas() {
         const PATH_DISPLAY_COLORS = {
           A:'#5C2D82',B:'#1E5C3A',C:'#8B6914',D:'#1A4D6E',
           E:'#7A2020',F:'#7A4A20',G:'#1A5C5C',H:'#3C1A7A',M:'#7A6520'
-        };  // A=purple(Emily), C=gold(Ariadne)
+        };
         const _ppid   = isOnPath ? tile.on_path.find(p => PATH_DISPLAY_COLORS[p]) : null;
         const pathHex = _ppid ? PATH_DISPLAY_COLORS[_ppid] : null;
         // Path tile: any tile on a path (except home/MV). Paths prioritise over houses.
@@ -3418,8 +3197,8 @@ function setupMVCanvas() {
       }
     }
 
-    // ── Gate lines ────────────────────────────────────────────────
-    drawGateLines(ctx, now, m);
+    // ── Gate lines ──────────────────────
+    if (REALM && REALM.gates) drawGateLines(ctx, now, m);
 
     // ── Player position marker — uses gridToScreen() for exact tile placement ──
     const _pp = getP().lastPos;
@@ -3687,11 +3466,7 @@ function setupMVCanvas() {
     // (travel is now via the "Travel here" button, not a third tap)
     if (!document.getElementById('mvInfo').classList.contains('show')) {
       showInfoPanel(tile);
-      return;
-    }
-    // Second tap: if SKM active, open editor panel instead of travel
-    if (_skmActive) {
-      skmOpenEditor(tile.x, tile.y);
+      if (_skmActive) skmOpenEditor(tile.x, tile.y);
       return;
     }
 
@@ -4118,6 +3893,8 @@ function deactivateKudraMode() {
   saveP(p);
   const bar = document.getElementById('kudraMode');
   if (bar) bar.classList.remove('on');
+  const _ekoff = document.getElementById('exitKBtn');
+  if (_ekoff) _ekoff.style.display = 'none';
   const kb = document.getElementById('keyBar');
   if (kb) kb.style.opacity = '1';
   const ekb2 = document.getElementById('exitKBtn');
@@ -4951,12 +4728,13 @@ const MusicEngine = (() => {
       return 'melchizedek_path_music';
     }
 
-    // Tile-level music override (set via SKM or realm.json)
-    if (tile.music) return tile.music;
     // Puzzle tiles
     if (tile.puzzle && tile.puzzle.music) {
       return tile.puzzle.music;
     }
+
+    // Tile-level music override
+    if (tile.music) return tile.music;
 
     // Quiz area
     if (tile.type === 'quiz') {
@@ -5091,7 +4869,9 @@ function _deactivateSKM() {
   document.body.classList.remove('skm-active');
   const exitBtn = document.getElementById('exitSkmBtn');
   if (exitBtn) exitBtn.style.display = 'none';
-  closeSkmPanel();
+  // Close any open editor
+  const mount = document.getElementById('skmEditorMount');
+  if (mount) mount.innerHTML = '';
 }
 
 function _skmFlash() {
@@ -5114,350 +4894,266 @@ function _skmFlash() {
 // Injects the editor into the mvInfo panel
 function skmOpenEditor(x, y) {
   if (!_skmActive) return;
-  const panel  = document.getElementById('skmPanel');
-  const scroll = document.getElementById('skmPanelScroll');
-  const title  = document.getElementById('skmPanelTitle');
-  if (!panel || !scroll) return;
+  const tile = getTile(x, y);
+  const infoEl = document.getElementById('mvInfo');
+  if (!infoEl) return;
 
-  title.textContent = `✦ SKM · (${x},${y})`;
-
-  const tile  = getTile(x, y);
   const doors = getDoors(x, y);
-  const dirMap = {up:'↑N',down:'↓S',left:'←W',right:'→E'};
+  const dirLabels = {up:'↑N',down:'↓S',left:'←W',right:'→E'};
   let mechLines = '';
   for (const [dir, door] of Object.entries(doors)) {
-    const nx = x+(dir==='right'?1:dir==='left'?-1:0);
-    const ny = y+(dir==='up'?1:dir==='down'?-1:0);
+    const nx = x + (dir==='right'?1:dir==='left'?-1:0);
+    const ny = y + (dir==='up'?1:dir==='down'?-1:0);
     const nb = getTile(nx,ny);
     const status = door.sealed ? `SEALED (${door.reason||'blocked'})`
                  : door.path   ? `OPEN — Path ${nb?.on_path?.join(',')}`
                  : 'OPEN';
-    mechLines += `${dirMap[dir]||dir} ${status}\n`;
+    mechLines += `${dirLabels[dir]} ${status}\n`;
   }
   mechLines += `\nType: ${tile.type||'empty'}`;
   if (tile.on_path?.length) mechLines += ` | Paths: ${tile.on_path.join(',')}`;
   if (tile.house_id) mechLines += ` | House: ${tile.house_id.toUpperCase()}`;
   if (tile.key_id)   mechLines += ` | KEY: ${tile.key_id}`;
 
-  const pzl     = tile.puzzle || {};
-  const curName = tile.name  || '';
-  const curLore = tile.lore  || tile.description || '';
-  let curType = 'text';
-  if (pzl.type && ['tesseract','masklock','turing','face3d'].includes(pzl.type)) curType='game';
-  else if (tile.embed_url) curType='iframe';
-  else if (tile.video_url) curType='video';
-  else if (tile.image_url) curType='image';
+  const curName  = tile.name  || '';
+  const curLore  = tile.lore  || '';
+  const curType  = tile.puzzle ? (tile.puzzle.type||'face3d') : 'text';
+  const pzl      = tile.puzzle || {};
 
-  const MUSIC_OPTS = ['puzzle_tension','high_stress_music','quiz_stress_music',
-    'low_stress_minor','low_stress_major','emily_path_music_1',
-    'emily_triumph','house_threshold_music','melchizedek_path_music'];
+  // Build editor HTML
+  const editorHtml = `
+  <div class="skm-badge">✦ SUPERKUDRAMARDUK EDITOR</div>
+  <div class="skm-editor" id="skmEditorPanel">
+    <div class="skm-section">📍 Mechanics (locked — read only)</div>
+    <pre class="skm-mechanics">${mechLines}</pre>
 
-  const row = (label, content) =>
-    `<div style="margin-bottom:10px;">
-      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.3em;
-        color:rgba(192,132,252,0.45);margin-bottom:4px;">${label}</div>
-      ${content}</div>`;
+    <div class="skm-section">Content Type</div>
+    <div class="skm-content-type">
+      ${(()=>{
+        // Normalise curType: face3d/tesseract both map to 'game'
+        const _ct = ['face3d','tesseract'].includes(curType) ? 'game' : curType;
+        return ['text','game','iframe','video','image'].map(ct =>
+          `<button class="skm-type-btn${ct===_ct?' active':''}"
+            onclick="skmSetType('${ct}',this)">${ct === 'game' ? '🎮 GAME' : ct.toUpperCase()}</button>`
+        ).join('');
+      })()}
+    </div>
 
-  const inp = (id, val='', placeholder='', type='text', extra='') =>
-    `<input id="${id}" type="${type}" value="${String(val).replace(/"/g,'&quot;')}"
-      placeholder="${placeholder}" ${extra}
-      style="width:100%;background:rgba(0,0,0,0.55);border:1px solid rgba(201,168,76,0.2);
-      color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;">`;
-
-  const sel = (id, opts, selected) =>
-    `<select id="${id}" style="width:100%;background:rgba(0,0,0,0.55);
-      border:1px solid rgba(201,168,76,0.2);color:var(--cream);
-      font-size:13px;padding:6px 8px;box-sizing:border-box;">
-      ${opts.map(([v,l])=>`<option value="${v}"${v===selected?' selected':''}>${l}</option>`).join('')}
-    </select>`;
-
-  const typeBtns = ['text','game','iframe','video','image'].map(ct =>
-    `<button data-type="${ct}" onclick="skm_setType('${ct}')"
-      style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;
-      padding:5px 10px;cursor:pointer;border-radius:1px;
-      background:${ct===curType?'rgba(201,168,76,0.15)':'transparent'};
-      border:1px solid ${ct===curType?'var(--gold)':'rgba(201,168,76,0.2)'};
-      color:${ct===curType?'var(--gold)':'rgba(201,168,76,0.4)'};">
-      ${ct==='game'?'🎮 GAME':ct.toUpperCase()}</button>`
-  ).join('');
-
-  // Gate rows
-  const gateRows = ['N','S','E','W'].map(dir => {
-    const g = getGate(x,y,dir)||{};
-    const solved = isGateSolved(x,y,dir);
-    const dirLabel = {N:'↑ N',S:'↓ S',E:'→ E',W:'← W'}[dir];
-    const gLabel = g.type ? (GATE_LABELS[g.type]||g.type) : 'open';
-    return `<div style="margin-bottom:8px;padding:8px 10px;
-      background:rgba(0,0,0,0.3);border:1px solid rgba(192,132,252,${g.type?'0.18':'0.06'});">
-      <div style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:0.2em;
-        color:${g.type?'#c084fc':'rgba(201,168,76,0.3)'};margin-bottom:6px;">
-        ${dirLabel} — ${gLabel}${solved?' ✓':''}</div>
-      <div style="display:flex;gap:5px;flex-wrap:wrap;">
-        ${sel('skm_gate_'+dir+'_type',
-          [['','— open —'],['tesseract','Tesseract'],['masklock','Mask Lock'],['turing','Turing']],
-          g.type||'')}
-        ${inp('skm_gate_'+dir+'_level', g.level||'', 'lvl', 'number', 'min="1" max="1000" style="width:58px!important;"')}
-        ${inp('skm_gate_'+dir+'_title', g.title||'', 'Title')}
-        <button onclick="skm_saveGate(${x},${y},'${dir}')"
-          style="font-family:'Cinzel',serif;font-size:8px;padding:5px 10px;
-          cursor:pointer;background:rgba(192,132,252,0.15);
-          border:1px solid rgba(192,132,252,0.3);color:#c084fc;white-space:nowrap;">
-          SET</button>
-        ${g.type?`<button onclick="skm_clearGate(${x},${y},'${dir}')"
-          style="font-size:10px;padding:5px 8px;cursor:pointer;
-          background:transparent;border:1px solid rgba(201,168,76,0.15);
-          color:var(--dim);">✕</button>`:''}
+    <div id="skmTextPanel" style="${curType!=='text'?'display:none':''}">
+      <div class="skm-section">Tile Name</div>
+      <input class="skm-field" id="skmName" value="${curName.replace(/"/g,'&quot;')}" placeholder="Short title (40 chars)">
+      <div class="skm-section">Lore / Body Text  (WYSIWYG)</div>
+      <div class="skm-toolbar">
+        <button class="skm-tb-btn" onclick="document.execCommand('bold')"><b>B</b></button>
+        <button class="skm-tb-btn" onclick="document.execCommand('italic')"><i>I</i></button>
+        <button class="skm-tb-btn" onclick="document.execCommand('underline')"><u>U</u></button>
+        <button class="skm-tb-btn" onclick="document.execCommand('insertOrderedList')">1.</button>
+        <button class="skm-tb-btn" onclick="document.execCommand('insertUnorderedList')">•</button>
+        <button class="skm-tb-btn" onclick="skmInsertLink()">🔗</button>
       </div>
-    </div>`;
-  }).join('');
+      <div class="skm-field skm-wysiwyg" id="skmLore" contenteditable="true"
+        style="min-height:90px;text-align:left;">${curLore}</div>
+    </div>
 
-  scroll.innerHTML = `
-  <!-- Mechanics -->
-  ${row('📍 MECHANICS (READ ONLY)',
-    `<pre style="font-size:11px;color:rgba(201,168,76,0.5);background:rgba(0,0,0,0.3);
-      padding:7px 9px;line-height:1.7;white-space:pre-wrap;margin:0;">${mechLines}</pre>`)}
-
-  <!-- Content type -->
-  ${row('CONTENT TYPE',
-    `<div style="display:flex;gap:5px;flex-wrap:wrap;">${typeBtns}</div>`)}
-
-  <!-- Text panel -->
-  <div id="skmP_text" style="${curType!=='text'?'display:none':''}">
-    ${row('TILE NAME', inp('skm_name', curName, 'Short title'))}
-    ${row('BODY TEXT',
-      `<div style="display:flex;gap:3px;margin-bottom:5px;">
-        ${[['B','bold'],['I','italic'],['U','underline']].map(([l,c])=>
-          `<button onclick="document.execCommand('${c}')"
-            style="font-size:12px;padding:3px 8px;background:rgba(0,0,0,0.4);
-            border:1px solid rgba(201,168,76,0.15);color:var(--cream);cursor:pointer;">${l}</button>`
-        ).join('')}
-        <button onclick="skm_insertLink()" style="font-size:11px;padding:3px 8px;
-          background:rgba(0,0,0,0.4);border:1px solid rgba(201,168,76,0.15);
-          color:var(--cream);cursor:pointer;">🔗</button>
+    <div id="skmPuzzlePanel" style="${['face3d','tesseract','game'].includes(curType)?'':'display:none'}">
+      <div class="skm-section">Puzzle Settings</div>
+      <div class="skm-row">
+        <span class="skm-label">GAME</span>
+        <select class="skm-select" id="skmPzlType">
+          <option value="face3d"   ${(!pzl.type||pzl.type==='face3d')   ?'selected':''}>3D Face Puzzle (100 levels)</option>
+          <option value="tesseract"${pzl.type==='tesseract' ?'selected':''}>Tesseract (1000 levels)</option>
+        </select>
       </div>
-      <div id="skm_lore" contenteditable="true"
-        style="min-height:80px;background:rgba(0,0,0,0.55);
-        border:1px solid rgba(201,168,76,0.2);color:var(--cream);
-        font-family:'EB Garamond',serif;font-size:14px;
-        padding:7px;line-height:1.7;text-align:left;">${curLore}</div>`)}
-  </div>
+      <div class="skm-row">
+        <span class="skm-label">LEVEL</span>
+        <input class="skm-input" id="skmPzlLevel" type="number" min="1" max="1000"
+          value="${pzl.level||1}" style="width:80px;">
+        <span class="skm-label" style="margin:0 4px;">OR RANGE</span>
+        <input class="skm-input" id="skmPzlRangeA" type="number" min="1" max="1000"
+          value="${(pzl.range||[1,''])[0]}" style="width:60px;" placeholder="from">
+        <span style="color:var(--dim);padding:0 4px;">–</span>
+        <input class="skm-input" id="skmPzlRangeB" type="number" min="1" max="1000"
+          value="${(pzl.range||['',1])[1]}" style="width:60px;" placeholder="to">
+      </div>
+      <div class="skm-row">
+        <span class="skm-label">TITLE</span>
+        <input class="skm-input" id="skmPzlTitle" value="${(pzl.title||'').replace(/"/g,'&quot;')}" placeholder="Challenge title">
+      </div>
+      <div class="skm-row">
+        <span class="skm-label">DESC</span>
+        <textarea class="skm-input" id="skmPzlDesc" rows="2">${pzl.desc||''}</textarea>
+      </div>
+      <div class="skm-row">
+        <span class="skm-label">LOCK</span>
+        <label style="color:var(--cream);font-size:13px;cursor:pointer;">
+          <input type="checkbox" id="skmPzlLock" ${pzl.lock_entry?'checked':''}> Block entry until solved
+        </label>
+        <label style="color:var(--cream);font-size:13px;cursor:pointer;margin-left:12px;">
+          <input type="checkbox" id="skmPzlExitLock" ${pzl.lock_exit?'checked':''}> Block exit until solved
+        </label>
+      </div>
+      <div class="skm-row">
+        <span class="skm-label">MUSIC</span>
+        <select class="skm-select" id="skmPzlMusic">
+          ${['puzzle_tension','high_stress_music','quiz_stress_music','low_stress_minor',
+             'low_stress_major','emily_path_music_1','emily_triumph'].map(m=>
+            `<option value="${m}"${(pzl.music||'puzzle_tension')===m?' selected':''}>${m}</option>`
+          ).join('')}
+        </select>
+      </div>
+      <div class="skm-row">
+        <span class="skm-label">ON SOLVE</span>
+        <select class="skm-select" id="skmPzlCompleteMusic">
+          <option value="">— none —</option>
+          ${['emily_triumph','low_stress_major','eli_house_music'].map(m=>
+            `<option value="${m}"${(pzl.on_complete_music||'')===m?' selected':''}>${m}</option>`
+          ).join('')}
+        </select>
+        <span class="skm-note" style="margin-left:6px;">play on completion</span>
+      </div>
+    </div>
 
-  <!-- Game panel -->
-  <div id="skmP_game" style="${curType!=='game'?'display:none':''}">
-    ${row('GAME', sel('skm_game',
-      [['tesseract','Tesseract (1000 levels)'],['masklock','Mask Lock (100 levels)'],['turing','Turing Test (100 levels)']],
-      pzl.type||'tesseract'))}
-    ${row('LEVEL', `<div style="display:flex;gap:6px;align-items:center;">
-      ${inp('skm_pzl_level', pzl.level||1, '', 'number', 'min="1" max="1000" style="width:70px!important;"')}
-      <span style="color:var(--dim);font-size:11px;">or range</span>
-      ${inp('skm_pzl_range_a', (pzl.range||['',''])[0], 'from', 'number', 'style="width:60px!important;"')}
-      <span style="color:var(--dim);">–</span>
-      ${inp('skm_pzl_range_b', (pzl.range||['',''])[1], 'to', 'number', 'style="width:60px!important;"')}
-    </div>`)}
-    ${row('TITLE', inp('skm_pzl_title', pzl.title||'', 'Challenge title'))}
-    ${row('DESC', `<textarea id="skm_pzl_desc" rows="2"
-      style="width:100%;background:rgba(0,0,0,0.55);border:1px solid rgba(201,168,76,0.2);
-      color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;resize:vertical;">${pzl.desc||''}</textarea>`)}
-    ${row('LOCKS', `<div style="display:flex;gap:14px;">
-      <label style="color:var(--cream);font-size:12px;cursor:pointer;display:flex;gap:5px;align-items:center;">
-        <input type="checkbox" id="skm_lock_entry" ${pzl.lock_entry?'checked':''}>Entry</label>
-      <label style="color:var(--cream);font-size:12px;cursor:pointer;display:flex;gap:5px;align-items:center;">
-        <input type="checkbox" id="skm_lock_exit" ${pzl.lock_exit?'checked':''}>Exit</label>
-    </div>`)}
-    ${row('MUSIC CUE', sel('skm_pzl_music',
-      MUSIC_OPTS.map(m=>[m,m]), pzl.music||'puzzle_tension'))}
-    ${row('ON COMPLETION', sel('skm_pzl_complete_music',
-      [['','— none —'],...['emily_triumph','low_stress_major','eli_house_music','house_threshold_music'].map(m=>[m,m])],
-      pzl.on_complete_music||''))}
-  </div>
+    <div id="skmIframePanel" style="${curType==='iframe'?'':'display:none'}">
+      <div class="skm-section">Embed URL</div>
+      <input class="skm-input" id="skmIframeUrl" value="${tile.embed_url||''}" placeholder="https://...">
+      <div class="skm-row" style="margin-top:6px;">
+        <span class="skm-label">TITLE</span>
+        <input class="skm-input" id="skmEmbedTitle" value="${tile.embed_title||''}" placeholder="Embed title">
+      </div>
+    </div>
 
-  <!-- Iframe panel -->
-  <div id="skmP_iframe" style="${curType!=='iframe'?'display:none':''}">
-    ${row('EMBED URL', inp('skm_embed_url', tile.embed_url||'', 'https://...'))}
-    ${row('EMBED TITLE', inp('skm_embed_title', tile.embed_title||'', 'Optional title'))}
-  </div>
+    <div id="skmVideoPanel" style="${curType==='video'?'':'display:none'}">
+      <div class="skm-section">Video URL (YouTube embed or direct mp4)</div>
+      <input class="skm-input" id="skmVideoUrl" value="${tile.video_url||''}" placeholder="https://www.youtube.com/embed/...">
+    </div>
 
-  <!-- Video panel -->
-  <div id="skmP_video" style="${curType!=='video'?'display:none':''}">
-    ${row('VIDEO URL', inp('skm_video_url', tile.video_url||'', 'https://www.youtube.com/embed/...'))}
-  </div>
+    <div id="skmImagePanel" style="${curType==='image'?'':'display:none'}">
+      <div class="skm-section">Image URL</div>
+      <input class="skm-input" id="skmImageUrl" value="${tile.image_url||''}" placeholder="https://...">
+      <div class="skm-row" style="margin-top:6px;">
+        <span class="skm-label">CAPTION</span>
+        <input class="skm-input" id="skmImageCaption" value="${tile.image_caption||''}" placeholder="Optional caption">
+      </div>
+    </div>
 
-  <!-- Image panel -->
-  <div id="skmP_image" style="${curType!=='image'?'display:none':''}">
-    ${row('IMAGE URL', inp('skm_image_url', tile.image_url||'', 'https://...'))}
-    ${row('CAPTION', inp('skm_image_caption', tile.image_caption||'', 'Optional caption'))}
-  </div>
+    <div class="skm-section">Tile Name (shown in all modes)</div>
+    <input class="skm-input" id="skmNameGlobal"
+      value="${curName.replace(/"/g,'&quot;')}" placeholder="Short title">
 
-  <!-- Global name -->
-  ${row('TILE NAME (MAP)', inp('skm_name_global', curName, 'Short title'))}
-
-  <!-- Actions -->
-  <div style="display:flex;gap:8px;margin-top:4px;">
-    <button onclick="skm_save(${x},${y})"
-      style="flex:1;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;
-      padding:11px;cursor:pointer;background:#c084fc;color:#1a0a2e;border:none;">
-      💾 SAVE</button>
-    <button onclick="skm_export()"
-      style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.15em;
-      padding:11px 14px;cursor:pointer;background:transparent;
-      border:1px solid rgba(201,168,76,0.3);color:var(--gold);">↓ EXPORT</button>
-  </div>
-  <div style="font-size:11px;color:rgba(201,168,76,0.3);font-style:italic;margin-top:8px;">
-    Saves to browser. Export JSON for permanent installation.</div>
-
-  <!-- Directional gates -->
-  <div style="margin-top:16px;border-top:1px solid rgba(192,132,252,0.12);padding-top:12px;">
-    <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.35em;
-      color:rgba(192,132,252,0.5);margin-bottom:6px;">⊛ DIRECTIONAL GATES</div>
-    <div style="font-size:11px;color:rgba(201,168,76,0.3);margin-bottom:10px;">
-      Block movement in a direction until a puzzle is solved. Return is always free.</div>
-    ${gateRows}
+    <div class="skm-actions">
+      <button class="skm-save-btn" onclick="skmSave(${x},${y})">💾 SAVE TO MEMORY</button>
+      <button class="skm-export-btn" onclick="skmExport()">↓ EXPORT JSON</button>
+    </div>
+    <div class="skm-note">Changes save to browser localStorage and persist across sessions. Export to get a JSON patch for permanent installation.</div>
+    <button class="skm-dismiss-btn" onclick="document.getElementById('mvInfo').classList.remove('show');if(mvDrawFn)mvDrawFn();">✕ DISMISS</button>
   </div>`;
 
-  // Open panel
-  panel.classList.add('open');
+  // Replace info panel content with editor
+  const existingContent = infoEl.querySelector('.mv-info-content');
+  if (existingContent) existingContent.style.display = 'none';
+  let editorDiv = infoEl.querySelector('#skmEditorMount');
+  if (!editorDiv) {
+    editorDiv = document.createElement('div');
+    editorDiv.id = 'skmEditorMount';
+    infoEl.appendChild(editorDiv);
+  }
+  // Inject into scrollable mount
+  editorDiv.innerHTML = editorHtml;
+  // Ensure mount has id for CSS scroll targeting
+  editorDiv.id = 'skmEditorMount';
 }
 
-function closeSkmPanel() {
-  const panel = document.getElementById('skmPanel');
-  if (panel) panel.classList.remove('open');
+function skmSetType(type, btn) {
+  document.querySelectorAll('.skm-type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const textP = document.getElementById('skmTextPanel');
+  const pzlP  = document.getElementById('skmPuzzlePanel');
+  const ifrP  = document.getElementById('skmIframePanel');
+  const vidP  = document.getElementById('skmVideoPanel');
+  const imgP  = document.getElementById('skmImagePanel');
+  // 'game' maps to the puzzle panel
+  const isPuzzle = ['face3d','tesseract','game'].includes(type);
+  if (textP) textP.style.display = type==='text'   ? '' : 'none';
+  if (pzlP)  pzlP.style.display  = isPuzzle        ? '' : 'none';
+  if (ifrP)  ifrP.style.display  = type==='iframe' ? '' : 'none';
+  if (vidP)  vidP.style.display  = type==='video'  ? '' : 'none';
+  if (imgP)  imgP.style.display  = type==='image'  ? '' : 'none';
 }
 
-
-// SKM helper functions — called from inline onclick in skmOpenEditor
-function skm_setType(type) {
-  ['text','game','iframe','video','image'].forEach(t => {
-    const p = document.getElementById('skmP_'+t);
-    if (p) p.style.display = t===type ? '' : 'none';
-  });
-  document.querySelectorAll('[data-type]').forEach(b => {
-    const active = b.dataset.type === type;
-    b.style.background = active ? 'rgba(201,168,76,0.15)' : 'transparent';
-    b.style.borderColor = active ? 'var(--gold)' : 'rgba(201,168,76,0.2)';
-    b.style.color = active ? 'var(--gold)' : 'rgba(201,168,76,0.45)';
-  });
-}
-
-function skm_insertLink() {
+function skmInsertLink() {
   const url = prompt('Enter URL:');
   if (url) document.execCommand('createLink', false, url);
 }
 
-function skm_save(x, y) {
+function skmSave(x, y) {
   const k = `${x},${y}`;
-  // Determine active type
-  let activeType = 'text';
-  ['text','game','iframe','video','image'].forEach(t => {
-    const p = document.getElementById('skmP_'+t);
-    if (p && p.style.display !== 'none') activeType = t;
-  });
+  let activeType = (document.querySelector('.skm-type-btn.active')?.dataset?.type
+    || document.querySelector('.skm-type-btn.active')?.textContent?.toLowerCase()
+    || 'text').replace('🎮 ','').trim();
+  // Normalise 'game' → use the game dropdown value
+  if (activeType === 'game' || activeType === '🎮 game') activeType = 'game';
+  const nameGlobal = document.getElementById('skmNameGlobal')?.value?.trim();
 
-  const nameGlobal = document.getElementById('skm_name_global')?.value?.trim() || '';
   let patch = {};
   if (nameGlobal) patch.name = nameGlobal;
-  const tileMusic = document.getElementById('skm_tile_music')?.value;
-  if (tileMusic) patch.music = tileMusic; else delete patch.music;
 
   if (activeType === 'text') {
-    const nm = document.getElementById('skm_name')?.value?.trim();
-    if (nm) patch.name = nm;
-    const loreEl = document.getElementById('skm_lore');
-    if (loreEl) {
-      // Save as plain text (strip basic HTML) for tile rendering compatibility
-      const tmp = document.createElement('div');
-      tmp.innerHTML = loreEl.innerHTML;
-      patch.lore = tmp.textContent || tmp.innerText || loreEl.innerHTML;
-    }
-    delete patch.puzzle;
-  } else if (activeType === 'game') {
-    const gameType = document.getElementById('skm_game')?.value || 'tesseract';
-    const lvA = parseInt(document.getElementById('skm_pzl_range_a')?.value) || null;
-    const lvB = parseInt(document.getElementById('skm_pzl_range_b')?.value) || null;
-    const lv  = parseInt(document.getElementById('skm_pzl_level')?.value) || 1;
+    patch.name = document.getElementById('skmName')?.value?.trim() || nameGlobal;
+    const loreEl = document.getElementById('skmLore');
+    if (loreEl) patch.lore = loreEl.innerHTML;
+    delete patch.puzzle; delete patch.embed_url; delete patch.video_url; delete patch.image_url;
+  } else if (['face3d','tesseract','game'].includes(activeType)) {
+    const lvA  = parseInt(document.getElementById('skmPzlRangeA')?.value)||null;
+    const lvB  = parseInt(document.getElementById('skmPzlRangeB')?.value)||null;
+    const lv   = parseInt(document.getElementById('skmPzlLevel')?.value)||1;
     patch.puzzle = {
-      type:   gameType,
-      title:  document.getElementById('skm_pzl_title')?.value || '',
-      desc:   document.getElementById('skm_pzl_desc')?.value  || '',
-      music:  document.getElementById('skm_pzl_music')?.value || 'puzzle_tension',
-      on_complete_music: document.getElementById('skm_pzl_complete_music')?.value || null,
-      lock_entry: document.getElementById('skm_lock_entry')?.checked || false,
-      lock_exit:  document.getElementById('skm_lock_exit')?.checked  || false,
+      type:   document.getElementById('skmPzlType')?.value || activeType,
+      title:  document.getElementById('skmPzlTitle')?.value || '',
+      desc:   document.getElementById('skmPzlDesc')?.value  || '',
+      music:  document.getElementById('skmPzlMusic')?.value || 'puzzle_tension',
+      on_complete_music: document.getElementById('skmPzlCompleteMusic')?.value || null,
+      lock_entry: document.getElementById('skmPzlLock')?.checked || false,
+      lock_exit:  document.getElementById('skmPzlExitLock')?.checked || false,
     };
-    if (lvA && lvB) patch.puzzle.range = [lvA, lvB];
+    if (lvA && lvB) patch.puzzle.range = [lvA,lvB];
     else patch.puzzle.level = lv;
   } else if (activeType === 'iframe') {
-    patch.embed_url   = document.getElementById('skm_embed_url')?.value || '';
-    patch.embed_title = document.getElementById('skm_embed_title')?.value || '';
+    patch.embed_url   = document.getElementById('skmIframeUrl')?.value || '';
+    patch.embed_title = document.getElementById('skmEmbedTitle')?.value || '';
   } else if (activeType === 'video') {
-    patch.video_url = document.getElementById('skm_video_url')?.value || '';
+    patch.video_url = document.getElementById('skmVideoUrl')?.value || '';
   } else if (activeType === 'image') {
-    patch.image_url     = document.getElementById('skm_image_url')?.value || '';
-    patch.image_caption = document.getElementById('skm_image_caption')?.value || '';
+    patch.image_url     = document.getElementById('skmImageUrl')?.value     || '';
+    patch.image_caption = document.getElementById('skmImageCaption')?.value || '';
   }
 
   // Apply to live REALM
   if (!REALM.tiles[k]) REALM.tiles[k] = {};
   Object.assign(REALM.tiles[k], patch);
 
-  // Persist to localStorage overrides
+  // Persist
   const ov = _loadOverrides();
-  ov[k] = Object.assign(ov[k] || {}, patch);
+  ov[k] = Object.assign(ov[k]||{}, patch);
   _saveOverrides(ov);
 
-  // Feedback
-  const btn = document.querySelector('[onclick*="skm_save"]');
-  if (btn) { const orig=btn.textContent; btn.textContent='✓ SAVED'; setTimeout(()=>btn.textContent=orig,1500); }
+  // Re-render current tile to show changes
+  const coords = decodeXY(window.location.hash.replace('#',''));
+  if (coords && coords.x===x && coords.y===y) render(x, y);
 
-  // Re-render tile if currently viewing it
-  const cur = decodeXY((window.location.hash||'').replace('#',''));
-  if (cur && cur.x===x && cur.y===y) render(x, y);
+  // Flash save confirmation
+  const btn = document.querySelector('.skm-save-btn');
+  if (btn) { btn.textContent='✓ SAVED'; setTimeout(()=>btn.textContent='💾 SAVE TO MEMORY',1500); }
 }
 
-function skm_saveGate(x, y, dir) {
-  const typeEl  = document.getElementById(`skm_gate_${dir}_type`);
-  const levelEl = document.getElementById(`skm_gate_${dir}_level`);
-  const titleEl = document.getElementById(`skm_gate_${dir}_title`);
-  const gtype = typeEl?.value;
-  if (!gtype) { skm_clearGate(x,y,dir); return; }
-  const gate = {
-    type: gtype,
-    title: titleEl?.value?.trim() || '',
-  };
-  const lv = parseInt(levelEl?.value);
-  if (lv) gate.level = lv;
-  // Save to REALM in memory
-  if (!REALM.gates) REALM.gates = {};
-  REALM.gates[gateKey(x,y,dir)] = gate;
-  // Persist override
-  const ov = _loadOverrides();
-  if (!ov._gates) ov._gates = {};
-  ov._gates[gateKey(x,y,dir)] = gate;
-  _saveOverrides(ov);
-  // Refresh arrows
-  renderNavArrows(x,y);
-  skmOpenEditor(x,y);
-}
-
-function skm_clearGate(x, y, dir) {
-  const k = gateKey(x,y,dir);
-  if (REALM.gates) delete REALM.gates[k];
-  const ov = _loadOverrides();
-  if (ov._gates) delete ov._gates[k];
-  _saveOverrides(ov);
-  renderNavArrows(x,y);
-  skmOpenEditor(x,y);
-}
-
-function skm_export() {
+function skmExport() {
   const ov = _loadOverrides();
   const json = JSON.stringify(ov, null, 2);
   const blob = new Blob([json], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'tile-overrides-v8.json';
+  a.download = 'tile-overrides.json';
   a.click();
 }
-
 
 // Hook into MV: when SKM active and tile double-tapped, open editor instead of regular panel
 // We'll inject after showInfoPanel is called
@@ -5468,14 +5164,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
   if (b) b.addEventListener('click', _deactivateSKM);
 });
 
-/* ══════════════════════════════════════════════════
- *  GATES SYSTEM v8.6
- *  Gates are directional edge locks stored in REALM.gates
- *  Key format: "x,y:DIR" where DIR ∈ {N,S,E,W}
- *  A gate fires when moving FROM (x,y) in direction DIR.
- *  The return direction is always free.
- *  Solved gates stored in localStorage.
- * ═════════════════════════════════════════════════*/
+/* ══ GATE SYSTEM ════════════════════════════════ */
+
+function getVisited() {
+  const p = getP();
+  return new Set(p.visited || ['0,0']);
+}
+
 
 const GATE_URLS = {
   tesseract: 'https://jamesalexanderhiggins.github.io/marduk/beta/realm/tesseract/',
@@ -5722,6 +5417,554 @@ function _showKeyTriumph(keyId) {
 }
 
 /* ── Boot ──────────────────────────────────────── */
+// (boot defined below)
+function _onGateFrameLoad() {
+  if (!_pendingGate) return;
+  try {
+    const href = this.contentWindow.location.href;
+    if (href && href.includes('#gate:')) {
+      const hash = href.split('#gate:')[1];
+      _resolveGateFromHash(hash);
+    }
+  } catch(e) { /* cross-origin — normal until redirect fires */ }
+}
+
+
+/* ══ KEY TRIUMPH ════════════════════════════════ */
+
+function _showKeyTriumph(keyId) {
+  const KEY_NAMES = {
+    D:'Key of Ice',C:'Key of Violet',B:'Key of Moss',E:'Key of Crimson',
+    G:'Key of Teal',A:'Key of Gold',H:'Key of Shadow',I:'Key of Silver',J:'Key of Ember'
+  };
+  const name = KEY_NAMES[keyId] || `Key ${keyId}`;
+  const el = document.createElement('div');
+  el.style.cssText = `position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    z-index:500;text-align:center;pointer-events:none;
+    animation:keyTriumph 3.5s ease forwards;`;
+  el.innerHTML = `<div style="font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3vw,28px);
+    color:#D4AF37;text-shadow:0 0 30px rgba(212,175,55,0.9);margin-bottom:8px;">
+    ✦ YOU ACHIEVED ✦</div>
+    <div style="font-family:'Cinzel',serif;font-size:clamp(20px,3.5vw,32px);
+    color:#fff;text-shadow:0 0 20px rgba(255,255,255,0.6);">${name}</div>`;
+  const style = document.createElement('style');
+  style.textContent = '@keyframes keyTriumph{'
+    +'0%{opacity:0;transform:translate(-50%,-50%) scale(0.7)}'
+    +'15%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}'
+    +'70%{opacity:1;transform:translate(-50%,-50%) scale(1)}'
+    +'100%{opacity:0;transform:translate(-50%,-50%) scale(1.1)}}';
+  document.head.appendChild(style);
+  document.body.appendChild(el);
+  setTimeout(()=>{el.remove();style.remove();}, 3600);
+  MusicEngine.playByKey('triumph');
+}
+
+
+/* ══ GATE VISUALIZATION ═════════════════════════ */
+
+/* ══ Gate visualization on MV map ══════════════════
+ * Draws colored lines between tiles that have gates.
+ * Shown in K/SKM mode always; in normal mode only for visited tiles.
+ * Solid = locked, dashed = solved.
+ * Colors: tesseract=#c084fc, masklock=#D4AF37, turing=#4adede
+ * ══════════════════════════════════════════════════*/
+const GATE_LINE_COLORS = {
+  tesseract: '#c084fc',
+  masklock:  '#D4AF37',
+  turing:    '#4adede',
+  face3d:    '#D4AF37',
+};
+
+function drawGateLines(ctx, now, m) {
+  if (!REALM || !REALM.gates) return;
+  const r = MV_R * mvZoom;
+  const DIR_TO_OFFSET = {
+    N: [0,  1], S: [0, -1], E: [1,  0], W: [-1, 0]
+  };
+
+  for (const [gk, gate] of Object.entries(REALM.gates)) {
+    // Parse "x,y:DIR"
+    const colonIdx = gk.lastIndexOf(':');
+    if (colonIdx < 0) continue;
+    const coordStr = gk.slice(0, colonIdx);
+    const dir      = gk.slice(colonIdx+1);
+    const [fx, fy] = coordStr.split(',').map(Number);
+    const [dx, dy] = DIR_TO_OFFSET[dir] || [0,0];
+    const tx = fx+dx, ty = fy+dy;
+
+    const fromVisited = getVisited().has(`${fx},${fy}`);
+    const showGate = isKudraUnlocked() || fromVisited;
+    if (!showGate) continue;
+
+    const [fpx, fpy] = gridToScreen(fx, fy, m);
+    const [tpx, tpy] = gridToScreen(tx, ty, m);
+
+    const col   = GATE_LINE_COLORS[gate.type] || '#888';
+    const solved = isGateSolved(fx, fy, dir);
+    const pulse  = 0.6 + 0.4 * Math.sin(now * 0.004 + fx * 0.3 + fy * 0.5);
+    const alpha  = solved ? 0.35 : pulse * 0.75;
+
+    ctx.save();
+    ctx.strokeStyle = col;
+    ctx.globalAlpha = alpha;
+    ctx.lineWidth   = Math.max(1.5, r * 0.08);
+
+    if (solved) {
+      // Dashed = solved/open
+      ctx.setLineDash([r*0.15, r*0.1]);
+    } else {
+      ctx.setLineDash([]);
+      ctx.shadowColor = col;
+      ctx.shadowBlur  = 6;
+    }
+
+    // Draw midpoint line (from centre of from-tile to centre of to-tile)
+    ctx.beginPath();
+    ctx.moveTo(fpx, fpy);
+    ctx.lineTo(tpx, tpy);
+    ctx.stroke();
+
+    // Small ⊛ label at midpoint when locked
+    if (!solved && r > 12) {
+      const mx = (fpx+tpx)/2, my = (fpy+tpy)/2;
+      ctx.setLineDash([]);
+      ctx.shadowBlur = 0;
+      ctx.globalAlpha = alpha;
+      ctx.font = `${Math.max(8, r*0.28)}px monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = col;
+      ctx.fillText('⊛', mx, my);
+    }
+    ctx.restore();
+  }
+}
+
+
+/* ══ SKM EDITOR PANEL ═══════════════════════════ */
+function closeSkmPanel() {
+  const p = document.getElementById('skmPanel');
+  if (p) p.classList.remove('open');
+}
+
+
+function skmOpenEditor(x, y) {
+  if (!_skmActive) return;
+  const panel  = document.getElementById('skmPanel');
+  const scroll = document.getElementById('skmPanelScroll');
+  const title  = document.getElementById('skmPanelTitle');
+  if (!panel || !scroll) return;
+
+  title.textContent = `✦ SKM · (${x},${y})`;
+
+  const tile  = getTile(x, y);
+  const doors = getDoors(x, y);
+  const dirMap = {up:'↑N',down:'↓S',left:'←W',right:'→E'};
+  let mechLines = '';
+  for (const [dir, door] of Object.entries(doors)) {
+    const nx = x+(dir==='right'?1:dir==='left'?-1:0);
+    const ny = y+(dir==='up'?1:dir==='down'?-1:0);
+    const nb = getTile(nx,ny);
+    const status = door.sealed ? `SEALED (${door.reason||'blocked'})`
+                 : door.path   ? `OPEN — Path ${nb?.on_path?.join(',')}`
+                 : 'OPEN';
+    mechLines += `${dirMap[dir]||dir} ${status}\n`;
+  }
+  mechLines += `\nType: ${tile.type||'empty'}`;
+  if (tile.on_path?.length) mechLines += ` | Paths: ${tile.on_path.join(',')}`;
+  if (tile.house_id) mechLines += ` | House: ${tile.house_id.toUpperCase()}`;
+  if (tile.key_id)   mechLines += ` | KEY: ${tile.key_id}`;
+
+  const pzl     = tile.puzzle || {};
+  const curName = tile.name  || '';
+  const curLore = tile.lore  || tile.description || '';
+  let curType = 'text';
+  if (pzl.type && ['tesseract','masklock','turing','face3d'].includes(pzl.type)) curType='game';
+  else if (tile.embed_url) curType='iframe';
+  else if (tile.video_url) curType='video';
+  else if (tile.image_url) curType='image';
+
+  const MUSIC_OPTS = ['puzzle_tension','high_stress_music','quiz_stress_music',
+    'low_stress_minor','low_stress_major','emily_path_music_1',
+    'emily_triumph','house_threshold_music','melchizedek_path_music'];
+
+  const row = (label, content) =>
+    `<div style="margin-bottom:10px;">
+      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.3em;
+        color:rgba(192,132,252,0.45);margin-bottom:4px;">${label}</div>
+      ${content}</div>`;
+
+  const inp = (id, val='', placeholder='', type='text', extra='') =>
+    `<input id="${id}" type="${type}" value="${String(val).replace(/"/g,'&quot;')}"
+      placeholder="${placeholder}" ${extra}
+      style="width:100%;background:rgba(0,0,0,0.55);border:1px solid rgba(201,168,76,0.2);
+      color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;">`;
+
+  const sel = (id, opts, selected) =>
+    `<select id="${id}" style="width:100%;background:rgba(0,0,0,0.55);
+      border:1px solid rgba(201,168,76,0.2);color:var(--cream);
+      font-size:13px;padding:6px 8px;box-sizing:border-box;">
+      ${opts.map(([v,l])=>`<option value="${v}"${v===selected?' selected':''}>${l}</option>`).join('')}
+    </select>`;
+
+  const typeBtns = ['text','game','iframe','video','image'].map(ct =>
+    `<button data-type="${ct}" onclick="skm_setType('${ct}')"
+      style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;
+      padding:5px 10px;cursor:pointer;border-radius:1px;
+      background:${ct===curType?'rgba(201,168,76,0.15)':'transparent'};
+      border:1px solid ${ct===curType?'var(--gold)':'rgba(201,168,76,0.2)'};
+      color:${ct===curType?'var(--gold)':'rgba(201,168,76,0.4)'};">
+      ${ct==='game'?'🎮 GAME':ct.toUpperCase()}</button>`
+  ).join('');
+
+  // Gate rows
+  const gateRows = ['N','S','E','W'].map(dir => {
+    const g = getGate(x,y,dir)||{};
+    const solved = isGateSolved(x,y,dir);
+    const dirLabel = {N:'↑ N',S:'↓ S',E:'→ E',W:'← W'}[dir];
+    const gLabel = g.type ? (GATE_LABELS[g.type]||g.type) : 'open';
+    return `<div style="margin-bottom:8px;padding:8px 10px;
+      background:rgba(0,0,0,0.3);border:1px solid rgba(192,132,252,${g.type?'0.18':'0.06'});">
+      <div style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:0.2em;
+        color:${g.type?'#c084fc':'rgba(201,168,76,0.3)'};margin-bottom:6px;">
+        ${dirLabel} — ${gLabel}${solved?' ✓':''}</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;">
+        ${sel('skm_gate_'+dir+'_type',
+          [['','— open —'],['tesseract','Tesseract'],['masklock','Mask Lock'],['turing','Turing']],
+          g.type||'')}
+        ${inp('skm_gate_'+dir+'_level', g.level||'', 'lvl', 'number', 'min="1" max="1000" style="width:58px!important;"')}
+        ${inp('skm_gate_'+dir+'_title', g.title||'', 'Title')}
+        <button onclick="skm_saveGate(${x},${y},'${dir}')"
+          style="font-family:'Cinzel',serif;font-size:8px;padding:5px 10px;
+          cursor:pointer;background:rgba(192,132,252,0.15);
+          border:1px solid rgba(192,132,252,0.3);color:#c084fc;white-space:nowrap;">
+          SET</button>
+        ${g.type?`<button onclick="skm_clearGate(${x},${y},'${dir}')"
+          style="font-size:10px;padding:5px 8px;cursor:pointer;
+          background:transparent;border:1px solid rgba(201,168,76,0.15);
+          color:var(--dim);">✕</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  scroll.innerHTML = `
+  <!-- Mechanics -->
+  ${row('📍 MECHANICS (READ ONLY)',
+    `<pre style="font-size:11px;color:rgba(201,168,76,0.5);background:rgba(0,0,0,0.3);
+      padding:7px 9px;line-height:1.7;white-space:pre-wrap;margin:0;">${mechLines}</pre>`)}
+
+  <!-- Content type -->
+  ${row('CONTENT TYPE',
+    `<div style="display:flex;gap:5px;flex-wrap:wrap;">${typeBtns}</div>`)}
+
+  <!-- Text panel -->
+  <div id="skmP_text" style="${curType!=='text'?'display:none':''}">
+    ${row('TILE NAME', inp('skm_name', curName, 'Short title'))}
+    ${row('BODY TEXT',
+      `<div style="display:flex;gap:3px;margin-bottom:5px;">
+        ${[['B','bold'],['I','italic'],['U','underline']].map(([l,c])=>
+          `<button onclick="document.execCommand('${c}')"
+            style="font-size:12px;padding:3px 8px;background:rgba(0,0,0,0.4);
+            border:1px solid rgba(201,168,76,0.15);color:var(--cream);cursor:pointer;">${l}</button>`
+        ).join('')}
+        <button onclick="skm_insertLink()" style="font-size:11px;padding:3px 8px;
+          background:rgba(0,0,0,0.4);border:1px solid rgba(201,168,76,0.15);
+          color:var(--cream);cursor:pointer;">🔗</button>
+      </div>
+      <div id="skm_lore" contenteditable="true"
+        style="min-height:80px;background:rgba(0,0,0,0.55);
+        border:1px solid rgba(201,168,76,0.2);color:var(--cream);
+        font-family:'EB Garamond',serif;font-size:14px;
+        padding:7px;line-height:1.7;text-align:left;">${curLore}</div>`)}
+  </div>
+
+  <!-- Game panel -->
+  <div id="skmP_game" style="${curType!=='game'?'display:none':''}">
+    ${row('GAME', sel('skm_game',
+      [['tesseract','Tesseract (1000 levels)'],['masklock','Mask Lock (100 levels)'],['turing','Turing Test (100 levels)']],
+      pzl.type||'tesseract'))}
+    ${row('LEVEL', `<div style="display:flex;gap:6px;align-items:center;">
+      ${inp('skm_pzl_level', pzl.level||1, '', 'number', 'min="1" max="1000" style="width:70px!important;"')}
+      <span style="color:var(--dim);font-size:11px;">or range</span>
+      ${inp('skm_pzl_range_a', (pzl.range||['',''])[0], 'from', 'number', 'style="width:60px!important;"')}
+      <span style="color:var(--dim);">–</span>
+      ${inp('skm_pzl_range_b', (pzl.range||['',''])[1], 'to', 'number', 'style="width:60px!important;"')}
+    </div>`)}
+    ${row('TITLE', inp('skm_pzl_title', pzl.title||'', 'Challenge title'))}
+    ${row('DESC', `<textarea id="skm_pzl_desc" rows="2"
+      style="width:100%;background:rgba(0,0,0,0.55);border:1px solid rgba(201,168,76,0.2);
+      color:var(--cream);font-size:13px;padding:6px 8px;box-sizing:border-box;resize:vertical;">${pzl.desc||''}</textarea>`)}
+    ${row('LOCKS', `<div style="display:flex;gap:14px;">
+      <label style="color:var(--cream);font-size:12px;cursor:pointer;display:flex;gap:5px;align-items:center;">
+        <input type="checkbox" id="skm_lock_entry" ${pzl.lock_entry?'checked':''}>Entry</label>
+      <label style="color:var(--cream);font-size:12px;cursor:pointer;display:flex;gap:5px;align-items:center;">
+        <input type="checkbox" id="skm_lock_exit" ${pzl.lock_exit?'checked':''}>Exit</label>
+    </div>`)}
+    ${row('MUSIC CUE', sel('skm_pzl_music',
+      MUSIC_OPTS.map(m=>[m,m]), pzl.music||'puzzle_tension'))}
+    ${row('ON COMPLETION', sel('skm_pzl_complete_music',
+      [['','— none —'],...['emily_triumph','low_stress_major','eli_house_music','house_threshold_music'].map(m=>[m,m])],
+      pzl.on_complete_music||''))}
+  </div>
+
+  <!-- Iframe panel -->
+  <div id="skmP_iframe" style="${curType!=='iframe'?'display:none':''}">
+    ${row('EMBED URL', inp('skm_embed_url', tile.embed_url||'', 'https://...'))}
+    ${row('EMBED TITLE', inp('skm_embed_title', tile.embed_title||'', 'Optional title'))}
+  </div>
+
+  <!-- Video panel -->
+  <div id="skmP_video" style="${curType!=='video'?'display:none':''}">
+    ${row('VIDEO URL', inp('skm_video_url', tile.video_url||'', 'https://www.youtube.com/embed/...'))}
+  </div>
+
+  <!-- Image panel -->
+  <div id="skmP_image" style="${curType!=='image'?'display:none':''}">
+    ${row('IMAGE URL', inp('skm_image_url', tile.image_url||'', 'https://...'))}
+    ${row('CAPTION', inp('skm_image_caption', tile.image_caption||'', 'Optional caption'))}
+  </div>
+
+  <!-- Global name -->
+  ${row('TILE NAME (MAP)', inp('skm_name_global', curName, 'Short title'))}
+
+  <!-- Actions -->
+  <div style="display:flex;gap:8px;margin-top:4px;">
+    <button onclick="skm_save(${x},${y})"
+      style="flex:1;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.2em;
+      padding:11px;cursor:pointer;background:#c084fc;color:#1a0a2e;border:none;">
+      💾 SAVE</button>
+    <button onclick="skm_export()"
+      style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.15em;
+      padding:11px 14px;cursor:pointer;background:transparent;
+      border:1px solid rgba(201,168,76,0.3);color:var(--gold);">↓ EXPORT</button>
+  </div>
+  <div style="font-size:11px;color:rgba(201,168,76,0.3);font-style:italic;margin-top:8px;">
+    Saves to browser. Export JSON for permanent installation.</div>
+
+  <!-- Directional gates -->
+  <div style="margin-top:16px;border-top:1px solid rgba(192,132,252,0.12);padding-top:12px;">
+    <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.35em;
+      color:rgba(192,132,252,0.5);margin-bottom:6px;">⊛ DIRECTIONAL GATES</div>
+    <div style="font-size:11px;color:rgba(201,168,76,0.3);margin-bottom:10px;">
+      Block movement in a direction until a puzzle is solved. Return is always free.</div>
+    ${gateRows}
+  </div>`;
+
+  // Open panel
+  panel.classList.add('open');
+}
+
+function closeSkmPanel() {
+  const panel = document.getElementById('skmPanel');
+  if (panel) panel.classList.remove('open');
+}
+
+
+
+
+function skm_setType(type) {
+  ['text','game','iframe','video','image'].forEach(t => {
+    const p = document.getElementById('skmP_'+t);
+    if (p) p.style.display = t===type ? '' : 'none';
+  });
+  document.querySelectorAll('[data-type]').forEach(b => {
+    const active = b.dataset.type === type;
+    b.style.background = active ? 'rgba(201,168,76,0.15)' : 'transparent';
+    b.style.borderColor = active ? 'var(--gold)' : 'rgba(201,168,76,0.2)';
+    b.style.color = active ? 'var(--gold)' : 'rgba(201,168,76,0.45)';
+  });
+}
+
+function skm_insertLink() {
+  const url = prompt('Enter URL:');
+  if (url) document.execCommand('createLink', false, url);
+}
+
+function skm_save(x, y) {
+  const k = `${x},${y}`;
+  // Determine active type
+  let activeType = 'text';
+  ['text','game','iframe','video','image'].forEach(t => {
+    const p = document.getElementById('skmP_'+t);
+    if (p && p.style.display !== 'none') activeType = t;
+  });
+
+  const nameGlobal = document.getElementById('skm_name_global')?.value?.trim() || '';
+  let patch = {};
+  if (nameGlobal) patch.name = nameGlobal;
+  const tileMusic = document.getElementById('skm_tile_music')?.value;
+  if (tileMusic) patch.music = tileMusic; else delete patch.music;
+
+  if (activeType === 'text') {
+    const nm = document.getElementById('skm_name')?.value?.trim();
+    if (nm) patch.name = nm;
+    const loreEl = document.getElementById('skm_lore');
+    if (loreEl) {
+      // Save as plain text (strip basic HTML) for tile rendering compatibility
+      const tmp = document.createElement('div');
+      tmp.innerHTML = loreEl.innerHTML;
+      patch.lore = tmp.textContent || tmp.innerText || loreEl.innerHTML;
+    }
+    delete patch.puzzle;
+  } else if (activeType === 'game') {
+    const gameType = document.getElementById('skm_game')?.value || 'tesseract';
+    const lvA = parseInt(document.getElementById('skm_pzl_range_a')?.value) || null;
+    const lvB = parseInt(document.getElementById('skm_pzl_range_b')?.value) || null;
+    const lv  = parseInt(document.getElementById('skm_pzl_level')?.value) || 1;
+    patch.puzzle = {
+      type:   gameType,
+      title:  document.getElementById('skm_pzl_title')?.value || '',
+      desc:   document.getElementById('skm_pzl_desc')?.value  || '',
+      music:  document.getElementById('skm_pzl_music')?.value || 'puzzle_tension',
+      on_complete_music: document.getElementById('skm_pzl_complete_music')?.value || null,
+      lock_entry: document.getElementById('skm_lock_entry')?.checked || false,
+      lock_exit:  document.getElementById('skm_lock_exit')?.checked  || false,
+    };
+    if (lvA && lvB) patch.puzzle.range = [lvA, lvB];
+    else patch.puzzle.level = lv;
+  } else if (activeType === 'iframe') {
+    patch.embed_url   = document.getElementById('skm_embed_url')?.value || '';
+    patch.embed_title = document.getElementById('skm_embed_title')?.value || '';
+  } else if (activeType === 'video') {
+    patch.video_url = document.getElementById('skm_video_url')?.value || '';
+  } else if (activeType === 'image') {
+    patch.image_url     = document.getElementById('skm_image_url')?.value || '';
+    patch.image_caption = document.getElementById('skm_image_caption')?.value || '';
+  }
+
+  // Apply to live REALM
+  if (!REALM.tiles[k]) REALM.tiles[k] = {};
+  Object.assign(REALM.tiles[k], patch);
+
+  // Persist to localStorage overrides
+  const ov = _loadOverrides();
+  ov[k] = Object.assign(ov[k] || {}, patch);
+  _saveOverrides(ov);
+
+  // Feedback
+  const btn = document.querySelector('[onclick*="skm_save"]');
+  if (btn) { const orig=btn.textContent; btn.textContent='✓ SAVED'; setTimeout(()=>btn.textContent=orig,1500); }
+
+  // Re-render tile if currently viewing it
+  const cur = decodeXY((window.location.hash||'').replace('#',''));
+  if (cur && cur.x===x && cur.y===y) render(x, y);
+}
+
+function skm_saveGate(x, y, dir) {
+  const typeEl  = document.getElementById(`skm_gate_${dir}_type`);
+  const levelEl = document.getElementById(`skm_gate_${dir}_level`);
+  const titleEl = document.getElementById(`skm_gate_${dir}_title`);
+  const gtype = typeEl?.value;
+  if (!gtype) { skm_clearGate(x,y,dir); return; }
+  const gate = {
+    type: gtype,
+    title: titleEl?.value?.trim() || '',
+  };
+  const lv = parseInt(levelEl?.value);
+  if (lv) gate.level = lv;
+  // Save to REALM in memory
+  if (!REALM.gates) REALM.gates = {};
+  REALM.gates[gateKey(x,y,dir)] = gate;
+  // Persist override
+  const ov = _loadOverrides();
+  if (!ov._gates) ov._gates = {};
+  ov._gates[gateKey(x,y,dir)] = gate;
+  _saveOverrides(ov);
+  // Refresh arrows
+  renderNavArrows(x,y);
+  skmOpenEditor(x,y);
+}
+
+function skm_clearGate(x, y, dir) {
+  const k = gateKey(x,y,dir);
+  if (REALM.gates) delete REALM.gates[k];
+  const ov = _loadOverrides();
+  if (ov._gates) delete ov._gates[k];
+  _saveOverrides(ov);
+  renderNavArrows(x,y);
+  skmOpenEditor(x,y);
+}
+
+function skm_export() {
+  const ov = _loadOverrides();
+  const json = JSON.stringify(ov, null, 2);
+  const blob = new Blob([json], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tile-overrides-v8.json';
+  a.click();
+}
+
+
+// Hook into MV: when SKM active and tile double-tapped, open editor instead of regular panel
+// We'll inject after showInfoPanel is called
+
+// Wire EXIT SKM button
+document.addEventListener('DOMContentLoaded', ()=>{
+  const b = document.getElementById('exitSkmBtn');
+  if (b) b.addEventListener('click', _deactivateSKM);
+});
+
+/* ══════════════════════════════════════════════════
+ *  GATES SYSTEM v8.6
+ *  Gates are directional edge locks stored in REALM.gates
+ *  Key format: "x,y:DIR" where DIR ∈ {N,S,E,W}
+ *  A gate fires when moving FROM (x,y) in direction DIR.
+ *  The return direction is always free.
+ *  Solved gates stored in localStorage.
+ * ═════════════════════════════════════════════════*/
+
+
+/* ══ ACTIVATE/DEACTIVATE HELPERS ════════════════ */
+function _activateSKM() {
+  if (typeof _skmActive !== 'undefined' && _skmActive) return;
+  if (typeof _skmActive !== 'undefined') _skmActive = true;
+  activateKudraMode();
+  document.body.classList.add('skm-active');
+  const b = document.getElementById('exitSkmBtn');
+  if (b) b.style.display = '';
+  const k = document.getElementById('exitKBtn');
+  if (k) k.style.display = '';
+  _skmFlash();
+}
+
+function _deactivateSKM() {
+  if (typeof _skmActive !== 'undefined') _skmActive = false;
+  document.body.classList.remove('skm-active');
+  const b = document.getElementById('exitSkmBtn');
+  if (b) b.style.display = 'none';
+  closeSkmPanel();
+}
+
+/* duplicates removed */
+
+
+function _skmFlash() {
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;font-family:"Cinzel Decorative",serif;font-size:clamp(18px,3vw,28px);color:#f0abfc;text-shadow:0 0 30px rgba(240,171,252,0.9);pointer-events:none;text-align:center;animation:skmFl 2.2s ease forwards;';
+  el.textContent = '✦ SUPERKUDRAMARDUK ✦';
+  const s = document.createElement('style');
+  s.textContent = '@keyframes skmFl{0%{opacity:0;transform:translate(-50%,-50%) scale(0.8)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}';
+  document.head.appendChild(s);
+  document.body.appendChild(el);
+  setTimeout(()=>{el.remove();s.remove();}, 2300);
+}
+
+document.addEventListener('keydown', (ev) => {
+  if (ev.key.length !== 1) return;
+  if (['INPUT','TEXTAREA','[contenteditable]'].some(s => document.activeElement?.matches?.(s))) return;
+  _skmBuffer = (_skmBuffer + ev.key.toLowerCase()).slice(-SKM_CODE.length);
+  if (_skmBuffer === SKM_CODE) { _activateSKM(); _skmBuffer = ''; }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const b = document.getElementById('exitSkmBtn');
+  if (b) b.addEventListener('click', _deactivateSKM);
+  const k = document.getElementById('exitKBtn');
+  if (k) k.addEventListener('click', deactivateKudraMode);
+});
+
+/* ── Boot ──────────────────────────────────────── */
 async function boot() {
   const res = await fetch('realm.json');
   REALM = await res.json();
@@ -5731,8 +5974,8 @@ async function boot() {
   // Restore kudra visual state across page reloads
   if (isKudraUnlocked()) {
     document.body.classList.add('kudra-active');
-    const ekbtnb = document.getElementById('exitKBtn');
-    if (ekbtnb) ekbtnb.style.display = '';
+    const _ekb = document.getElementById('exitKBtn');
+    if (_ekb) _ekb.style.display = '';
   }
   window.addEventListener('resize', () => {
     const bg = document.getElementById('bg');
@@ -5746,10 +5989,10 @@ async function boot() {
   const h = (window.location.hash || '').replace('#', '');
   if (h) {
     if (h.startsWith('gate:')) {
-      const gateResult = _handleGateHash(h);
-      if (gateResult) start = gateResult;
-    }
-    else if (h.startsWith('pzl:')) {
+      const _gr = _handleGateHash(h);
+      if (_gr) { start = _gr; history.replaceState(null,'',window.location.pathname); }
+    } else
+    if (h.startsWith('pzl:')) {
       const dec = decodeXY(h.replace('pzl:',''));
       if (dec) {
         markPuzzleSolved(dec.x, dec.y);
