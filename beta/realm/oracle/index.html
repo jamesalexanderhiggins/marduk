@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MARDUK — THE ORACLE</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- 3D canvas -->
+<div id="stage"></div>
+<div id="vignette"></div>
+<div id="scanlines"></div>
+
+<!-- HUD -->
+<div id="hud-top">
+  <div>
+    <div class="hud-title">MARDUK &nbsp;//&nbsp; THE ORACLE</div>
+    <div class="hud-sub pulse">— INFORMATIONAL REALM — SESSION LIVE</div>
+  </div>
+  <div class="hud-right">
+    <div class="hud-sub" id="hud-state">DORMANT</div>
+  </div>
+</div>
+
+<!-- Status -->
+<div id="status-bar"></div>
+
+<!-- Results panel -->
+<div id="results-panel"></div>
+
+<!-- Search -->
+<div id="search-area">
+  <input id="search-input" type="text" autocomplete="off" spellcheck="false"
+         placeholder="SPEAK YOUR QUERY TO THE ORACLE">
+  <div id="search-hint">drag &middot; rotate &nbsp;&nbsp; scroll &middot; zoom &nbsp;&nbsp; type &middot; consult</div>
+</div>
+
+<!-- Detail overlay -->
+<div id="detail-panel">
+  <div class="detail-inner">
+    <div class="detail-back" id="detail-back">&#8592; RETURN TO QUERY</div>
+    <div id="detail-inner"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     ADMIN PANEL (melchizedek mode)
+     ═══════════════════════════════════════════════════ -->
+<div id="admin-panel">
+  <div class="admin-header">
+    <div class="admin-title">MARDUK &nbsp;//&nbsp; CANONICAL RECORD ADMINISTRATION</div>
+    <div class="admin-btns">
+      <button class="abtn" id="admin-import">IMPORT DB</button>
+      <button class="abtn" id="admin-new">+ NEW ENTRY</button>
+      <button class="abtn gold" id="admin-export">EXPORT db.js</button>
+      <button class="abtn danger" id="admin-close">RETURN TO ORACLE</button>
+    </div>
+  </div>
+
+  <div id="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th data-col="name">NAME</th>
+          <th data-col="category">CATEGORY</th>
+          <th data-col="summary">SUMMARY</th>
+          <th data-col="public">VISIBILITY</th>
+        </tr>
+      </thead>
+      <tbody id="admin-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- Edit form (overlaid on admin panel) -->
+  <div id="admin-edit">
+    <div class="edit-header">
+      <div class="edit-title" id="edit-form-title">EDIT ENTRY</div>
+      <div class="admin-btns">
+        <button class="abtn danger" id="edit-delete" style="display:none">DELETE</button>
+        <button class="abtn" id="edit-cancel">CANCEL</button>
+        <button class="abtn gold" id="edit-save">SAVE ENTRY</button>
+      </div>
+    </div>
+
+    <div class="edit-body">
+      <div class="edit-row half">
+        <div>
+          <label class="edit-label" for="ef-id">Entry ID</label>
+          <input class="edit-input" id="ef-id" placeholder="auto-generated">
+        </div>
+        <div>
+          <label class="edit-label" for="ef-category">Category</label>
+          <select class="edit-input" id="ef-category" style="appearance:none; cursor:pointer;">
+            <option>Character</option>
+            <option>Location</option>
+            <option>Technology</option>
+            <option>Faction</option>
+            <option>Event</option>
+            <option>Concept</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="edit-row">
+        <label class="edit-label" for="ef-name">Name</label>
+        <input class="edit-input" id="ef-name" placeholder="Primary canonical name">
+      </div>
+
+      <div class="edit-row">
+        <label class="edit-label" for="ef-aliases">Aliases (comma-separated)</label>
+        <input class="edit-input" id="ef-aliases" placeholder="alternate name, another name, ...">
+      </div>
+
+      <div class="edit-row">
+        <label class="edit-label" for="ef-tags">Tags (comma-separated)</label>
+        <input class="edit-input" id="ef-tags" placeholder="keyword, another, ...">
+      </div>
+
+      <div class="edit-row">
+        <label class="edit-label">Public Visibility</label>
+        <div class="pub-row">
+          <input type="checkbox" class="pub-check" id="ef-public" checked>
+          <label class="pub-label" for="ef-public">Visible in public oracle queries</label>
+        </div>
+      </div>
+
+      <div class="edit-row">
+        <label class="edit-label" for="ef-summary">Summary (shown in search results)</label>
+        <textarea class="edit-textarea" id="ef-summary" rows="2"
+          placeholder="Short description visible in public search results..."></textarea>
+      </div>
+
+      <div class="edit-row">
+        <label class="edit-label" for="ef-detail">Full Detail (shown in entry view)</label>
+        <textarea class="edit-textarea" id="ef-detail" rows="5"
+          placeholder="Complete canonical description..."></textarea>
+      </div>
+
+      <!-- Structured fields -->
+      <div class="edit-row edit-fields-section">
+        <label class="edit-label">Structured Fields</label>
+        <div id="fields-container"></div>
+        <button class="add-field-btn" id="add-field-btn">+ ADD FIELD</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Intro screen -->
+<div id="intro">
+  <div class="intro-mark">&#10022; &nbsp; THE MARDUKVERSE &nbsp; &#10022;</div>
+  <h1>MARDUK</h1>
+  <div class="intro-tag">— THE ORACLE —</div>
+  <div class="intro-copy">
+    He dwells in the informational realm between the realities.<br><br>
+    He holds all canonical knowledge of the Mardukverse —
+    every character, location, event, and truth that has been committed
+    to the record. Ask him what you seek. He will retrieve it from the
+    layer that underlies both worlds.<br><br>
+    <em style="color:#4a6a8a">Drag to rotate &middot; Scroll to zoom &middot; Type to consult</em>
+  </div>
+  <button class="intro-begin" id="begin-btn">CONSULT THE ORACLE</button>
+</div>
+
+<!-- Three.js importmap -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
+<!-- Database (replaceable file) -->
+<script src="db.js"></script>
+
+<!-- Boot -->
+<script>
+(function(){
+  window.__oracleReady = false;
+})();
+</script>
+
+<script type="module">
+(async () => {
+  try {
+    await import('three');
+  } catch(e) {
+    try {
+      await import('https://unpkg.com/three@0.160.0/build/three.module.js');
+    } catch(e2) {
+      document.getElementById('intro').insertAdjacentHTML('beforeend',
+        '<p style="color:#e05050;font-size:10px;margin-top:20px;letter-spacing:2px">NETWORK ERROR — THREE.JS UNAVAILABLE</p>');
+      return;
+    }
+  }
+  try {
+    await import('./js/main.js');
+  } catch(e) {
+    console.error('Main module failed:', e);
+    document.getElementById('intro').insertAdjacentHTML('beforeend',
+      `<p style="color:#e05050;font-size:10px;margin-top:20px;letter-spacing:2px">LOAD ERROR: ${e.message}</p>`);
+  }
+})();
+</script>
+
+</body>
+</html>
