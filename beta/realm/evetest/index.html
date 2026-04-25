@@ -62,12 +62,25 @@
   <div id="loading-status"></div>
 </div>
 
-<!-- Early non-module bootstrap: binds button before main module loads. -->
+<!-- Importmap MUST come before any module script that uses 'three'.
+     jsdelivr is the primary; unpkg is the fallback inside the bootstrap below. -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
+<!-- Bootstrap: binds the button before main module loads, surfaces real errors,
+     and verifies Three.js is actually reachable before we try to import it. -->
 <script>
 (function(){
   window.__eveReady = false;
   window.__eveQueued = false;
   window.__eveStart = null;
+  window.__eveLoadError = null;
+
   function showError(msg) {
     var intro = document.getElementById('intro');
     if (!intro) return;
@@ -75,27 +88,39 @@
     if (existing) existing.remove();
     var box = document.createElement('div');
     box.id = 'eve-error';
-    box.style.cssText = 'margin-top:24px; padding:14px 20px; border:1px solid #ff5a6a; color:#ffb0b8; font-size:11px; letter-spacing:1px; max-width:520px; line-height:1.6; text-transform:none;';
+    box.style.cssText = 'margin-top:24px; padding:14px 20px; border:1px solid #ff5a6a; color:#ffb0b8; font-size:11px; letter-spacing:1px; max-width:560px; line-height:1.6; text-transform:none; font-family: ui-monospace, monospace; word-break:break-word;';
     box.textContent = 'The gate could not open. ' + msg;
     intro.appendChild(box);
   }
+
+  function setStatus(s) {
+    var el = document.getElementById('loading-status');
+    if (el) el.textContent = s;
+  }
+
   function begin() {
     var intro = document.getElementById('intro');
+    if (window.__eveLoadError) {
+      showError(window.__eveLoadError);
+      return;
+    }
     if (window.__eveReady && typeof window.__eveStart === 'function') {
       try { window.__eveStart(); if (intro) intro.classList.add('hide'); }
-      catch (e) { showError(String(e && e.message || e)); }
+      catch (e) { showError('Start failed: ' + String(e && e.message || e)); }
     } else {
       window.__eveQueued = true;
       var btn = document.getElementById('begin-btn');
       if (btn) { btn.textContent = 'OPENING\u2026'; btn.style.opacity = '0.6'; }
+      setStatus('loading three.js\u2026');
       setTimeout(function(){
-        if (!window.__eveReady) {
-          showError('Three.js did not load within 10 seconds. Reload to retry.');
+        if (!window.__eveReady && !window.__eveLoadError) {
+          showError('Loading timed out after 12 seconds. The CDN may be blocked or slow. Reload to retry.');
           if (btn) { btn.textContent = 'RETRY'; btn.style.opacity='1'; btn.onclick = function(){ location.reload(); }; }
         }
-      }, 10000);
+      }, 12000);
     }
   }
+
   function bind() {
     var btn = document.getElementById('begin-btn');
     if (btn) btn.addEventListener('click', begin);
@@ -104,16 +129,94 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
   else bind();
-  window.addEventListener('error', function(e){ if (!window.__eveReady) showError(String(e.message || 'Unknown script error.')); });
-  window.addEventListener('unhandledrejection', function(e){ if (!window.__eveReady) showError(String((e.reason && e.reason.message) || e.reason || 'Promise rejected.')); });
+
+  // Catch synchronous errors during module init
+  window.addEventListener('error', function(e){
+    var msg = '';
+    if (e.message && e.filename) {
+      msg = e.message + ' in ' + e.filename.split('/').pop() + ':' + (e.lineno || '?');
+    } else if (e.target && (e.target.src || e.target.href)) {
+      // Resource load failure (script, link)
+      msg = 'Failed to load ' + (e.target.src || e.target.href);
+    } else {
+      msg = String(e.message || 'Unknown error');
+    }
+    if (!window.__eveReady) {
+      window.__eveLoadError = msg;
+      if (window.__eveQueued) showError(msg);
+    }
+  }, true); // capture phase to catch resource errors
+
+  window.addEventListener('unhandledrejection', function(e){
+    var msg = String((e.reason && e.reason.message) || e.reason || 'Promise rejected.');
+    if (!window.__eveReady) {
+      window.__eveLoadError = msg;
+      if (window.__eveQueued) showError(msg);
+    }
+  });
+
+  // Pre-flight: try fetching three.js directly so we get a clear error if the
+  // CDN is blocked, rather than a silent module failure.
+  setStatus('checking network\u2026');
+  fetch('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js', { method: 'HEAD', mode: 'no-cors' })
+    .then(function(){ setStatus('three.js reachable'); })
+    .catch(function(err){
+      // no-cors HEAD shouldn't fail except for total network issues
+      console.warn('Pre-flight fetch failed:', err);
+    });
 })();
 </script>
 
-<script type="importmap">
-{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
-</script>
+<script type="module">
+// Inline module bootstrap. By having the import statement here in the same
+// document as the importmap (rather than a separate file), Safari iOS can
+// always resolve 'three' to its mapped URL.
+(async () => {
+  try {
+    // Try the mapped 'three' first (jsdelivr per importmap)
+    await import('three');
+  } catch (eFirst) {
+    console.warn('Primary three import failed, trying unpkg fallback:', eFirst);
+    try {
+      // Fallback: import from unpkg directly
+      await import('https://unpkg.com/three@0.160.0/build/three.module.js');
+      console.log('Loaded three.js from unpkg fallback.');
+    } catch (eSecond) {
+      const msg = 'three.js failed to load from both jsdelivr and unpkg. ' +
+                  '(' + (eFirst.message || eFirst) + ')';
+      window.__eveLoadError = msg;
+      const intro = document.getElementById('intro');
+      const btn = document.getElementById('begin-btn');
+      if (window.__eveQueued && intro) {
+        const box = document.createElement('div');
+        box.id = 'eve-error';
+        box.style.cssText = 'margin-top:24px; padding:14px 20px; border:1px solid #ff5a6a; color:#ffb0b8; font-size:11px; letter-spacing:1px; max-width:560px; line-height:1.6; text-transform:none; font-family: ui-monospace, monospace; word-break:break-word;';
+        box.textContent = 'The gate could not open. ' + msg;
+        intro.appendChild(box);
+        if (btn) { btn.textContent = 'RETRY'; btn.style.opacity='1'; btn.onclick = () => location.reload(); }
+      }
+      return;
+    }
+  }
 
-<script type="module" src="js/main.js"></script>
+  // Three.js is now loadable. Boot the main module.
+  try {
+    await import('./js/main.js');
+  } catch (e) {
+    const msg = 'Module load failed: ' + (e.message || e) + (e.stack ? '\n' + e.stack.split('\n').slice(0,3).join('\n') : '');
+    console.error(msg, e);
+    window.__eveLoadError = msg;
+    const intro = document.getElementById('intro');
+    if (window.__eveQueued && intro) {
+      const box = document.createElement('div');
+      box.id = 'eve-error';
+      box.style.cssText = 'margin-top:24px; padding:14px 20px; border:1px solid #ff5a6a; color:#ffb0b8; font-size:11px; letter-spacing:1px; max-width:560px; line-height:1.6; text-transform:none; font-family: ui-monospace, monospace; word-break:break-word; white-space:pre-wrap;';
+      box.textContent = 'The gate could not open. ' + msg;
+      intro.appendChild(box);
+    }
+  }
+})();
+</script>
 
 </body>
 </html>

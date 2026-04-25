@@ -1,6 +1,14 @@
-# EVE — THE TURING GATE v3.0
+# EVE — THE TURING GATE v3.0.1
 
 A wireframe sci-fi gate for the Marduk Map. Eve, a sentient AI, interrogates the user to decide whether they are safe to carry inside her. Eve is rendered as a particle-cloud humanoid (~4500 points + ~12k connecting lines) inspired by the constellation-figure GIF reference.
+
+## Hotfix v3.0.1
+
+If you saw a "Three.js did not load" error on the previous version: that was usually an iOS Safari importmap timing issue, where the module script started fetching before the importmap registered. Fixed in this version by:
+- Moving the importmap to be the **first** script in the document, before anything else.
+- Switching primary CDN to jsdelivr (more globally reliable than unpkg).
+- Adding a fallback to unpkg if jsdelivr fails.
+- Adding a pre-flight network check and **real error reporting** — if anything fails, you'll now see the actual error message instead of a generic timeout.
 
 ## Package contents
 
