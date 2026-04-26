@@ -1,6 +1,8 @@
 // oracle.js — search engine, results UI, state machine.
 // Reads window.MARDUK_DB; no AI API required.
 
+import { SFX } from './audio.js';
+
 export class Oracle {
   constructor(marduk, env) {
     this.marduk = marduk;
@@ -36,9 +38,10 @@ export class Oracle {
     const val = this.searchInput.value.trim();
 
     // Secret admin password
-    if (val.toLowerCase() === 'melchizedek') {
+    if (val.toLowerCase() === 'iammelchizedek') {
       this.searchInput.value = '';
       this._clearSearch();
+      SFX.adminKey();
       document.dispatchEvent(new CustomEvent('oracle:adminMode'));
       return;
     }
@@ -48,7 +51,7 @@ export class Oracle {
     clearTimeout(this._debounce);
     this._setStatus('QUERYING INFORMATIONAL REALM\u2026');
     this._setState('searching');
-
+    SFX.searchStart();
     this._debounce = setTimeout(() => this._runSearch(val), 320);
   }
 
@@ -84,8 +87,10 @@ export class Oracle {
     if (this._currentResults.length > 0) {
       this._setState('data');
       this.marduk.triggerReveal();
+      SFX.dataFound();
     } else {
       this._setState('idle');
+      SFX.noResults();
     }
   }
 
@@ -128,6 +133,7 @@ export class Oracle {
     this._selectedEntry = entry;
     this._setState('detail');
     this.resultsPanel.style.display = 'none';
+    SFX.detailOpen();
 
     // Build populated fields first, then empty
     const fields = entry.fields || {};
@@ -164,6 +170,7 @@ export class Oracle {
 
   _closeDetail() {
     this.detailPanel.style.display = 'none';
+    SFX.detailClose();
     this._setState('data');
     if (this._currentResults.length) this.resultsPanel.style.display = 'block';
   }
@@ -175,6 +182,7 @@ export class Oracle {
     this._currentResults = [];
     this._setState('idle');
     this._clearStatus();
+    SFX.clear();
   }
 
   _setState(state) {
