@@ -1,4 +1,5 @@
-// main.js — scene boot, smooth spherical orbital camera, audio, sparks.
+// main.js v1.2 — clean spherical orbital camera, no lag on rotation.
+// Drag = instant 1:1 orbit. Scroll/pinch = smoothly-lerped zoom.
 
 import * as THREE from 'three';
 import { Environment } from './environment.js';
@@ -8,12 +9,13 @@ import { Admin       } from './admin.js';
 import { SFX         } from './audio.js';
 import { Sparks      } from './sparks.js';
 
-// ─── SCENE ───
+// ─── SCENE SETUP ─────────────────────────────────────────────────────────────
 const stage  = document.getElementById('stage');
 const scene  = new THREE.Scene();
 scene.background = new THREE.Color(0x010208);
 
 const camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.05, 2000);
+camera.updateProjectionMatrix();
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -22,38 +24,32 @@ stage.appendChild(renderer.domElement);
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
+  camera.updateProjectionMatrix();               // only on resize
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// ─── SUBSYSTEMS ───
+// ─── SUBSYSTEMS ──────────────────────────────────────────────────────────────
 const env    = new Environment(scene);
 const marduk = new MardukHead(scene);
 const oracle = new Oracle(marduk, env);
 const admin  = new Admin();
 const sparks = new Sparks(scene);
 
-// ─── SMOOTH SPHERICAL ORBITAL CAMERA ────────────────────────────────────────
-// Always looks at head center. Drag=orbit, scroll/pinch=zoom.
-// theta = azimuth (0..2π), phi = elevation (-π/2..π/2), radius = distance.
-
-const CAM_TARGET = new THREE.Vector3(0, -0.5, 0);
-const cam = {
-  theta:  0.0,  tTheta:  0.0,
-  phi:    0.08, tPhi:    0.08,
-  radius: 7.5,  tRadius: 7.5,
-};
+// ─── CAMERA STATE ────────────────────────────────────────────────────────────
+// theta = azimuth (horizontal), phi = elevation (vertical)
+// Drag updates theta/phi DIRECTLY — no spring lag on rotation.
+// Only zoom (radius) uses a smooth lerp target.
+const CAM_TARGET = new THREE.Vector3(0, -0.4, 0);
 const CLAMP = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
-function updateCamera(dt) {
-  // Shortest-arc lerp for theta (avoids spinning the wrong way)
-  let dTheta = cam.tTheta - cam.theta;
-  if (dTheta >  Math.PI) dTheta -= Math.PI * 2;
-  if (dTheta < -Math.PI) dTheta += Math.PI * 2;
-  cam.theta  += dTheta              * Math.min(1, dt * 7);
-  cam.phi    += (cam.tPhi    - cam.phi)    * Math.min(1, dt * 7);
-  cam.radius += (cam.tRadius - cam.radius) * Math.min(1, dt * 5);
+const cam = {
+  theta:   0.0,           // current azimuth  (updated directly by drag)
+  phi:     0.06,          // current elevation (updated directly by drag)
+  radius:  7.5,           // current radius    (lerps toward tRadius)
+  tRadius: 7.5,           // zoom target
+};
 
+function positionCamera() {
   const cp = Math.cos(cam.phi), sp = Math.sin(cam.phi);
   const ct = Math.cos(cam.theta), st = Math.sin(cam.theta);
   camera.position.set(
@@ -62,64 +58,65 @@ function updateCamera(dt) {
     CAM_TARGET.z + cam.radius * cp * ct
   );
   camera.lookAt(CAM_TARGET);
-  camera.updateProjectionMatrix();
 }
 
-// ─── POINTER / DRAG STATE ───────────────────────────────────────────────────
-const ptrs = new Map();
-let   dragActive      = false;
-let   lastDragX       = 0, lastDragY = 0;
-let   lastPinchDist   = 0;
-let   pointerDownX    = 0, pointerDownY = 0;
-const TAP_THRESHOLD   = 10; // px — below this = tap, not drag
+// ─── POINTER STATE ────────────────────────────────────────────────────────────
+const ptrs        = new Map();   // pointerId → {x,y}
+let   dragActive  = false;
+let   lastDragX   = 0,  lastDragY   = 0;
+let   lastPinchDist = 0;
 
-// ─── RAYCASTER for touch→world position ─────────────────────────────────────
+// Sensitivity — pixels per radian
+const ORBIT_SENS = 0.0045;
+
+// ─── RAYCASTER (touch → 3-D world position) ──────────────────────────────────
 const raycaster = new THREE.Raycaster();
-const _mouse    = new THREE.Vector2();
+const _ndc      = new THREE.Vector2();
 
 function touchWorldPos(clientX, clientY) {
-  _mouse.x = (clientX / window.innerWidth)  *  2 - 1;
-  _mouse.y = (clientY / window.innerHeight) * -2 + 1;
-  raycaster.setFromCamera(_mouse, camera);
-
-  // Intersect a sphere of radius 3.5 centred on CAM_TARGET
+  _ndc.set(
+    (clientX / window.innerWidth)  *  2 - 1,
+    (clientY / window.innerHeight) * -2 + 1
+  );
+  raycaster.setFromCamera(_ndc, camera);
+  // Intersect sphere of radius 3.2 centred on CAM_TARGET
   const o  = raycaster.ray.origin.clone().sub(CAM_TARGET);
   const d  = raycaster.ray.direction;
-  const R  = 3.5;
-  const a  = d.dot(d);
+  const R  = 3.2;
   const b  = 2 * o.dot(d);
-  const c_ = o.dot(o) - R * R;
-  const disc = b * b - 4 * a * c_;
+  const c  = o.dot(o) - R * R;
+  const disc = b * b - 4 * c;
   if (disc >= 0) {
-    const t1 = (-b - Math.sqrt(disc)) / (2 * a);
-    const t2 = (-b + Math.sqrt(disc)) / (2 * a);
+    const sq = Math.sqrt(disc);
+    const t1 = (-b - sq) * 0.5;
+    const t2 = (-b + sq) * 0.5;
     const t  = t1 > 0.01 ? t1 : t2 > 0.01 ? t2 : null;
-    if (t !== null)
-      return raycaster.ray.origin.clone().addScaledVector(d, t);
+    if (t !== null) return raycaster.ray.origin.clone().addScaledVector(d, t);
   }
-  // Fallback: point on a plane at fixed distance
-  return raycaster.ray.origin.clone().addScaledVector(d, cam.radius * 0.6);
+  return raycaster.ray.origin.clone().addScaledVector(d, cam.radius * 0.55);
 }
 
-// ─── POINTER EVENTS ─────────────────────────────────────────────────────────
+// ─── POINTER EVENTS ──────────────────────────────────────────────────────────
 
 stage.addEventListener('pointerdown', e => {
   SFX.unlock();
+
   ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
-  pointerDownX = e.clientX; pointerDownY = e.clientY;
+  try { stage.setPointerCapture(e.pointerId); } catch (_) {}
 
   if (ptrs.size === 1) {
     dragActive = true;
-    lastDragX  = e.clientX; lastDragY = e.clientY;
+    lastDragX  = e.clientX;
+    lastDragY  = e.clientY;
     stage.classList.add('grabbing');
-    try { stage.setPointerCapture(e.pointerId); } catch(_) {}
   } else if (ptrs.size === 2) {
+    // Entering pinch — freeze drag, record initial pinch distance
     dragActive = false;
-    const pts = [...ptrs.values()];
-    lastPinchDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+    const vals = [...ptrs.values()];
+    lastPinchDist = Math.hypot(vals[0].x - vals[1].x, vals[0].y - vals[1].y);
   }
 
-  // Sparks on every touch — fired immediately at pointer-down
+  // Spark + head react on every touch
   const wp = touchWorldPos(e.clientX, e.clientY);
   sparks.burst(wp.x, wp.y, wp.z);
   marduk.reactToTouch(wp);
@@ -131,50 +128,62 @@ stage.addEventListener('pointermove', e => {
   ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
   if (ptrs.size >= 2) {
-    // Pinch zoom
-    const pts = [...ptrs.values()];
-    const d = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+    // Pinch zoom — compare current distance to last frame's distance
+    const vals = [...ptrs.values()];
+    const dist = Math.hypot(vals[0].x - vals[1].x, vals[0].y - vals[1].y);
     if (lastPinchDist > 0) {
-      const ratio = lastPinchDist / d;
-      cam.tRadius = CLAMP(cam.tRadius * ratio, 1.5, 20);
+      // Smaller fingers = zoom in (radius shrinks)
+      cam.tRadius = CLAMP(cam.tRadius * (lastPinchDist / dist), 1.5, 22);
     }
-    lastPinchDist = d;
+    lastPinchDist = dist;
     return;
   }
 
   if (!dragActive) return;
+
+  // Apply orbit delta INSTANTLY to actual camera angles
   const dx = e.clientX - lastDragX;
   const dy = e.clientY - lastDragY;
-  lastDragX = e.clientX; lastDragY = e.clientY;
+  lastDragX = e.clientX;
+  lastDragY = e.clientY;
 
-  cam.tTheta -= dx * 0.006;
-  cam.tPhi    = CLAMP(cam.tPhi - dy * 0.006, -Math.PI * 0.47, Math.PI * 0.47);
+  cam.theta -= dx * ORBIT_SENS;
+  cam.phi    = CLAMP(cam.phi - dy * ORBIT_SENS, -1.45, 1.45);
 });
 
-const endPtr = e => {
+stage.addEventListener('pointerup', e => {
+  ptrs.delete(e.pointerId);
+  if (ptrs.size === 0) {
+    dragActive = false;
+    stage.classList.remove('grabbing');
+  } else if (ptrs.size === 1) {
+    // Dropped from pinch back to single-finger — resume drag
+    const remaining = [...ptrs.entries()][0];
+    dragActive = true;
+    lastDragX  = remaining[1].x;
+    lastDragY  = remaining[1].y;
+  }
+});
+stage.addEventListener('pointercancel', e => {
   ptrs.delete(e.pointerId);
   if (ptrs.size === 0) { dragActive = false; stage.classList.remove('grabbing'); }
-};
-stage.addEventListener('pointerup',     endPtr);
-stage.addEventListener('pointercancel', endPtr);
+});
 
-// Hover tracking — head tracks mouse gently when not dragging
+// Hover: head tracks mouse when not dragging
 stage.addEventListener('mousemove', e => {
   if (dragActive) return;
   const nx = (e.clientX / window.innerWidth)  * 2 - 1;
   const ny = (e.clientY / window.innerHeight) * 2 - 1;
-  marduk.setMouseTarget(nx * 0.5, ny * 0.28);
+  marduk.setMouseTarget(nx * 0.48, ny * 0.25);
 });
 
 // Scroll wheel zoom
 stage.addEventListener('wheel', e => {
-  const factor = 1 + e.deltaY * 0.0012;
-  cam.tRadius = CLAMP(cam.tRadius * factor, 1.5, 20);
+  const factor = 1 + e.deltaY * 0.0011;
+  cam.tRadius = CLAMP(cam.tRadius * factor, 1.5, 22);
 }, { passive: true });
 
-// ─── AUDIO ON UI ELEMENTS ────────────────────────────────────────────────────
-
-// Keypress sounds — wire to search input
+// ─── UI AUDIO ────────────────────────────────────────────────────────────────
 const searchInput = document.getElementById('search-input');
 let   _keyN = 0;
 searchInput.addEventListener('keydown', e => {
@@ -184,7 +193,6 @@ searchInput.addEventListener('keydown', e => {
   SFX.keypress(_keyN++);
 });
 
-// Button sounds — wire to any element with class 'abtn' or 'intro-begin'
 document.addEventListener('click', e => {
   if (e.target.classList.contains('abtn') ||
       e.target.classList.contains('intro-begin') ||
@@ -194,10 +202,10 @@ document.addEventListener('click', e => {
 });
 
 // ─── INTRO ───────────────────────────────────────────────────────────────────
-
 let started = false;
 function start() {
-  if (started) return; started = true;
+  if (started) return;
+  started = true;
   SFX.unlock();
   document.getElementById('intro').classList.add('hide');
   searchInput.focus();
@@ -208,6 +216,8 @@ document.getElementById('intro').addEventListener('click', e => {
 });
 
 // ─── RENDER LOOP ─────────────────────────────────────────────────────────────
+// Initial position
+positionCamera();
 
 let prevTime = 0;
 function tick(now) {
@@ -216,7 +226,10 @@ function tick(now) {
   const dt = Math.min(t - prevTime, 0.05);
   prevTime = t;
 
-  updateCamera(dt);
+  // Zoom lerp only — rotation is already at its target
+  cam.radius += (cam.tRadius - cam.radius) * Math.min(1, dt * 6);
+  positionCamera();
+
   env.update(t);
   marduk.update(t, dt);
   sparks.update(dt, camera);
