@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-<title>Tesseract Run · v2.1</title>
+<title>Tesseract Run · v2.3</title>
 <style>
   html, body {
     margin: 0; padding: 0; width: 100%; height: 100%;
@@ -50,8 +51,9 @@
   #overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.78);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 20px; z-index: 10;
-    text-align: center; padding: 20px; box-sizing: border-box;
+    gap: 18px; z-index: 10;
+    text-align: center; padding: 24px; box-sizing: border-box;
+    overflow-y: auto;
   }
   #overlay h1 {
     font-size: 42px; letter-spacing: 8px; margin: 0;
@@ -63,16 +65,39 @@
   #overlay p { max-width: 520px; line-height: 1.6; font-size: 13px; opacity: 0.85; letter-spacing: 1px; }
   #overlay .keys { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; font-size: 11px; letter-spacing: 2px; opacity: 0.75; }
   #overlay .keys span { border: 1px solid currentColor; padding: 6px 10px; }
-  #startBtn {
-    margin-top: 10px; padding: 14px 28px;
+  .panelBtn {
+    margin-top: 6px; padding: 12px 24px;
     background: transparent; border: 1px solid currentColor; color: currentColor;
-    font-family: inherit; font-size: 14px; letter-spacing: 4px;
+    font-family: inherit; font-size: 13px; letter-spacing: 4px;
     cursor: pointer; text-shadow: 0 0 8px currentColor;
     transition: background 140ms, box-shadow 140ms;
   }
-  #startBtn:hover { background: rgba(158,239,255,0.08); box-shadow: 0 0 22px currentColor; }
+  .panelBtn:hover { background: rgba(158,239,255,0.08); box-shadow: 0 0 22px currentColor; }
+  .panelBtn.primary { padding: 14px 28px; font-size: 14px; }
   #bottombar { bottom: 10px; left: 12px; right: 12px; display: flex; justify-content: space-between; font-size: 10px; opacity: 0.5; letter-spacing: 2px; }
+
+/* VICTORY SCREEN */
+#victoryScreen { display: none; flex-direction: column; align-items: center; gap: 18px; }
+#victoryScreen h1 {
+font-size: 64px; letter-spacing: 12px; margin: 0;
+background: linear-gradient(90deg, #ffd36b, #ff77c8, #9ef, #7cffb2, #ffd36b);
+background-size: 400% 100%;
+-webkit-background-clip: text; background-clip: text;
+-webkit-text-fill-color: transparent; color: transparent;
+animation: shimmer 3.5s linear infinite;
+text-shadow: 0 0 32px rgba(255,211,107,0.5);
+}
+#victoryScreen h2 { letter-spacing: 6px; opacity: 0.9; }
+#victoryStats {
+display: flex; gap: 32px; flex-wrap: wrap; justify-content: center;
+font-size: 13px; letter-spacing: 3px; opacity: 0.85;
+}
+#victoryStats .stat { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+#victoryStats .stat .v { font-size: 22px; color: #ffd36b; text-shadow: 0 0 12px #ffd36b; letter-spacing: 2px; }
+@keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 400% 50%; } }
+body.victory .hud { opacity: 0; transition: opacity 800ms; pointer-events: none; }
 </style>
+
 </head>
 <body>
 <canvas id="game"></canvas>
@@ -105,22 +130,35 @@
 </div>
 
 <div id="overlay">
-  <h2>MARDUKVERSE // TESSERACT PROTOCOL · v2.1</h2>
-  <h1>TESSERACT RUN</h1>
-  <p>Pilot the ship through a winding tesseract tunnel. Reach the wormhole at the end of each run.</p>
-  <div class="keys">
-    <span>← → ↑ ↓ MOVE</span>
-    <span>/ FIRE (unlocks L50)</span>
-    <span>ESC PAUSE</span>
+  <div id="startScreen">
+    <h2>TESSERACT RUN</h2>
+    <p id="startBlurb">A flight through the structure.</p>
+    <div class="keys">
+      <span>← → ↑ ↓ MOVE</span>
+      <span>/ FIRE</span>
+      <span>ESC PAUSE</span>
+    </div>
+    <button id="startBtn" class="panelBtn primary">BEGIN</button>
   </div>
-  <button id="startBtn">BEGIN</button>
+
+  <div id="victoryScreen">
+    <h2 id="victorySub">RUN COMPLETE</h2>
+    <h1>YOU DID IT!</h1>
+    <div id="victoryStats">
+      <div class="stat"><span class="label">SCORE</span><span class="v" id="vStatScore">0</span></div>
+      <div class="stat"><span class="label">DEPTH</span><span class="v" id="vStatLevel">0</span></div>
+    </div>
+    <button id="victoryBtn" class="panelBtn primary">PLAY AGAIN</button>
+  </div>
 </div>
 
 <script>
 "use strict";
 
 // ============================================================
-// TESSERACT RUN v2.1 — Full original + wide ship movement + tight collisions
+// TESSERACT RUN v2.3 — clean embed via URL params, victory pass
+// with fireworks + beauty fly-by, projection-coherent ship
+// collisions. Single file, no dependencies.
 // ============================================================
 
 const CANVAS = document.getElementById('game');
@@ -141,11 +179,20 @@ window.addEventListener('resize', resize);
 resize();
 
 // URL PARAMS
+//   ?level=N           — start AND end at single level N
+//   ?range=x-y         — play levels x through y (hyphen)
+//   ?range=x,y         — play levels x through y (comma)
+//   ?redirect=URL      — go to URL when range completes; otherwise victory page
+//   (none)             — full game, levels 1 to 1000
 const params = new URLSearchParams(window.location.search);
 let LEVEL_START = 1, LEVEL_END = 1000;
-const rng = params.get('range');
-if (rng) {
-  const m = rng.match(/^(\d+)\s*-\s*(\d+)$/);
+const lvlParam = params.get('level');
+const rngParam = params.get('range');
+if (lvlParam) {
+  const n = Math.max(1, Math.min(1000, parseInt(lvlParam) || 1));
+  LEVEL_START = n; LEVEL_END = n;
+} else if (rngParam) {
+  const m = rngParam.match(/^(\d+)\s*[-,]\s*(\d+)$/);
   if (m) {
     LEVEL_START = Math.max(1, Math.min(1000, parseInt(m[1])));
     LEVEL_END = Math.max(LEVEL_START, Math.min(1000, parseInt(m[2])));
@@ -153,12 +200,10 @@ if (rng) {
 }
 const REDIRECT = params.get('redirect');
 
+// ============================================================
 // AUDIO
-let AC = null;
-let masterGain = null;
-let engineNode = null;
-let engineGain = null;
-let audioReady = false;
+// ============================================================
+let AC = null, masterGain = null, engineNode = null, engineGain = null, audioReady = false;
 
 function initAudio() {
   if (audioReady) return;
@@ -210,10 +255,10 @@ function noise(dur, vol=0.3, filterFreq=1500) {
 }
 
 const SFX = {
-  fire: () => blip(820, 0.14, 'square', 0.18, -600),
-  hit: () => { blip(140, 0.25, 'sawtooth', 0.35, -90); noise(0.2, 0.25, 700); },
-  bigHit: () => { blip(70, 0.45, 'sawtooth', 0.45, -40); noise(0.4, 0.4, 500); },
-  wormhole: () => {
+  fire:    () => blip(820, 0.14, 'square', 0.18, -600),
+  hit:     () => { blip(140, 0.25, 'sawtooth', 0.35, -90); noise(0.2, 0.25, 700); },
+  bigHit:  () => { blip(70, 0.45, 'sawtooth', 0.45, -40); noise(0.4, 0.4, 500); blip(180, 0.3, 'square', 0.3, -150); },
+  wormhole:() => {
     blip(220, 0.4, 'sine', 0.3, 600);
     setTimeout(()=>blip(330, 0.4, 'sine', 0.3, 600), 80);
     setTimeout(()=>blip(440, 0.4, 'sine', 0.3, 600), 160);
@@ -227,7 +272,7 @@ const SFX = {
     setTimeout(()=>blip(784, 0.12, 'triangle', 0.3), 160);
     setTimeout(()=>blip(1046, 0.2, 'triangle', 0.3), 240);
   },
-  damage: () => blip(180, 0.12, 'square', 0.25, -100),
+  damage:  () => blip(180, 0.12, 'square', 0.25, -100),
   destroy: () => { noise(0.3, 0.35, 1200); blip(400, 0.2, 'sawtooth', 0.2, -200); },
   powerup: () => {
     blip(440, 0.1, 'sine', 0.3);
@@ -235,10 +280,23 @@ const SFX = {
     setTimeout(()=>blip(880, 0.15, 'sine', 0.35), 140);
     setTimeout(()=>blip(1320, 0.2, 'sine', 0.35), 210);
   },
-  bounce: () => blip(380, 0.06, 'triangle', 0.18, -120)
+  bounce:  () => blip(380, 0.06, 'triangle', 0.18, -120),
+  firework: () => {
+    blip(800 + Math.random()*600, 0.04, 'square', 0.12);
+    setTimeout(()=>noise(0.25, 0.18, 4000), 30);
+  },
+  victory: () => {
+    // Triumphant ascending arpeggio over a sustained pad
+    const seq = [261, 329, 392, 523, 659, 784, 1046];
+    seq.forEach((f, i) => setTimeout(()=>blip(f, 0.18, 'triangle', 0.3), i * 90));
+    setTimeout(()=>blip(1318, 0.5, 'triangle', 0.4), seq.length * 90);
+    setTimeout(()=>blip(1568, 0.7, 'sine', 0.35), seq.length * 90 + 80);
+  }
 };
 
+// ============================================================
 // INPUT
+// ============================================================
 const KEY = {};
 window.addEventListener('keydown', e => {
   if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','/',' '].includes(e.key)) e.preventDefault();
@@ -257,17 +315,21 @@ CANVAS.addEventListener('touchstart', e => {
 }, {passive:false});
 CANVAS.addEventListener('touchmove', e => {
   if (!touchActive) return;
-  ship.vx += (e.touches[0].clientX - touchX) * 0.01;
-  ship.vy += (e.touches[0].clientY - touchY) * 0.01;
+  if (state === 'playing') {
+    ship.vx += (e.touches[0].clientX - touchX) * 0.012;
+    ship.vy += (e.touches[0].clientY - touchY) * 0.012;
+  }
   touchX = e.touches[0].clientX; touchY = e.touches[0].clientY;
   e.preventDefault();
 }, {passive:false});
 CANVAS.addEventListener('touchend', () => {
   touchActive = false;
-  if (performance.now() - tapT < 220 && torpedoUnlocked) fireTorpedo();
+  if (performance.now() - tapT < 220 && torpedoUnlocked && state === 'playing') fireTorpedo();
 });
 
+// ============================================================
 // MATH / PROJECTION
+// ============================================================
 const FOCAL = 520;
 const NEAR = 20;
 const FAR = 3600;
@@ -315,7 +377,9 @@ function seededRandom(seed) {
 function lerp(a, b, t) { return a + (b - a) * t; }
 function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
 
+// ============================================================
 // PROGRESSION
+// ============================================================
 function levelHue(lvl) { return (180 + (lvl - 1) * 0.36) % 360; }
 function levelPalette(lvl) {
   const h = levelHue(lvl);
@@ -334,9 +398,7 @@ function maxHPForLevel(lvl) {
   return 450;
 }
 
-function hpBarPixelWidth(maxHP) {
-  return Math.min(420, 220 + (maxHP - 100) * 0.6);
-}
+function hpBarPixelWidth(maxHP) { return Math.min(420, 220 + (maxHP - 100) * 0.6); }
 
 function torpedoSpec(lvl) {
   const count      = lvl >= 900 ? 5 : lvl >= 750 ? 3 : lvl >= 500 ? 2 : 1;
@@ -359,13 +421,14 @@ function weaponLabel(lvl) {
   return 'MK-V SWARM';
 }
 
+// ============================================================
 // GAME STATE
+// ============================================================
 const ship = {
   x: 0, y: 0, vx: 0, vy: 0,
   bank: 0, pitch: 0,
   maxHP: 100, hp: 100,
-  shake: 0,
-  invuln: 0
+  shake: 0, invuln: 0
 };
 
 let state = 'menu';
@@ -381,52 +444,130 @@ let obstacles = [];
 let torpedoes = [];
 let sparks = [];
 let enemyShots = [];
+let shockwaves = [];
 let bgStars = [];
 let bgStructures = [];
 let ringObj = null;
 let torpedoUnlocked = false;
 let torpedoCooldown = 0;
-let shakeX = 0, shakeY = 0;
-let flashUntil = 0;
-let flashHue = 0;
+let shakeX = 0, shakeY = 0;          // ship-only shake
+let worldShake = 0;                   // env shake amount (decaying)
+let worldShakeX = 0, worldShakeY = 0; // env shake offsets per frame
+let flashUntil = 0, flashHue = 0;
+let vignetteUntil = 0, vignetteHue = 0;
+let slowMoUntil = 0;
 let transitionLock = false;
+let victoryTime = 0;                  // frames since victory began (state === 'victory')
+let fireworks = [];                   // active firework particles
 
 const TUNNEL_RADIUS = 180;
 
-// BACKGROUND
+// ============================================================
+// BACKGROUND (restored & polished)
+// ============================================================
 function initBackground() {
   bgStars = [];
-  for (let i = 0; i < 360; i++) {
+  for (let i = 0; i < 420; i++) {
     bgStars.push({
       a: Math.random() * Math.PI * 2,
-      r: 0.5 + Math.random() * 0.9,
-      d: 0.2 + Math.random() * 0.8,
+      r: 0.5 + Math.random() * 1.0,
+      d: 0.2 + Math.random() * 0.85,
       tw: Math.random() * Math.PI * 2
     });
   }
   bgStructures = [];
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 10; i++) {
     bgStructures.push({
       a: Math.random() * Math.PI * 2,
-      r: 260 + Math.random() * 200,
+      r: 240 + Math.random() * 220,
       rot: Math.random() * Math.PI * 2,
-      rotSp: (Math.random() - 0.5) * 0.002,
+      rotSp: (Math.random() - 0.5) * 0.0024,
       kind: Math.floor(Math.random() * 3),
-      size: 40 + Math.random() * 60
+      size: 40 + Math.random() * 70
     });
   }
 }
 initBackground();
 
-function drawBackground(pal) {
+function drawBackground(pal, t) {
+  // Deep gradient
   const g = CTX.createRadialGradient(CX, CY, 0, CX, CY, Math.max(W, H) * 0.7);
-  g.addColorStop(0, `hsla(${pal.h}, 60%, 10%, 1)`);
-  g.addColorStop(1, '#000');
+  g.addColorStop(0,   `hsla(${pal.h}, 60%, 11%, 1)`);
+  g.addColorStop(0.55,`hsla(${(pal.h+20)%360}, 55%, 5%, 1)`);
+  g.addColorStop(1,   '#000');
   CTX.fillStyle = g;
   CTX.fillRect(0, 0, W, H);
+
+  // Star field — twinkling, slowly rotating with camera
+  CTX.save();
+  CTX.translate(CX, CY);
+  for (const s of bgStars) {
+    const tw = 0.55 + 0.45 * Math.sin(t * 0.003 + s.tw);
+    const x = Math.cos(s.a + cameraZ * 0.00002) * s.d * Math.max(W, H) * 0.55;
+    const y = Math.sin(s.a + cameraZ * 0.00002) * s.d * Math.max(W, H) * 0.55;
+    CTX.fillStyle = `hsla(${pal.h + (s.d * 60 - 30)}, 75%, ${55 + tw * 30}%, ${0.5 * tw})`;
+    CTX.fillRect(x, y, s.r, s.r);
+  }
+  CTX.restore();
+
+  // Distant wireframe structures (more appear at higher levels)
+  const structCount = 2 + Math.floor(pal.chaos * 12);
+  CTX.save();
+  CTX.translate(CX, CY);
+  CTX.lineWidth = 1;
+  for (let i = 0; i < Math.min(structCount, bgStructures.length); i++) {
+    const s = bgStructures[i];
+    s.rot += s.rotSp;
+    const ox = Math.cos(s.a) * s.r;
+    const oy = Math.sin(s.a) * s.r;
+    CTX.strokeStyle = `hsla(${pal.h + i * 30}, 65%, 55%, 0.18)`;
+    drawBgShape(ox, oy, s.size, s.rot, s.kind);
+  }
+  CTX.restore();
+
+  // Lightning at high chaos
+  if (pal.chaos > 0.65 && Math.random() < 0.025) {
+    CTX.strokeStyle = `hsla(${pal.h}, 90%, 80%, ${0.18 + Math.random()*0.22})`;
+    CTX.lineWidth = 0.6;
+    CTX.beginPath();
+    let x = Math.random() * W, y = 0;
+    CTX.moveTo(x, y);
+    while (y < H) { x += (Math.random() - 0.5) * 90; y += 22 + Math.random() * 44; CTX.lineTo(x, y); }
+    CTX.stroke();
+  }
 }
 
-// TUNNEL
+function drawBgShape(x, y, size, rot, kind) {
+  CTX.save();
+  CTX.translate(x, y);
+  CTX.rotate(rot);
+  CTX.beginPath();
+  if (kind === 0) {
+    CTX.rect(-size, -size, size*2, size*2);
+    CTX.rect(-size*0.55, -size*0.55, size*1.1, size*1.1);
+    CTX.moveTo(-size, -size); CTX.lineTo(-size*0.55, -size*0.55);
+    CTX.moveTo( size, -size); CTX.lineTo( size*0.55, -size*0.55);
+    CTX.moveTo(-size,  size); CTX.lineTo(-size*0.55,  size*0.55);
+    CTX.moveTo( size,  size); CTX.lineTo( size*0.55,  size*0.55);
+  } else if (kind === 1) {
+    for (let a = 0; a < 6; a++) {
+      const px = Math.cos(a / 6 * Math.PI * 2) * size;
+      const py = Math.sin(a / 6 * Math.PI * 2) * size;
+      if (a === 0) CTX.moveTo(px, py); else CTX.lineTo(px, py);
+    }
+    CTX.closePath();
+  } else {
+    CTX.moveTo(0, -size); CTX.lineTo(size, 0); CTX.lineTo(0, size); CTX.lineTo(-size, 0); CTX.closePath();
+    CTX.moveTo(-size, 0); CTX.lineTo(size, 0);
+    CTX.moveTo(0, -size); CTX.lineTo(0, size);
+  }
+  CTX.stroke();
+  CTX.restore();
+}
+
+// ============================================================
+// TUNNEL — with bloom-style multi-stroke glow
+// ============================================================
 const TUNNEL_STEP = 180;
 const TUNNEL_DEPTH = 24;
 
@@ -457,9 +598,10 @@ function drawTunnel(pal) {
     const tDepth = 1 - clamp(relZ / FAR, 0, 1);
     const alpha = 0.15 + tDepth * 0.75;
     const hueShift = (segIdx * 0.5) % 30;
-    CTX.strokeStyle = `hsla(${pal.h + hueShift}, 75%, ${35 + tDepth * 40}%, ${alpha})`;
-    CTX.lineWidth = 1 + tDepth * 0.8;
 
+    // Glow pass — wider, low alpha
+    CTX.strokeStyle = `hsla(${pal.h + hueShift}, 90%, ${55 + tDepth * 25}%, ${alpha * 0.35})`;
+    CTX.lineWidth = (1 + tDepth * 0.8) * 3;
     CTX.beginPath();
     for (let k = 0; k < pts.length; k++) {
       const p = pts[k];
@@ -468,9 +610,22 @@ function drawTunnel(pal) {
     CTX.closePath();
     CTX.stroke();
 
+    // Crisp pass
+    CTX.strokeStyle = `hsla(${pal.h + hueShift}, 75%, ${35 + tDepth * 40}%, ${alpha})`;
+    CTX.lineWidth = 1 + tDepth * 0.8;
+    CTX.beginPath();
+    for (let k = 0; k < pts.length; k++) {
+      const p = pts[k];
+      if (k === 0) CTX.moveTo(p.x, p.y); else CTX.lineTo(p.x, p.y);
+    }
+    CTX.closePath();
+    CTX.stroke();
+
+    // Nested inner ring (tesseract feel)
     if (segIdx % 4 === 0) {
       const inner = tunnelRingPoints(segIdx, absZ, 0.6);
-      CTX.strokeStyle = `hsla(${pal.h + 60}, 80%, ${40 + tDepth * 30}%, ${alpha * 0.6})`;
+      CTX.strokeStyle = `hsla(${pal.h + 60}, 85%, ${45 + tDepth * 30}%, ${alpha * 0.65})`;
+      CTX.lineWidth = 0.9 + tDepth * 0.5;
       CTX.beginPath();
       for (let k = 0; k < inner.length; k++) {
         const p = inner[k];
@@ -479,14 +634,15 @@ function drawTunnel(pal) {
       CTX.closePath();
       CTX.stroke();
       CTX.beginPath();
-      for (let k = 0; k < pts.length; k += 1) {
+      for (let k = 0; k < pts.length; k++) {
         CTX.moveTo(pts[k].x, pts[k].y); CTX.lineTo(inner[k].x, inner[k].y);
       }
       CTX.stroke();
     }
 
+    // Connecting longitudinal lines (tunnel walls)
     if (lastPts.length === pts.length) {
-      CTX.strokeStyle = `hsla(${pal.h}, 55%, ${25 + tDepth * 25}%, ${alpha * 0.5})`;
+      CTX.strokeStyle = `hsla(${pal.h}, 55%, ${25 + tDepth * 25}%, ${alpha * 0.55})`;
       CTX.lineWidth = 0.8;
       CTX.beginPath();
       for (let k = 0; k < pts.length; k++) {
@@ -499,39 +655,35 @@ function drawTunnel(pal) {
   }
 }
 
-// OBSTACLES
+// ============================================================
+// OBSTACLES & ENEMIES
+// ============================================================
 const OBS = {
-  CUBE:       { id: 'cube',       hp: 1,  dmg: 15, rad: 28, shootable: true,  score: 10 },
-  ASTEROID_S: { id: 'asteroid_s', hp: 1,  dmg: 12, rad: 24, shootable: true,  score: 12 },
-  ASTEROID_L: { id: 'asteroid_l', hp: 3,  dmg: 28, rad: 46, shootable: true,  score: 30, splits: true },
-  TETRA:      { id: 'tetra',      hp: 2,  dmg: 20, rad: 32, shootable: true,  score: 18 },
-  MINE:       { id: 'mine',       hp: 1,  dmg: 40, rad: 22, shootable: true,  score: 25, flashy: true },
-  ENEMY:      { id: 'enemy',      hp: 2,  dmg: 18, rad: 28, shootable: true,  score: 40, fires: true },
-  BOSS:       { id: 'boss',       hp: 6,  dmg: 35, rad: 50, shootable: true,  score: 120, fires: true },
-  WALL:       { id: 'wall',       hp: 999, dmg: 50, rad: 80, shootable: false, score: 0, isWall: true }
+  CUBE:       { id: 'cube',       hp: 1,   dmg: 15, rad: 28, shootable: true,  score: 10 },
+  ASTEROID_S: { id: 'asteroid_s', hp: 1,   dmg: 12, rad: 24, shootable: true,  score: 12 },
+  ASTEROID_L: { id: 'asteroid_l', hp: 3,   dmg: 28, rad: 46, shootable: true,  score: 30, splits: true },
+  TETRA:      { id: 'tetra',      hp: 2,   dmg: 20, rad: 32, shootable: true,  score: 18 },
+  MINE:       { id: 'mine',       hp: 1,   dmg: 40, rad: 22, shootable: true,  score: 25, flashy: true },
+  ENEMY:      { id: 'enemy',      hp: 2,   dmg: 18, rad: 28, shootable: true,  score: 40, fires: true },
+  BOSS:       { id: 'boss',       hp: 6,   dmg: 35, rad: 50, shootable: true,  score: 120, fires: true },
+  WALL:       { id: 'wall',       hp: 999, dmg: 50, rad: 80, shootable: false, score: 0,   isWall: true }
 };
 
 function spawnObstacle(type, worldZ, x, y, extra = {}) {
   const def = OBS[type];
   obstacles.push({
-    type, def,
-    worldZ, x, y,
+    type, def, worldZ, x, y,
     vx: extra.vx || 0, vy: extra.vy || 0,
     rot: Math.random() * Math.PI * 2,
     rotSp: (Math.random() - 0.5) * 0.06,
-    hp: def.hp,
-    alive: true,
-    age: 0,
+    hp: def.hp, alive: true, age: 0,
     fireCd: 60 + Math.random() * 100,
     gapX: extra.gapX, gapY: extra.gapY, gapW: extra.gapW, gapH: extra.gapH
   });
 }
 
 function buildLevel(lvl) {
-  obstacles = [];
-  torpedoes = [];
-  sparks = [];
-  enemyShots = [];
+  obstacles = []; torpedoes = []; sparks = []; enemyShots = []; shockwaves = [];
   ringObj = null;
   runRand = seededRandom(lvl * 9973 + 17);
   const rnd = runRand;
@@ -557,9 +709,7 @@ function buildLevel(lvl) {
     const type = available[Math.floor(rnd() * available.length)];
 
     if (pattern === 0) {
-      const x = (rnd() - 0.5) * TUNNEL_RADIUS * 1.5;
-      const y = (rnd() - 0.5) * TUNNEL_RADIUS * 1.5;
-      spawnObstacle(type, z, x, y);
+      spawnObstacle(type, z, (rnd() - 0.5) * TUNNEL_RADIUS * 1.5, (rnd() - 0.5) * TUNNEL_RADIUS * 1.5);
       z += lerp(440, 220, Math.min(1, density/2));
     } else if (pattern === 1) {
       const n = 3 + Math.floor(rnd() * 3);
@@ -567,8 +717,7 @@ function buildLevel(lvl) {
       const gap = Math.floor(rnd() * n);
       for (let i = 0; i < n; i++) {
         if (i === gap) continue;
-        const xx = -TUNNEL_RADIUS + (i + 0.5) * (TUNNEL_RADIUS*2 / n);
-        spawnObstacle(type, z, xx, yy);
+        spawnObstacle(type, z, -TUNNEL_RADIUS + (i + 0.5) * (TUNNEL_RADIUS*2 / n), yy);
       }
       z += 520;
     } else if (pattern === 2) {
@@ -577,8 +726,7 @@ function buildLevel(lvl) {
       const gap = Math.floor(rnd() * n);
       for (let i = 0; i < n; i++) {
         if (i === gap) continue;
-        const yy = -TUNNEL_RADIUS + (i + 0.5) * (TUNNEL_RADIUS*2 / n);
-        spawnObstacle(type, z, xx, yy);
+        spawnObstacle(type, z, xx, -TUNNEL_RADIUS + (i + 0.5) * (TUNNEL_RADIUS*2 / n));
       }
       z += 520;
     } else if (pattern === 3) {
@@ -601,12 +749,10 @@ function buildLevel(lvl) {
     } else {
       const n = 2 + Math.floor(rnd() * 3);
       for (let i = 0; i < n; i++) {
-        const x = (rnd() - 0.5) * TUNNEL_RADIUS * 1.5;
-        const y = (rnd() - 0.5) * TUNNEL_RADIUS * 1.5;
-        spawnObstacle(type, z + i*80, x, y, {
-          vx: (rnd() - 0.5) * 0.6,
-          vy: (rnd() - 0.5) * 0.6
-        });
+        spawnObstacle(type, z + i*80,
+          (rnd() - 0.5) * TUNNEL_RADIUS * 1.5,
+          (rnd() - 0.5) * TUNNEL_RADIUS * 1.5,
+          { vx: (rnd() - 0.5) * 0.6, vy: (rnd() - 0.5) * 0.6 });
       }
       z += 520;
     }
@@ -631,23 +777,29 @@ function buildLevel(lvl) {
   const wlbl = document.getElementById('weaponLabel');
   const wval = document.getElementById('weapon');
   if (torpedoUnlocked) {
-    wlbl.style.display = 'block';
-    wval.style.display = 'block';
+    wlbl.style.display = 'block'; wval.style.display = 'block';
     wval.textContent = weaponLabel(lvl);
-  } else {
-    wlbl.style.display = 'none';
-    wval.style.display = 'none';
-  }
+  } else { wlbl.style.display = 'none'; wval.style.display = 'none'; }
 
   updateHP();
 }
 
-// SHIP - Wide movement, small size, good banking
+// ============================================================
+// SHIP
+// ============================================================
+// SHIP_DEPTH is the world-space distance from the camera to the ship.
+// Both the ship's RENDER position AND its COLLISION z use this value, so
+// the ship visually occupies the same projected plane as any obstacle at
+// the ship's z. This is what makes obstacle ↔ ship collisions look honest.
+const SHIP_DEPTH = 280;
+const SHIP_RAD = 15;          // tunnel-local; matches the on-screen sprite half-width
+const SHIP_SCREEN_LIFT = 0.20; // fraction of screen height; pushes ship into the lower band
+
 function updateShip(dt) {
   const accel = 2.7;
   const friction = 0.81;
   const maxV = 27;
-  const limit = TUNNEL_RADIUS - 6;
+  const limit = TUNNEL_RADIUS - SHIP_RAD; // ship sprite edge meets the tunnel wall
 
   if (KEY['ArrowLeft'])  ship.vx -= accel * dt;
   if (KEY['ArrowRight']) ship.vx += accel * dt;
@@ -663,17 +815,17 @@ function updateShip(dt) {
   ship.y += ship.vy * dt;
 
   let bounced = false;
-  if (ship.x > limit) { ship.x = limit; if (ship.vx > 1.2) bounced = true; ship.vx *= -0.6; }
+  if (ship.x >  limit) { ship.x =  limit; if (ship.vx >  1.2) bounced = true; ship.vx *= -0.6; }
   if (ship.x < -limit) { ship.x = -limit; if (ship.vx < -1.2) bounced = true; ship.vx *= -0.6; }
-  if (ship.y > limit) { ship.y = limit; if (ship.vy > 1.2) bounced = true; ship.vy *= -0.6; }
+  if (ship.y >  limit) { ship.y =  limit; if (ship.vy >  1.2) bounced = true; ship.vy *= -0.6; }
   if (ship.y < -limit) { ship.y = -limit; if (ship.vy < -1.2) bounced = true; ship.vy *= -0.6; }
   if (bounced) {
     SFX.bounce();
-    spawnSparks(ship.x, ship.y, cameraZ + 140, 6, 20);
+    spawnSparks(ship.x, ship.y, cameraZ + SHIP_DEPTH, 8, 22);
   }
 
-  ship.bank = lerp(ship.bank, -ship.vx * 0.06, 0.23);
-  ship.pitch = lerp(ship.pitch, ship.vy * 0.03, 0.25);
+  ship.bank  = lerp(ship.bank,  -ship.vx * 0.06, 0.23);
+  ship.pitch = lerp(ship.pitch,  ship.vy * 0.03, 0.25);
 
   if (ship.invuln > 0) ship.invuln -= dt;
   if (ship.shake > 0) {
@@ -690,23 +842,33 @@ function updateShip(dt) {
 }
 
 function drawShip(pal, t) {
-  const sx = CX + ship.x * 0.96;
-  const sy = CY + H * 0.07 + ship.y * 0.80;
-  const S = 44;
+  // Project the ship through the SAME projection pipeline as obstacles, at
+  // the same world Z used for collision detection. This makes the ship visually
+  // occupy the exact screen position it occupies in tunnel-local space — so
+  // when the math says an asteroid is overlapping the ship, the user sees it.
+  const shipP = projectAtZ(ship.x, ship.y, cameraZ + SHIP_DEPTH);
+  const sx = shipP.x;
+  const sy = shipP.y + H * SHIP_SCREEN_LIFT;
+  const S = 56; // sprite size — drawn fixed (ship is at fixed depth, sprite doesn't shrink)
+
+  // Chromatic aberration during heavy environment shake
+  const aberration = clamp(worldShake * 0.4, 0, 4);
 
   CTX.save();
   CTX.translate(sx + shakeX, sy + shakeY);
   CTX.rotate(ship.bank);
 
+  // Twin thruster glow plumes
   const plumePulse = 0.85 + 0.15 * Math.sin(t*0.03);
   const speedBoost = clamp(speed / 20, 0, 1);
-  const plumeLen = S * (0.8 + speedBoost * 0.6);
-
+  const plumeLen = S * (0.85 + speedBoost * 0.7);
   for (const side of [-1, 1]) {
     const tx = side * S * 0.14;
     const ty = S * 0.38;
     const grad = CTX.createRadialGradient(tx, ty + plumeLen*0.25, 0, tx, ty + plumeLen*0.25, plumeLen);
-    grad.addColorStop(0,   `hsla(${(pal.h+180)%360}, 100%, 90%, ${0.85 * plumePulse})`);
+    grad.addColorStop(0,   `hsla(${(pal.h+180)%360}, 100%, 92%, ${0.9 * plumePulse})`);
+    grad.addColorStop(0.3, `hsla(${(pal.h+170)%360}, 100%, 70%, ${0.55 * plumePulse})`);
+    grad.addColorStop(0.7, `hsla(${(pal.h+160)%360}, 90%, 55%, ${0.18 * plumePulse})`);
     grad.addColorStop(1,   'transparent');
     CTX.fillStyle = grad;
     CTX.fillRect(tx - plumeLen, ty, plumeLen*2, plumeLen*1.2);
@@ -714,14 +876,90 @@ function drawShip(pal, t) {
 
   CTX.fillStyle = `hsla(${pal.h}, 45%, 12%, 0.88)`;
   const hullColor = (ship.invuln > 0 && Math.floor(t/70) % 2) ? '#ffffff' : `hsl(${pal.h}, 85%, 78%)`;
-  CTX.strokeStyle = hullColor;
-  CTX.lineWidth = 1.5;
 
   const FORWARD_TILT = 0.58;
   const pitchScale = FORWARD_TILT + ship.pitch * 0.22;
   CTX.save();
   CTX.scale(1, pitchScale);
 
+  // Aberration ghosts: cyan and magenta side copies of the silhouette
+  if (aberration > 0.3) {
+    CTX.save();
+    CTX.globalCompositeOperation = 'lighter';
+    for (const [dx, hue] of [[-aberration, (pal.h+90)%360], [aberration, (pal.h-90+360)%360]]) {
+      CTX.translate(dx, 0);
+      CTX.strokeStyle = `hsla(${hue}, 95%, 70%, 0.6)`;
+      CTX.lineWidth = 1.2;
+      drawShipSilhouette(S);
+      CTX.stroke();
+      CTX.translate(-dx, 0);
+    }
+    CTX.restore();
+  }
+
+  // Hull
+  drawShipSilhouette(S);
+  CTX.fill();
+  CTX.strokeStyle = hullColor;
+  CTX.lineWidth = 1.5;
+  CTX.stroke();
+
+  // Top spine ridge
+  CTX.strokeStyle = `hsla(${pal.h}, 70%, 65%, 0.75)`;
+  CTX.lineWidth = 0.9;
+  CTX.beginPath();
+  CTX.moveTo(0, -S * 0.52);
+  CTX.lineTo(0,  S * 0.40);
+  CTX.stroke();
+
+  // Top-deck panel lines
+  CTX.strokeStyle = `hsla(${pal.h}, 60%, 50%, 0.55)`;
+  CTX.lineWidth = 0.6;
+  CTX.beginPath();
+  CTX.moveTo(-S * 0.09, -S * 0.25); CTX.lineTo(-S * 0.18, S * 0.32);
+  CTX.moveTo( S * 0.09, -S * 0.25); CTX.lineTo( S * 0.18, S * 0.32);
+  CTX.stroke();
+
+  // Canopy
+  CTX.fillStyle = `hsla(${(pal.h+40)%360}, 90%, 55%, 0.7)`;
+  CTX.strokeStyle = `hsla(${pal.h}, 80%, 70%, 0.8)`;
+  CTX.lineWidth = 0.8;
+  CTX.beginPath();
+  CTX.moveTo(0, -S * 0.32);
+  CTX.lineTo(-S * 0.055, -S * 0.14);
+  CTX.lineTo(0, -S * 0.07);
+  CTX.lineTo(S * 0.055, -S * 0.14);
+  CTX.closePath();
+  CTX.fill(); CTX.stroke();
+
+  // Wing leading-edge highlights
+  CTX.strokeStyle = `hsla(${pal.h}, 90%, 85%, 0.7)`;
+  CTX.lineWidth = 0.9;
+  CTX.beginPath();
+  CTX.moveTo( S * 0.12, -S * 0.08); CTX.lineTo( S * 0.52, S * 0.14);
+  CTX.moveTo(-S * 0.12, -S * 0.08); CTX.lineTo(-S * 0.52, S * 0.14);
+  CTX.stroke();
+
+  // Thruster cores
+  const coreR = S * 0.045 * plumePulse;
+  for (const side of [-1, 1]) {
+    const tx = side * S * 0.14;
+    const ty = S * 0.38;
+    CTX.fillStyle = `hsla(${(pal.h+180)%360}, 100%, 60%, 0.95)`;
+    CTX.beginPath();
+    CTX.ellipse(tx, ty, S * 0.07, S * 0.092, 0, 0, Math.PI*2);
+    CTX.fill();
+    CTX.fillStyle = '#ffffff';
+    CTX.beginPath();
+    CTX.arc(tx, ty, coreR, 0, Math.PI*2);
+    CTX.fill();
+  }
+
+  CTX.restore();
+  CTX.restore();
+}
+
+function drawShipSilhouette(S) {
   CTX.beginPath();
   CTX.moveTo(0, -S * 0.52);
   CTX.lineTo(S * 0.06, -S * 0.36);
@@ -735,19 +973,13 @@ function drawShip(pal, t) {
   CTX.lineTo(-S * 0.12, -S * 0.08);
   CTX.lineTo(-S * 0.06, -S * 0.36);
   CTX.closePath();
-  CTX.fill();
-  CTX.stroke();
-
-  CTX.restore();
-  CTX.restore();
 }
 
-// COLLISION - Tight to hull
-const SHIP_RAD = 19;
-
+// ============================================================
+// COLLISION
+// ============================================================
 function checkCollisions() {
-  const SHIP_WORLD_Z = cameraZ + 140;
-
+  const SHIP_WORLD_Z = cameraZ + SHIP_DEPTH;
   for (const o of obstacles) {
     if (!o.alive) continue;
     const dz = o.worldZ - SHIP_WORLD_Z;
@@ -755,7 +987,7 @@ function checkCollisions() {
       if (o.type === 'WALL') {
         const insideGap = Math.abs(ship.x - o.gapX) < (o.gapW - SHIP_RAD) &&
                           Math.abs(ship.y - o.gapY) < (o.gapH - SHIP_RAD);
-        if (!insideGap && ship.invuln <= 0) damageShip(o.def.dmg * 1.15, o.x, o.y);
+        if (!insideGap && ship.invuln <= 0) damageShip(o.def.dmg * 1.15, o.x, o.y, o.worldZ, o.def.rad * 1.6);
         continue;
       }
       const dx = ship.x - o.x;
@@ -765,7 +997,7 @@ function checkCollisions() {
       if (distSq < minDist * minDist && ship.invuln <= 0) {
         const overlap = minDist - Math.sqrt(distSq);
         const damage = Math.max(10, Math.floor(o.def.dmg * (overlap / 14)));
-        damageShip(damage, o.x + dx*0.65, o.y + dy*0.65);
+        damageShip(damage, o.x + dx*0.65, o.y + dy*0.65, o.worldZ, o.def.rad);
         if (o.def.shootable) hitObstacle(o, 99);
       }
     }
@@ -778,19 +1010,34 @@ function checkCollisions() {
       const dy = ship.y - s.y;
       if (dx*dx + dy*dy < 38*38) {
         s.life = 0;
-        if (ship.invuln <= 0) damageShip(14, s.x, s.y);
+        if (ship.invuln <= 0) damageShip(14, s.x, s.y, s.worldZ, 30);
       }
     }
   }
 }
 
-function damageShip(amount, sx, sy) {
+function damageShip(amount, sx, sy, sz, sourceRad) {
   ship.hp -= amount;
   ship.invuln = 40;
   ship.shake = Math.min(45, amount * 1.3);
   SFX.damage();
   if (amount > 25) SFX.bigHit();
-  spawnSparks(sx || ship.x, sy || ship.y, cameraZ + 140, 24, 40);
+
+  // World shake — bigger for bigger hits, the whole environment rumbles
+  worldShake = Math.min(28, worldShake + amount * 0.4);
+
+  // Shockwave at impact point (3D)
+  spawnShockwave(sx ?? ship.x, sy ?? ship.y, sz ?? (cameraZ + SHIP_DEPTH), Math.max(80, (sourceRad || 30) * 2.4));
+
+  // Big spark burst
+  spawnSparks(sx ?? ship.x, sy ?? ship.y, sz ?? (cameraZ + SHIP_DEPTH), 28, 44);
+
+  // Damage vignette — red flash from screen edges
+  triggerVignette(0, amount > 25 ? 600 : 360);
+
+  // Slow-mo on big hits
+  if (amount > 25) slowMoUntil = performance.now() + 280;
+
   updateHP();
   if (ship.hp <= 0) gameOver();
 }
@@ -801,12 +1048,15 @@ function hitObstacle(o, dmg) {
   if (o.hp <= 0) {
     o.alive = false;
     SFX.destroy();
-    spawnSparks(o.x, o.y, o.worldZ, 28, o.def.rad * 1.6);
+    spawnSparks(o.x, o.y, o.worldZ, 30, o.def.rad * 1.6);
+    spawnShockwave(o.x, o.y, o.worldZ, o.def.rad * 1.8);
     score += o.def.score;
     updateScore();
     if (o.def.splits) {
       for (let i = 0; i < 2; i++) {
-        spawnObstacle('ASTEROID_S', o.worldZ + (Math.random()-0.5)*40, o.x + (Math.random()-0.5)*20, o.y + (Math.random()-0.5)*20, {vx: (Math.random()-0.5)*1.2, vy: (Math.random()-0.5)*1.2});
+        spawnObstacle('ASTEROID_S', o.worldZ + (Math.random()-0.5)*40,
+          o.x + (Math.random()-0.5)*20, o.y + (Math.random()-0.5)*20,
+          {vx: (Math.random()-0.5)*1.2, vy: (Math.random()-0.5)*1.2});
       }
     }
   } else {
@@ -814,18 +1064,165 @@ function hitObstacle(o, dmg) {
   }
 }
 
+// ============================================================
+// SHOCKWAVES — expanding rings in world space at impact points
+// ============================================================
+function spawnShockwave(x, y, worldZ, maxRadius) {
+  shockwaves.push({
+    x, y, worldZ,
+    radius: 4, maxRadius,
+    life: 32, maxLife: 32,
+    hue: Math.random() * 40 - 20
+  });
+}
+
+function updateShockwaves(dt) {
+  for (const s of shockwaves) {
+    const t = 1 - (s.life / s.maxLife);
+    s.radius = lerp(4, s.maxRadius, Math.pow(t, 0.55));
+    s.life -= dt;
+  }
+  shockwaves = shockwaves.filter(s => s.life > 0);
+}
+
+function drawShockwaves(pal) {
+  for (const s of shockwaves) {
+    const relZ = s.worldZ - cameraZ;
+    if (relZ < NEAR || relZ > FAR) continue;
+    const t = Math.max(0, s.life / s.maxLife);
+    const center = projectAtZ(s.x, s.y, s.worldZ);
+    if (center.culled) continue;
+    const projR = Math.max(2, center.s * s.radius);
+    const hue = (pal.h + 60 + s.hue) % 360;
+
+    // Outer glow
+    CTX.save();
+    CTX.lineWidth = 3 + (1 - t) * 6;
+    CTX.strokeStyle = `hsla(${hue}, 100%, 75%, ${0.5 * t})`;
+    CTX.beginPath();
+    CTX.arc(center.x, center.y, projR, 0, Math.PI*2);
+    CTX.stroke();
+
+    // Crisp inner ring
+    CTX.lineWidth = 1.4;
+    CTX.strokeStyle = `hsla(${hue}, 100%, 90%, ${0.85 * t})`;
+    CTX.beginPath();
+    CTX.arc(center.x, center.y, projR, 0, Math.PI*2);
+    CTX.stroke();
+    CTX.restore();
+  }
+}
+
+// ============================================================
+// FIREWORKS — screen-space, only used during the victory state.
+// Each firework is either a 'rocket' (trail rising) or 'burst' (radial shower).
+// ============================================================
+function spawnFireworkRocket() {
+  const x = W * (0.15 + Math.random() * 0.7);
+  const targetY = H * (0.15 + Math.random() * 0.35);
+  const startY = H + 20;
+  const totalDist = startY - targetY;
+  const speed = 6 + Math.random() * 3;
+  fireworks.push({
+    kind: 'rocket',
+    x, y: startY,
+    vx: (Math.random() - 0.5) * 0.6,
+    vy: -speed,
+    targetY,
+    hue: Math.floor(Math.random() * 360),
+    life: totalDist / speed + 4,
+    trail: []
+  });
+}
+
+function spawnFireworkBurst(x, y, hue) {
+  const n = 60 + Math.floor(Math.random() * 40);
+  const ringMode = Math.random() < 0.35;
+  const sparkleHue = hue;
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2 + (ringMode ? 0 : Math.random() * 0.4);
+    const v = ringMode ? (4 + Math.random() * 1.5) : (1 + Math.random() * 5);
+    fireworks.push({
+      kind: 'burst',
+      x, y,
+      vx: Math.cos(a) * v,
+      vy: Math.sin(a) * v,
+      hue: sparkleHue + (Math.random() - 0.5) * 60,
+      life: 70 + Math.random() * 35,
+      maxLife: 105,
+      gravity: 0.06 + Math.random() * 0.04,
+      drag: 0.96 + Math.random() * 0.02,
+      sparkle: Math.random()
+    });
+  }
+  SFX.firework();
+}
+
+function updateFireworks(dt) {
+  for (const f of fireworks) {
+    if (f.kind === 'rocket') {
+      f.trail.push({ x: f.x, y: f.y, life: 12 });
+      f.x += f.vx * dt;
+      f.y += f.vy * dt;
+      f.life -= dt;
+      // Burst when reaching target
+      if (f.y <= f.targetY || f.life <= 0) {
+        spawnFireworkBurst(f.x, f.y, f.hue);
+        f.life = -1;
+      }
+      for (const tr of f.trail) tr.life -= dt;
+      f.trail = f.trail.filter(tr => tr.life > 0);
+    } else {
+      f.vy += f.gravity * dt;
+      f.vx *= Math.pow(f.drag, dt);
+      f.vy *= Math.pow(f.drag, dt);
+      f.x += f.vx * dt;
+      f.y += f.vy * dt;
+      f.life -= dt;
+    }
+  }
+  fireworks = fireworks.filter(f => f.life > 0);
+}
+
+function drawFireworks() {
+  CTX.save();
+  CTX.globalCompositeOperation = 'lighter';
+  for (const f of fireworks) {
+    if (f.kind === 'rocket') {
+      // Rising trail
+      for (const tr of f.trail) {
+        const a = clamp(tr.life / 12, 0, 1);
+        CTX.fillStyle = `hsla(${f.hue}, 90%, ${60 + a*30}%, ${a * 0.85})`;
+        CTX.fillRect(tr.x - 1, tr.y - 1, 2, 2);
+      }
+      // Hot tip
+      CTX.fillStyle = `hsla(${f.hue}, 100%, 95%, 1)`;
+      CTX.fillRect(f.x - 1.5, f.y - 1.5, 3, 3);
+    } else {
+      const a = clamp(f.life / f.maxLife, 0, 1);
+      const sparkle = (Math.sin(f.sparkle * 30 + (f.maxLife - f.life) * 0.4) * 0.5 + 0.5);
+      const size = (1.5 + sparkle * 1.5) * Math.max(0.4, a);
+      CTX.fillStyle = `hsla(${f.hue}, 100%, ${55 + a*40}%, ${a * (0.7 + 0.3*sparkle)})`;
+      CTX.fillRect(f.x - size, f.y - size, size*2, size*2);
+    }
+  }
+  CTX.restore();
+}
+
+// ============================================================
 // SPARKS
+// ============================================================
 function spawnSparks(x, y, worldZ, n, spread) {
   for (let i = 0; i < n; i++) {
     const a = Math.random() * Math.PI * 2;
-    const v = 0.8 + Math.random() * 2.8;
+    const v = 0.8 + Math.random() * 3.0;
     sparks.push({
       x, y, worldZ,
       vx: Math.cos(a) * v,
       vy: Math.sin(a) * v,
       vz: (Math.random() - 0.5) * 5,
-      life: 26 + Math.random() * 44,
-      maxLife: 58,
+      life: 28 + Math.random() * 50,
+      maxLife: 64,
       hue: Math.random() * 80
     });
   }
@@ -849,38 +1246,52 @@ function drawSparks(pal) {
     const p = projectAtZ(s.x, s.y, s.worldZ);
     if (p.culled) continue;
     const t = s.life / s.maxLife;
-    CTX.fillStyle = `hsla(${pal.h + s.hue}, 95%, ${75*t + 25}%, ${t})`;
     const size = Math.max(1.8, p.s * 5.5 * t);
+    // glow
+    CTX.fillStyle = `hsla(${pal.h + s.hue}, 95%, 80%, ${0.45 * t})`;
+    CTX.fillRect(p.x - size, p.y - size, size*2, size*2);
+    // core
+    CTX.fillStyle = `hsla(${pal.h + s.hue}, 95%, ${75*t + 25}%, ${t})`;
     CTX.fillRect(p.x - size/2, p.y - size/2, size, size);
   }
 }
 
+// ============================================================
 // TORPEDOES
+// ============================================================
 function fireTorpedo() {
   const spec = torpedoSpec(level);
-  const originZ = cameraZ + 140;
+  const originZ = cameraZ + SHIP_DEPTH;
   for (let i = 0; i < spec.count; i++) {
     const mid = (spec.count - 1) / 2;
     const spread = (i - mid);
     const lateral = spread * 10;
     const angleX = spread * 0.04;
     torpedoes.push({
-      x: ship.x + lateral,
-      y: ship.y,
-      worldZ: originZ,
+      x: ship.x + lateral, y: ship.y, worldZ: originZ,
       vx: ship.vx * 0.15 + Math.sin(angleX) * spec.speed,
       vy: ship.vy * 0.15,
       vz: Math.cos(angleX) * spec.speed,
       life: 320,
-      homing: spec.homing,
-      splits: spec.splits,
-      splitCount: spec.splitCount,
-      radius: spec.radius,
-      damage: spec.damage,
-      isChild: false
+      homing: spec.homing, splits: spec.splits, splitCount: spec.splitCount,
+      radius: spec.radius, damage: spec.damage, isChild: false
     });
   }
   SFX.fire();
+}
+
+function spawnSplitFragments(parent, hitX, hitY, hitZ) {
+  for (let i = 0; i < parent.splitCount; i++) {
+    const a = (i / parent.splitCount) * Math.PI * 2 + Math.random() * 0.3;
+    torpedoes.push({
+      x: hitX, y: hitY, worldZ: hitZ + 20,
+      vx: Math.cos(a) * 3.5, vy: Math.sin(a) * 3.5, vz: 9,
+      life: 160,
+      homing: true, splits: false, splitCount: 0,
+      radius: parent.radius * 0.75, damage: Math.max(1, parent.damage - 1),
+      isChild: true
+    });
+  }
 }
 
 function updateTorpedoes(dt) {
@@ -896,14 +1307,10 @@ function updateTorpedoes(dt) {
         if (d < bestD) { bestD = d; best = o; }
       }
       if (best) {
-        const dx = best.x - t.x;
-        const dy = best.y - t.y;
+        const dx = best.x - t.x, dy = best.y - t.y;
         const dz = Math.max(1, best.worldZ - t.worldZ);
-        const desiredVx = (dx / dz) * t.vz;
-        const desiredVy = (dy / dz) * t.vz;
-        const turn = 0.15;
-        t.vx = lerp(t.vx, desiredVx, turn);
-        t.vy = lerp(t.vy, desiredVy, turn);
+        t.vx = lerp(t.vx, (dx / dz) * t.vz, 0.15);
+        t.vy = lerp(t.vy, (dy / dz) * t.vz, 0.15);
       }
     }
     t.worldZ += t.vz * dt;
@@ -936,33 +1343,36 @@ function drawTorpedoes(pal) {
     if (p.culled) continue;
     const s = Math.max(1, p.s * t.radius * 0.9);
     const hue = t.homing ? (pal.h + 100) % 360 : (pal.h + 160) % 360;
+    // outer glow
+    CTX.fillStyle = `hsla(${hue}, 100%, 75%, 0.35)`;
+    CTX.beginPath(); CTX.arc(p.x, p.y, s * 2.2, 0, Math.PI*2); CTX.fill();
+    // mid
     CTX.fillStyle = `hsl(${hue}, 95%, 80%)`;
+    CTX.beginPath(); CTX.arc(p.x, p.y, s, 0, Math.PI*2); CTX.fill();
+    // ring
     CTX.strokeStyle = `hsl(${hue}, 95%, 65%)`;
-    CTX.beginPath();
-    CTX.arc(p.x, p.y, s, 0, Math.PI*2);
-    CTX.fill();
-    CTX.save();
-    CTX.globalAlpha = 0.4;
-    CTX.beginPath();
-    CTX.arc(p.x, p.y, s * 1.8, 0, Math.PI*2);
-    CTX.stroke();
-    CTX.restore();
+    CTX.lineWidth = 1; CTX.globalAlpha = 0.5;
+    CTX.beginPath(); CTX.arc(p.x, p.y, s * 1.8, 0, Math.PI*2); CTX.stroke();
+    CTX.globalAlpha = 1;
+    // trail
     const tail = projectAtZ(t.x - t.vx * 6, t.y - t.vy * 6, t.worldZ - t.vz * 6);
     if (!tail.culled) {
-      CTX.lineWidth = 1.2;
+      CTX.lineWidth = 1.4;
+      CTX.strokeStyle = `hsl(${hue}, 95%, 70%)`;
       CTX.beginPath(); CTX.moveTo(p.x, p.y); CTX.lineTo(tail.x, tail.y); CTX.stroke();
     }
   }
 }
 
+// ============================================================
 // OBSTACLE UPDATE & DRAW
+// ============================================================
 function updateObstacles(dt) {
   for (const o of obstacles) {
     if (!o.alive) continue;
     o.age += dt;
     o.rot += o.rotSp * dt;
-    o.x += o.vx * dt;
-    o.y += o.vy * dt;
+    o.x += o.vx * dt; o.y += o.vy * dt;
     if (Math.abs(o.x) > TUNNEL_RADIUS - 10) o.vx *= -1;
     if (Math.abs(o.y) > TUNNEL_RADIUS - 10) o.vy *= -1;
 
@@ -980,8 +1390,7 @@ function updateObstacles(dt) {
 
   for (const s of enemyShots) {
     s.worldZ -= s.vz * dt;
-    s.x += s.vx * dt;
-    s.y += s.vy * dt;
+    s.x += s.vx * dt; s.y += s.vy * dt;
     s.life -= dt;
   }
   obstacles = obstacles.filter(o => (o.alive && (o.worldZ - cameraZ) > NEAR - 100));
@@ -993,11 +1402,7 @@ function enemyShoot(o) {
   const travelT = Math.max(30, relZ / 6);
   const vx = (ship.x - o.x) / travelT;
   const vy = (ship.y - o.y) / travelT;
-  enemyShots.push({
-    x: o.x, y: o.y, worldZ: o.worldZ,
-    vx, vy, vz: 6,
-    life: 240
-  });
+  enemyShots.push({ x: o.x, y: o.y, worldZ: o.worldZ, vx, vy, vz: 6, life: 240 });
 }
 
 function drawObstacles(pal, t) {
@@ -1008,23 +1413,30 @@ function drawObstacles(pal, t) {
 
   for (const o of visible) {
     const z = o.worldZ - cameraZ;
-    if (o.type === 'WALL') {
-      drawWallWorld(o, z, pal);
-      continue;
-    }
+    if (o.type === 'WALL') { drawWallWorld(o, z, pal); continue; }
     const p = projectAtZ(o.x, o.y, o.worldZ);
     if (p.culled) continue;
     const depthT = 1 - clamp(z / FAR, 0, 1);
     const s = p.s * o.def.rad * 1.2;
     if (s < 0.5) continue;
+
+    const hue = pal.h + obstacleHueShift(o.type);
+    const alpha = 0.35 + depthT * 0.65;
+
     CTX.save();
     CTX.translate(p.x, p.y);
     CTX.rotate(o.rot);
+
+    // Glow layer
+    CTX.strokeStyle = `hsla(${hue}, 95%, 70%, ${alpha * 0.35})`;
+    CTX.lineWidth = (1 + depthT * 0.6) * 3;
+    CTX.fillStyle = `hsla(${hue}, 80%, 38%, ${0.10 * alpha})`;
+    drawObstacleShape(o, s, t);
+
+    // Crisp layer
+    CTX.strokeStyle = `hsla(${hue}, 80%, ${50 + depthT*22}%, ${alpha})`;
     CTX.lineWidth = 1 + depthT * 0.6;
-    const alpha = 0.3 + depthT * 0.7;
-    const baseHue = pal.h;
-    CTX.strokeStyle = `hsla(${baseHue + obstacleHueShift(o.type)}, 80%, ${50 + depthT*20}%, ${alpha})`;
-    CTX.fillStyle = `hsla(${baseHue + obstacleHueShift(o.type)}, 80%, 40%, ${0.08 * alpha})`;
+    CTX.fillStyle = `hsla(${hue}, 80%, 40%, ${0.08 * alpha})`;
     drawObstacleShape(o, s, t);
     CTX.restore();
   }
@@ -1034,10 +1446,11 @@ function drawObstacles(pal, t) {
     if (z < NEAR || z > FAR) continue;
     const p = projectAtZ(sh.x, sh.y, sh.worldZ);
     if (p.culled) continue;
+    const r = Math.max(2, p.s * 6);
+    CTX.fillStyle = `hsla(${(pal.h+30)%360}, 100%, 75%, 0.45)`;
+    CTX.beginPath(); CTX.arc(p.x, p.y, r * 1.8, 0, Math.PI*2); CTX.fill();
     CTX.fillStyle = `hsl(${(pal.h+30)%360}, 95%, 70%)`;
-    CTX.beginPath();
-    CTX.arc(p.x, p.y, Math.max(2, p.s * 6), 0, Math.PI*2);
-    CTX.fill();
+    CTX.beginPath(); CTX.arc(p.x, p.y, r, 0, Math.PI*2); CTX.fill();
   }
 }
 
@@ -1047,13 +1460,13 @@ function obstacleHueShift(type) {
 
 function drawObstacleShape(o, s, t) {
   switch (o.type) {
-    case 'CUBE': drawCube(s); break;
+    case 'CUBE':       drawCube(s); break;
     case 'ASTEROID_S': drawAsteroid(s, 7, o.worldZ); break;
     case 'ASTEROID_L': drawAsteroid(s, 11, o.worldZ); break;
-    case 'TETRA': drawTetra(s); break;
-    case 'MINE': drawMine(s, t); break;
-    case 'ENEMY': drawEnemy(s); break;
-    case 'BOSS': drawBoss(s); break;
+    case 'TETRA':      drawTetra(s); break;
+    case 'MINE':       drawMine(s, t); break;
+    case 'ENEMY':      drawEnemy(s); break;
+    case 'BOSS':       drawBoss(s); break;
   }
 }
 
@@ -1062,12 +1475,11 @@ function drawCube(s) {
   CTX.rect(-s*0.5, -s*0.5, s, s);
   CTX.rect(-s*0.35, -s*0.35, s*0.7, s*0.7);
   CTX.moveTo(-s*0.5, -s*0.5); CTX.lineTo(-s*0.35, -s*0.35);
-  CTX.moveTo(s*0.5, -s*0.5); CTX.lineTo(s*0.35, -s*0.35);
-  CTX.moveTo(-s*0.5, s*0.5); CTX.lineTo(-s*0.35, s*0.35);
-  CTX.moveTo(s*0.5, s*0.5); CTX.lineTo(s*0.35, s*0.35);
+  CTX.moveTo( s*0.5, -s*0.5); CTX.lineTo( s*0.35, -s*0.35);
+  CTX.moveTo(-s*0.5,  s*0.5); CTX.lineTo(-s*0.35,  s*0.35);
+  CTX.moveTo( s*0.5,  s*0.5); CTX.lineTo( s*0.35,  s*0.35);
   CTX.fill(); CTX.stroke();
 }
-
 function drawAsteroid(s, sides, seed) {
   const rnd = seededRandom(seed | 0);
   CTX.beginPath();
@@ -1079,8 +1491,12 @@ function drawAsteroid(s, sides, seed) {
   }
   CTX.closePath();
   CTX.fill(); CTX.stroke();
+  // inner detail
+  CTX.beginPath();
+  CTX.moveTo(-s*0.15, -s*0.1); CTX.lineTo(s*0.1, s*0.05);
+  CTX.moveTo(s*0.15, -s*0.2); CTX.lineTo(-s*0.1, -s*0.05);
+  CTX.stroke();
 }
-
 function drawTetra(s) {
   CTX.beginPath();
   CTX.moveTo(0, -s*0.6);
@@ -1093,7 +1509,6 @@ function drawTetra(s) {
   CTX.moveTo(-s*0.55, s*0.4); CTX.lineTo(s*0.55, s*0.4);
   CTX.stroke();
 }
-
 function drawMine(s, t) {
   const pulse = 0.85 + 0.15 * Math.sin(t * 0.01);
   CTX.beginPath();
@@ -1107,7 +1522,6 @@ function drawMine(s, t) {
   CTX.arc(0, 0, s * 0.3 * pulse, 0, Math.PI*2);
   CTX.fill(); CTX.stroke();
 }
-
 function drawEnemy(s) {
   CTX.beginPath();
   CTX.moveTo(0, s*0.5);
@@ -1122,7 +1536,6 @@ function drawEnemy(s) {
   CTX.arc(0, 0, s*0.1, 0, Math.PI*2);
   CTX.stroke();
 }
-
 function drawBoss(s) {
   CTX.beginPath();
   CTX.arc(0, 0, s*0.7, 0, Math.PI*2);
@@ -1147,14 +1560,14 @@ function drawWallWorld(o, z, pal) {
   const hue = pal.h + 40;
   CTX.save();
   CTX.strokeStyle = `hsla(${hue}, 80%, ${45 + depthT*25}%, ${alpha})`;
-  CTX.fillStyle = `hsla(${hue}, 80%, 30%, ${0.08 * alpha})`;
+  CTX.fillStyle   = `hsla(${hue}, 80%, 30%, ${0.08 * alpha})`;
   CTX.lineWidth = 1 + depthT;
 
   const R = TUNNEL_RADIUS;
   const tl = projectAtZ(-R, -R, o.worldZ);
-  const tr = projectAtZ(R, -R, o.worldZ);
-  const br = projectAtZ(R, R, o.worldZ);
-  const bl = projectAtZ(-R, R, o.worldZ);
+  const tr = projectAtZ( R, -R, o.worldZ);
+  const br = projectAtZ( R,  R, o.worldZ);
+  const bl = projectAtZ(-R,  R, o.worldZ);
 
   CTX.beginPath();
   CTX.moveTo(tl.x, tl.y); CTX.lineTo(tr.x, tr.y);
@@ -1163,9 +1576,8 @@ function drawWallWorld(o, z, pal) {
   CTX.fill(); CTX.stroke();
 
   CTX.lineWidth = 0.6;
-  const steps = 8;
-  for (let i = 1; i < steps; i++) {
-    const t = i / steps;
+  for (let i = 1; i < 8; i++) {
+    const t = i / 8;
     const wx = -R + t * 2 * R;
     const a = projectAtZ(wx, -R, o.worldZ), b = projectAtZ(wx, R, o.worldZ);
     CTX.beginPath(); CTX.moveTo(a.x, a.y); CTX.lineTo(b.x, b.y); CTX.stroke();
@@ -1201,7 +1613,9 @@ function drawWallWorld(o, z, pal) {
   CTX.restore();
 }
 
-// WORMHOLE
+// ============================================================
+// WORMHOLE — restored fancy version
+// ============================================================
 function updateRing(dt) {
   if (!ringObj) return;
   ringObj.rot += 0.02 * dt;
@@ -1219,7 +1633,7 @@ function updateRing(dt) {
       levelComplete(true);
     } else {
       showMessage('WORMHOLE MISSED', 'HULL DAMAGE', 60);
-      damageShip(25, 0, 0);
+      damageShip(25, 0, 0, cameraZ + 200, 60);
       triggerFlash(0, 400);
       levelComplete(false);
     }
@@ -1231,8 +1645,7 @@ function drawWormhole(pal, t) {
   const relZ = ringObj.worldZ - cameraZ;
   if (relZ < 40 || relZ > FAR) return;
 
-  const stages = 7;
-  const stageGap = 50;
+  const stages = 7, stageGap = 50;
   const rBase = TUNNEL_RADIUS * 0.85;
   const depthT = 1 - clamp(relZ / FAR, 0, 1);
 
@@ -1243,7 +1656,6 @@ function drawWormhole(pal, t) {
     const stageZ = ringObj.worldZ + i * stageGap;
     const stageRelZ = stageZ - cameraZ;
     if (stageRelZ < 30) continue;
-
     const stageT = 1 - clamp(stageRelZ / FAR, 0, 1);
     const hueOffset = 120 + i * 14;
     const radius = rBase * (1 - i * 0.095);
@@ -1251,7 +1663,7 @@ function drawWormhole(pal, t) {
 
     CTX.lineWidth = (1 + stageT * 2.2) * wobble;
     CTX.strokeStyle = `hsla(${(pal.h + hueOffset)%360}, 95%, ${60 + stageT*25}%, ${0.55 + stageT*0.45})`;
-    CTX.shadowBlur = 16 * stageT;
+    CTX.shadowBlur = 18 * stageT;
     CTX.shadowColor = `hsl(${(pal.h + hueOffset)%360}, 95%, 70%)`;
 
     const sides = 32;
@@ -1267,38 +1679,81 @@ function drawWormhole(pal, t) {
   }
   CTX.shadowBlur = 0;
 
+  // Spokes
+  CTX.strokeStyle = `hsla(${(pal.h + 150)%360}, 90%, 80%, 0.4)`;
+  CTX.lineWidth = 0.9;
+  const spokeCount = 18;
+  for (let k = 0; k < spokeCount; k++) {
+    const a = (k/spokeCount) * Math.PI * 2 + ringObj.rot * 0.6;
+    const pNear = projectAtZ(Math.cos(a) * rBase, Math.sin(a) * rBase, ringObj.worldZ);
+    const pFar  = projectAtZ(Math.cos(a) * rBase * 0.2, Math.sin(a) * rBase * 0.2, ringObj.worldZ + stages * stageGap);
+    if (pNear.culled || pFar.culled) continue;
+    CTX.beginPath(); CTX.moveTo(pNear.x, pNear.y); CTX.lineTo(pFar.x, pFar.y); CTX.stroke();
+  }
+
+  // Core glow
   const coreZ = ringObj.worldZ + stages * stageGap * 0.85;
   const coreP = projectAtZ(0, 0, coreZ);
   if (!coreP.culled) {
     const glowR = Math.max(8, coreP.s * TUNNEL_RADIUS * 0.45);
     const glow = CTX.createRadialGradient(coreP.x, coreP.y, 0, coreP.x, coreP.y, glowR);
-    glow.addColorStop(0, `hsla(${(pal.h + 160)%360}, 100%, 90%, 0.95)`);
-    glow.addColorStop(1, 'transparent');
+    glow.addColorStop(0,    `hsla(${(pal.h + 160)%360}, 100%, 92%, 0.95)`);
+    glow.addColorStop(0.35, `hsla(${(pal.h + 150)%360}, 100%, 70%, 0.55)`);
+    glow.addColorStop(1,    'transparent');
     CTX.fillStyle = glow;
     CTX.beginPath();
     CTX.arc(coreP.x, coreP.y, glowR, 0, Math.PI*2);
     CTX.fill();
   }
 
+  // Swirling particles around the mouth
+  if (relZ < 2200) {
+    const particleCount = 26;
+    for (let k = 0; k < particleCount; k++) {
+      const phase = (k/particleCount) * Math.PI * 2 + ringObj.pulseT * 0.08;
+      const spiral = (k / particleCount) * 2 + ringObj.pulseT * 0.005;
+      const r = rBase * (0.4 + 0.55 * ((Math.sin(spiral) + 1) / 2));
+      const zOff = (Math.sin(spiral * 2) * 0.5 + 0.5) * stages * stageGap;
+      const p = projectAtZ(Math.cos(phase) * r, Math.sin(phase) * r, ringObj.worldZ + zOff);
+      if (p.culled) continue;
+      CTX.fillStyle = `hsla(${(pal.h + 140)%360}, 100%, 88%, ${0.65 * depthT})`;
+      const ps = Math.max(1.5, p.s * 5.5);
+      CTX.fillRect(p.x - ps/2, p.y - ps/2, ps, ps);
+    }
+  }
+
   CTX.restore();
 }
 
-// FLASH
-function triggerFlash(hue, durMs) {
-  flashUntil = performance.now() + durMs;
-  flashHue = hue;
-}
+// ============================================================
+// FLASH / VIGNETTE
+// ============================================================
+function triggerFlash(hue, durMs) { flashUntil = performance.now() + durMs; flashHue = hue; }
+function triggerVignette(hue, durMs) { vignetteUntil = performance.now() + durMs; vignetteHue = hue; }
 
 function drawFlash(now) {
   if (flashUntil <= now) return;
-  const total = flashUntil - now;
-  const rem = Math.min(1, total / 900);
+  const rem = Math.min(1, (flashUntil - now) / 900);
   const ramp = Math.pow(rem, 0.6);
   CTX.fillStyle = `hsla(${flashHue}, 100%, 80%, ${ramp * 0.85})`;
   CTX.fillRect(0, 0, W, H);
 }
 
+function drawVignette(now) {
+  if (vignetteUntil <= now) return;
+  const rem = Math.min(1, (vignetteUntil - now) / 600);
+  const ramp = Math.pow(rem, 0.7);
+  const grad = CTX.createRadialGradient(CX, CY, Math.min(W, H) * 0.2, CX, CY, Math.max(W, H) * 0.7);
+  grad.addColorStop(0, 'transparent');
+  grad.addColorStop(0.6, `hsla(${vignetteHue}, 100%, 50%, ${ramp * 0.18})`);
+  grad.addColorStop(1, `hsla(${vignetteHue}, 100%, 45%, ${ramp * 0.65})`);
+  CTX.fillStyle = grad;
+  CTX.fillRect(0, 0, W, H);
+}
+
+// ============================================================
 // LEVEL FLOW
+// ============================================================
 function levelComplete(successful) {
   transitionLock = true;
   SFX.levelUp();
@@ -1311,6 +1766,9 @@ function levelComplete(successful) {
     else if (level === 500) { SFX.powerup(); showMessage('WEAPON UPGRADE', 'MK-III HOMING', 180); }
     else if (level === 700) { SFX.powerup(); showMessage('WEAPON UPGRADE', 'MK-IV SPLIT-SEEKER', 180); }
     else if (level === 900) { SFX.powerup(); showMessage('WEAPON UPGRADE', 'MK-V SWARM', 180); }
+    else if ([100,250,350,400,600,750,800].includes(level)) {
+      showMessage(`DEPTH ${level}`, milestoneText(level), 150);
+    }
 
     const prevMax = maxHPForLevel(level - 1);
     const newMax = maxHPForLevel(level);
@@ -1327,31 +1785,94 @@ function levelComplete(successful) {
   }, 900);
 }
 
+function milestoneText(l) {
+  if (l === 100) return 'THE STRUCTURE DEEPENS';
+  if (l === 250) return 'WALLS MANIFEST';
+  if (l === 350) return 'SOMETHING LISTENS';
+  if (l === 400) return 'HEAVY HULLS INBOUND';
+  if (l === 600) return 'THE GEOMETRY SHIFTS';
+  if (l === 750) return 'THE WALLS ARE SINGING';
+  if (l === 800) return 'THE FINAL QUARTER';
+  return '';
+}
+
 function gameOver() {
   state = 'gameover';
   SFX.explode();
   const o = document.getElementById('overlay');
   o.innerHTML = `
-    <h2>SIGNAL LOST</h2>
-    <h1>HULL BREACH</h1>
-    <p>You reached level ${level}. Score: ${score}.</p>
-    <button id="startBtn">TRY AGAIN</button>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:20px">
+      <h2>SIGNAL LOST</h2>
+      <h1>HULL BREACH</h1>
+      <p>You reached level ${level}. Score: ${score}.</p>
+      <button id="gameoverBtn" class="panelBtn primary">TRY AGAIN</button>
+    </div>
   `;
   o.style.display = 'flex';
-  document.getElementById('startBtn').onclick = restart;
+  document.getElementById('gameoverBtn').onclick = () => {
+    o.style.display = 'none';
+    restart();
+  };
 }
 
 function complete() {
   state = 'complete';
-  const o = document.getElementById('overlay');
-  o.innerHTML = `
-    <h2>RUN COMPLETE</h2>
-    <h1>THE TESSERACT YIELDS</h1>
-    <p>Levels ${LEVEL_START}–${LEVEL_END} cleared. Score: ${score}.</p>
-    <button id="startBtn">AGAIN</button>
-  `;
-  o.style.display = 'flex';
-  document.getElementById('startBtn').onclick = restart;
+  if (REDIRECT) {
+    // No celebration screen — embedded use, hand control back to host page.
+    setTimeout(() => { window.location.href = REDIRECT; }, 600);
+    return;
+  }
+  // Victory beauty pass — keep the game world rendering, transition into a
+  // celebratory state. The ship continues forward through a clean tunnel,
+  // banking gracefully, while fireworks pop in the foreground.
+  startVictorySequence();
+}
+
+function startVictorySequence() {
+  state = 'victory';
+  victoryTime = 0;
+  fireworks = [];
+  // Clear obstacles and shots; let the tunnel and ship glide forward
+  obstacles = [];
+  enemyShots = [];
+  torpedoes = [];
+  ringObj = null;
+  // Hide HUD via body class so the celebration is uncluttered
+  document.body.classList.add('victory');
+  // Set the final stat values
+  document.getElementById('vStatScore').textContent = score;
+  document.getElementById('vStatLevel').textContent = LEVEL_END;
+  // Customize the subtitle based on what was completed
+  const sub = document.getElementById('victorySub');
+  if (LEVEL_START === 1 && LEVEL_END === 1000) sub.textContent = 'THE FULL TESSERACT';
+  else if (LEVEL_START === LEVEL_END)          sub.textContent = `LEVEL ${LEVEL_START} CLEARED`;
+  else                                          sub.textContent = `LEVELS ${LEVEL_START}–${LEVEL_END} CLEARED`;
+  // Show the victory overlay (faded in via opacity transition below)
+  const ov = document.getElementById('overlay');
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('victoryScreen').style.display = 'flex';
+  ov.style.background = 'rgba(0,0,0,0.0)';
+  ov.style.transition = 'background 1400ms';
+  ov.style.display = 'flex';
+  ov.style.pointerEvents = 'none';
+  // Let the ship fly free for ~2 seconds before the overlay starts to fade in.
+  setTimeout(() => {
+    ov.style.background = 'rgba(0,0,0,0.45)';
+    ov.style.pointerEvents = 'auto';
+  }, 1800);
+  // Pre-spawn a few rockets for an immediate punch
+  for (let i = 0; i < 5; i++) setTimeout(() => spawnFireworkRocket(), i * 180);
+  // Wire button
+  document.getElementById('victoryBtn').onclick = () => {
+    document.body.classList.remove('victory');
+    document.getElementById('victoryScreen').style.display = 'none';
+    document.getElementById('startScreen').style.display = 'flex';
+    ov.style.background = 'rgba(0,0,0,0.78)';
+    ov.style.transition = '';
+    restart();
+  };
+  // Trumpet
+  SFX.victory && SFX.victory();
 }
 
 function restart() {
@@ -1371,13 +1892,8 @@ function updateHP() {
   document.getElementById('hpText').textContent = `${Math.ceil(ship.hp)} / ${ship.maxHP}`;
   document.getElementById('healthOuter').style.width = hpBarPixelWidth(ship.maxHP) + 'px';
 }
-function updateScore() {
-  document.getElementById('score').textContent = score;
-}
-function updateVel() {
-  const v = (speed / 6).toFixed(2);
-  document.getElementById('vel').textContent = v + 'c';
-}
+function updateScore() { document.getElementById('score').textContent = score; }
+function updateVel() { document.getElementById('vel').textContent = (speed / 6).toFixed(2) + 'c'; }
 
 function showMessage(main, sub, framesDur) {
   const el = document.getElementById('centerMsg');
@@ -1396,17 +1912,24 @@ function togglePause() {
   if (paused) {
     el.innerHTML = 'PAUSED<div class="sub">PRESS ESC TO RESUME</div>';
     el.classList.add('show');
-  } else {
-    el.classList.remove('show');
-  }
+  } else { el.classList.remove('show'); }
 }
 
+// ============================================================
 // MAIN LOOP
+// ============================================================
 let lastT = performance.now();
 function loop(now) {
-  const dt = Math.min(2.5, (now - lastT) / 16.67);
+  let dt = Math.min(2.5, (now - lastT) / 16.67);
   lastT = now;
+  // Slow-mo time dilation on big hits
+  if (slowMoUntil > now) {
+    const remaining = (slowMoUntil - now) / 280;
+    const factor = 0.32 + (1 - remaining) * 0.68; // 0.32 → 1.0
+    dt *= factor;
+  }
   if (state === 'playing') step(dt, now);
+  else if (state === 'victory') stepVictory(dt, now);
   render(now);
   requestAnimationFrame(loop);
 }
@@ -1419,16 +1942,58 @@ function step(dt, now) {
 
   cameraZ += speed * dt;
   poCam = pathOffset(cameraZ);
-
   levelProgress = clamp(cameraZ / LEVEL_LENGTH, 0, 1);
+
+  // Decay env shake & generate offsets
+  worldShake = Math.max(0, worldShake - dt * 0.6);
+  if (worldShake > 0.1) {
+    worldShakeX = (Math.random() - 0.5) * worldShake;
+    worldShakeY = (Math.random() - 0.5) * worldShake;
+  } else { worldShakeX = 0; worldShakeY = 0; }
 
   updateShip(dt);
   updateObstacles(dt);
   updateTorpedoes(dt);
   updateSparks(dt);
+  updateShockwaves(dt);
   updateRing(dt);
   checkCollisions();
   updateVel();
+}
+
+function stepVictory(dt, now) {
+  // Beauty pass: keep flying forward through clean tunnel, ship banks elegantly,
+  // fireworks pop continuously. No collisions, no obstacles.
+  victoryTime += dt;
+  // Speed cruises rather than accelerates
+  speed = lerp(speed, 7, 0.04);
+  setEngine(0.45);
+  cameraZ += speed * dt;
+  poCam = pathOffset(cameraZ);
+
+  // Auto-pilot: figure-eight-ish bank pattern within tunnel
+  const t = victoryTime * 0.018;
+  const targetX = Math.sin(t) * (TUNNEL_RADIUS * 0.5);
+  const targetY = Math.cos(t * 0.7) * (TUNNEL_RADIUS * 0.3);
+  const ax = (targetX - ship.x) * 0.012;
+  const ay = (targetY - ship.y) * 0.012;
+  ship.vx = lerp(ship.vx, ax * 30, 0.06);
+  ship.vy = lerp(ship.vy, ay * 30, 0.06);
+  ship.x += ship.vx * dt;
+  ship.y += ship.vy * dt;
+  ship.bank  = lerp(ship.bank,  -ship.vx * 0.06, 0.18);
+  ship.pitch = lerp(ship.pitch,  ship.vy * 0.03, 0.18);
+
+  worldShakeX = 0; worldShakeY = 0;
+  shakeX = 0; shakeY = 0;
+
+  updateSparks(dt);
+  updateShockwaves(dt);
+  updateFireworks(dt);
+
+  // Spawn rockets every ~24 frames, occasionally double
+  if (Math.random() < dt * 0.06) spawnFireworkRocket();
+  if (Math.random() < dt * 0.025) { spawnFireworkRocket(); spawnFireworkRocket(); }
 }
 
 function render(now) {
@@ -1437,27 +2002,45 @@ function render(now) {
   CTX.fillStyle = '#000';
   CTX.fillRect(0, 0, W, H);
 
-  drawBackground(pal);
+  drawBackground(pal, now);
+
+  // Apply environment shake to all world rendering
+  CTX.save();
+  CTX.translate(worldShakeX, worldShakeY);
+
   drawTunnel(pal);
   drawWormhole(pal, now);
   drawObstacles(pal, now);
   drawTorpedoes(pal);
   drawSparks(pal);
+  drawShockwaves(pal);
   drawShip(pal, now);
 
-  const pw = Math.min(260, W * 0.4);
-  CTX.save();
-  CTX.strokeStyle = `hsla(${pal.h}, 80%, 60%, 0.6)`;
-  CTX.lineWidth = 1;
-  CTX.strokeRect(CX - pw/2, H - 28, pw, 3);
-  CTX.fillStyle = `hsl(${pal.h}, 90%, 65%)`;
-  CTX.fillRect(CX - pw/2, H - 28, pw * levelProgress, 3);
   CTX.restore();
 
+  // Progress bar (hidden during victory state)
+  if (state !== 'victory') {
+    const pw = Math.min(260, W * 0.4);
+    CTX.save();
+    CTX.strokeStyle = `hsla(${pal.h}, 80%, 60%, 0.6)`;
+    CTX.lineWidth = 1;
+    CTX.strokeRect(CX - pw/2, H - 28, pw, 3);
+    CTX.fillStyle = `hsl(${pal.h}, 90%, 65%)`;
+    CTX.fillRect(CX - pw/2, H - 28, pw * levelProgress, 3);
+    CTX.restore();
+  }
+
+  // Damage vignette beneath the white flash
+  drawVignette(now);
   drawFlash(now);
+
+  // Fireworks render on top during victory
+  if (state === 'victory') drawFireworks();
 }
 
+// ============================================================
 // START
+// ============================================================
 document.getElementById('startBtn').onclick = () => {
   initAudio();
   document.getElementById('overlay').style.display = 'none';
@@ -1473,9 +2056,7 @@ window.addEventListener('click', initAudio, { once: true });
 
 ship.maxHP = maxHPForLevel(level);
 ship.hp = ship.maxHP;
-updateHP();
-updateScore();
-updateVel();
+updateHP(); updateScore(); updateVel();
 document.getElementById('lvl').textContent = String(LEVEL_START).padStart(3, '0');
 if (LEVEL_END !== 1000 || LEVEL_START !== 1) {
   document.getElementById('target').textContent = `RANGE ${LEVEL_START}–${LEVEL_END}`;
@@ -1483,5 +2064,6 @@ if (LEVEL_END !== 1000 || LEVEL_START !== 1) {
 
 requestAnimationFrame(loop);
 </script>
+
 </body>
 </html>
