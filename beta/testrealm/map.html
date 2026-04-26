@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<!-- Map v10.0.0 | 2026-04-27 | Fetches realm.json | SKM: type superkudramarduk on map -->
+<title>Marduk's Map — The Grid v10.0.0</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;background:#020208;color:#e0d8c8;font-family:Georgia,serif;}
+
+#top-bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;gap:10px;
+  padding:8px 14px;background:rgba(2,2,8,0.95);border-bottom:1px solid #2a2040;font-size:12px;}
+#top-bar h1{flex:1;text-align:center;font-size:13px;letter-spacing:3px;color:#8b6914;text-transform:uppercase;}
+.top-btn{padding:5px 12px;background:transparent;border:1px solid #4a3a18;color:#8b6914;
+  border-radius:4px;cursor:pointer;font-size:11px;letter-spacing:1px;text-decoration:none;
+  white-space:nowrap;transition:all 0.2s;}
+.top-btn:hover{background:#4a3a18;}
+#mode-btn{border-color:#5050a0;color:#8080d0;}
+#mode-btn:hover{background:#20204a;}
+
+#legend{position:fixed;top:44px;left:0;right:0;z-index:90;background:rgba(2,2,8,0.9);
+  border-bottom:1px solid #1a1030;padding:4px 10px;display:flex;gap:12px;overflow-x:auto;
+  scrollbar-width:none;font-size:10px;letter-spacing:1px;}
+#legend::-webkit-scrollbar{display:none;}
+.leg-item{display:flex;align-items:center;gap:4px;white-space:nowrap;}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+#map-viewport{position:fixed;top:68px;left:0;right:0;bottom:56px;overflow:hidden;touch-action:none;}
+#map-canvas{position:absolute;cursor:grab;}
+#map-canvas.dragging{cursor:grabbing;}
+
+.cell{position:absolute;border:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;cursor:pointer;transition:border-color 0.2s;overflow:hidden;user-select:none;}
+.cell:hover{border-color:rgba(255,255,255,0.3);z-index:10;}
+.cell.current{border:2px solid #d8a808!important;box-shadow:0 0 12px rgba(215,168,8,0.6);z-index:20;}
+.cell.visited{opacity:1;}
+.cell.unvisited{opacity:0.25;filter:saturate(0.15);}
+.cell-icon{font-size:14px;line-height:1;}
+.cell-name{font-size:6px;letter-spacing:0.5px;text-align:center;max-width:90%;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;opacity:0.8;margin-top:2px;}
+.cell-coord{font-size:5px;opacity:0.3;position:absolute;top:2px;left:3px;}
+.cell-key{position:absolute;top:2px;right:2px;font-size:8px;}
+
+/* Path background colours via on_path[0] */
+.p-emily    {background:#0d0415;}
+.p-jake     {background:#120800;}
+.p-delacroix{background:#030a05;}
+.p-xan      {background:#040810;}
+.p-gus      {background:#02020f;}
+.p-eli      {background:#03100d;}
+.p-olivia   {background:#100408;}
+.p-marduk   {background:#010108;}
+.p-author   {background:#080100;}
+.p-central  {background:#100c04;}
+.p-cave     {background:#080500;}
+.p-blank    {background:#050505;}
+.p-home     {background:#100c04;}
+.p-oracle   {background:#010108;}
+.p-manga    {background:#0a0510;}
+.p-threshold{background:#0a0810;}
+.p-house    {background:#0a0804;}
+.p-key      {background:#0a0700;}
+.p-special  {background:#070507;}
+.p-gate     {background:#040408;}
+.p-story    {background:#050505;}
+.p-teleport-hub{background:#020410;}
+.p-quiz     {background:#050510;}
+
+#bottom-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(2,2,8,0.95);
+  border-top:1px solid #1a1030;padding:6px 14px;display:flex;align-items:center;gap:10px;font-size:11px;}
+#selected-info{flex:1;color:#8b6914;letter-spacing:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+#go-btn{padding:6px 16px;background:#8b6914;border:none;border-radius:6px;color:#000;
+  font-weight:bold;cursor:pointer;font-size:12px;font-family:Georgia,serif;display:none;transition:all 0.2s;}
+#go-btn:hover{background:#c09018;}
+#zoom-btns{display:flex;gap:4px;}
+.zbtn{padding:4px 10px;background:transparent;border:1px solid #2a2040;border-radius:4px;
+  color:#8080c0;cursor:pointer;font-size:14px;transition:all 0.2s;}
+.zbtn:hover{background:#1a1a40;}
+
+#loading-map{position:fixed;inset:0;background:#020208;display:flex;align-items:center;
+  justify-content:center;z-index:500;flex-direction:column;gap:14px;font-size:13px;
+  letter-spacing:3px;color:rgba(139,105,20,0.7);text-transform:uppercase;}
+#loading-map .spinner{width:28px;height:28px;border:2px solid rgba(139,105,20,0.2);
+  border-top-color:#8b6914;border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<div id="loading-map"><div class="spinner"></div><span>Loading map…</span></div>
+
+<div id="top-bar">
+  <a class="top-btn" id="back-btn" href="index.html">← REALM</a>
+  <h1>🗺 Marduk's Map</h1>
+  <button class="top-btn" id="mode-btn" onclick="toggleMode()">MODE: ALL</button>
+</div>
+
+<div id="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#9b3dc8"></div>Emily</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#b05a18"></div>Jake</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#2a8a4a"></div>Delacroix</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#4a9ab0"></div>Xan</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#2a3acc"></div>Gus</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#18b09a"></div>Eli</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#b02a5a"></div>Olivia</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#d8a808"></div>Marduk</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#a01818"></div>Author</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#8b6914"></div>Central</div>
+</div>
+
+<div id="map-viewport">
+  <div id="map-canvas"></div>
+</div>
+
+<div id="bottom-bar">
+  <div id="selected-info">Select a tile to travel to it</div>
+  <button id="go-btn" onclick="goToSelected()">GO THERE →</button>
+  <div id="zoom-btns">
+    <button class="zbtn" onclick="zoom(-1)">−</button>
+    <button class="zbtn" onclick="zoom(1)">+</button>
+    <button class="zbtn" onclick="resetView()">⊙</button>
+  </div>
+</div>
+
+<script>
+const GRID_MIN=-16, GRID_MAX=16, GRID_SIZE=33;
+let REALM=null, cellSize=28, offsetX=0, offsetY=0;
+let isDragging=false, dragStart={x:0,y:0}, dragOrigin={x:0,y:0};
+let selectedTile=null, mapMode='all', _skmMapActive=false;
+
+// State
+function getVisited(){try{return new Set(JSON.parse(localStorage.getItem('mm_visited')||'[]'));}catch{return new Set();}}
+function getKeys(){try{return new Set(JSON.parse(localStorage.getItem('mm_keys')||'[]'));}catch{return new Set();}}
+function getCurPos(){
+  const p=new URLSearchParams(location.search);
+  const s=p.get('x')&&p.get('y')?null:localStorage.getItem('mm_last')||'0,0';
+  const x=parseInt(p.get('x')||s.split(',')[0])||0;
+  const y=parseInt(p.get('y')||s.split(',')[1])||0;
+  return{x,y};
+}
+
+let visited, keys, curPos;
+
+// Tile path colour class
+function tileClass(tile) {
+  if (!tile) return 'p-blank';
+  const p = tile.on_path?.[0] || tile.type || 'blank';
+  return 'p-'+p;
+}
+
+function buildMap() {
+  const canvas = document.getElementById('map-canvas');
+  canvas.innerHTML = '';
+  const total = GRID_SIZE * cellSize;
+  canvas.style.width = total+'px';
+  canvas.style.height = total+'px';
+
+  for (let gx=GRID_MIN;gx<=GRID_MAX;gx++) {
+    for (let gy=GRID_MIN;gy<=GRID_MAX;gy++) {
+      const tile = REALM?.tiles?.[`${gx},${gy}`] || {name:'Empty Space',emoji:'·',type:'blank'};
+      const el = document.createElement('div');
+      const isVisited = visited.has(`${gx},${gy}`);
+      const isCurrent = gx===curPos.x && gy===curPos.y;
+      el.className = `cell ${tileClass(tile)} ${isCurrent?'current':isVisited?'visited':'unvisited'}`;
+      if(mapMode==='visited' && !isVisited && !isCurrent){el.style.display='none';}
+      el.dataset.x=gx; el.dataset.y=gy;
+      const px=(gx-GRID_MIN)*cellSize, py=(GRID_MAX-gy)*cellSize;
+      el.style.cssText+=`;left:${px}px;top:${py}px;width:${cellSize}px;height:${cellSize}px;`;
+
+      // Coord label
+      const coord=document.createElement('div');
+      coord.className='cell-coord'; coord.textContent=`${gx},${gy}`; el.appendChild(coord);
+
+      if (tile.type !== 'blank' || isVisited) {
+        const icon=document.createElement('div'); icon.className='cell-icon'; icon.textContent=tile.emoji||''; el.appendChild(icon);
+        if (cellSize>=24) {
+          const nm=document.createElement('div'); nm.className='cell-name'; nm.textContent=tile.name||''; el.appendChild(nm);
+        }
+      }
+
+      // Key badge
+      if (tile.key_id && keys.has(tile.key_id)) {
+        const kb=document.createElement('div'); kb.className='cell-key'; kb.textContent='🗝'; el.appendChild(kb);
+      }
+
+      // Glow for visited named tiles
+      if (tile.type!=='blank' && isVisited && !isCurrent) {
+        el.style.boxShadow='inset 0 0 5px rgba(139,105,20,0.2)';
+        el.style.borderColor='rgba(201,168,76,0.15)';
+      }
+
+      el.addEventListener('click', ()=>selectTile(gx,gy,tile));
+      canvas.appendChild(el);
+    }
+  }
+}
+
+function selectTile(gx,gy,tile) {
+  document.querySelectorAll('.cell.sel').forEach(el=>{el.classList.remove('sel');el.style.boxShadow='';el.style.borderColor='';el.style.zIndex='';});
+  selectedTile={x:gx,y:gy,tile};
+  const el=document.querySelector(`.cell[data-x="${gx}"][data-y="${gy}"]`);
+  if(el){el.classList.add('sel');el.style.boxShadow='0 0 12px rgba(216,168,8,0.7)';el.style.borderColor='#d8a808';el.style.zIndex='15';}
+  document.getElementById('selected-info').textContent=`(${gx}, ${gy}) — ${tile.name||'Empty Space'}`;
+  const go=document.getElementById('go-btn');
+  go.style.display=(visited.has(`${gx},${gy}`)||gx===curPos.x&&gy===curPos.y)?'block':'none';
+}
+
+function goToSelected(){
+  if(!selectedTile) return;
+  const sfx=_skmMapActive?'&skm_open=1':'';
+  window.location.href=`index.html?x=${selectedTile.x}&y=${selectedTile.y}${sfx}`;
+}
+
+// Drag
+const vp=document.getElementById('map-viewport');
+vp.addEventListener('mousedown',e=>{isDragging=true;document.getElementById('map-canvas').classList.add('dragging');dragStart={x:e.clientX,y:e.clientY};dragOrigin={x:offsetX,y:offsetY};});
+window.addEventListener('mousemove',e=>{if(!isDragging)return;offsetX=dragOrigin.x+(e.clientX-dragStart.x);offsetY=dragOrigin.y+(e.clientY-dragStart.y);clamp();applyT();});
+window.addEventListener('mouseup',()=>{isDragging=false;document.getElementById('map-canvas').classList.remove('dragging');});
+
+let _lt=null;
+vp.addEventListener('touchstart',e=>{if(e.touches.length!==1)return;_lt=e.touches[0];dragStart={x:_lt.clientX,y:_lt.clientY};dragOrigin={x:offsetX,y:offsetY};isDragging=true;},{passive:true});
+vp.addEventListener('touchmove',e=>{if(!isDragging||e.touches.length!==1)return;const t=e.touches[0];offsetX=dragOrigin.x+(t.clientX-dragStart.x);offsetY=dragOrigin.y+(t.clientY-dragStart.y);clamp();applyT();},{passive:true});
+vp.addEventListener('touchend',()=>isDragging=false,{passive:true});
+vp.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY<0?1:-1,e.clientX,e.clientY);},{passive:false});
+
+function applyT(){document.getElementById('map-canvas').style.transform=`translate(${offsetX}px,${offsetY}px)`;}
+function clamp(){
+  const total=GRID_SIZE*cellSize;
+  offsetX=Math.min(0,Math.max(vp.clientWidth-total,offsetX));
+  offsetY=Math.min(0,Math.max(vp.clientHeight-total,offsetY));
+}
+function zoom(dir,px,py){
+  const old=cellSize; cellSize=Math.max(10,Math.min(60,cellSize+dir*4)); if(cellSize===old)return;
+  const ratio=cellSize/old; const cx=px??vp.clientWidth/2, cy=py??vp.clientHeight/2;
+  offsetX=cx-(cx-offsetX)*ratio; offsetY=cy-(cy-offsetY)*ratio;
+  buildMap(); clamp(); applyT();
+}
+function resetView(){
+  const total=GRID_SIZE*cellSize;
+  const cx=(curPos.x-GRID_MIN)*cellSize+cellSize/2;
+  const cy=(GRID_MAX-curPos.y)*cellSize+cellSize/2;
+  offsetX=Math.max(vp.clientWidth-total,Math.min(0,vp.clientWidth/2-cx));
+  offsetY=Math.max(vp.clientHeight-total,Math.min(0,vp.clientHeight/2-cy));
+  clamp(); applyT();
+}
+function toggleMode(){
+  mapMode=mapMode==='all'?'visited':'all';
+  document.getElementById('mode-btn').textContent='MODE: '+mapMode.toUpperCase();
+  buildMap(); applyT();
+}
+
+// SKM activation on map
+const SKM_CODE='superkudramarduk'; let _skmBuf='';
+document.addEventListener('keydown',ev=>{
+  if(ev.ctrlKey||ev.metaKey||ev.altKey)return;
+  if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))return;
+  if(ev.key.length!==1)return;
+  _skmBuf+=ev.key.toLowerCase(); if(_skmBuf.length>SKM_CODE.length)_skmBuf=_skmBuf.slice(-SKM_CODE.length);
+  if(_skmBuf===SKM_CODE){
+    _skmBuf=''; localStorage.setItem('mm_kudra','1'); _skmMapActive=true;
+    const d=document.createElement('div');
+    d.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;font-family:Georgia,serif;font-size:22px;letter-spacing:3px;color:#f0abfc;text-shadow:0 0 30px rgba(240,171,252,0.9);pointer-events:none;animation:_sf 2.2s ease forwards;';
+    d.textContent='✦ SUPERKUDRAMARDUK ✦';
+    const s=document.createElement('style'); s.textContent='@keyframes _sf{0%{opacity:0;transform:translate(-50%,-50%) scale(0.8)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}70%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}';
+    document.head.appendChild(s); document.body.appendChild(d); setTimeout(()=>d.remove(),2300);
+    const si=document.getElementById('selected-info'); si.textContent='✦ SKM active — double-click any tile to open editor'; si.style.color='#f0abfc';
+    buildMap(); applyT();
+  }
+});
+
+// Double-click opens tile in SKM edit mode
+document.getElementById('map-canvas').addEventListener('dblclick',ev=>{
+  if(!_skmMapActive)return;
+  const cell=ev.target.closest('.cell'); if(!cell)return;
+  window.location.href=`index.html?x=${cell.dataset.x}&y=${cell.dataset.y}&skm_open=1`;
+});
+
+// Boot
+async function boot(){
+  try{
+    const res=await fetch('realm.json'); REALM=await res.json();
+  } catch(e){
+    document.getElementById('loading-map').innerHTML='<span style="color:#ff6060">Failed to load realm.json</span>'; return;
+  }
+  visited=getVisited(); keys=getKeys(); curPos=getCurPos();
+  document.getElementById('back-btn').href=`index.html?x=${curPos.x}&y=${curPos.y}`;
+  document.getElementById('loading-map').style.display='none';
+  buildMap(); resetView(); applyT();
+}
+boot();
+</script>
+</body>
+</html>
