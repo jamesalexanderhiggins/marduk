@@ -1,3 +1,4 @@
+// MARDUK ORACLE v1.3 — environment.js
 // environment.js — sphere grid, starfield, orbiting wireframes.
 // Adapted from the EVE Turing Gate engine; palette shifted to amber/indigo for Marduk.
 

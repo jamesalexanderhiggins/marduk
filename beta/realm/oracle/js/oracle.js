@@ -1,3 +1,4 @@
+// MARDUK ORACLE v1.3 — oracle.js
 // oracle.js — search engine, results UI, state machine.
 // Reads window.MARDUK_DB; no AI API required.
 

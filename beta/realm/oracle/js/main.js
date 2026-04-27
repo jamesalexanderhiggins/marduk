@@ -1,3 +1,4 @@
+// MARDUK ORACLE v1.3 — main.js
 // main.js v1.2 — clean spherical orbital camera, no lag on rotation.
 // Drag = instant 1:1 orbit. Scroll/pinch = smoothly-lerped zoom.
 

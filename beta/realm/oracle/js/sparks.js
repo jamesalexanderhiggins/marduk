@@ -1,3 +1,4 @@
+// MARDUK ORACLE v1.3 — sparks.js
 // sparks.js — Touch-triggered particle bursts and shockwave rings.
 // Pool-based: pre-allocated Float32Arrays, no per-frame allocations.
 

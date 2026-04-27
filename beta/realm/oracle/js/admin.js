@@ -1,3 +1,4 @@
+// MARDUK ORACLE v1.3 — admin.js
 // admin.js — canonical database editor.
 // Activated by typing "melchizedek" in the search field.
 // Exports a replacement db.js file.

@@ -1,3 +1,4 @@
+// MARDUK ORACLE v1.3 — audio.js
 // audio.js — Web Audio synth sounds for Marduk Oracle UI.
 // All sounds generated procedurally via Web Audio API; no files required.
 

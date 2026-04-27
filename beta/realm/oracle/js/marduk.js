@@ -1,3 +1,4 @@
+// MARDUK ORACLE v1.3 — marduk.js
 // marduk.js v1.2 — Aristotle bust geometry.
 // Reference: Vienna Kunsthistorisches Museum / Ludovisi Aristotle type.
 // Coordinate axes: +z = forward (face), +y = up, +x = viewer's right.
