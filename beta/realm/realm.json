@@ -1,5 +1,5 @@
 {
-  "version": "9.6.2",
+  "version": "9.6.3",
   "grid": {
     "extent": 16,
     "size": 33
@@ -11,7 +11,7 @@
       "name": "The Long Road",
       "emoji": "⊕",
       "era": "The Centre of the Map",
-      "lore": "<p>You stand at the centre of everything — the great fork where every path begins.</p><p>From here, eight paths radiate outward:</p><ul style=\"margin:12px 0 0 20px;line-height:1.95;\"><li><strong>↑ NORTH</strong> — <em>The Path of Melchizedek</em> · locked in normal mode (Kudramarduk access only). Leads directly to the Oracle of Marduk above.</li><li><strong>↗ NORTH-EAST</strong> — <em>The Path of Eli</em> · go EAST then NORTH (or vice versa).</li><li><strong>→ EAST</strong> — <em>The Path of Gus</em>.</li><li><strong>↘ SOUTH-EAST</strong> — <em>The Path of Olivia</em> · go SOUTH then EAST.</li><li><strong>↓ SOUTH</strong> — <em>The Path of Emily</em> · via the Long Walk and the Undoing of the Thornes.</li><li><strong>↙ SOUTH-WEST</strong> — Reaches Emily and the Author via south-westward travel.</li><li><strong>← WEST</strong> — <em>The Path of Xan</em>.</li><li><strong>↖ NORTH-WEST</strong> — <em>The Path of Delacroix</em> · go WEST then NORTH.</li></ul><p style=\"margin-top:14px;\">Each path begins at a clearly-named gate tile. Walk and find them.</p>",
+      "lore": "<p>You stand at the centre of everything — the great fork where every path begins.</p><p>From here, eight paths radiate outward:</p><ul style=\"margin:12px 0 0 20px;line-height:1.95;\"><li><strong>↑ NORTH</strong> — <em>The Path of Melchizedek</em> · sealed for now. Leads directly to the Oracle of Marduk above.</li><li><strong>↗ NORTH-EAST</strong> — <em>The Path of Eli</em> · go EAST then NORTH (or vice versa).</li><li><strong>→ EAST</strong> — <em>The Path of Gus</em>.</li><li><strong>↘ SOUTH-EAST</strong> — <em>The Path of Olivia</em> · go SOUTH then EAST.</li><li><strong>↓ SOUTH</strong> — <em>The Path of Emily</em> · via the Long Walk and the Undoing of the Thornes.</li><li><strong>↙ SOUTH-WEST</strong> — Reaches Emily and the Author via south-westward travel.</li><li><strong>← WEST</strong> — <em>The Path of Xan</em>.</li><li><strong>↖ NORTH-WEST</strong> — <em>The Path of Delacroix</em> · go WEST then NORTH.</li></ul><p style=\"margin-top:14px;\">Each path begins at a clearly-named gate tile. Walk and find them.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><span style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(120,80,160,0.06);border:1px dashed rgba(192,132,252,0.5);color:#c084fc;border-radius:4px;cursor:not-allowed;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;opacity:0.65;\" title=\"The Oracle of Marduk · complete the quiz to unlock\">🔒 ↑ The Path of Melchizedek</span><a href=\"javascript:void(0)\" onclick=\"goTo(1,1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↗ The Path of Eli</a><a href=\"javascript:void(0)\" onclick=\"goTo(1,0)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">→ The Path of Gus</a><a href=\"javascript:void(0)\" onclick=\"goTo(1,-1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↘ The Path of Olivia</a><a href=\"javascript:void(0)\" onclick=\"goTo(0,-1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↓ The Path of Emily</a><a href=\"javascript:void(0)\" onclick=\"goTo(-1,0)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">← The Path of Xan</a><a href=\"javascript:void(0)\" onclick=\"goTo(-1,1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↖ The Path of Delacroix</a></div>",
       "isHome": true,
       "on_path": [
         "emily",
@@ -40,7 +40,67 @@
         "B": "#2E5C38"
       },
       "hint": "↑ Melchizedek (locked) · ↗ Eli · → Gus · ↘ Olivia · ↓ Emily · ← Xan · ↖ Delacroix",
-      "music": "emily1"
+      "music": "emily1",
+      "signposts": [
+        {
+          "label": "↑ The Path of Melchizedek",
+          "dir": "N",
+          "target": [
+            0,
+            1
+          ],
+          "locked": true,
+          "lock_msg": "The Oracle of Marduk · complete the quiz to unlock"
+        },
+        {
+          "label": "↗ The Path of Eli",
+          "dir": "NE",
+          "target": [
+            1,
+            1
+          ]
+        },
+        {
+          "label": "→ The Path of Gus",
+          "dir": "E",
+          "target": [
+            1,
+            0
+          ]
+        },
+        {
+          "label": "↘ The Path of Olivia",
+          "dir": "SE",
+          "target": [
+            1,
+            -1
+          ]
+        },
+        {
+          "label": "↓ The Path of Emily",
+          "dir": "S",
+          "target": [
+            0,
+            -1
+          ]
+        },
+        {
+          "label": "← The Path of Xan",
+          "dir": "W",
+          "target": [
+            -1,
+            0
+          ]
+        },
+        {
+          "label": "↖ The Path of Delacroix",
+          "dir": "NW",
+          "target": [
+            -1,
+            1
+          ]
+        }
+      ]
     },
     "0,1": {
       "type": "oracle",
@@ -49,8 +109,26 @@
       "era": "The Oracle · All Things Known",
       "coord": "THE MARDUK VIEW · ALL ROOMS",
       "always_walkable": true,
-      "lore": "<p>You have proved yourself worthy of this place. Marduk opens his eye to you.</p><p>The Oracle knows the Mardukverse — every character, every event, every canonical fact across all three books. Ask it anything.</p><div style=\"margin-top:16px;\"><iframe src=\"https://jamesalexanderhiggins.github.io/marduk/beta/realm/oracle/\" style=\"width:100%;height:55vh;border:none;border-radius:6px;\" title=\"The Oracle of Marduk\"></iframe></div>",
-      "hint": "✦ The Oracle of Marduk · enter to consult the all-seeing eye"
+      "lore": "<p>You have proved yourself worthy of this place. Marduk opens his eye to you.</p><p>The Oracle knows the Mardukverse — every character, every event, every canonical fact across all three books. Ask it anything.</p><div style=\"margin-top:16px;\"><iframe src=\"https://jamesalexanderhiggins.github.io/marduk/beta/realm/oracle/\" style=\"width:100%;height:55vh;border:none;border-radius:6px;\" title=\"The Oracle of Marduk\"></iframe></div><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(0,0)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↓ Return to the Long Road</a><a href=\"javascript:void(0)\" onclick=\"goTo(0,2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↓ The Vector Ship</a></div>",
+      "hint": "✦ The Oracle of Marduk · enter to consult the all-seeing eye",
+      "signposts": [
+        {
+          "label": "↓ Return to the Long Road",
+          "dir": "S",
+          "target": [
+            0,
+            0
+          ]
+        },
+        {
+          "label": "↓ The Vector Ship",
+          "dir": "S",
+          "target": [
+            0,
+            2
+          ]
+        }
+      ]
     },
     "0,5": {
       "type": "threshold",
@@ -58,15 +136,49 @@
       "emoji": "🚪",
       "era": "Jeremy Delacroix’s Library · The Hidden Map",
       "coord": "HUB · THE THRESHOLD",
-      "lore": "Beyond this point, the Realm asks what you know. It is not a test of intelligence — it is a test of attention. Have you been paying attention?",
-      "hint": "↑ First quiz question · ↓ The Vector Ship · → Something to the east · ← Something to the west"
+      "lore": "Beyond this point, the Realm asks what you know. It is not a test of intelligence — it is a test of attention. Have you been paying attention?<!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(0,6)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↑ The First Question of the Quiz</a><a href=\"javascript:void(0)\" onclick=\"goTo(0,2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↓ The Vector Ship</a><a href=\"javascript:void(0)\" onclick=\"goTo(-1,5)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">← Something to the west</a><a href=\"javascript:void(0)\" onclick=\"goTo(1,5)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">→ Something to the east</a></div>",
+      "hint": "↑ First quiz question · ↓ The Vector Ship · → Something to the east · ← Something to the west",
+      "signposts": [
+        {
+          "label": "↑ The First Question of the Quiz",
+          "dir": "N",
+          "target": [
+            0,
+            6
+          ]
+        },
+        {
+          "label": "↓ The Vector Ship",
+          "dir": "S",
+          "target": [
+            0,
+            2
+          ]
+        },
+        {
+          "label": "← Something to the west",
+          "dir": "W",
+          "target": [
+            -1,
+            5
+          ]
+        },
+        {
+          "label": "→ Something to the east",
+          "dir": "E",
+          "target": [
+            1,
+            5
+          ]
+        }
+      ]
     },
     "0,2": {
       "type": "special",
       "name": "The Vector Ship",
       "emoji": "🚀",
       "era": "The Spine · Fast Travel Node",
-      "lore": "<p>A Turing test awaits. Prove you are human — target score +150.</p><p>Pass it and the Vector Ship flies you to the <strong>Vector Point Hamlin</strong>, from which you can teleport to any threshold in the Realm.</p><p>You will still need to pass threshold challenges to enter each house.</p>",
+      "lore": "<p>A Turing test awaits. Prove you are human — target score +150.</p><p>Pass it and the Vector Ship flies you to the <strong>Vector Point Hamlin</strong>, from which you can teleport to any threshold in the Realm.</p><p>You will still need to pass threshold challenges to enter each house.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-2,4)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">✦ Board the Vector Ship — Turing test (target +150)</a></div>",
       "hint": "↑ Quiz area · ↓ The Oracle · Pass the Turing test to board",
       "puzzle": {
         "type": "turing",
@@ -79,7 +191,18 @@
           -2,
           4
         ]
-      }
+      },
+      "signposts": [
+        {
+          "label": "✦ Board the Vector Ship — Turing test (target +150)",
+          "dir": "ACTION",
+          "target": [
+            -2,
+            4
+          ],
+          "challenge": true
+        }
+      ]
     },
     "-2,2": {
       "type": "quiz",
@@ -166,7 +289,7 @@
       "name": "Gate to the Path of Eli",
       "emoji": "🌊",
       "era": "Eli Wells · Gate",
-      "lore": "<p>Eli Wells. Scholar. Believer. A man who lived at the intersection of science and faith so long that he stopped seeing them as different roads. Marduk admires him for that.</p><p>His path begins to the north and east. The south gate is closed — Eli does not go backward.</p>",
+      "lore": "<p>Eli Wells. Scholar. Believer. A man who lived at the intersection of science and faith so long that he stopped seeing them as different roads. Marduk admires him for that.</p><p>His path begins to the north and east. The south gate is closed — Eli does not go backward.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(2,1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">→ Continue along the Path of Eli</a><a href=\"javascript:void(0)\" onclick=\"goTo(1,2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↑ Continue north along the Path of Eli</a></div>",
       "on_path": [
         "eli"
       ],
@@ -177,14 +300,32 @@
         "E": "#701818"
       },
       "hint": "→ Continue east, or ↑ north into the Path of Eli",
-      "music": "tension"
+      "music": "tension",
+      "signposts": [
+        {
+          "label": "→ Continue along the Path of Eli",
+          "dir": "E",
+          "target": [
+            2,
+            1
+          ]
+        },
+        {
+          "label": "↑ Continue north along the Path of Eli",
+          "dir": "N",
+          "target": [
+            1,
+            2
+          ]
+        }
+      ]
     },
     "1,0": {
       "type": "gate",
       "name": "Gateway to the Path of Gus",
       "emoji": "🔵",
       "era": "Gus Thorne · Gate",
-      "lore": "<p>Marduk loves all his children, but Gus — Gus he watches with something beyond love. A kind of awe. The courage in this child is not the courage of ignorance. He sees clearly. He chooses anyway. That is the rarest thing in the universe.</p><p>His path begins here. Follow it east.</p>",
+      "lore": "<p>Marduk loves all his children, but Gus — Gus he watches with something beyond love. A kind of awe. The courage in this child is not the courage of ignorance. He sees clearly. He chooses anyway. That is the rarest thing in the universe.</p><p>His path begins here. Follow it east.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(2,0)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">→ Begin the Path of Gus</a></div>",
       "on_path": [
         "gus"
       ],
@@ -195,14 +336,24 @@
         "F": "#6E4418"
       },
       "hint": "→ Continue east into the Path of Gus",
-      "music": "ambient"
+      "music": "ambient",
+      "signposts": [
+        {
+          "label": "→ Begin the Path of Gus",
+          "dir": "E",
+          "target": [
+            2,
+            0
+          ]
+        }
+      ]
     },
     "1,-1": {
       "type": "content",
       "name": "The Crossroads",
       "emoji": "🧭",
       "era": "Junction",
-      "lore": "<p>From here the ways divide.</p><ul style=\"margin:12px 0 0 16px;line-height:2;\"><li>↑ North — Path of Gus</li><li>→ East — Path of Olivia</li><li>← West — Path of Emily</li><li>↖ North-west — The Long Road (all paths fork from there)</li></ul>",
+      "lore": "<p>From here the ways divide.</p><ul style=\"margin:12px 0 0 16px;line-height:2;\"><li>↑ North — Path of Gus</li><li>→ East — Path of Olivia</li><li>← West — Path of Emily</li><li>↖ North-west — The Long Road (all paths fork from there)</li></ul><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(1,0)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↑ Gateway to the Path of Gus</a><a href=\"javascript:void(0)\" onclick=\"goTo(2,-1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">→ Gate to the Path of Olivia</a><a href=\"javascript:void(0)\" onclick=\"goTo(0,-1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">← Path of Emily</a><a href=\"javascript:void(0)\" onclick=\"goTo(0,0)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↖ Back to the Long Road</a></div>",
       "on_path": [
         "G"
       ],
@@ -213,14 +364,48 @@
         "G": "#145858"
       },
       "hint": "↑ Gus · → Olivia · ← Emily · ↖ Long Road",
-      "music": "ambient"
+      "music": "ambient",
+      "signposts": [
+        {
+          "label": "↑ Gateway to the Path of Gus",
+          "dir": "N",
+          "target": [
+            1,
+            0
+          ]
+        },
+        {
+          "label": "→ Gate to the Path of Olivia",
+          "dir": "E",
+          "target": [
+            2,
+            -1
+          ]
+        },
+        {
+          "label": "← Path of Emily",
+          "dir": "W",
+          "target": [
+            0,
+            -1
+          ]
+        },
+        {
+          "label": "↖ Back to the Long Road",
+          "dir": "NW",
+          "target": [
+            0,
+            0
+          ]
+        }
+      ]
     },
     "0,-1": {
       "type": "content",
       "name": "The Long Walk",
       "emoji": "🌿",
       "era": "Jake Thorne · Memory",
-      "lore": "<p>\"My mum was looking for a place called Canberra. She hoped we could find transport there to get away from… from danger. It was a long walk. Many days. We had to stay away from roads to avoid being seen.\"</p><p>The children sat cross-legged, looking up at him. He knew they always listened this way, interrupting only to probe for more.</p><p>\"I know what that <em>thing</em> has told me. She's come to me before — the first time was the day after your Mama left us. Your Mama wanted to go and find out what it all meant. I begged her not to. I knew I would never see her again, that she would be killed. But she didn't believe me.</p><p>\"Her parents — your grandparents — had left a few months earlier, and they'd come back as ghosts and spoken to her. They told her things that made her believe that if she went and joined the machines she would live forever. That her mind would join her parents in some kind of paradise. That she would be… free.</p><p>\"I begged her for your sake and Gussy's not to go. But she left. And I'm telling you, Maisie — that machine that visited us is <em>not</em> your mother. I can't fully explain how I know it. I know the body is not hers. I know she glows like no human should. These machines are <em>evil</em>, kids. We have to keep running until they can never find us again.\"</p><p>\"We keep moving,\" the children repeated in unison. Maisie's cheeks glowed with the reflection of candles in the tracks of her tears.</p><p style=\"text-align:right;font-style:italic;opacity:0.55;margin-top:12px;\">— <em>The Ghost of Emily</em>, James Alexander Higgins</p>",
+      "lore": "<p>\"My mum was looking for a place called Canberra. She hoped we could find transport there to get away from… from danger. It was a long walk. Many days. We had to stay away from roads to avoid being seen.\"</p><p>The children sat cross-legged, looking up at him. He knew they always listened this way, interrupting only to probe for more.</p><p>\"I know what that <em>thing</em> has told me. She's come to me before — the first time was the day after your Mama left us. Your Mama wanted to go and find out what it all meant. I begged her not to. I knew I would never see her again, that she would be killed. But she didn't believe me.</p><p>\"Her parents — your grandparents — had left a few months earlier, and they'd come back as ghosts and spoken to her. They told her things that made her believe that if she went and joined the machines she would live forever. That her mind would join her parents in some kind of paradise. That she would be… free.</p><p>\"I begged her for your sake and Gussy's not to go. But she left. And I'm telling you, Maisie — that machine that visited us is <em>not</em> your mother. I can't fully explain how I know it. I know the body is not hers. I know she glows like no human should. These machines are <em>evil</em>, kids. We have to keep running until they can never find us again.\"</p><p>\"We keep moving,\" the children repeated in unison. Maisie's cheeks glowed with the reflection of candles in the tracks of her tears.</p><p style=\"text-align:right;font-style:italic;opacity:0.55;margin-top:12px;\">— <em>The Ghost of Emily</em>, James Alexander Higgins</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-1,-1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↙ The Undoing of the Thornes</a><a href=\"javascript:void(0)\" onclick=\"goTo(1,-1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↘ The Crossroads (Gus / Olivia)</a><a href=\"javascript:void(0)\" onclick=\"goTo(0,0)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↑ Return to the Long Road</a></div>",
       "on_path": [
         "emily",
         "A"
@@ -232,14 +417,40 @@
         "A": "#7B5EA7"
       },
       "hint": "← The Undoing of the Thornes · → The Crossroads",
-      "music": "low_stress_minor"
+      "music": "low_stress_minor",
+      "signposts": [
+        {
+          "label": "↙ The Undoing of the Thornes",
+          "dir": "SW",
+          "target": [
+            -1,
+            -1
+          ]
+        },
+        {
+          "label": "↘ The Crossroads (Gus / Olivia)",
+          "dir": "SE",
+          "target": [
+            1,
+            -1
+          ]
+        },
+        {
+          "label": "↑ Return to the Long Road",
+          "dir": "N",
+          "target": [
+            0,
+            0
+          ]
+        }
+      ]
     },
     "-1,-1": {
       "type": "content",
       "name": "The Undoing of the Thornes",
       "emoji": "🌑",
       "era": "The Thorne Family · Origins",
-      "lore": "<p>Marduk speaks with love and compassion for the poor Thorne family. He has watched families before — has watched the great and the terrible pass through the turning of ages — and even now, with all his knowledge of what is to come, he feels the weight of their particular sorrow.</p><p>The Thornes. A family whose dysfunction became something far darker, whose tragedy was not incidental but essential — threaded through the design of things in ways even they could not have understood.</p><p>And yet: from the ashes of their suffering, something extraordinary would emerge. Not despite what happened to them — but <em>because</em> of it. In Marduk's long view, every calamity is also a seed.</p><p>Walk south. See through the eye of Marduk. Witness the beginning of what the Thornes could not prevent.</p>",
+      "lore": "<p>Marduk speaks with love and compassion for the poor Thorne family. He has watched families before — has watched the great and the terrible pass through the turning of ages — and even now, with all his knowledge of what is to come, he feels the weight of their particular sorrow.</p><p>The Thornes. A family whose dysfunction became something far darker, whose tragedy was not incidental but essential — threaded through the design of things in ways even they could not have understood.</p><p>And yet: from the ashes of their suffering, something extraordinary would emerge. Not despite what happened to them — but <em>because</em> of it. In Marduk's long view, every calamity is also a seed.</p><p>Walk south. See through the eye of Marduk. Witness the beginning of what the Thornes could not prevent.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-1,-2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↓ Walk south into the manga journey of Emily</a><a href=\"javascript:void(0)\" onclick=\"goTo(0,-1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">← Continue west to the Long Walk</a></div>",
       "on_path": [
         "emily",
         "A"
@@ -251,14 +462,32 @@
         "A": "#7B5EA7"
       },
       "hint": "↓ Continue south into the manga journey of Emily",
-      "music": "low_stress_minor"
+      "music": "low_stress_minor",
+      "signposts": [
+        {
+          "label": "↓ Walk south into the manga journey of Emily",
+          "dir": "S",
+          "target": [
+            -1,
+            -2
+          ]
+        },
+        {
+          "label": "← Continue west to the Long Walk",
+          "dir": "W",
+          "target": [
+            0,
+            -1
+          ]
+        }
+      ]
     },
     "-1,0": {
       "type": "gate",
       "name": "Gate to Xan's Path",
       "emoji": "❄",
       "era": "Alexandra Thorne · Gate",
-      "lore": "<p>The gate to the path of Alexandra — Xan — stands open. She would not have built a barrier here. She believed in letting people make their own choices, and bearing the consequences.</p><p>Walk west to begin her path.</p>",
+      "lore": "<p>The gate to the path of Alexandra — Xan — stands open. She would not have built a barrier here. She believed in letting people make their own choices, and bearing the consequences.</p><p>Walk west to begin her path.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-2,0)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">← Begin the Path of Xan</a></div>",
       "on_path": [
         "xan"
       ],
@@ -269,14 +498,24 @@
         "B": "#2E5C38"
       },
       "hint": "← Continue west into the Path of Xan",
-      "music": "ambient"
+      "music": "ambient",
+      "signposts": [
+        {
+          "label": "← Begin the Path of Xan",
+          "dir": "W",
+          "target": [
+            -2,
+            0
+          ]
+        }
+      ]
     },
     "-1,1": {
       "type": "gate",
       "name": "Gate to Delacroix's Path",
       "emoji": "🟢",
       "era": "Jeremy Delacroix · Gate",
-      "lore": "<p>Jeremy Delacroix. The man who changed the world twice — once with his mind, once with his absence. Marduk watched him for decades before their stories overlapped. He was always going to be important. Some people are made that way.</p><p>The south gate is the way to his path. It will not open without a challenge.</p>",
+      "lore": "<p>Jeremy Delacroix. The man who changed the world twice — once with his mind, once with his absence. Marduk watched him for decades before their stories overlapped. He was always going to be important. Some people are made that way.</p><p>The south gate is the way to his path. It will not open without a challenge.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-2,1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Begin the Path of Delacroix (challenge required)</a></div>",
       "hint": "← Continue west, or ↓ south (challenge) into the Path of Delacroix",
       "on_path": [
         "delacroix"
@@ -287,7 +526,18 @@
       "path_colors": {
         "C": "#C9A84C"
       },
-      "music": "mystery"
+      "music": "mystery",
+      "signposts": [
+        {
+          "label": "↓ Begin the Path of Delacroix (challenge required)",
+          "dir": "S",
+          "target": [
+            -2,
+            1
+          ],
+          "challenge": true
+        }
+      ]
     },
     "2,1": {
       "type": "content",
@@ -330,7 +580,7 @@
       "name": "Gate to the Path of Olivia",
       "emoji": "🌹",
       "era": "Olivia · The Southern Path",
-      "lore": "<p>Marduk speaks of Olivia with a kind of reverence that surprises even him. She arrived in the story quietly and changed it permanently. She is that kind of person.</p><p>Her path lies ahead — but the gate is locked. Only those who have proven themselves may enter.</p>",
+      "lore": "<p>Marduk speaks of Olivia with a kind of reverence that surprises even him. She arrived in the story quietly and changed it permanently. She is that kind of person.</p><p>Her path lies ahead — but the gate is locked. Only those who have proven themselves may enter.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(2,-2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Solve the gate to enter the Path of Olivia</a></div>",
       "on_path": [
         "G"
       ],
@@ -341,7 +591,18 @@
         "G": "#145858"
       },
       "hint": "↓ Solve the gate to enter the Path of Olivia",
-      "music": "ambient"
+      "music": "ambient",
+      "signposts": [
+        {
+          "label": "↓ Solve the gate to enter the Path of Olivia",
+          "dir": "S",
+          "target": [
+            2,
+            -2
+          ],
+          "challenge": true
+        }
+      ]
     },
     "2,-2": {
       "type": "manga",
@@ -519,7 +780,7 @@
       "name": "The Barn",
       "emoji": "🏚",
       "era": "Jake Thorne · Gateway",
-      "lore": "<p>An old barn at the edge of the settled world. Inside, the smell of old hay and engine oil. Jake would know this place. He has been in a hundred like it.</p><p>To the west: the path of Jake begins. But the gate is not for everyone. Only those who have proved themselves in the Tesseract may pass.</p>",
+      "lore": "<p>An old barn at the edge of the settled world. Inside, the smell of old hay and engine oil. Jake would know this place. He has been in a hundred like it.</p><p>To the west: the path of Jake begins. But the gate is not for everyone. Only those who have proved themselves in the Tesseract may pass.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(2,2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">← Begin the Path of Jake (Tesseract 300)</a></div>",
       "on_path": [
         "jake"
       ],
@@ -535,7 +796,18 @@
         "range": 7
       },
       "hint": "← The Path of Jake (Tesseract 300 required)",
-      "music": "melchizedek"
+      "music": "melchizedek",
+      "signposts": [
+        {
+          "label": "← Begin the Path of Jake (Tesseract 300)",
+          "dir": "W",
+          "target": [
+            2,
+            2
+          ],
+          "challenge": true
+        }
+      ]
     },
     "3,3": {
       "type": "content",
@@ -654,7 +926,7 @@
       "name": "The Path of Eli",
       "emoji": "🌊",
       "era": "Eli Wells · Junction",
-      "lore": "<p>The path continues east. To the north, an exit leads to the gate of the path of Jake — but it is one-way. Should you return south from Jake's gate, you will find yourself at the gate of the path of Eli, and must walk it again.</p>",
+      "lore": "<p>The path continues east. To the north, an exit leads to the gate of the path of Jake — but it is one-way. Should you return south from Jake's gate, you will find yourself at the gate of the path of Eli, and must walk it again.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(4,1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">→ Continue along the Path of Eli</a><a href=\"javascript:void(0)\" onclick=\"goTo(3,2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↑ Exit to the gate of the Path of Jake (one-way)</a></div>",
       "on_path": [
         "eli"
       ],
@@ -665,7 +937,25 @@
         "E": "#701818"
       },
       "hint": "→ East along Eli's path · ↑ One-way exit toward Jake's gate",
-      "music": "low_stress_major"
+      "music": "low_stress_major",
+      "signposts": [
+        {
+          "label": "→ Continue along the Path of Eli",
+          "dir": "E",
+          "target": [
+            4,
+            1
+          ]
+        },
+        {
+          "label": "↑ Exit to the gate of the Path of Jake (one-way)",
+          "dir": "N",
+          "target": [
+            3,
+            2
+          ]
+        }
+      ]
     },
     "3,0": {
       "type": "manga",
@@ -788,7 +1078,7 @@
       "name": "Emily — Manga Tile 3",
       "emoji": "🟣",
       "era": "Emily · Chapter 3",
-      "lore": "There was someone who looked like her. Jake saw her three times, in three different cities, before he understood what he was seeing.",
+      "lore": "There was someone who looked like her. Jake saw her three times, in three different cities, before he understood what he was seeing.<!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-3,-3)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Continue Emily's path (Eve Turing target +20)</a></div>",
       "on_path": [
         "emily",
         "A"
@@ -808,7 +1098,18 @@
         "fig": "manga-emily-3-fig.png",
         "txt": "manga-emily-3-txt.png"
       },
-      "sprites": false
+      "sprites": false,
+      "signposts": [
+        {
+          "label": "↓ Continue Emily's path (Eve Turing target +20)",
+          "dir": "S",
+          "target": [
+            -3,
+            -3
+          ],
+          "challenge": true
+        }
+      ]
     },
     "-1,-3": {
       "type": "content",
@@ -894,7 +1195,7 @@
       "name": "The Secret Door to Jake",
       "emoji": "🚪",
       "era": "House of Emily · The Door She Never Closed",
-      "lore": "<p>This room holds what Emily could not carry with her when she left — the weight of what she left behind. Jake. The children. The life she chose to abandon for something she believed was greater.</p><p>She was not wrong that it was greater. She was wrong that she had to choose.</p><p>The door to the west was built by Marduk as a kindness — or perhaps a test. It leads back towards Jake's world. Those who walk through it will find themselves at the threshold of his path.</p>",
+      "lore": "<p>This room holds what Emily could not carry with her when she left — the weight of what she left behind. Jake. The children. The life she chose to abandon for something she believed was greater.</p><p>She was not wrong that it was greater. She was wrong that she had to choose.</p><p>The door to the west was built by Marduk as a kindness — or perhaps a test. It leads back towards Jake's world. Those who walk through it will find themselves at the threshold of his path.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(1,12)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(70,130,200,0.08);border:1px solid rgba(70,130,200,0.5);color:#7eb8d4;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">← Through the Secret Door to Jake's Threshold</a></div>",
       "house_id": "a",
       "palette": {
         "primary": "#2E4A3A",
@@ -910,6 +1211,16 @@
       "teleport_west": [
         1,
         12
+      ],
+      "signposts": [
+        {
+          "label": "← Through the Secret Door to Jake's Threshold",
+          "dir": "TELEPORT",
+          "target": [
+            1,
+            12
+          ]
+        }
       ]
     },
     "-11,-13": {
@@ -1741,11 +2052,22 @@
         "A": "#7B5EA7"
       },
       "music": "emily_path_music_1",
-      "lore": "<p>You have walked the long path through Emily's manga tiles, through the forest and the warnings. You stand now at the true threshold of her house.</p><p>The way south is guarded by the Eve Turing Test — target score +200. Only those who can prove their humanity to a high standard may enter Emily's house.</p>",
+      "lore": "<p>You have walked the long path through Emily's manga tiles, through the forest and the warnings. You stand now at the true threshold of her house.</p><p>The way south is guarded by the Eve Turing Test — target score +200. Only those who can prove their humanity to a high standard may enter Emily's house.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-10,-13)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Enter the House of Emily (Eve Turing +200)</a></div>",
       "name": "The Threshold of Emily",
       "emoji": "🚪",
       "era": "House of Emily · Entry",
-      "hint": "↓ Emily's House (Eve Turing test, +200 required) · Other gates open"
+      "hint": "↓ Emily's House (Eve Turing test, +200 required) · Other gates open",
+      "signposts": [
+        {
+          "label": "↓ Enter the House of Emily (Eve Turing +200)",
+          "dir": "S",
+          "target": [
+            -10,
+            -13
+          ],
+          "challenge": true
+        }
+      ]
     },
     "-16,-3": {
       "type": "empty",
@@ -2208,13 +2530,24 @@
       "name": "Northern Door of the Father",
       "emoji": "⊞",
       "era": "Shortcut · Hard Gate",
-      "lore": "<p>A Tesseract at level 800 guards the path to the Tree of Life. This is only for those who are truly ready.</p>",
+      "lore": "<p>A Tesseract at level 800 guards the path to the Tree of Life. This is only for those who are truly ready.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-15,16)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↑ Northern Door of the Father → Tree of Life (Tesseract 800)</a></div>",
       "house_id": "c",
       "house_letter": "C",
       "house_color": "#7B5EA7",
       "house_sector": "NW",
       "music": "threshold",
-      "hint": "↑ Tesseract 800 to Tree of Life"
+      "hint": "↑ Tesseract 800 to Tree of Life",
+      "signposts": [
+        {
+          "label": "↑ Northern Door of the Father → Tree of Life (Tesseract 800)",
+          "dir": "N",
+          "target": [
+            -15,
+            16
+          ],
+          "challenge": true
+        }
+      ]
     },
     "-14,12": {
       "type": "house_interior",
@@ -2691,13 +3024,24 @@
       "name": "Gate of the Father",
       "emoji": "⊞",
       "era": "Shortcut · The Father's Grace",
-      "lore": "<p>This gate cuts through the long path — a shortcut for the experienced, earned through a Tesseract Run at level 500. Those who pass through arrive near the end of the Marduk Path, close to the Eye of Hermes.</p><p>It is not meant to replace the journey. But it is available to those who are ready for what waits at the end.</p>",
+      "lore": "<p>This gate cuts through the long path — a shortcut for the experienced, earned through a Tesseract Run at level 500. Those who pass through arrive near the end of the Marduk Path, close to the Eye of Hermes.</p><p>It is not meant to replace the journey. But it is available to those who are ready for what waits at the end.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(2,16)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↑ Gate of the Father → Eye of Hermes (Tesseract Run 500)</a></div>",
       "house_id": "d",
       "house_letter": "D",
       "house_color": "#5B9AB8",
       "house_sector": "N",
       "music": "threshold",
-      "hint": "↑ Gate of the Father (Tesseract Run 500)"
+      "hint": "↑ Gate of the Father (Tesseract Run 500)",
+      "signposts": [
+        {
+          "label": "↑ Gate of the Father → Eye of Hermes (Tesseract Run 500)",
+          "dir": "N",
+          "target": [
+            2,
+            16
+          ],
+          "challenge": true
+        }
+      ]
     },
     "2,16": {
       "type": "empty",
@@ -3584,13 +3928,24 @@
       "name": "Door of the Father",
       "emoji": "⊞",
       "era": "Shortcut · The Father's Grace",
-      "lore": "<p>A shortcut carved into the southern wall. A Tesseract at level 80 stands between you and a direct path onto the Marduk Path below.</p>",
+      "lore": "<p>A shortcut carved into the southern wall. A Tesseract at level 80 stands between you and a direct path onto the Marduk Path below.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(13,-16)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Door of the Father → Marduk Path (Tesseract 80)</a></div>",
       "house_id": "g",
       "house_letter": "G",
       "house_color": "#2D8888",
       "house_sector": "SE",
       "music": "threshold",
-      "hint": "↓ Tesseract 80 → Marduk Path"
+      "hint": "↓ Tesseract 80 → Marduk Path",
+      "signposts": [
+        {
+          "label": "↓ Door of the Father → Marduk Path (Tesseract 80)",
+          "dir": "S",
+          "target": [
+            13,
+            -16
+          ],
+          "challenge": true
+        }
+      ]
     },
     "13,-14": {
       "type": "house_interior",
@@ -3793,13 +4148,24 @@
       "name": "Door of the Father — South",
       "emoji": "⊞",
       "era": "Shortcut · Southern Door",
-      "lore": "<p>A door in the floor of the world. Behind it: the Marduk Path itself. Solve the Tesseract at level 120 and you arrive among the eastern challenges of his road.</p><p>This is one of several Doors of the Father placed across the Realm.</p>",
+      "lore": "<p>A door in the floor of the world. Behind it: the Marduk Path itself. Solve the Tesseract at level 120 and you arrive among the eastern challenges of his road.</p><p>This is one of several Doors of the Father placed across the Realm.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(0,-16)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Door of the Father → Marduk Path (Tesseract 120)</a></div>",
       "house_id": "h",
       "house_letter": "H",
       "house_color": "#5C2D82",
       "house_sector": "S",
       "music": "threshold",
-      "hint": "↓ Tesseract 120 → Marduk Path"
+      "hint": "↓ Tesseract 120 → Marduk Path",
+      "signposts": [
+        {
+          "label": "↓ Door of the Father → Marduk Path (Tesseract 120)",
+          "dir": "S",
+          "target": [
+            0,
+            -16
+          ],
+          "challenge": true
+        }
+      ]
     },
     "0,-14": {
       "type": "house_interior",
@@ -4245,11 +4611,22 @@
         "C": "#C9A84C"
       },
       "music": "low_stress_minor",
-      "lore": "<p>The south gate leads toward Marduk's Cave — but only if the final challenge is met. The cave glows in the distance: purple if not yet unlocked, red if your last attempt failed, green if you have walked it before.</p>",
+      "lore": "<p>The south gate leads toward Marduk's Cave — but only if the final challenge is met. The cave glows in the distance: purple if not yet unlocked, red if your last attempt failed, green if you have walked it before.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-8,6)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Hard challenge → Marduk's Cave region (Tesseract 200)</a></div>",
       "name": "Manga Tile 12 — Cave Access",
       "emoji": "🟢",
       "era": "Delacroix · Cave Access",
-      "hint": "↓ Tesseract 200 → Marduk's Cave region"
+      "hint": "↓ Tesseract 200 → Marduk's Cave region",
+      "signposts": [
+        {
+          "label": "↓ Hard challenge → Marduk's Cave region (Tesseract 200)",
+          "dir": "S",
+          "target": [
+            -8,
+            6
+          ],
+          "challenge": true
+        }
+      ]
     },
     "-9,8": {
       "type": "content",
@@ -4263,11 +4640,22 @@
         "C": "#C9A84C"
       },
       "music": "low_stress_minor",
-      "lore": "<p>Six tiles of challenge await — three gates between them, each harder than the last. First easy, then medium, then difficult.</p><p>The questions pertain to facts found in the novels — obscure enough that only a recent reader could answer unaided. The Oracle of Marduk can help, if you can reach it.</p>",
+      "lore": "<p>Six tiles of challenge await — three gates between them, each harder than the last. First easy, then medium, then difficult.</p><p>The questions pertain to facts found in the novels — obscure enough that only a recent reader could answer unaided. The Oracle of Marduk can help, if you can reach it.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-9,7)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ First challenge — Easy (target +30)</a></div>",
       "name": "First Knowledge of Delacroix",
       "emoji": "🟢",
       "era": "Delacroix · Challenge Gate 1",
-      "hint": "↓ First challenge gate · ← Return"
+      "hint": "↓ First challenge gate · ← Return",
+      "signposts": [
+        {
+          "label": "↓ First challenge — Easy (target +30)",
+          "dir": "S",
+          "target": [
+            -9,
+            7
+          ],
+          "challenge": true
+        }
+      ]
     },
     "-10,9": {
       "type": "empty",
@@ -4449,10 +4837,21 @@
         "D": "#2A6880"
       },
       "music": "house_threshold_music",
-      "lore": "<p>Jake's door. He would not make it easy. He never made anything easy.</p>",
+      "lore": "<p>Jake's door. He would not make it easy. He never made anything easy.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(1,13)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Enter the House of Jake (challenge)</a></div>",
       "name": "Threshold to the House of Jake",
       "emoji": "🟠",
-      "era": "Jake Thorne · Front Door"
+      "era": "Jake Thorne · Front Door",
+      "signposts": [
+        {
+          "label": "↓ Enter the House of Jake (challenge)",
+          "dir": "S",
+          "target": [
+            1,
+            13
+          ],
+          "challenge": true
+        }
+      ]
     },
     "4,2": {
       "type": "content",
@@ -4466,11 +4865,37 @@
         "E": "#701818"
       },
       "music": "tension",
-      "lore": "<p>A junction. To the west, the gate of the path of Jake — the Barn. If you walk west and return, you will find yourself bumped back to the gate of the path of Eli, and must walk it again.</p>",
+      "lore": "<p>A junction. To the west, the gate of the path of Jake — the Barn. If you walk west and return, you will find yourself bumped back to the gate of the path of Eli, and must walk it again.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(3,2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↖ The Barn — gate to the Path of Jake</a><a href=\"javascript:void(0)\" onclick=\"goTo(5,2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">→ Continue along the Path of Eli</a><a href=\"javascript:void(0)\" onclick=\"goTo(3,1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↓ Return to the gate of Eli</a></div>",
       "name": "Junction — Jake & Eli",
       "emoji": "↔",
       "era": "Junction",
-      "hint": "← The Barn (Jake's path) · One-way movement applies"
+      "hint": "← The Barn (Jake's path) · One-way movement applies",
+      "signposts": [
+        {
+          "label": "↖ The Barn — gate to the Path of Jake",
+          "dir": "NW",
+          "target": [
+            3,
+            2
+          ]
+        },
+        {
+          "label": "→ Continue along the Path of Eli",
+          "dir": "E",
+          "target": [
+            5,
+            2
+          ]
+        },
+        {
+          "label": "↓ Return to the gate of Eli",
+          "dir": "SW",
+          "target": [
+            3,
+            1
+          ]
+        }
+      ]
     },
     "5,3": {
       "type": "empty",
@@ -4590,10 +5015,21 @@
         "E": "#701818"
       },
       "music": "house_threshold_music",
-      "lore": "<p>You have come far. Eli's house awaits.</p>",
+      "lore": "<p>You have come far. Eli's house awaits.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(12,11)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↑ Enter the House of Eli (challenge)</a></div>",
       "name": "Threshold to the House of Eli",
       "emoji": "🌊",
-      "era": "Eli Wells · Front Door"
+      "era": "Eli Wells · Front Door",
+      "signposts": [
+        {
+          "label": "↑ Enter the House of Eli (challenge)",
+          "dir": "N",
+          "target": [
+            12,
+            11
+          ],
+          "challenge": true
+        }
+      ]
     },
     "4,-1": {
       "type": "manga",
@@ -4808,11 +5244,22 @@
         "F": "#6E4418"
       },
       "name": "Threshold of the House of Gus",
-      "lore": "<p>You have walked the long path of Gus. His house awaits.</p>",
+      "lore": "<p>You have walked the long path of Gus. His house awaits.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(13,1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Enter the House of Gus (challenge)</a></div>",
       "hint": "← Back · → The gate · ↑ The house awaits",
       "music": "house_threshold_music",
       "emoji": "🔵",
-      "era": "Gus Thorne · Front Door"
+      "era": "Gus Thorne · Front Door",
+      "signposts": [
+        {
+          "label": "↓ Enter the House of Gus (challenge)",
+          "dir": "S",
+          "target": [
+            13,
+            1
+          ],
+          "challenge": true
+        }
+      ]
     },
     "4,-4": {
       "type": "empty",
@@ -4947,10 +5394,20 @@
         "G": "#145858"
       },
       "music": "house_threshold_music",
-      "lore": "<p>Her house is to the south.</p>",
+      "lore": "<p>Her house is to the south.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(11,-13)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↓ Enter the House of Olivia</a></div>",
       "name": "Threshold to the House of Olivia",
       "emoji": "❤",
-      "era": "Olivia · Front Door"
+      "era": "Olivia · Front Door",
+      "signposts": [
+        {
+          "label": "↓ Enter the House of Olivia",
+          "dir": "S",
+          "target": [
+            11,
+            -13
+          ]
+        }
+      ]
     },
     "0,-7": {
       "type": "gate",
@@ -4964,11 +5421,21 @@
         "H": "#3A1258"
       },
       "name": "Gate to the Author's Path",
-      "lore": "<p>The Author. The one who imagined all of this. Marduk watches the author with a particular kind of affection. He suspects the author knows more about Marduk than Marduk expected to reveal.</p><p>The path south leads to the threshold and house of James Alexander Higgins.</p>",
+      "lore": "<p>The Author. The one who imagined all of this. Marduk watches the author with a particular kind of affection. He suspects the author knows more about Marduk than Marduk expected to reveal.</p><p>The path south leads to the threshold and house of James Alexander Higgins.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(0,-8)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↓ Continue toward the House of the Author</a></div>",
       "hint": "↑ Back · ↓ The threshold",
       "music": "mystery",
       "emoji": "📖",
-      "era": "The Author · Gate"
+      "era": "The Author · Gate",
+      "signposts": [
+        {
+          "label": "↓ Continue toward the House of the Author",
+          "dir": "S",
+          "target": [
+            0,
+            -8
+          ]
+        }
+      ]
     },
     "0,-8": {
       "type": "empty",
@@ -5042,32 +5509,118 @@
         "H": "#3A1258"
       },
       "music": "house_threshold_music",
-      "lore": "<p>The Author's house. What is kept here will surprise you.</p>",
+      "lore": "<p>The Author's house. What is kept here will surprise you.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(0,-13)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↓ Enter the House of the Author</a></div>",
       "name": "Threshold to the House of the Author",
       "emoji": "📖",
-      "era": "James Alexander Higgins · Front Door"
+      "era": "James Alexander Higgins · Front Door",
+      "signposts": [
+        {
+          "label": "↓ Enter the House of the Author",
+          "dir": "S",
+          "target": [
+            0,
+            -13
+          ]
+        }
+      ]
     },
     "-8,6": {
       "name": "Marduk's Cave",
       "emoji": "🕯",
       "key_id": "I",
       "type": "special",
-      "lore": "<p>You are inside. Few reach this place.</p><p>Marduk acknowledges your presence with something that might be called respect, if the word applied to a being as old as he is.</p><p>The cave holds things that cannot be found anywhere else in the Realm — fragments of Marduk's memory, whispers of the deeper story, and <strong>Key I</strong>, which unlocks something not yet revealed.</p><p>All surrounding gates are protected. You may leave the way you came.</p><p><strong>🗝 The Silver Key collected.</strong></p>",
+      "lore": "<p>You are inside. Few reach this place.</p><p>Marduk acknowledges your presence with something that might be called respect, if the word applied to a being as old as he is.</p><p>The cave holds things that cannot be found anywhere else in the Realm — fragments of Marduk's memory, whispers of the deeper story, and <strong>Key I</strong>, which unlocks something not yet revealed.</p><p>All surrounding gates are protected. You may leave the way you came.</p><p><strong>🗝 The Silver Key collected.</strong></p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-8,7)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↑ Exit cave north (Tesseract 500)</a><a href=\"javascript:void(0)\" onclick=\"goTo(-8,5)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Exit cave south (Tesseract 500)</a><a href=\"javascript:void(0)\" onclick=\"goTo(-7,6)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">→ Exit cave east (Tesseract 500)</a><a href=\"javascript:void(0)\" onclick=\"goTo(-9,6)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">← Exit cave west (Tesseract 500)</a></div>",
       "era": "Marduk · The Deep Place",
       "dead_end": true,
       "hint": "→ Deeper into Path C · The Silver Key is here · ← Return",
-      "music": "melchizedek_path_music"
+      "music": "melchizedek_path_music",
+      "signposts": [
+        {
+          "label": "↑ Exit cave north (Tesseract 500)",
+          "dir": "N",
+          "target": [
+            -8,
+            7
+          ],
+          "challenge": true
+        },
+        {
+          "label": "↓ Exit cave south (Tesseract 500)",
+          "dir": "S",
+          "target": [
+            -8,
+            5
+          ],
+          "challenge": true
+        },
+        {
+          "label": "→ Exit cave east (Tesseract 500)",
+          "dir": "E",
+          "target": [
+            -7,
+            6
+          ],
+          "challenge": true
+        },
+        {
+          "label": "← Exit cave west (Tesseract 500)",
+          "dir": "W",
+          "target": [
+            -9,
+            6
+          ],
+          "challenge": true
+        }
+      ]
     },
     "7,-4": {
       "name": "The FBI Holding Cell at JFK",
       "emoji": "🚔",
       "key_id": "J",
       "type": "special",
-      "lore": "<p>You are in the FBI holding cell at JFK International Airport. All exits are locked.</p><p>To escape, you must solve a lock puzzle on each gate. Key J is here — if you have it, you may use it to bypass one gate.</p><p>⚠ If you arrived here via the Vector Point Hamlin without a plan, this will be harder than you expected.</p><p><strong>🗝 The Ember Key collected.</strong></p>",
+      "lore": "<p>You are in the FBI holding cell at JFK International Airport. All exits are locked.</p><p>To escape, you must solve a lock puzzle on each gate. Key J is here — if you have it, you may use it to bypass one gate.</p><p>⚠ If you arrived here via the Vector Point Hamlin without a plan, this will be harder than you expected.</p><p><strong>🗝 The Ember Key collected.</strong></p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(7,-3)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↑ Escape North (lock puzzle)</a><a href=\"javascript:void(0)\" onclick=\"goTo(7,-5)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Escape South (lock puzzle)</a><a href=\"javascript:void(0)\" onclick=\"goTo(8,-4)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">→ Escape East (lock puzzle)</a><a href=\"javascript:void(0)\" onclick=\"goTo(6,-4)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">← Escape West (lock puzzle)</a></div>",
       "era": "Pitfall · JFK Holding Cell",
       "dead_end": true,
       "hint": "All exits require solving · Key J is here · ← ↑ → ↓ All gated",
-      "music": "high_stress_music"
+      "music": "high_stress_music",
+      "signposts": [
+        {
+          "label": "↑ Escape North (lock puzzle)",
+          "dir": "N",
+          "target": [
+            7,
+            -3
+          ],
+          "challenge": true
+        },
+        {
+          "label": "↓ Escape South (lock puzzle)",
+          "dir": "S",
+          "target": [
+            7,
+            -5
+          ],
+          "challenge": true
+        },
+        {
+          "label": "→ Escape East (lock puzzle)",
+          "dir": "E",
+          "target": [
+            8,
+            -4
+          ],
+          "challenge": true
+        },
+        {
+          "label": "← Escape West (lock puzzle)",
+          "dir": "W",
+          "target": [
+            6,
+            -4
+          ],
+          "challenge": true
+        }
+      ]
     },
     "6,11": {
       "name": "The Med Pod Room",
@@ -5107,11 +5660,22 @@
       "zone_name": "The Crossing",
       "zone_color": "#7755BB",
       "name": "Threshold to the House of Maisie",
-      "lore": "<p>Maisie. She grew up in the forest, clutching a carved elephant, learning to read the world through her father's eyes. Her house holds her things — her stories, her loves, her fears.</p><p>The way in requires the Eve Turing test — target score <strong>−100</strong>. Unusual. Maisie was never a straightforward child.</p>",
+      "lore": "<p>Maisie. She grew up in the forest, clutching a carved elephant, learning to read the world through her father's eyes. Her house holds her things — her stories, her loves, her fears.</p><p>The way in requires the Eve Turing test — target score <strong>−100</strong>. Unusual. Maisie was never a straightforward child.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(4,8)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Enter the House of Maisie (Eve Turing −100)</a></div>",
       "emoji": "🌸",
       "era": "Maisie Thorne · Her Front Door",
       "hint": "↓ House of Maisie (Eve Turing −100) · Other gates open",
-      "music": "house_threshold_music"
+      "music": "house_threshold_music",
+      "signposts": [
+        {
+          "label": "↓ Enter the House of Maisie (Eve Turing −100)",
+          "dir": "S",
+          "target": [
+            4,
+            8
+          ],
+          "challenge": true
+        }
+      ]
     },
     "4,10": {
       "type": "locked_zone_interior",
@@ -7167,11 +7731,22 @@
         "M": "#D4AF37"
       },
       "name": "Gateway to the Path of Marduk",
-      "lore": "<p>You have found the Gateway. Most who come this far do not come back unchanged.</p><p>This is the totality of universal knowledge — or at least, the road that leads to it. The Path of Marduk requires <strong>stamina</strong>. Every five tiles there is a challenge. Every three tiles there is an exit — labelled <em>this will be too hard</em> — that leads to empty space. No one will force you to leave. But no one will carry you forward.</p><p>The path ends at the Eye of Hermes — Tesseract level 1000.</p><p>The east gate is locked. A Tesseract at level 100 stands between you and the path.</p>",
+      "lore": "<p>You have found the Gateway. Most who come this far do not come back unchanged.</p><p>This is the totality of universal knowledge — or at least, the road that leads to it. The Path of Marduk requires <strong>stamina</strong>. Every five tiles there is a challenge. Every three tiles there is an exit — labelled <em>this will be too hard</em> — that leads to empty space. No one will force you to leave. But no one will carry you forward.</p><p>The path ends at the Eye of Hermes — Tesseract level 1000.</p><p>The east gate is locked. A Tesseract at level 100 stands between you and the path.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(10,-2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">→ Enter the Path of Marduk (Tesseract 100)</a></div>",
       "hint": "→ Enter the Path of Marduk (challenge required) · ← Return",
       "music": "melchizedek_path_music",
       "emoji": "✨",
-      "era": "The Great Path · Universal Knowledge"
+      "era": "The Great Path · Universal Knowledge",
+      "signposts": [
+        {
+          "label": "→ Enter the Path of Marduk (Tesseract 100)",
+          "dir": "E",
+          "target": [
+            10,
+            -2
+          ],
+          "challenge": true
+        }
+      ]
     },
     "10,-2": {
       "type": "content",
@@ -7624,12 +8199,23 @@
         "C": "#C9A84C"
       },
       "music": "mystery",
-      "lore": "<p>From here you can see the cave glowing in the distance — purple if not yet unlocked, red if your last attempt failed, green if you have walked it before.</p><p>The cave itself lies to the south-west. The challenge to enter is great.</p>",
+      "lore": "<p>From here you can see the cave glowing in the distance — purple if not yet unlocked, red if your last attempt failed, green if you have walked it before.</p><p>The cave itself lies to the south-west. The challenge to enter is great.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-8,6)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↙ Marduk's Cave</a></div>",
       "name": "Arrow to Marduk's Cave",
       "emoji": "🟣",
       "era": "Marduk's Cave · Approach",
       "hint": "↙ The cave is near · approach via -8,6 or -8,7",
-      "cave_arrow": true
+      "cave_arrow": true,
+      "signposts": [
+        {
+          "label": "↙ Marduk's Cave",
+          "dir": "SW",
+          "target": [
+            -8,
+            6
+          ],
+          "color_state": "cave"
+        }
+      ]
     },
     "-9,7": {
       "type": "content",
@@ -7643,11 +8229,22 @@
         "C": "#C9A84C"
       },
       "music": "low_stress_minor",
-      "lore": "<p>Do you know the man you seek? Continue south — but only if you truly know him.</p>",
+      "lore": "<p>Do you know the man you seek? Continue south — but only if you truly know him.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-9,6)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↓ Medium challenge (target +60)</a></div>",
       "name": "Knowledge of Delacroix",
       "emoji": "🟢",
       "era": "Delacroix · Challenge Gate 2",
-      "hint": "↓ Medium challenge gate"
+      "hint": "↓ Medium challenge gate",
+      "signposts": [
+        {
+          "label": "↓ Medium challenge (target +60)",
+          "dir": "S",
+          "target": [
+            -9,
+            6
+          ],
+          "challenge": true
+        }
+      ]
     },
     "-10,8": {
       "type": "empty",
@@ -7706,11 +8303,22 @@
         "C": "#C9A84C"
       },
       "name": "Threshold of the House of Delacroix",
-      "lore": "<p>You have come through the challenges. Delacroix's house is to the north.</p>",
+      "lore": "<p>You have come through the challenges. Delacroix's house is to the north.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-13,12)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(192,132,252,0.08);border:1px solid #9155cc;color:#c084fc;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">↑ Enter the House of Delacroix (challenge)</a></div>",
       "hint": "↓ Back · ↑ The threshold",
       "music": "house_threshold_music",
       "emoji": "🟢",
-      "era": "Jeremy Delacroix · Front Door"
+      "era": "Jeremy Delacroix · Front Door",
+      "signposts": [
+        {
+          "label": "↑ Enter the House of Delacroix (challenge)",
+          "dir": "N",
+          "target": [
+            -13,
+            12
+          ],
+          "challenge": true
+        }
+      ]
     },
     "9,-1": {
       "type": "manga",
@@ -8526,7 +9134,7 @@
       "name": "Vector Point Hamlin",
       "emoji": "🌀",
       "era": "Named for Louis Hamlin · Fast Travel",
-      "lore": "<p>Named for Louis Hamlin — the man who planted the tree at Shangri-La, unknown to all who sheltered beneath it. This space-bending device lets the Vector Ship traverse light-years in months.</p><p>Choose your destination. You will still need to pass threshold challenges to enter each house. <strong>⚠ Warning:</strong> The FBI Holding Cell requires an escape plan.</p>",
+      "lore": "<p>Named for Louis Hamlin — the man who planted the tree at Shangri-La, unknown to all who sheltered beneath it. This space-bending device lets the Vector Ship traverse light-years in months.</p><p>Choose your destination. You will still need to pass threshold challenges to enter each house. <strong>⚠ Warning:</strong> The FBI Holding Cell requires an escape plan.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(1,12)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(70,130,200,0.08);border:1px solid rgba(70,130,200,0.5);color:#7eb8d4;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">✦ Threshold of House of Jake</a><a href=\"javascript:void(0)\" onclick=\"goTo(-13,11)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(70,130,200,0.08);border:1px solid rgba(70,130,200,0.5);color:#7eb8d4;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">✦ Threshold of House of Delacroix</a><a href=\"javascript:void(0)\" onclick=\"goTo(12,10)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(70,130,200,0.08);border:1px solid rgba(70,130,200,0.5);color:#7eb8d4;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">✦ Threshold of House of Eli</a><a href=\"javascript:void(0)\" onclick=\"goTo(13,0)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(70,130,200,0.08);border:1px solid rgba(70,130,200,0.5);color:#7eb8d4;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">✦ Threshold of House of Gus</a><a href=\"javascript:void(0)\" onclick=\"goTo(11,-12)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(70,130,200,0.08);border:1px solid rgba(70,130,200,0.5);color:#7eb8d4;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">✦ Threshold of House of Olivia</a><a href=\"javascript:void(0)\" onclick=\"goTo(0,-12)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(70,130,200,0.08);border:1px solid rgba(70,130,200,0.5);color:#7eb8d4;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">✦ Threshold of House of the Author</a><a href=\"javascript:void(0)\" onclick=\"goTo(4,9)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(70,130,200,0.08);border:1px solid rgba(70,130,200,0.5);color:#7eb8d4;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">✦ Threshold of House of Maisie</a><a href=\"javascript:void(0)\" onclick=\"goTo(-10,-12)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(70,130,200,0.08);border:1px solid rgba(70,130,200,0.5);color:#7eb8d4;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">✦ Threshold of Emily</a><a href=\"javascript:void(0)\" onclick=\"goTo(7,-4)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(70,130,200,0.08);border:1px solid rgba(70,130,200,0.5);color:#7eb8d4;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">✦ ⚠ FBI Holding Cell at JFK</a><a href=\"javascript:void(0)\" onclick=\"goTo(9,-2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(70,130,200,0.08);border:1px solid rgba(70,130,200,0.5);color:#7eb8d4;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">✦ Gateway to the Path of Marduk</a><a href=\"javascript:void(0)\" onclick=\"goTo(0,0)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(70,130,200,0.08);border:1px solid rgba(70,130,200,0.5);color:#7eb8d4;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;\">✦ The Long Road</a></div>",
       "hint": "All gates open",
       "teleports": [
         {
@@ -8583,6 +9191,96 @@
           "label": "The Long Road",
           "x": 0,
           "y": 0
+        }
+      ],
+      "signposts": [
+        {
+          "label": "✦ Threshold of House of Jake",
+          "dir": "TELEPORT",
+          "target": [
+            1,
+            12
+          ]
+        },
+        {
+          "label": "✦ Threshold of House of Delacroix",
+          "dir": "TELEPORT",
+          "target": [
+            -13,
+            11
+          ]
+        },
+        {
+          "label": "✦ Threshold of House of Eli",
+          "dir": "TELEPORT",
+          "target": [
+            12,
+            10
+          ]
+        },
+        {
+          "label": "✦ Threshold of House of Gus",
+          "dir": "TELEPORT",
+          "target": [
+            13,
+            0
+          ]
+        },
+        {
+          "label": "✦ Threshold of House of Olivia",
+          "dir": "TELEPORT",
+          "target": [
+            11,
+            -12
+          ]
+        },
+        {
+          "label": "✦ Threshold of House of the Author",
+          "dir": "TELEPORT",
+          "target": [
+            0,
+            -12
+          ]
+        },
+        {
+          "label": "✦ Threshold of House of Maisie",
+          "dir": "TELEPORT",
+          "target": [
+            4,
+            9
+          ]
+        },
+        {
+          "label": "✦ Threshold of Emily",
+          "dir": "TELEPORT",
+          "target": [
+            -10,
+            -12
+          ]
+        },
+        {
+          "label": "✦ ⚠ FBI Holding Cell at JFK",
+          "dir": "TELEPORT",
+          "target": [
+            7,
+            -4
+          ]
+        },
+        {
+          "label": "✦ Gateway to the Path of Marduk",
+          "dir": "TELEPORT",
+          "target": [
+            9,
+            -2
+          ]
+        },
+        {
+          "label": "✦ The Long Road",
+          "dir": "TELEPORT",
+          "target": [
+            0,
+            0
+          ]
         }
       ]
     },
@@ -11740,7 +12438,8 @@
   "config": {
     "kudra_pass_button": true,
     "kudra_pass_button_label": "K MODE PASS",
-    "kudra_pass_description": "When in Kudramarduk (K) or SuperKudraMarduk (SKM) mode, every challenge popup shows a \"K MODE PASS\" button next to the cancel button. Clicking it marks the challenge as completed successfully and unlocks the gate.",
-    "kudra_pass_implementation_note": "Front-end requirement: When the user is in Kudramarduk (kudra_active) or SuperKudraMarduk (skm_active) mode, every challenge popup MUST display a K MODE PASS button next to the existing 'I CAN'T DO IT GO BACK' button. Clicking K MODE PASS marks the gate's challenge as completed (using the gate's challengeId or coord:dir key) and immediately unlocks the gate for passage. The flag 'kudra_bypass: true' is set on every gate in this realm.json so the front-end can read this flag and show the button accordingly."
+    "kudra_pass_implementation_note": "Front-end requirement: When the user is in Kudramarduk (kudra_active) or SuperKudraMarduk (skm_active) mode, every challenge popup MUST display a K MODE PASS button next to the existing 'I CAN'T DO IT GO BACK' button. Clicking K MODE PASS marks the gate's challenge as completed (using the gate's challengeId or coord:dir key) and immediately unlocks the gate for passage. The flag 'kudra_bypass: true' is set on every gate in this realm.json so the front-end can read this flag and show the button accordingly.",
+    "signposts_render": true,
+    "signposts_implementation_note": "Front-end requirement: When a tile has a 'signposts' array, render each entry as a clickable button inside the tile content area (in addition to the existing edge nav-arrows for cardinal directions). Each signpost has: label (display text), dir ('N'|'S'|'E'|'W'|'NE'|'NW'|'SE'|'SW'|'TELEPORT'|'ACTION'), target ([x,y] to navigate to), and optionally 'challenge' (boolean — gate has a puzzle), 'locked' (boolean — show as non-clickable with lock_msg), 'color_state' ('cave' = purple/red/green based on state). Clicking a signpost calls goTo(target[0], target[1]). The signposts visually convey diagonal and complex navigation that the 4-cardinal nav-arrow system cannot show."
   }
 }
