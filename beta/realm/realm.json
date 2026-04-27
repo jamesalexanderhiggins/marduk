@@ -1,5 +1,5 @@
 {
-  "version": "9.6.3",
+  "version": "10.0.0",
   "grid": {
     "extent": 16,
     "size": 33
@@ -11,7 +11,7 @@
       "name": "The Long Road",
       "emoji": "⊕",
       "era": "The Centre of the Map",
-      "lore": "<p>You stand at the centre of everything — the great fork where every path begins.</p><p>From here, eight paths radiate outward:</p><ul style=\"margin:12px 0 0 20px;line-height:1.95;\"><li><strong>↑ NORTH</strong> — <em>The Path of Melchizedek</em> · sealed for now. Leads directly to the Oracle of Marduk above.</li><li><strong>↗ NORTH-EAST</strong> — <em>The Path of Eli</em> · go EAST then NORTH (or vice versa).</li><li><strong>→ EAST</strong> — <em>The Path of Gus</em>.</li><li><strong>↘ SOUTH-EAST</strong> — <em>The Path of Olivia</em> · go SOUTH then EAST.</li><li><strong>↓ SOUTH</strong> — <em>The Path of Emily</em> · via the Long Walk and the Undoing of the Thornes.</li><li><strong>↙ SOUTH-WEST</strong> — Reaches Emily and the Author via south-westward travel.</li><li><strong>← WEST</strong> — <em>The Path of Xan</em>.</li><li><strong>↖ NORTH-WEST</strong> — <em>The Path of Delacroix</em> · go WEST then NORTH.</li></ul><p style=\"margin-top:14px;\">Each path begins at a clearly-named gate tile. Walk and find them.</p><!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><span style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(120,80,160,0.06);border:1px dashed rgba(192,132,252,0.5);color:#c084fc;border-radius:4px;cursor:not-allowed;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;opacity:0.65;\" title=\"The Oracle of Marduk · complete the quiz to unlock\">🔒 ↑ The Path of Melchizedek</span><a href=\"javascript:void(0)\" onclick=\"goTo(1,1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↗ The Path of Eli</a><a href=\"javascript:void(0)\" onclick=\"goTo(1,0)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">→ The Path of Gus</a><a href=\"javascript:void(0)\" onclick=\"goTo(1,-1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↘ The Path of Olivia</a><a href=\"javascript:void(0)\" onclick=\"goTo(0,-1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↓ The Path of Emily</a><a href=\"javascript:void(0)\" onclick=\"goTo(-1,0)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">← The Path of Xan</a><a href=\"javascript:void(0)\" onclick=\"goTo(-1,1)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↖ The Path of Delacroix</a></div>",
+      "lore": "<p style=\"font-style:italic;font-size:15px;line-height:1.6;text-align:center;margin-bottom:8px;\">You stand at the centre of everything — the great fork where every path begins.</p>",
       "isHome": true,
       "on_path": [
         "emily",
@@ -39,7 +39,7 @@
         "F": "#6E4418",
         "B": "#2E5C38"
       },
-      "hint": "↑ Melchizedek (locked) · ↗ Eli · → Gus · ↘ Olivia · ↓ Emily · ← Xan · ↖ Delacroix",
+      "hint": "Click any spoke of the compass to begin a path",
       "music": "emily1",
       "signposts": [
         {
@@ -136,15 +136,15 @@
       "emoji": "🚪",
       "era": "Jeremy Delacroix’s Library · The Hidden Map",
       "coord": "HUB · THE THRESHOLD",
-      "lore": "Beyond this point, the Realm asks what you know. It is not a test of intelligence — it is a test of attention. Have you been paying attention?<!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(0,6)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↑ The First Question of the Quiz</a><a href=\"javascript:void(0)\" onclick=\"goTo(0,2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↓ The Vector Ship</a><a href=\"javascript:void(0)\" onclick=\"goTo(-1,5)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">← Something to the west</a><a href=\"javascript:void(0)\" onclick=\"goTo(1,5)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">→ Something to the east</a></div>",
+      "lore": "Beyond this point, the Realm asks what you know. It is not a test of intelligence — it is a test of attention. Have you been paying attention?<!-- SIGNPOSTS --><div class=\"signposts\" style=\"margin-top:18px;text-align:center;line-height:2;\"><div style=\"font-size:9px;letter-spacing:3px;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-bottom:8px;\">⊛ Choose Your Way</div><a href=\"javascript:void(0)\" onclick=\"goTo(-2,2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↑ The First Question of the Quiz</a><a href=\"javascript:void(0)\" onclick=\"goTo(0,2)\" style=\"display:inline-block;margin:4px 6px;padding:8px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.4);color:#c9a84c;border-radius:4px;cursor:pointer;text-decoration:none;font-family:Georgia,serif;font-size:13px;letter-spacing:0.5px;transition:all 0.2s;\">↓ The Vector Ship</a></div>",
       "hint": "↑ First quiz question · ↓ The Vector Ship · → Something to the east · ← Something to the west",
       "signposts": [
         {
           "label": "↑ The First Question of the Quiz",
           "dir": "N",
           "target": [
-            0,
-            6
+            -2,
+            2
           ]
         },
         {
@@ -153,22 +153,6 @@
           "target": [
             0,
             2
-          ]
-        },
-        {
-          "label": "← Something to the west",
-          "dir": "W",
-          "target": [
-            -1,
-            5
-          ]
-        },
-        {
-          "label": "→ Something to the east",
-          "dir": "E",
-          "target": [
-            1,
-            5
           ]
         }
       ]
@@ -9517,50 +9501,6 @@
         "olivia"
       ]
     },
-    "17,-3": {
-      "type": "content",
-      "name": "Stories of Olivia",
-      "emoji": "❤",
-      "era": "Olivia · Her Story",
-      "music": "low_stress_major",
-      "lore": "<p><em>Stories of Olivia — this section is under construction. Her full story will be built out here.</em></p>",
-      "on_path": [
-        "olivia"
-      ]
-    },
-    "18,-3": {
-      "type": "content",
-      "name": "Stories of Olivia",
-      "emoji": "❤",
-      "era": "Olivia · Her Story",
-      "music": "low_stress_major",
-      "lore": "<p><em>Stories of Olivia — this section is under construction. Her full story will be built out here.</em></p>",
-      "on_path": [
-        "olivia"
-      ]
-    },
-    "19,-3": {
-      "type": "content",
-      "name": "Stories of Olivia",
-      "emoji": "❤",
-      "era": "Olivia · Her Story",
-      "music": "low_stress_major",
-      "lore": "<p><em>Stories of Olivia — this section is under construction. Her full story will be built out here.</em></p>",
-      "on_path": [
-        "olivia"
-      ]
-    },
-    "20,-3": {
-      "type": "content",
-      "name": "Stories of Olivia",
-      "emoji": "❤",
-      "era": "Olivia · Her Story",
-      "music": "low_stress_major",
-      "lore": "<p><em>Stories of Olivia — this section is under construction. Her full story will be built out here.</em></p>",
-      "on_path": [
-        "olivia"
-      ]
-    },
     "6,2": {
       "type": "content",
       "name": "Path of Eli",
@@ -9644,6 +9584,12 @@
       "on_path": [
         "eli"
       ]
+    },
+    "-8,5": {
+      "name": "Beyond the Cave",
+      "emoji": "·",
+      "type": "empty",
+      "lore": "<p>The land south of Marduk's Cave. Empty, but watched.</p>"
     }
   },
   "questions": {
@@ -11460,13 +11406,6 @@
     }
   },
   "gates": {
-    "13,1:N": {
-      "type": "masklock",
-      "level": 1,
-      "title": "The Gate at Shangri-La",
-      "desc": "The copper gate requires alignment.",
-      "kudra_bypass": true
-    },
     "1,13:N": {
       "type": "tesseract",
       "level": 5,
@@ -12370,15 +12309,6 @@
     },
     "16,15:W": {
       "type": "closed"
-    },
-    "6,1:N": {
-      "type": "space"
-    },
-    "9,1:N": {
-      "type": "space"
-    },
-    "12,1:N": {
-      "type": "space"
     },
     "10,-2:N": {
       "type": "closed"

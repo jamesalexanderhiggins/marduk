@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Marduk's Map / Map v10.0.0 — 2026-04-27 — standalone page, fresh load each visit -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Marduk's Map — The Grid</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070910; --gold:#c9a84c; --gold2:#e8c96e; --spirit:#7eb8d4;
+  --violet:#c084fc; --green:#7ed49a; --ember:#ff6b2b;
+  --text:#e4dccb; --dim:#6a6055;
+  --border:rgba(201,168,76,0.22);
+  --glow:0 0 18px rgba(201,168,76,0.5);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);
+  font-family:'EB Garamond',serif;}
+
+/* Top header — same look as the game */
+#mapHeader{position:fixed;top:0;left:0;right:0;z-index:100;height:48px;
+  display:flex;align-items:center;gap:10px;padding:0 14px;
+  background:rgba(7,9,16,0.97);border-bottom:1px solid rgba(201,168,76,0.22);
+  backdrop-filter:blur(8px);}
+#closeMap{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--dim);
+  border:1px solid rgba(201,168,76,0.18);padding:7px 14px;cursor:pointer;
+  background:transparent;transition:all 0.25s;}
+#closeMap:hover{color:var(--gold);border-color:var(--gold);}
+#mapTitle{flex:1;text-align:center;font-family:'Cinzel',serif;font-size:13px;
+  letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;}
+#modeToggle{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--violet);
+  border:1px solid rgba(192,132,252,0.3);padding:7px 12px;cursor:pointer;
+  background:transparent;transition:all 0.25s;}
+#modeToggle:hover{background:rgba(192,132,252,0.08);}
+
+/* Legend strip */
+#legend{position:fixed;top:48px;left:0;right:0;z-index:99;
+  background:rgba(7,9,16,0.92);border-bottom:1px solid rgba(201,168,76,0.1);
+  padding:5px 12px;display:flex;gap:14px;overflow-x:auto;
+  scrollbar-width:none;font-size:10px;letter-spacing:1px;}
+#legend::-webkit-scrollbar{display:none;}
+.leg-item{display:flex;align-items:center;gap:5px;white-space:nowrap;color:var(--dim);}
+.leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+
+/* Map viewport — the canvas zone */
+#mapViewport{position:fixed;top:80px;left:0;right:0;bottom:60px;
+  overflow:hidden;touch-action:none;background:#040608;}
+#mapCanvas{position:absolute;cursor:grab;}
+#mapCanvas.dragging{cursor:grabbing;}
+
+/* Cells */
+.cell{position:absolute;border:1px solid rgba(255,255,255,0.06);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;transition:all 0.18s;overflow:hidden;user-select:none;
+  background:rgba(7,9,16,0.5);}
+.cell:hover:not(.unvisited){border-color:rgba(201,168,76,0.7);
+  box-shadow:0 0 8px rgba(201,168,76,0.4);z-index:8;}
+.cell.current{border:2px solid var(--gold)!important;
+  box-shadow:0 0 16px rgba(201,168,76,0.85);z-index:20;
+  animation:currentPulse 2s ease-in-out infinite;}
+@keyframes currentPulse{0%,100%{box-shadow:0 0 12px rgba(201,168,76,0.7);}
+  50%{box-shadow:0 0 22px rgba(201,168,76,1);}}
+.cell.visited{opacity:1;}
+.cell.unvisited{opacity:0.18;filter:saturate(0.2) brightness(0.6);cursor:default;}
+.cell.selected{border:2px solid var(--gold2)!important;
+  box-shadow:0 0 16px rgba(232,201,110,0.7);z-index:15;}
+.cell-icon{font-size:16px;line-height:1;}
+.cell-name{font-size:7px;letter-spacing:0.3px;text-align:center;
+  max-width:90%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+  opacity:0.85;margin-top:2px;color:var(--text);}
+.cell-coord{font-size:5px;opacity:0.25;position:absolute;top:1px;left:2px;
+  font-family:monospace;}
+.cell-key-icon{position:absolute;top:1px;right:2px;font-size:8px;}
+.cell-current-marker{position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);font-size:18px;
+  text-shadow:0 0 8px rgba(201,168,76,1);
+  pointer-events:none;animation:currentBob 2s ease-in-out infinite;}
+@keyframes currentBob{0%,100%{transform:translate(-50%,-50%) scale(1);}
+  50%{transform:translate(-50%,-50%) scale(1.15);}}
+
+/* Path background colours */
+.p-A{background:rgba(192,80,200,0.14);}    /* Emily */
+.p-B{background:rgba(40,140,80,0.15);}     /* Delacroix */
+.p-C{background:rgba(170,120,40,0.15);}    /* Jake */
+.p-D{background:rgba(40,170,180,0.15);}    /* Eli */
+.p-E{background:rgba(70,150,180,0.15);}    /* Xan */
+.p-F{background:rgba(170,80,30,0.15);}     /* Jake-alt */
+.p-G{background:rgba(60,80,200,0.15);}     /* Gus */
+.p-H{background:rgba(180,40,90,0.15);}     /* Olivia */
+.p-M{background:rgba(220,170,30,0.18);}    /* Marduk */
+.p-marduk{background:rgba(220,170,30,0.18);}
+.p-author{background:rgba(160,30,30,0.15);}
+.p-cave{background:rgba(200,110,20,0.18);}
+.p-central{background:rgba(140,110,30,0.13);}
+.p-emily{background:rgba(192,80,200,0.14);}
+.p-jake{background:rgba(170,120,40,0.15);}
+.p-delacroix{background:rgba(40,140,80,0.15);}
+.p-eli{background:rgba(40,170,180,0.15);}
+.p-xan{background:rgba(70,150,180,0.15);}
+.p-gus{background:rgba(60,80,200,0.15);}
+.p-olivia{background:rgba(180,40,90,0.15);}
+.p-blank{background:rgba(7,9,16,0.5);}
+.p-default{background:rgba(7,9,16,0.5);}
+
+/* Bottom bar — selected info & travel button */
+#mapBottom{position:fixed;bottom:0;left:0;right:0;z-index:100;height:60px;
+  background:rgba(7,9,16,0.97);border-top:1px solid rgba(201,168,76,0.22);
+  display:flex;align-items:center;gap:10px;padding:0 14px;
+  backdrop-filter:blur(8px);}
+#selectedInfo{flex:1;color:var(--dim);font-family:'Cinzel',serif;font-size:11px;
+  letter-spacing:0.15em;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+#selectedInfo .name{color:var(--gold);font-weight:600;}
+#selectedInfo .coord{color:var(--dim);margin-right:8px;}
+#travelBtn{font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--bg);background:var(--gold);
+  padding:10px 22px;cursor:pointer;border:none;display:none;
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+  transition:all 0.25s;}
+#travelBtn:hover{background:var(--gold2);box-shadow:var(--glow);}
+#travelBtn:disabled{background:#3a3120;color:#5a5040;cursor:not-allowed;}
+#zoomControls{display:flex;gap:4px;}
+.zbtn{width:32px;height:32px;background:transparent;
+  border:1px solid rgba(201,168,76,0.18);color:var(--gold);
+  cursor:pointer;font-size:14px;font-family:'Cinzel',serif;
+  transition:all 0.2s;}
+.zbtn:hover{background:rgba(201,168,76,0.1);border-color:var(--gold);}
+
+#loadingMap{position:fixed;inset:0;display:flex;align-items:center;
+  justify-content:center;flex-direction:column;gap:14px;z-index:200;
+  background:var(--bg);}
+.spinner{width:32px;height:32px;border:2px solid rgba(201,168,76,0.18);
+  border-top-color:var(--gold);border-radius:50%;animation:spin 0.9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spin-text{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.4em;
+  color:var(--dim);text-transform:uppercase;}
+
+#kudraIndicator{position:fixed;top:48px;right:8px;z-index:98;
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;
+  color:var(--violet);text-transform:uppercase;padding:3px 8px;
+  background:rgba(192,132,252,0.08);border:1px solid rgba(192,132,252,0.3);
+  display:none;}
+body.kudra-active #kudraIndicator{display:block;}
+
+@media(max-width:480px){
+  #mapTitle{font-size:11px;}
+  #closeMap{padding:6px 10px;font-size:9px;}
+  #travelBtn{padding:8px 14px;font-size:11px;}
+  #legend{padding:4px 8px;}
+}
+</style>
+</head>
+<body>
+
+<div id="loadingMap">
+  <div class="spinner"></div>
+  <span class="spin-text">Unfurling the Map</span>
+</div>
+
+<div id="mapHeader">
+  <button id="closeMap" onclick="closeMap()">✕ CLOSE</button>
+  <h1 id="mapTitle">⬡ Marduk's Map</h1>
+  <button id="modeToggle" onclick="toggleMode()">SHOW: ALL</button>
+</div>
+
+<div id="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#9b3dc8"></div>Emily</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#b05a18"></div>Jake</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#2a8a4a"></div>Delacroix</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#4a9ab0"></div>Xan</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#2a3acc"></div>Gus</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#18b09a"></div>Eli</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#b02a5a"></div>Olivia</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#d8a808"></div>Marduk</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#a01818"></div>Author</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#8b6914"></div>Central</div>
+</div>
+
+<div id="kudraIndicator">✦ Kudramarduk</div>
+
+<div id="mapViewport">
+  <div id="mapCanvas"></div>
+</div>
+
+<div id="mapBottom">
+  <div id="selectedInfo">Tap a tile to select it</div>
+  <button id="travelBtn" onclick="travelToSelected()">TRAVEL HERE →</button>
+  <div id="zoomControls">
+    <button class="zbtn" onclick="zoom(-1)" aria-label="Zoom out">−</button>
+    <button class="zbtn" onclick="zoom(1)" aria-label="Zoom in">+</button>
+    <button class="zbtn" onclick="recentre()" aria-label="Recentre on player">⊙</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ─────────────────────────────────────────────────────────────────
+// CONSTANTS
+// ─────────────────────────────────────────────────────────────────
+const GRID_MIN = -16, GRID_MAX = 16;
+const GRID_SIZE = GRID_MAX - GRID_MIN + 1;  // 33
+const STORAGE_KEY = 'marduk_realm';
+
+// ─────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────
+let REALM = null;
+let cellSize = 30;
+let offsetX = 0, offsetY = 0;
+let isDragging = false;
+let dragStart = { x: 0, y: 0, ox: 0, oy: 0 };
+let touchPinch = null;
+let selectedTile = null;
+let mapMode = 'all'; // 'all' or 'visited'
+let curX = 0, curY = 0;
+let visited = new Set();
+let collectedKeys = new Set();
+let kudraActive = false;
+
+// ─────────────────────────────────────────────────────────────────
+// LOCAL STORAGE
+// ─────────────────────────────────────────────────────────────────
+function loadState() {
+  let p;
+  try { p = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { p = {}; }
+
+  // Current position from lastPos
+  const lp = p.lastPos || [0, 0];
+  curX = lp[0]; curY = lp[1];
+
+  // Visited set
+  visited = new Set(p.visited || []);
+
+  // Keys collected
+  if (p.keys_collected && typeof p.keys_collected === 'object') {
+    collectedKeys = new Set(Object.keys(p.keys_collected).filter(k => p.keys_collected[k]));
+  }
+
+  // Kudra mode
+  kudraActive = !!p.kudra;
+  if (kudraActive) document.body.classList.add('kudra-active');
+}
+
+// ─────────────────────────────────────────────────────────────────
+// CLOSE / TRAVEL
+// ─────────────────────────────────────────────────────────────────
+function closeMap() {
+  // "Closing the map is effectively the same as TRAVEL TO THE TILE THAT MY
+  //  USER MARKER IS PLACED ON ON THIS MAP - no movement"
+  location.href = `index.html?x=${curX}&y=${curY}`;
+}
+
+function travelToSelected() {
+  if (!selectedTile) return;
+  const { x, y } = selectedTile;
+  if (!canTravelTo(x, y)) return;
+  location.href = `index.html?x=${x}&y=${y}`;
+}
+
+// Travel allowed from map: requires visited OR is current OR kudra
+function canTravelTo(x, y) {
+  if (kudraActive) return true;
+  if (x === curX && y === curY) return true;
+  return visited.has(`${x},${y}`);
+}
+
+// ─────────────────────────────────────────────────────────────────
+// TILE LOOKUP — supports BOTH old gates+tiles+paths schema (v9.6)
+// AND the patched signposts schema. Both shall coexist.
+// ─────────────────────────────────────────────────────────────────
+function getTile(x, y) {
+  if (!REALM) return null;
+  return REALM.tiles[`${x},${y}`] || null;
+}
+
+function getPathColorClass(tile) {
+  if (!tile) return 'p-blank';
+  // Prefer on_path[0] if present
+  if (tile.on_path && tile.on_path.length > 0) {
+    const first = tile.on_path[0];
+    return `p-${first}`;
+  }
+  // Fall back to type-based class
+  if (tile.type) return `p-${tile.type}`;
+  return 'p-blank';
+}
+
+// ─────────────────────────────────────────────────────────────────
+// BUILD MAP — creates DOM cells for the entire grid
+// ─────────────────────────────────────────────────────────────────
+function buildMap() {
+  const canvas = document.getElementById('mapCanvas');
+  canvas.innerHTML = '';
+  const total = GRID_SIZE * cellSize;
+  canvas.style.width = total + 'px';
+  canvas.style.height = total + 'px';
+
+  for (let gx = GRID_MIN; gx <= GRID_MAX; gx++) {
+    for (let gy = GRID_MIN; gy <= GRID_MAX; gy++) {
+      const tile = getTile(gx, gy) || { name: '', emoji: '·', type: 'blank' };
+      const isVisited = visited.has(`${gx},${gy}`);
+      const isCurrent = (gx === curX && gy === curY);
+      const isAccessible = isVisited || isCurrent || kudraActive;
+
+      // In 'visited' mode, only show what was visited (+ current)
+      if (mapMode === 'visited' && !isVisited && !isCurrent) continue;
+
+      const el = document.createElement('div');
+      el.className = `cell ${getPathColorClass(tile)} ${
+        isCurrent ? 'current' : (isAccessible ? 'visited' : 'unvisited')
+      }`;
+      el.dataset.x = gx;
+      el.dataset.y = gy;
+
+      const px = (gx - GRID_MIN) * cellSize;
+      const py = (GRID_MAX - gy) * cellSize;
+      el.style.left = px + 'px';
+      el.style.top = py + 'px';
+      el.style.width = cellSize + 'px';
+      el.style.height = cellSize + 'px';
+
+      // Coord
+      const coord = document.createElement('div');
+      coord.className = 'cell-coord';
+      coord.textContent = `${gx},${gy}`;
+      el.appendChild(coord);
+
+      // Icon (emoji) + name (only for accessible / known tiles)
+      if (isAccessible && tile.emoji) {
+        const ic = document.createElement('div');
+        ic.className = 'cell-icon';
+        ic.textContent = tile.emoji;
+        el.appendChild(ic);
+        if (cellSize >= 26 && tile.name) {
+          const nm = document.createElement('div');
+          nm.className = 'cell-name';
+          nm.textContent = tile.name.length > 14 ? tile.name.slice(0, 13) + '…' : tile.name;
+          el.appendChild(nm);
+        }
+      }
+
+      // Key collected badge
+      if (tile.key_id && collectedKeys.has(tile.key_id)) {
+        const kb = document.createElement('div');
+        kb.className = 'cell-key-icon';
+        kb.textContent = '🗝';
+        el.appendChild(kb);
+      }
+
+      // Current player marker — visible YOU-ARE-HERE icon
+      if (isCurrent) {
+        const cm = document.createElement('div');
+        cm.className = 'cell-current-marker';
+        cm.textContent = '✦';
+        el.appendChild(cm);
+      }
+
+      el.addEventListener('click', () => selectTile(gx, gy, tile, isAccessible));
+      canvas.appendChild(el);
+    }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────
+// SELECT TILE
+// ─────────────────────────────────────────────────────────────────
+function selectTile(gx, gy, tile, isAccessible) {
+  // Clear previous selection
+  document.querySelectorAll('.cell.selected').forEach(el => el.classList.remove('selected'));
+
+  selectedTile = { x: gx, y: gy, tile };
+  const el = document.querySelector(`.cell[data-x="${gx}"][data-y="${gy}"]`);
+  if (el) el.classList.add('selected');
+
+  const info = document.getElementById('selectedInfo');
+  const name = (tile && tile.name) || 'Empty Space';
+  info.innerHTML = `<span class="coord">(${gx >= 0 ? '+' : ''}${gx}, ${gy >= 0 ? '+' : ''}${gy})</span><span class="name">${name}</span>`;
+
+  const btn = document.getElementById('travelBtn');
+  if (canTravelTo(gx, gy)) {
+    btn.style.display = 'inline-block';
+    btn.disabled = false;
+    btn.textContent = (gx === curX && gy === curY) ? 'STAY HERE' : 'TRAVEL HERE →';
+  } else {
+    btn.style.display = 'inline-block';
+    btn.disabled = true;
+    btn.textContent = '🔒 NOT YET DISCOVERED';
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────
+// PAN / DRAG
+// ─────────────────────────────────────────────────────────────────
+const vp = document.getElementById('mapViewport');
+const canvas = document.getElementById('mapCanvas');
+
+vp.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  canvas.classList.add('dragging');
+  dragStart = { x: e.clientX, y: e.clientY, ox: offsetX, oy: offsetY };
+});
+window.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  offsetX = dragStart.ox + (e.clientX - dragStart.x);
+  offsetY = dragStart.oy + (e.clientY - dragStart.y);
+  clampOffset();
+  applyTransform();
+});
+window.addEventListener('mouseup', () => {
+  isDragging = false;
+  canvas.classList.remove('dragging');
+});
+
+// Touch
+vp.addEventListener('touchstart', (e) => {
+  if (e.touches.length === 1) {
+    const t = e.touches[0];
+    isDragging = true;
+    dragStart = { x: t.clientX, y: t.clientY, ox: offsetX, oy: offsetY };
+    touchPinch = null;
+  } else if (e.touches.length === 2) {
+    isDragging = false;
+    const [a, b] = e.touches;
+    const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    touchPinch = {
+      dist: d,
+      cellSize: cellSize,
+      cx: (a.clientX + b.clientX) / 2,
+      cy: (a.clientY + b.clientY) / 2,
+    };
+  }
+}, { passive: true });
+
+vp.addEventListener('touchmove', (e) => {
+  if (e.touches.length === 1 && isDragging) {
+    const t = e.touches[0];
+    offsetX = dragStart.ox + (t.clientX - dragStart.x);
+    offsetY = dragStart.oy + (t.clientY - dragStart.y);
+    clampOffset();
+    applyTransform();
+  } else if (e.touches.length === 2 && touchPinch) {
+    const [a, b] = e.touches;
+    const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    const scale = d / touchPinch.dist;
+    const newSize = Math.max(12, Math.min(60, Math.round(touchPinch.cellSize * scale)));
+    if (newSize !== cellSize) {
+      const ratio = newSize / cellSize;
+      const px = touchPinch.cx;
+      const py = touchPinch.cy;
+      offsetX = px - (px - offsetX) * ratio;
+      offsetY = py - (py - offsetY) * ratio;
+      cellSize = newSize;
+      buildMap();
+      clampOffset();
+      applyTransform();
+    }
+  }
+}, { passive: true });
+
+vp.addEventListener('touchend', (e) => {
+  if (e.touches.length === 0) {
+    isDragging = false;
+    touchPinch = null;
+  }
+}, { passive: true });
+
+// Wheel zoom
+vp.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  zoom(e.deltaY < 0 ? 1 : -1, e.clientX, e.clientY);
+}, { passive: false });
+
+// ─────────────────────────────────────────────────────────────────
+// TRANSFORM / CLAMP
+// ─────────────────────────────────────────────────────────────────
+function applyTransform() {
+  canvas.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+}
+
+function clampOffset() {
+  const total = GRID_SIZE * cellSize;
+  const padX = Math.min(total, vp.clientWidth) - 200;
+  const padY = Math.min(total, vp.clientHeight) - 200;
+  offsetX = Math.max(vp.clientWidth - total - 100, Math.min(100, offsetX));
+  offsetY = Math.max(vp.clientHeight - total - 100, Math.min(100, offsetY));
+}
+
+function zoom(dir, px, py) {
+  const old = cellSize;
+  cellSize = Math.max(14, Math.min(60, cellSize + dir * 4));
+  if (cellSize === old) return;
+  const ratio = cellSize / old;
+  const cx = px ?? vp.clientWidth / 2;
+  const cy = py ?? vp.clientHeight / 2;
+  offsetX = cx - (cx - offsetX) * ratio;
+  offsetY = cy - (cy - offsetY) * ratio;
+  buildMap();
+  clampOffset();
+  applyTransform();
+}
+
+function recentre() {
+  const total = GRID_SIZE * cellSize;
+  const cx = (curX - GRID_MIN) * cellSize + cellSize / 2;
+  const cy = (GRID_MAX - curY) * cellSize + cellSize / 2;
+  offsetX = vp.clientWidth / 2 - cx;
+  offsetY = vp.clientHeight / 2 - cy;
+  clampOffset();
+  applyTransform();
+}
+
+function toggleMode() {
+  mapMode = mapMode === 'all' ? 'visited' : 'all';
+  document.getElementById('modeToggle').textContent = 'SHOW: ' + mapMode.toUpperCase();
+  buildMap();
+  applyTransform();
+}
+
+// ─────────────────────────────────────────────────────────────────
+// BOOT
+// ─────────────────────────────────────────────────────────────────
+async function boot() {
+  loadState();
+  try {
+    const res = await fetch('realm.json', { cache: 'no-store' });
+    REALM = await res.json();
+  } catch (e) {
+    console.error('Failed to load realm.json', e);
+    document.getElementById('loadingMap').innerHTML =
+      '<div style="color:#ff6b2b;font-family:Cinzel,serif;letter-spacing:2px;">FAILED TO LOAD MAP</div>';
+    return;
+  }
+
+  document.getElementById('loadingMap').style.display = 'none';
+  buildMap();
+  recentre();
+  applyTransform();
+}
+
+// Hook ESC key to close
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeMap();
+});
+
+// Expose for inline onclick
+window.closeMap = closeMap;
+window.toggleMode = toggleMode;
+window.zoom = zoom;
+window.recentre = recentre;
+window.travelToSelected = travelToSelected;
+
+boot();
+</script>
+</body>
+</html>
