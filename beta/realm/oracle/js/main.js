@@ -28,6 +28,28 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+// ─── BLOCK ALL NATIVE BROWSER TOUCH HANDLING ON THE STAGE ────────────────────
+// Must use passive:false so we can call preventDefault().
+// This stops: iOS Safari page scroll, browser pinch-zoom, pan, and overscroll.
+// Scrollable UI panels (results, detail, admin) have touch-action:pan-y in CSS
+// and handle their own scroll — they are not children of #stage so unaffected.
+function blockNativeTouch(e) {
+  // Allow scrolling inside explicitly scrollable panels
+  let el = e.target;
+  while (el && el !== document.body) {
+    const ta = window.getComputedStyle(el).touchAction;
+    if (ta === 'pan-y' || ta === 'auto') return; // let panel scroll
+    el = el.parentElement;
+  }
+  e.preventDefault();
+}
+document.addEventListener('touchstart', blockNativeTouch, { passive: false });
+document.addEventListener('touchmove',  blockNativeTouch, { passive: false });
+// Also block gesturestart (Safari-specific pinch-zoom event)
+document.addEventListener('gesturestart',  e => e.preventDefault(), { passive: false });
+document.addEventListener('gesturechange', e => e.preventDefault(), { passive: false });
+document.addEventListener('gestureend',    e => e.preventDefault(), { passive: false });
+
 // ─── SUBSYSTEMS ──────────────────────────────────────────────────────────────
 const env    = new Environment(scene);
 const marduk = new MardukHead(scene);
@@ -177,11 +199,12 @@ stage.addEventListener('mousemove', e => {
   marduk.setMouseTarget(nx * 0.48, ny * 0.25);
 });
 
-// Scroll wheel zoom
+// Scroll wheel zoom — passive:false lets us preventDefault, blocking trackpad page-zoom
 stage.addEventListener('wheel', e => {
+  e.preventDefault();
   const factor = 1 + e.deltaY * 0.0011;
   cam.tRadius = CLAMP(cam.tRadius * factor, 1.5, 22);
-}, { passive: true });
+}, { passive: false });
 
 // ─── UI AUDIO ────────────────────────────────────────────────────────────────
 const searchInput = document.getElementById('search-input');
