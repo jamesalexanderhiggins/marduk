@@ -1,5 +1,5 @@
 {
-  "version": "9.6.1",
+  "version": "9.6.2",
   "grid": {
     "extent": 16,
     "size": 33
@@ -9,18 +9,19 @@
     "0,0": {
       "type": "home",
       "name": "The Long Road",
-      "emoji": "🏔️",
+      "emoji": "⊕",
       "era": "The Centre of the Map",
-      "lore": "You stand at the centre of everything — the great fork where every path begins. Eight paths radiate outward. The Realm knows where you walk.",
+      "lore": "<p>You stand at the centre of everything — the great fork where every path begins.</p><p>From here, eight paths radiate outward:</p><ul style=\"margin:12px 0 0 20px;line-height:1.95;\"><li><strong>↑ NORTH</strong> — <em>The Path of Melchizedek</em> · locked in normal mode (Kudramarduk access only). Leads directly to the Oracle of Marduk above.</li><li><strong>↗ NORTH-EAST</strong> — <em>The Path of Eli</em> · go EAST then NORTH (or vice versa).</li><li><strong>→ EAST</strong> — <em>The Path of Gus</em>.</li><li><strong>↘ SOUTH-EAST</strong> — <em>The Path of Olivia</em> · go SOUTH then EAST.</li><li><strong>↓ SOUTH</strong> — <em>The Path of Emily</em> · via the Long Walk and the Undoing of the Thornes.</li><li><strong>↙ SOUTH-WEST</strong> — Reaches Emily and the Author via south-westward travel.</li><li><strong>← WEST</strong> — <em>The Path of Xan</em>.</li><li><strong>↖ NORTH-WEST</strong> — <em>The Path of Delacroix</em> · go WEST then NORTH.</li></ul><p style=\"margin-top:14px;\">Each path begins at a clearly-named gate tile. Walk and find them.</p>",
       "isHome": true,
       "on_path": [
         "emily",
-        "A",
-        "E",
-        "G",
-        "C",
-        "F",
-        "B"
+        "xan",
+        "gus",
+        "eli",
+        "delacroix",
+        "olivia",
+        "marduk",
+        "central"
       ],
       "path_step": {
         "A": 0,
@@ -38,7 +39,7 @@
         "F": "#6E4418",
         "B": "#2E5C38"
       },
-      "hint": "↑ Path of Melchizedek (locked) · ↗ Path of Eli · ↖ Path of Delacroix · → Path of Gus · ↓ Path of Emily · ↘ Path of Olivia · ← Path of Xan",
+      "hint": "↑ Melchizedek (locked) · ↗ Eli · → Gus · ↘ Olivia · ↓ Emily · ← Xan · ↖ Delacroix",
       "music": "emily1"
     },
     "0,1": {
@@ -49,7 +50,7 @@
       "coord": "THE MARDUK VIEW · ALL ROOMS",
       "always_walkable": true,
       "lore": "<p>You have proved yourself worthy of this place. Marduk opens his eye to you.</p><p>The Oracle knows the Mardukverse — every character, every event, every canonical fact across all three books. Ask it anything.</p><div style=\"margin-top:16px;\"><iframe src=\"https://jamesalexanderhiggins.github.io/marduk/beta/realm/oracle/\" style=\"width:100%;height:55vh;border:none;border-radius:6px;\" title=\"The Oracle of Marduk\"></iframe></div>",
-      "hint": "↓ The Long Road · Exit in any direction"
+      "hint": "✦ The Oracle of Marduk · enter to consult the all-seeing eye"
     },
     "0,5": {
       "type": "threshold",
@@ -175,7 +176,7 @@
       "path_colors": {
         "E": "#701818"
       },
-      "hint": "↗ Begin the Path of Eli",
+      "hint": "→ Continue east, or ↑ north into the Path of Eli",
       "music": "tension"
     },
     "1,0": {
@@ -193,7 +194,7 @@
       "path_colors": {
         "F": "#6E4418"
       },
-      "hint": "→ Begin the Path of Gus",
+      "hint": "→ Continue east into the Path of Gus",
       "music": "ambient"
     },
     "1,-1": {
@@ -249,7 +250,7 @@
       "path_colors": {
         "A": "#7B5EA7"
       },
-      "hint": "↓ Emily's path begins · ← The Long Road",
+      "hint": "↓ Continue south into the manga journey of Emily",
       "music": "low_stress_minor"
     },
     "-1,0": {
@@ -267,7 +268,7 @@
       "path_colors": {
         "B": "#2E5C38"
       },
-      "hint": "← Begin Xan's path",
+      "hint": "← Continue west into the Path of Xan",
       "music": "ambient"
     },
     "-1,1": {
@@ -276,7 +277,7 @@
       "emoji": "🟢",
       "era": "Jeremy Delacroix · Gate",
       "lore": "<p>Jeremy Delacroix. The man who changed the world twice — once with his mind, once with his absence. Marduk watched him for decades before their stories overlapped. He was always going to be important. Some people are made that way.</p><p>The south gate is the way to his path. It will not open without a challenge.</p>",
-      "hint": "↓ Path of Delacroix (Tesseract 150 required)",
+      "hint": "← Continue west, or ↓ south (challenge) into the Path of Delacroix",
       "on_path": [
         "delacroix"
       ],
@@ -339,7 +340,7 @@
       "path_colors": {
         "G": "#145858"
       },
-      "hint": "↓ Olivia's path (challenge required) · ← The Crossroads",
+      "hint": "↓ Solve the gate to enter the Path of Olivia",
       "music": "ambient"
     },
     "2,-2": {
@@ -10765,363 +10766,219 @@
       "type": "masklock",
       "level": 1,
       "title": "The Gate at Shangri-La",
-      "desc": "The copper gate requires alignment."
+      "desc": "The copper gate requires alignment.",
+      "kudra_bypass": true
     },
     "1,13:N": {
       "type": "tesseract",
       "level": 5,
       "title": "The Northern Spire",
-      "desc": "Jeremy's domain. Prove you can follow."
+      "desc": "Jeremy's domain. Prove you can follow.",
+      "kudra_bypass": true
     },
     "-13,12:W": {
       "type": "masklock",
       "level": 12,
       "title": "The Violet Chamber",
-      "desc": "Ariadne's threshold. Only clear sight passes."
+      "desc": "Ariadne's threshold. Only clear sight passes.",
+      "kudra_bypass": true
     },
     "-13,0:W": {
       "type": "tesseract",
       "level": 25,
       "title": "The House of the World",
-      "desc": "The world does not open for the uninitiated."
+      "desc": "The world does not open for the uninitiated.",
+      "kudra_bypass": true
     },
     "12,11:N": {
       "type": "turing",
       "level": 40,
       "title": "The Eye of Eve",
       "desc": "The machine asks what you are entering.",
-      "target": -400
+      "target": -400,
+      "kudra_bypass": true
     },
     "11,-13:S": {
       "type": "tesseract",
       "level": 55,
       "title": "The Kingdom Gate",
-      "desc": "Gus keeps a hard threshold."
+      "desc": "Gus keeps a hard threshold.",
+      "kudra_bypass": true
     },
     "0,-13:S": {
       "type": "masklock",
       "level": 75,
       "title": "The Author's House",
-      "desc": "The final door. One who has come this far already knows."
+      "desc": "The final door. One who has come this far already knows.",
+      "kudra_bypass": true
     },
     "12,-2:E": {
       "type": "tesseract",
       "level": 10,
       "title": "The First Recursion",
-      "desc": "Level 10. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 10. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "16,-3:S": {
       "type": "tesseract",
       "level": 12,
       "title": "The Turning Age",
-      "desc": "Level 12. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 12. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "16,-8:S": {
       "type": "tesseract",
       "level": 15,
       "title": "A Name Forgotten",
-      "desc": "Level 15. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 15. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "16,-13:S": {
       "type": "tesseract",
       "level": 19,
       "title": "The Burning Library",
-      "desc": "Level 19. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 19. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "14,-16:W": {
       "type": "tesseract",
       "level": 23,
       "title": "The Long Road Through",
-      "desc": "Level 23. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 23. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "9,-16:W": {
       "type": "tesseract",
       "level": 28,
       "title": "The Empire's Last Night",
-      "desc": "Level 28. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 28. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "4,-16:W": {
       "type": "tesseract",
       "level": 35,
       "title": "What the Waters Covered",
-      "desc": "Level 35. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 35. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-1,-16:W": {
       "type": "tesseract",
       "level": 43,
       "title": "The Faithful Remnant",
-      "desc": "Level 43. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 43. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-6,-16:W": {
       "type": "tesseract",
       "level": 53,
       "title": "The Language Before Language",
-      "desc": "Level 53. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 53. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-11,-16:W": {
       "type": "tesseract",
       "level": 66,
       "title": "A Civilisation of One",
-      "desc": "Level 66. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 66. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-16,-16:N": {
       "type": "tesseract",
       "level": 81,
       "title": "The Crossing",
-      "desc": "Level 81. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 81. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-16,-11:N": {
       "type": "tesseract",
       "level": 100,
       "title": "The Desert of Clocks",
-      "desc": "Level 100. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 100. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-16,-6:N": {
       "type": "tesseract",
       "level": 123,
       "title": "The Watcher on the Bridge",
-      "desc": "Level 123. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 123. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-16,-1:N": {
       "type": "tesseract",
       "level": 152,
       "title": "Three Suns",
-      "desc": "Level 152. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 152. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-16,4:N": {
       "type": "tesseract",
       "level": 187,
       "title": "The Last Oracle",
-      "desc": "Level 187. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 187. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-16,9:N": {
       "type": "tesseract",
       "level": 231,
       "title": "A City Made of Salt",
-      "desc": "Level 231. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 231. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-16,14:N": {
       "type": "tesseract",
       "level": 285,
       "title": "The War of Mirrors",
-      "desc": "Level 285. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 285. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-13,16:E": {
       "type": "tesseract",
       "level": 351,
       "title": "The Garden That Was Not Eden",
-      "desc": "Level 351. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 351. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-8,16:E": {
       "type": "tesseract",
       "level": 433,
       "title": "The Frequency",
-      "desc": "Level 433. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 433. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-3,16:E": {
       "type": "tesseract",
       "level": 534,
       "title": "The Dreaming Machine",
-      "desc": "Level 534. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 534. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "2,16:E": {
       "type": "tesseract",
       "level": 658,
       "title": "The Second Fall",
-      "desc": "Level 658. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 658. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "7,16:E": {
       "type": "tesseract",
       "level": 811,
       "title": "Marduk's Grief",
-      "desc": "Level 811. Marduk has passed through every age. Can you follow?"
+      "desc": "Level 811. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "12,16:E": {
       "type": "tesseract",
       "level": 1000,
       "title": "The Final Recursion",
-      "desc": "Level 1000. Marduk has passed through every age. Can you follow?"
-    },
-    "11,8:N": {
-      "type": "masklock",
-      "level": 12,
-      "title": "A Gate on Path E",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "0,-7:S": {
-      "type": "turing",
-      "level": 12,
-      "title": "A Gate on Path H",
-      "desc": "A Turing challenge. Solve it to continue.",
-      "target": -120
-    },
-    "9,-1:N": {
-      "type": "masklock",
-      "level": 5,
-      "title": "A Gate on Path F",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "1,12:N": {
-      "type": "tesseract",
-      "level": 15,
-      "title": "A Gate on Path D",
-      "desc": "A Tesseract challenge. Solve it to continue."
-    },
-    "3,5:N": {
-      "type": "masklock",
-      "level": 8,
-      "title": "A Gate on Path D",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "-2,1:W": {
-      "type": "turing",
-      "level": 15,
-      "title": "A Gate on Path C",
-      "desc": "A Turing challenge. Solve it to continue.",
-      "target": -150
-    },
-    "10,0:E": {
-      "type": "masklock",
-      "level": 8,
-      "title": "A Gate on Path F",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "1,-1:E": {
-      "type": "tesseract",
-      "level": 6,
-      "title": "A Gate on Path G",
-      "desc": "A Tesseract challenge. Solve it to continue."
-    },
-    "4,-3:S": {
-      "type": "masklock",
-      "level": 4,
-      "title": "A Gate on Path G",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "8,5:N": {
-      "type": "turing",
-      "level": 3,
-      "title": "A Gate on Path E",
-      "desc": "A Turing challenge. Solve it to continue.",
-      "target": -30
-    },
-    "-9,8:W": {
-      "type": "masklock",
-      "level": 12,
-      "title": "A Gate on Path C",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "1,0:E": {
-      "type": "tesseract",
-      "level": 10,
-      "title": "A Gate on Path F",
-      "desc": "A Tesseract challenge. Solve it to continue."
-    },
-    "-8,1:W": {
-      "type": "masklock",
-      "level": 2,
-      "title": "A Gate on Path B",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "3,-3:E": {
-      "type": "turing",
-      "level": 1,
-      "title": "A Gate on Path G",
-      "desc": "A Turing challenge. Solve it to continue.",
-      "target": 10
-    },
-    "2,10:W": {
-      "type": "masklock",
-      "level": 2,
-      "title": "A Gate on Path D",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "3,-1:E": {
-      "type": "tesseract",
-      "level": 3,
-      "title": "A Gate on Path F",
-      "desc": "A Tesseract challenge. Solve it to continue."
-    },
-    "10,-9:S": {
-      "type": "masklock",
-      "level": 20,
-      "title": "A Gate on Path G",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "2,-2:E": {
-      "type": "turing",
-      "level": 3,
-      "title": "A Gate on Path G",
-      "desc": "A Turing challenge. Solve it to continue.",
-      "target": 30
-    },
-    "-7,6:N": {
-      "type": "masklock",
-      "level": 20,
-      "title": "A Gate on Path C",
-      "desc": "A Masklock challenge. Solve it to continue."
+      "desc": "Level 1000. Marduk has passed through every age. Can you follow?",
+      "kudra_bypass": true
     },
     "-13,11:N": {
       "type": "turing",
       "target": 80,
       "title": "Threshold of Delacroix",
-      "desc": "Prove yourself at the door of the man who changed the world. Target: +80."
-    },
-    "-1,0:W": {
-      "type": "masklock",
-      "level": 15,
-      "title": "A Gate on Path B",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "-10,9:W": {
-      "type": "turing",
-      "level": 2,
-      "title": "A Gate on Path C",
-      "desc": "A Turing challenge. Solve it to continue.",
-      "target": 20
-    },
-    "-5,3:N": {
-      "type": "masklock",
-      "level": 8,
-      "title": "A Gate on Path C",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "-6,1:W": {
-      "type": "tesseract",
-      "level": 8,
-      "title": "A Gate on Path B",
-      "desc": "A Tesseract challenge. Solve it to continue."
-    },
-    "-11,10:W": {
-      "type": "masklock",
-      "level": 15,
-      "title": "A Gate on Path C",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "7,-1:E": {
-      "type": "turing",
-      "level": 10,
-      "title": "A Gate on Path F",
-      "desc": "A Turing challenge. Solve it to continue.",
-      "target": 100
-    },
-    "0,-12:S": {
-      "type": "masklock",
-      "level": 12,
-      "title": "A Gate on Path H",
-      "desc": "A Masklock challenge. Solve it to continue."
-    },
-    "-7,1:W": {
-      "type": "tesseract",
-      "level": 5,
-      "title": "A Gate on Path B",
-      "desc": "A Tesseract challenge. Solve it to continue."
-    },
-    "7,4:N": {
-      "type": "masklock",
-      "level": 12,
-      "title": "A Gate on Path E",
-      "desc": "A Masklock challenge. Solve it to continue."
+      "desc": "Prove yourself at the door of the man who changed the world. Target: +80.",
+      "kudra_bypass": true
     },
     "-2,-3:W": {
       "type": "turing",
@@ -11133,7 +10990,8 @@
       "title": "The First Shadow",
       "desc": "Something bars the way. A small test — prove you can see clearly.",
       "on_complete_music": "emily1",
-      "target": 50
+      "target": 50,
+      "kudra_bypass": true
     },
     "-5,-5:S": {
       "type": "masklock",
@@ -11144,7 +11002,8 @@
       ],
       "title": "The Deep Forest",
       "desc": "The path grows darker. The lock on the way forward requires alignment.",
-      "on_complete_music": "emily1"
+      "on_complete_music": "emily1",
+      "kudra_bypass": true
     },
     "-7,-8:W": {
       "type": "tesseract",
@@ -11152,7 +11011,8 @@
       "level": 50,
       "title": "The Threshold of Memory",
       "desc": "Only those who can hold complexity in mind may continue.",
-      "on_complete_music": "emily1"
+      "on_complete_music": "emily1",
+      "kudra_bypass": true
     },
     "-10,-10:S": {
       "type": "turing",
@@ -11164,31 +11024,36 @@
       "title": "The Last Shadow",
       "desc": "She is close. The final gate before her house is the hardest. She does not want strangers.",
       "on_complete_music": "emily1",
-      "target": -1000
+      "target": -1000,
+      "kudra_bypass": true
     },
     "7,-4:N": {
       "type": "masklock",
       "level": 5,
       "title": "FBI Cell — Escape Challenge",
-      "desc": "Solve the lock puzzle to escape the holding cell."
+      "desc": "Solve the lock puzzle to escape the holding cell.",
+      "kudra_bypass": true
     },
     "7,-4:S": {
       "type": "masklock",
       "level": 5,
       "title": "FBI Cell — Escape Challenge",
-      "desc": "Solve the lock puzzle to escape the holding cell."
+      "desc": "Solve the lock puzzle to escape the holding cell.",
+      "kudra_bypass": true
     },
     "7,-4:E": {
       "type": "masklock",
       "level": 5,
       "title": "FBI Cell — Escape Challenge",
-      "desc": "Solve the lock puzzle to escape the holding cell."
+      "desc": "Solve the lock puzzle to escape the holding cell.",
+      "kudra_bypass": true
     },
     "7,-4:W": {
       "type": "masklock",
       "level": 5,
       "title": "FBI Cell — Escape Challenge",
-      "desc": "Solve the lock puzzle to escape the holding cell."
+      "desc": "Solve the lock puzzle to escape the holding cell.",
+      "kudra_bypass": true
     },
     "14,3:N": {
       "type": "masklock",
@@ -11197,7 +11062,8 @@
       "title": "Key of Ice",
       "desc": "The first key. The first lock. This one yields to attention.",
       "on_complete_music": "triumph",
-      "key_reward": "D"
+      "key_reward": "D",
+      "kudra_bypass": true
     },
     "4,15:N": {
       "type": "tesseract",
@@ -11206,7 +11072,8 @@
       "title": "Key of Violet",
       "desc": "The Tapestry key. To hold it, prove you can hold complexity.",
       "on_complete_music": "triumph",
-      "key_reward": "C"
+      "key_reward": "C",
+      "kudra_bypass": true
     },
     "-14,14:N": {
       "type": "turing",
@@ -11216,7 +11083,8 @@
       "desc": "The World key. The machine asks what you understand of the world.",
       "on_complete_music": "triumph",
       "key_reward": "B",
-      "target": -200
+      "target": -200,
+      "kudra_bypass": true
     },
     "-14,-4:N": {
       "type": "masklock",
@@ -11225,7 +11093,8 @@
       "title": "Key of Crimson",
       "desc": "Eve's reach into the world. Alignment under pressure.",
       "on_complete_music": "triumph",
-      "key_reward": "E"
+      "key_reward": "E",
+      "kudra_bypass": true
     },
     "14,14:N": {
       "type": "tesseract",
@@ -11234,7 +11103,8 @@
       "title": "Key of Teal",
       "desc": "The Kingdom key. Gus kept this for good reason. Earn it.",
       "on_complete_music": "triumph",
-      "key_reward": "G"
+      "key_reward": "G",
+      "kudra_bypass": true
     },
     "11,-13:N": {
       "type": "turing",
@@ -11247,7 +11117,8 @@
       "desc": "The key to Emily's house. The hardest before the last. She chose who holds this.",
       "on_complete_music": "triumph",
       "key_reward": "A",
-      "target": -850
+      "target": -850,
+      "kudra_bypass": true
     },
     "-9,-14:N": {
       "type": "masklock",
@@ -11256,7 +11127,8 @@
       "title": "Key of Shadow",
       "desc": "The final key. La Fille aux Cheveux de Lin. Level 90 stands between you and the end.",
       "on_complete_music": "triumph",
-      "key_reward": "H"
+      "key_reward": "H",
+      "kudra_bypass": true
     },
     "-2,12:N": {
       "type": "turing",
@@ -11267,7 +11139,8 @@
       ],
       "title": "The Northern Passage",
       "desc": "A Turing gate guards the approach to Jeremy's extended domain.",
-      "target": 400
+      "target": 400,
+      "kudra_bypass": true
     },
     "5,13:N": {
       "type": "turing",
@@ -11278,7 +11151,8 @@
       ],
       "title": "The Inner Sanctum Approach",
       "desc": "The path to the Northern Spire's deep secrets is tested here.",
-      "target": -300
+      "target": -300,
+      "kudra_bypass": true
     },
     "-12,5:S": {
       "type": "turing",
@@ -11289,7 +11163,8 @@
       ],
       "title": "The Western Wall Test",
       "desc": "The House of the World keeps its own counsel. Prove your understanding.",
-      "target": 500
+      "target": 500,
+      "kudra_bypass": true
     },
     "10,10:N": {
       "type": "turing",
@@ -11300,7 +11175,8 @@
       ],
       "title": "The Crimson Ascent",
       "desc": "Eve's upper levels require demonstrable intelligence. She is watching.",
-      "target": 600
+      "target": 600,
+      "kudra_bypass": true
     },
     "8,-8:S": {
       "type": "turing",
@@ -11311,7 +11187,8 @@
       ],
       "title": "The Southern Gate",
       "desc": "The Kingdom is selective about who approaches.",
-      "target": 400
+      "target": 400,
+      "kudra_bypass": true
     },
     "-5,-10:S": {
       "type": "turing",
@@ -11322,7 +11199,8 @@
       ],
       "title": "The Forest Deepening",
       "desc": "Emily's forest has its own tests beyond the path itself.",
-      "target": -300
+      "target": -300,
+      "kudra_bypass": true
     },
     "3,16:E": {
       "type": "turing",
@@ -11333,7 +11211,8 @@
       ],
       "title": "The Northern Rim Test",
       "desc": "Marduk's Path tests deepest here — the knowledge required grows.",
-      "target": -700
+      "target": -700,
+      "kudra_bypass": true
     },
     "12,14:W": {
       "type": "turing",
@@ -11344,7 +11223,8 @@
       ],
       "title": "The Eye of Eve's Crown",
       "desc": "The highest levels of Eve's domain. The Turing test at this altitude is severe.",
-      "target": -800
+      "target": -800,
+      "kudra_bypass": true
     },
     "0,0:N": {
       "type": "quiz",
@@ -11356,13 +11236,15 @@
       "type": "tesseract",
       "level": 120,
       "title": "Gate to the Path of Olivia",
-      "desc": "Olivia's path is not open to everyone. Solve the Tesseract to proceed."
+      "desc": "Olivia's path is not open to everyone. Solve the Tesseract to proceed.",
+      "kudra_bypass": true
     },
     "9,-2:E": {
       "type": "tesseract",
       "level": 100,
       "title": "Gateway to the Path of Marduk",
-      "desc": "Universal knowledge is not for the faint-hearted. Solve the Tesseract to begin."
+      "desc": "Universal knowledge is not for the faint-hearted. Solve the Tesseract to begin.",
+      "kudra_bypass": true
     },
     "10,-4:N": {
       "type": "space"
@@ -11374,7 +11256,8 @@
       "type": "masklock",
       "level": 280,
       "title": "Marduk Path Challenge 1",
-      "desc": "Level 280. Prove yourself to continue."
+      "desc": "Level 280. Prove yourself to continue.",
+      "kudra_bypass": true
     },
     "11,-2:N": {
       "type": "space"
@@ -11392,7 +11275,8 @@
       "type": "turing",
       "level": 505,
       "title": "Marduk Path Challenge 2",
-      "desc": "Level 505. Prove yourself to continue."
+      "desc": "Level 505. Prove yourself to continue.",
+      "kudra_bypass": true
     },
     "12,-3:N": {
       "type": "space"
@@ -11404,7 +11288,8 @@
       "type": "turing",
       "level": 730,
       "title": "Marduk Path Challenge 3",
-      "desc": "Level 730. Prove yourself to continue."
+      "desc": "Level 730. Prove yourself to continue.",
+      "kudra_bypass": true
     },
     "13,-4:N": {
       "type": "space"
@@ -11416,14 +11301,16 @@
       "type": "tesseract-run",
       "level": 955,
       "title": "Marduk Path Challenge 4",
-      "desc": "Level 955. Prove yourself to continue."
+      "desc": "Level 955. Prove yourself to continue.",
+      "kudra_bypass": true
     },
     "-10,-12:S": {
       "type": "turing",
       "target": 200,
       "title": "Threshold of Emily",
       "desc": "She does not turn all the way. Prove your humanity — target +200.",
-      "on_complete_music": "emily_triumph"
+      "on_complete_music": "emily_triumph",
+      "kudra_bypass": true
     },
     "-5,-5:N": {
       "type": "space"
@@ -11489,91 +11376,106 @@
       "type": "turing",
       "target": -100,
       "title": "Threshold of Maisie",
-      "desc": "A negative target. Think carefully about what that means. Target: −100."
+      "desc": "A negative target. Think carefully about what that means. Target: −100.",
+      "kudra_bypass": true
     },
     "2,15:N": {
       "type": "tesseract-run",
       "level": 500,
       "title": "Gate of the Father",
-      "desc": "A Tesseract Run at level 500. This is the shortcut — not the road."
+      "desc": "A Tesseract Run at level 500. This is the shortcut — not the road.",
+      "kudra_bypass": true
     },
     "-15,15:N": {
       "type": "tesseract",
       "level": 800,
       "title": "Northern Door of the Father",
-      "desc": "Level 800. The Tree of Life lies beyond."
+      "desc": "Level 800. The Tree of Life lies beyond.",
+      "kudra_bypass": true
     },
     "16,15:N": {
       "type": "tesseract",
       "level": 800,
       "title": "Final Gate to the Tree of Life",
-      "desc": "Level 800. The last gate."
+      "desc": "Level 800. The last gate.",
+      "kudra_bypass": true
     },
     "-8,6:N": {
       "type": "tesseract",
       "level": 500,
       "title": "Marduk's Cave — Enter/Exit Challenge",
-      "desc": "Level 500. This challenge applies to all gates of the cave."
+      "desc": "Level 500. This challenge applies to all gates of the cave.",
+      "kudra_bypass": true
     },
     "-8,6:S": {
       "type": "tesseract",
       "level": 500,
       "title": "Marduk's Cave — Enter/Exit Challenge",
-      "desc": "Level 500. This challenge applies to all gates of the cave."
+      "desc": "Level 500. This challenge applies to all gates of the cave.",
+      "kudra_bypass": true
     },
     "-8,6:E": {
       "type": "tesseract",
       "level": 500,
       "title": "Marduk's Cave — Enter/Exit Challenge",
-      "desc": "Level 500. This challenge applies to all gates of the cave."
+      "desc": "Level 500. This challenge applies to all gates of the cave.",
+      "kudra_bypass": true
     },
     "-8,6:W": {
       "type": "tesseract",
       "level": 500,
       "title": "Marduk's Cave — Enter/Exit Challenge",
-      "desc": "Level 500. This challenge applies to all gates of the cave."
+      "desc": "Level 500. This challenge applies to all gates of the cave.",
+      "kudra_bypass": true
     },
     "-7,6:W": {
       "type": "tesseract",
       "level": 400,
       "title": "Western Gate of Marduk's Cave",
-      "desc": "Level 400. The western approach."
+      "desc": "Level 400. The western approach.",
+      "kudra_bypass": true
     },
     "-9,8:S": {
       "type": "turing",
       "target": 30,
       "title": "First Knowledge of Delacroix — Easy",
-      "desc": "An easy question about Jeremy Delacroix. Target: +30."
+      "desc": "An easy question about Jeremy Delacroix. Target: +30.",
+      "kudra_bypass": true
     },
     "-9,7:S": {
       "type": "turing",
       "target": 60,
       "title": "Knowledge of Delacroix — Medium",
-      "desc": "A medium question about Jeremy Delacroix. Target: +60."
+      "desc": "A medium question about Jeremy Delacroix. Target: +60.",
+      "kudra_bypass": true
     },
     "-8,7:S": {
       "type": "tesseract",
       "level": 200,
       "title": "Knowledge of Delacroix — Hard",
-      "desc": "Level 200. The hardest gate before Marduk's Cave."
+      "desc": "Level 200. The hardest gate before Marduk's Cave.",
+      "kudra_bypass": true
     },
     "1,12:S": {
       "type": "tesseract",
       "level": 70,
       "title": "Threshold of Jake",
-      "desc": "Jake keeps a hard door. Level 70."
+      "desc": "Jake keeps a hard door. Level 70.",
+      "kudra_bypass": true
     },
     "12,10:N": {
       "type": "tesseract",
       "level": 60,
       "title": "Threshold of Eli",
-      "desc": "Level 60."
+      "desc": "Level 60.",
+      "kudra_bypass": true
     },
     "13,0:S": {
       "type": "tesseract",
       "level": 50,
       "title": "Threshold of Gus",
-      "desc": "Level 50."
+      "desc": "Level 50.",
+      "kudra_bypass": true
     },
     "-12,-4:W": {
       "type": "closed",
@@ -11688,9 +11590,6 @@
     "11,2:N": {
       "type": "space"
     },
-    "3,1:N": {
-      "type": "space"
-    },
     "-2,-15:S": {
       "type": "closed"
     },
@@ -11701,7 +11600,8 @@
       "type": "tesseract",
       "level": 120,
       "title": "Door of the Father — South",
-      "desc": "A tesseract challenge leading directly to the Marduk Path below."
+      "desc": "A tesseract challenge leading directly to the Marduk Path below.",
+      "kudra_bypass": true
     },
     "1,-15:S": {
       "type": "closed"
@@ -11713,7 +11613,8 @@
       "type": "tesseract",
       "level": 80,
       "title": "Door of the Father",
-      "desc": "Level 80. A shortcut into the Marduk Path for those who are ready."
+      "desc": "Level 80. A shortcut into the Marduk Path for those who are ready.",
+      "kudra_bypass": true
     },
     "-12,-15:S": {
       "type": "closed"
@@ -11737,18 +11638,18 @@
       "type": "tesseract",
       "level": 150,
       "title": "Gate to the Path of Delacroix",
-      "desc": "Twelve manga tiles of his story await. Solve the Tesseract to begin."
+      "desc": "Twelve manga tiles of his story await. Solve the Tesseract to begin.",
+      "kudra_bypass": true
     },
     "3,2:W": {
       "type": "tesseract",
       "level": 300,
       "title": "Gate to the Path of Jake",
-      "desc": "An old barn at the edge of the settled world. Solve the Tesseract to begin Jake's path."
+      "desc": "An old barn at the edge of the settled world. Solve the Tesseract to begin Jake's path.",
+      "kudra_bypass": true
     },
     "-2,0:N": {
-      "type": "closed",
-      "title": "No Path North",
-      "desc": "The path of Xan does not turn here."
+      "type": "closed"
     },
     "2,0:N": {
       "type": "closed",
@@ -11786,6 +11687,16 @@
     },
     "10,-2:S": {
       "type": "closed"
+    },
+    "2,-1:N": {
+      "type": "closed",
+      "title": "Path Continues South",
+      "desc": "The path of Olivia continues south."
+    },
+    "2,-1:E": {
+      "type": "closed",
+      "title": "Path Continues South",
+      "desc": "The path of Olivia continues south."
     }
   },
   "path_tunnels": {
@@ -11825,5 +11736,11 @@
       "tunnel_after": 8,
       "entry_step": 4
     }
+  },
+  "config": {
+    "kudra_pass_button": true,
+    "kudra_pass_button_label": "K MODE PASS",
+    "kudra_pass_description": "When in Kudramarduk (K) or SuperKudraMarduk (SKM) mode, every challenge popup shows a \"K MODE PASS\" button next to the cancel button. Clicking it marks the challenge as completed successfully and unlocks the gate.",
+    "kudra_pass_implementation_note": "Front-end requirement: When the user is in Kudramarduk (kudra_active) or SuperKudraMarduk (skm_active) mode, every challenge popup MUST display a K MODE PASS button next to the existing 'I CAN'T DO IT GO BACK' button. Clicking K MODE PASS marks the gate's challenge as completed (using the gate's challengeId or coord:dir key) and immediately unlocks the gate for passage. The flag 'kudra_bypass: true' is set on every gate in this realm.json so the front-end can read this flag and show the button accordingly."
   }
 }
