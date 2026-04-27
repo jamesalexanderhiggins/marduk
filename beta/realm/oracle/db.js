@@ -1,4 +1,4 @@
-// MARDUK ORACLE — CANONICAL DATABASE
+// MARDUK ORACLE v1.3 — db.js
 // Replace this file on the server to update the oracle's knowledge.
 // Schema per entry:
 //   id        string   unique identifier

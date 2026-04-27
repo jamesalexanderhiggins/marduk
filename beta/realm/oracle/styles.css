@@ -1,3 +1,4 @@
+/* MARDUK ORACLE v1.3 — styles.css */
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -297,7 +298,10 @@ html, body {
   font-family: inherit; font-size: 13px; letter-spacing: 5px; text-transform: uppercase;
   cursor: pointer; transition: all 0.3s; touch-action: manipulation;
 }
-.intro-begin:hover, .intro-begin:active {
-  background: rgba(232,160,48,0.08);
-  box-shadow: 0 0 35px rgba(232,160,48,0.18);
+/* ─── VERSION STAMP ─── */
+#version-stamp {
+  position: fixed; bottom: 8px; right: 14px;
+  font-size: 10px; letter-spacing: 3px; color: #1e3048;
+  text-transform: uppercase; pointer-events: none;
+  z-index: 10; opacity: 0.7;
 }
